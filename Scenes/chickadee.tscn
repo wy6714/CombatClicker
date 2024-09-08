@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://djpoqma4i6ff2"]
+
+[ext_resource type="Script" path="res://Scenes/chickadee.gd" id="1_6qlxt"]
+[ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7ab8"]
+atlas = ExtResource("1_66y72")
+region = Rect2(0, 0, 504, 504)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mv24i"]
+atlas = ExtResource("1_66y72")
+region = Rect2(0, 504, 504, 504)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7ab8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mv24i")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
+size = Vector2(353.333, 513.333)
+
+[node name="Chickadee" type="Node2D"]
+scale = Vector2(0.3, 0.3)
+script = ExtResource("1_6qlxt")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
+sprite_frames = SubResource("SpriteFrames_ri8e5")
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 3.33333)
+shape = SubResource("RectangleShape2D_fiuce")
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

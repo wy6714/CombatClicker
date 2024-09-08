@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://c7wwsist54rbt"]
 
-[ext_resource type="Texture2D" uid="uid://b5nadfqmgm5wx" path="res://icon.svg" id="1_pv7dg"]
+[ext_resource type="Texture2D" uid="uid://b5nadfqmgm5wx" path="res://Art/icon.svg" id="1_167nr"]
 
 [node name="testChacBody2d" type="CharacterBody2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_pv7dg")
+texture = ExtResource("1_167nr")
