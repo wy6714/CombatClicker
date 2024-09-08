@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://tuab648o7fxb"]
+
+[ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/chickadee.tscn" id="1_246fo"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 82.0
+offset_bottom = 74.0
+
+[node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
+position = Vector2(555, 334)
