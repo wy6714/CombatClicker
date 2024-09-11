@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://djpoqma4i6ff2"]
 
-[ext_resource type="Script" path="res://Scenes/chickadee.gd" id="1_6qlxt"]
 [ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
+[ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q7ab8"]
 atlas = ExtResource("1_66y72")
@@ -30,7 +30,7 @@ size = Vector2(353.333, 513.333)
 
 [node name="Chickadee" type="Node2D"]
 scale = Vector2(0.3, 0.3)
-script = ExtResource("1_6qlxt")
+script = ExtResource("1_goma6")
 
 [node name="Area2D" type="Area2D" parent="."]
 

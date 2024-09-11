@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=3 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/chickadee.tscn" id="1_246fo"]
+[ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -10,3 +11,6 @@ offset_bottom = 74.0
 
 [node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
 position = Vector2(555, 334)
+
+[node name="Scoreboard" parent="." instance=ExtResource("2_s574t")]
+layout_mode = 1
