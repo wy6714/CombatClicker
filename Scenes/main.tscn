@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=5 format=3 uid="uid://tuab648o7fxb"]
 
-[ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/chickadee.tscn" id="1_246fo"]
+[ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
+[ext_resource type="PackedScene" uid="uid://dnp4cy3xq0f0p" path="res://Scenes/enemy_manager.tscn" id="2_4tq6c"]
 [ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
 
 [node name="Main" type="Control"]
@@ -13,6 +14,8 @@ offset_bottom = 74.0
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_b0x31")
+
+[node name="EnemyManager" parent="." instance=ExtResource("2_4tq6c")]
 
 [node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
 position = Vector2(555, 334)
