@@ -4,15 +4,16 @@ var score: int = 0 #Our current score (also currency)
 var maxScore: int = 0 # Our TOTAL score accumulated throughout the entirety of playtime. (NOT currency)
 var pointsToGive: int = 1 #Points granted per click. This number will scale as player gets upgrades
 var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
-var health: int = 100 # Health of the enemy
+var health: int =100 # Health of the enemy
 
 @onready var player = get_node("Player") # Get a reference to the player
-
+@onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var anim = $Area2D/AnimatedSprite2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	anim.play()
+	position = get_viewport().get_size() / 2  # Set position to the center
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -41,6 +42,7 @@ func takeDamage(damage):
 	
 func defeatEnemy():
 	if(health <= 0):
+		enemyManager.spawnEnemy()
 		queue_free()
 	
 
