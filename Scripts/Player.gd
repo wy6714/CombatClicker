@@ -16,7 +16,11 @@ func _process(delta):
 	
 func determineDamage():
 	damage = strength
+	#Update strength text
+	var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
+	strengthText.text = str(strength) 
+	
 	var rng = randi_range(1, 100)
 	if(rng <= critRate):
 		damage = damage * critDamage
-	
+
