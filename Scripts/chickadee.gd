@@ -10,8 +10,6 @@ var health: int = 100 # Health of the enemy
 
 @onready var anim = $Area2D/AnimatedSprite2D
 
-@onready var game_manager = %GameManager
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	anim.play()
@@ -31,13 +29,15 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		defeatEnemy()
 
 func updateScore():
-	#var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
-	#scoreText.text = str(score) #Update text
-	game_manager.addScore() #use game_manager scirpt to control UI
+	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	scoreText.text = str(score) #Update text
+
 
 func takeDamage(damage):
 	health -= damage
-	print(health)
+	#var healthText = get_node("/root/Main/Scoreboard/enemy_health_num")
+	#healthText.text = str(health)
+	#print(health)
 	
 func defeatEnemy():
 	if(health <= 0):
