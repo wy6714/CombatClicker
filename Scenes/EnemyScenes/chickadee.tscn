@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://djpoqma4i6ff2"]
+[gd_scene load_steps=12 format=3 uid="uid://djpoqma4i6ff2"]
 
 [ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
+[ext_resource type="Script" path="res://Scenes/EnemyScenes/healthBar.gd" id="3_o46l0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q7ab8"]
 atlas = ExtResource("1_66y72")
@@ -28,6 +29,22 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
 size = Vector2(353.333, 513.333)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o62ts"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gv485"]
+bg_color = Color(0.748122, 0, 0.15664, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vilx3"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 1.0
+expand_margin_top = 3.0
+expand_margin_right = 1.0
+expand_margin_bottom = 3.0
+shadow_color = Color(1, 1, 1, 0.27451)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m0k"]
+bg_color = Color(1, 1, 1, 1)
+
 [node name="Chickadee" type="Node2D"]
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_goma6")
@@ -43,4 +60,40 @@ frame_progress = 0.378031
 position = Vector2(0, 3.33333)
 shape = SubResource("RectangleShape2D_fiuce")
 
+[node name="HealthBar" type="ProgressBar" parent="."]
+z_index = 1
+offset_left = -166.667
+offset_top = -343.333
+offset_right = -126.667
+offset_bottom = -316.333
+scale = Vector2(8.7889, 1.77664)
+theme_override_styles/background = SubResource("StyleBoxEmpty_o62ts")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gv485")
+value = 60.0
+show_percentage = false
+script = ExtResource("3_o46l0")
+
+[node name="DamageBar" type="ProgressBar" parent="HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.379265
+offset_top = -1.52588e-05
+offset_right = -0.379265
+offset_bottom = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_vilx3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_j8m0k")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="HealthBar"]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="timeout" from="HealthBar/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="HealthBar/Timer" to="HealthBar" method="_on_timer_timeout"]

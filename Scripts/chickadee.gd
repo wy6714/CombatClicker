@@ -5,11 +5,14 @@ var health: int = 20 # Health of the enemy
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var anim = $Area2D/AnimatedSprite2D
+@onready var healthBar = $HealthBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
+	healthBar.init_health(health)
+	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -34,6 +37,7 @@ func takeDamage(damage):
 	health -= damage
 	DamageNumber.display_number(damage,get_global_mouse_position(),player.crit)
 	player.crit = false
+	healthBar.health = health
 	#var healthText = get_node("/root/Main/Scoreboard/enemy_health_num")
 	#healthText.text = str(health)
 	#print(health)
