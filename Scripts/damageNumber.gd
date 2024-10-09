@@ -4,7 +4,6 @@ extends Node
 #(HOPEFULLY...)
 
 func display_number(value: int, position: Vector2, isCrit: bool = false):
-	print("DamageNum instantiated")
 	var number = Label.new()
 	number.global_position = position
 	number.text = str(value)

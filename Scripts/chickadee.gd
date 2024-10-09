@@ -7,6 +7,7 @@ var health: int = 20 # Health of the enemy
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $HealthBar
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
+@export var animComboCount: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -52,8 +53,15 @@ func defeatEnemy():
 func activateAttackAnim():
 	#Later, we would put the code that determines which attack animation we use here
 	# Ex: swap from sword animation to greatsword animation depending on weapon etc
+	
 	var attackingAnimation = attackAnim.instantiate()
 	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.determineAnimation(animComboCount)
+	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
+	#Simply allows for a satisfying animation combo
+	animComboCount += 1
+	if(animComboCount >= 3):
+		animComboCount = 0
 	add_child(attackingAnimation)
 	
 
