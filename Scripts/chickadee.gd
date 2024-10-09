@@ -6,6 +6,7 @@ var health: int = 20 # Health of the enemy
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $HealthBar
+@onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,7 +36,8 @@ func updateScore():
 
 func takeDamage(damage):
 	health -= damage
-	DamageNumber.display_number(damage,get_global_mouse_position(),player.crit)
+	DamageNumber.display_number(damage,get_global_mouse_position(),player.crit) #Display damage number and attack animation upon hit
+	activateAttackAnim()
 	player.crit = false
 	healthBar.health = health
 	#var healthText = get_node("/root/Main/Scoreboard/enemy_health_num")
@@ -46,5 +48,12 @@ func defeatEnemy():
 	if(health <= 0):
 		enemyManager.spawnEnemy()
 		queue_free()
+	
+func activateAttackAnim():
+	#Later, we would put the code that determines which attack animation we use here
+	# Ex: swap from sword animation to greatsword animation depending on weapon etc
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	add_child(attackingAnimation)
 	
 
