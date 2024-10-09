@@ -1,30 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5tq6xudhgo17"]
+[gd_scene load_steps=9 format=3 uid="uid://b5tq6xudhgo17"]
 
 [ext_resource type="Script" path="res://Scenes/attack_anim.gd" id="1_8uymx"]
-[ext_resource type="Texture2D" uid="uid://daxvkxyer6amr" path="res://Art/Slash (1).png" id="1_wkx38"]
-
-[sub_resource type="Animation" id="Animation_x2xc5"]
-resource_name = "SwordAnim"
-length = 0.37
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0641129, 0.126517, 0.189775, 0.252179),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4]
-}
+[ext_resource type="Texture2D" uid="uid://b2flvr0yjyyo1" path="res://Art/SwordSlashes.png" id="2_kpsxr"]
+[ext_resource type="AudioStream" uid="uid://cnpbjf06hl3db" path="res://Audio/SlashSE.wav" id="3_751iw"]
 
 [sub_resource type="Animation" id="Animation_kroo3"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("SwordAnims:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -34,25 +19,120 @@ tracks/0/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_x2xc5"]
+resource_name = "SwordAnim"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SwordAnims:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0590979, 0.120238, 0.179187, 0.240203),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playAlteredAudio"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_b0onf"]
+resource_name = "SwordAnim2"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SwordAnims:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0629681, 0.121092, 0.18067, 0.241701),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [5, 6, 7, 8, 9]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playAlteredAudio"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_dekwb"]
+resource_name = "SwordAnim3"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SwordAnims:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.061515, 0.120608, 0.18067, 0.240247),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13, 14]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playAlteredAudio"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n00nr"]
 _data = {
 "RESET": SubResource("Animation_kroo3"),
-"SwordAnim": SubResource("Animation_x2xc5")
+"SwordAnim": SubResource("Animation_x2xc5"),
+"SwordAnim2": SubResource("Animation_b0onf"),
+"SwordAnim3": SubResource("Animation_dekwb")
 }
 
 [node name="AttackAnim" type="Node2D"]
 scale = Vector2(6, 6)
 script = ExtResource("1_8uymx")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_wkx38")
-hframes = 2
-vframes = 3
+[node name="SwordAnims" type="Sprite2D" parent="."]
+texture = ExtResource("2_kpsxr")
+hframes = 4
+vframes = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_n00nr")
 }
-autoplay = "SwordAnim"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_751iw")
+volume_db = -16.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
