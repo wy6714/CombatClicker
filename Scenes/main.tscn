@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=9 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
 [ext_resource type="PackedScene" uid="uid://p6pqw153f1fy" path="res://Scenes/scrollingBackground.tscn" id="4_tcxoj"]
 [ext_resource type="PackedScene" uid="uid://douvpgvfai6nt" path="res://Scenes/player.tscn" id="5_yvxiw"]
+[ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
 [ext_resource type="Script" path="res://Scripts/add_strength_button.gd" id="7_o1iyn"]
 
 [node name="Main" type="Control"]
@@ -33,6 +34,9 @@ position = Vector2(555, 334)
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
 [node name="Scoreboard" parent="." instance=ExtResource("2_s574t")]
+layout_mode = 1
+
+[node name="ExpBarSystem" parent="." instance=ExtResource("7_gst64")]
 layout_mode = 1
 
 [node name="shop" type="Label" parent="."]
