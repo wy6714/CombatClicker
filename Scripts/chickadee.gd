@@ -1,6 +1,7 @@
 extends Node2D
 
 var health: int = 20 # Health of the enemy
+var exp: int = 34
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
@@ -47,6 +48,7 @@ func takeDamage(damage):
 	
 func defeatEnemy():
 	if(health <= 0):
+		player.gainExp(exp)
 		enemyManager.spawnEnemy()
 		queue_free()
 	
