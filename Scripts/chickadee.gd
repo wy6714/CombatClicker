@@ -1,14 +1,21 @@
 extends Node2D
 
 var health: int = 20 # Health of the enemy
-var exp: int = 34
+var expToGive: int = 34
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $HealthBar
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
+@onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
+@onready var chargeMeter
+@onready var chargeMeterInstance
 @export var animComboCount: int = 0
+@export var chargeLevel = 0
+@export var maxCharge = 100
+@export var chargeDuration = 1.5
+@export var charging: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,8 +25,13 @@ func _ready():
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _process(_delta):
+	if(charging):
+		chargeLevel += (maxCharge / chargeDuration) * _delta
+		chargeMeter.value = chargeLevel
+		if(chargeLevel >= 100):
+			print("RESET")
+			chargeLevel = 0
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On mouse click...
@@ -30,6 +42,23 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		player.maxScore += player.damage #Increment the maximum
 		updateScore()
 		defeatEnemy()
+		
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.pressed:
+			# The right mouse button is pressed
+			print("Right mouse button is pressed")
+			charging = true
+			activateChargeMeter()
+		else:
+			# The right mouse button is released
+			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
+			_on_right_button_released()
+			charging = false
+			chargeLevel = 0
+			chargeMeterInstance.queue_free()
+
+func _on_right_button_released():
+	print("Triggered on right mouse button release")
 
 func updateScore():
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
@@ -48,7 +77,7 @@ func takeDamage(damage):
 	
 func defeatEnemy():
 	if(health <= 0):
-		player.gainExp(exp)
+		player.gainExp(expToGive)
 		enemyManager.spawnEnemy()
 		queue_free()
 	
@@ -66,4 +95,10 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
-
+func activateChargeMeter():
+	chargeMeterInstance = anim_claymore_meter.instantiate()
+	add_child(chargeMeterInstance)
+	chargeMeter = chargeMeterInstance.get_node("ChargeFill")
+	chargeMeter.value = 0
+	chargeMeter.position = to_local(get_global_mouse_position())
+	
