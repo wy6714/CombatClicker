@@ -34,6 +34,7 @@ func _process(_delta):
 			chargeLevel = 0
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
+	#SWORD
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On mouse click...
 		player.totalClicks += 1 #Track totalClicks
 		player.determineDamage()
@@ -43,6 +44,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		updateScore()
 		defeatEnemy()
 		
+	#CLAYMORE (on right click)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
 		if event.pressed:
 			# The right mouse button is pressed
@@ -54,6 +56,7 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
 			_on_right_button_released()
 			charging = false
+			dealClaymoreDamage()
 			chargeLevel = 0
 			chargeMeterInstance.queue_free()
 
@@ -101,4 +104,22 @@ func activateChargeMeter():
 	chargeMeter = chargeMeterInstance.get_node("ChargeFill")
 	chargeMeter.value = 0
 	chargeMeter.position = to_local(get_global_mouse_position())
+
+func dealClaymoreDamage():
+	player.totalClicks += 1 #Track totalClicks
+	if(chargeLevel >= 90):
+		player.determineDamage()
+		takeDamage(player.damage * 5)
+		player.score += player.damage * 5 #Gain points based on how many points you get each click
+		player.maxScore += player.damage * 5 #Increment the maximum
+		updateScore()
+		defeatEnemy()
+	else:
+		player.determineDamage()
+		takeDamage(player.damage)
+		player.score += player.damage #Gain points based on how many points you get each click
+		player.maxScore += player.damage #Increment the maximum
+		updateScore()
+		defeatEnemy()
+	
 	
