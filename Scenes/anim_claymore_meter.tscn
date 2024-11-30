@@ -26,6 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(3, 3)
+mouse_filter = 2
 script = ExtResource("1_fcty1")
 
 [node name="ChargeFill" type="ProgressBar" parent="."]
@@ -33,6 +34,7 @@ layout_mode = 0
 offset_right = 117.0
 offset_bottom = 27.0
 rotation = 4.71239
+mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_xeucw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_r4c6h")
 value = 90.0
@@ -44,4 +46,5 @@ offset_top = 4.0
 offset_right = 142.333
 offset_bottom = 44.0
 scale = Vector2(0.276332, 0.574783)
+mouse_filter = 2
 color = Color(1, 1, 1, 0.537255)
