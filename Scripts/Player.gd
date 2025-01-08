@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var strength: int = 1
-@export var critRate: int = 5
+@export var critRate: float = 5
 @export var critDamage: int = 2
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
@@ -26,11 +26,7 @@ func _process(delta):
 	
 func determineDamage():
 	damage = strength
-	#Update strength text
-	var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
-	strengthText.text = str(strength) 
-	
-	var rng = randi_range(1, 100)
+	var rng = randf_range(1, 100)
 	if(rng <= critRate):
 		crit = true
 		damage = damage * critDamage
@@ -49,3 +45,12 @@ func levelUp():
 		currentExp = 0
 		currentExp += expOverflow
 		print("POST LEVEL EXP: ", currentExp)
+		
+		#Update strength text upon level...?
+		#strength += 1
+		#var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
+		#strengthText.text = str(strength) 
+		#critRate += 1
+		#crit rate text upgdate
+		#var critText = get_node("/root/Main/Scoreboard/critRateNum")
+		#critText.text = str(critRate)
