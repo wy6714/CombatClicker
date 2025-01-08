@@ -52,7 +52,46 @@ offset_left = 2.0
 offset_top = 37.0
 offset_right = 157.0
 offset_bottom = 68.0
-text = "+1 STRENGTH (100)"
+text = "+1 STRENGTH (50)"
+script = ExtResource("7_o1iyn")
+
+[node name="Add Crit Rate" type="Button" parent="shop"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 99.0
+offset_right = 157.0
+offset_bottom = 130.0
+text = "+ 0.5 CRIT RATE (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="Sword" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_top = 136.0
+offset_right = 155.0
+offset_bottom = 167.0
+text = "Sword"
+script = ExtResource("7_o1iyn")
+
+[node name="Claymore" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 213.0
+offset_right = 156.0
+offset_bottom = 244.0
+text = "Claymore"
+script = ExtResource("7_o1iyn")
+
+[node name="Drill" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 276.0
+offset_right = 156.0
+offset_bottom = 307.0
+text = "Drill"
 script = ExtResource("7_o1iyn")
 
 [connection signal="button_up" from="shop/Add Strength Button" to="shop/Add Strength Button" method="_on_button_up"]
+[connection signal="button_up" from="shop/Add Crit Rate" to="shop/Add Strength Button" method="_on_add_crit_rate_button_up"]

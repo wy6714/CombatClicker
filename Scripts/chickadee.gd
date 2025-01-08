@@ -21,6 +21,7 @@ var expToGive: int = 34
 func _ready():
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
+	health = health * (1 + 0.2 * (player.level - 1))
 	healthBar.init_health(health)
 	
 	
