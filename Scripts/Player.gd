@@ -14,6 +14,19 @@ extends Node2D
 @export var expToNextLevel: int = 100
 @onready var expBarSystem = get_node("/root/Main/ExpBarSystem") # Get a reference to the levelSystem
 
+@onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
+@onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
+@onready var chargeMeter
+@onready var chargeMeterInstance
+@export var animComboCount: int = 0
+@export var chargeLevel = 0
+@export var maxCharge = 100
+@export var chargeDuration = 1.5
+@export var charging: bool = false
+@export var startingClaymoreAttack: bool = false
+
+var currentEnemy;
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,8 +34,31 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _process(_delta):
+	if (startingClaymoreAttack):
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			# The right mouse button is pressed
+			if chargeMeterInstance == null:  # Check if it's already instantiated
+				print("Right mouse button is pressed")
+				charging = true
+				activateChargeMeter()  # Only instantiate the charge meter once
+		else:
+			# The right mouse button is released
+			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
+			charging = false
+			determineClaymoreDamage()
+			chargeLevel = 0
+			if (chargeMeterInstance != null):
+				chargeMeterInstance.queue_free()  # Free the charge meter when released
+				chargeMeterInstance = null  # Reset the instance tracker
+				startingClaymoreAttack = false
+				
+	if (charging):
+		chargeLevel += (maxCharge / chargeDuration) * _delta
+		chargeMeter.value = chargeLevel
+		if (chargeLevel >= 100):
+			print("RESET")
+			chargeLevel = 0
 	
 func determineDamage():
 	damage = strength
@@ -54,3 +90,69 @@ func levelUp():
 		#crit rate text upgdate
 		#var critText = get_node("/root/Main/Scoreboard/critRateNum")
 		#critText.text = str(critRate)
+func updateScore():
+	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	scoreText.text = str(score) #Update text
+
+func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
+	determineDamage()
+	currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	activateAttackAnim()
+	updateScore()
+	crit = false
+	
+func dealClaymoreDamage():
+	determineDamage()
+	damage = damage * 5 # Claymores should be very strong, so...
+	currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	activateAttackAnim()
+	crit = false
+	
+func activateChargeMeter():
+	chargeMeterInstance = anim_claymore_meter.instantiate()
+	add_child(chargeMeterInstance)
+
+	# Print the position and scale
+	print("Charge meter instance position:", chargeMeterInstance.position)
+	print("Charge meter instance scale:", chargeMeterInstance.scale)
+
+	chargeMeter = chargeMeterInstance.get_node("ChargeFill")
+	if chargeMeter:
+		chargeMeter.value = 0
+
+	# Get the current global mouse position
+	var mouse_pos = get_global_mouse_position()
+	# Set the position slightly to the left of the mouse position
+	chargeMeterInstance.position = mouse_pos - Vector2(50, 0)  # 50 pixels to the left
+	print("Charge meter repositioned to:", chargeMeterInstance.position)
+
+func determineClaymoreDamage():
+	totalClicks += 1 #Track totalClicks
+	if(chargeLevel >= 90):
+		determineDamage()
+		dealClaymoreDamage()
+		score += damage * 5 #Gain points based on how many points you get each click
+		maxScore += damage * 5 #Increment the maximum
+		updateScore()
+	else:
+		determineDamage()
+		dealDamage()
+		score += damage #Gain points based on how many points you get each click
+		maxScore += damage #Increment the maximum
+		updateScore()
+	
+func activateAttackAnim():
+	#Later, we would put the code that determines which attack animation we use here
+	# Ex: swap from sword animation to greatsword animation depending on weapon etc
+	
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.determineAnimation(animComboCount)
+	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
+	#Simply allows for a satisfying animation combo
+	animComboCount += 1
+	if(animComboCount >= 3):
+		animComboCount = 0
+	add_child(attackingAnimation)
