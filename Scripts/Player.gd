@@ -156,3 +156,5 @@ func activateAttackAnim():
 	if(animComboCount >= 3):
 		animComboCount = 0
 	add_child(attackingAnimation)
+	
+
