@@ -72,15 +72,36 @@ offset_bottom = 206.0
 text = "Sword"
 script = ExtResource("7_o1iyn")
 
-[node name="Sword1" type="Button" parent="shop/Sword"]
+[node name="Sword1" type="Button" parent="shop/Sword" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 19.0
 offset_top = 44.0
 offset_right = 129.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 1 (--)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Sword2" type="Button" parent="shop/Sword"]
 visible = false
@@ -89,8 +110,29 @@ offset_left = 150.0
 offset_top = 44.0
 offset_right = 277.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 2 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Sword3" type="Button" parent="shop/Sword"]
 visible = false
@@ -99,8 +141,29 @@ offset_left = 300.0
 offset_top = 44.0
 offset_right = 427.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 3 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Claymore" type="Button" parent="shop"]
 layout_mode = 0
@@ -117,8 +180,29 @@ offset_left = 19.0
 offset_top = 44.0
 offset_right = 146.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 1 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Claymore2" type="Button" parent="shop/Claymore"]
 visible = false
@@ -127,8 +211,29 @@ offset_left = 150.0
 offset_top = 44.0
 offset_right = 277.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 2 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Claymore3" type="Button" parent="shop/Claymore"]
 visible = false
@@ -137,8 +242,29 @@ offset_left = 300.0
 offset_top = 44.0
 offset_right = 427.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 3 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Drill" type="Button" parent="shop"]
 layout_mode = 0
@@ -156,8 +282,29 @@ offset_left = 18.0
 offset_top = 44.0
 offset_right = 145.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 1 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Drill2" type="Button" parent="shop/Drill"]
 visible = false
@@ -166,8 +313,29 @@ offset_left = 149.0
 offset_top = 44.0
 offset_right = 276.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 2 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Drill3" type="Button" parent="shop/Drill"]
 visible = false
@@ -176,8 +344,29 @@ offset_left = 299.0
 offset_top = 44.0
 offset_right = 426.0
 offset_bottom = 94.0
+button_mask = 3
 text = "Weapon 3 (100)"
 script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
 
 [node name="Weapons" type="Label" parent="shop"]
 layout_mode = 0

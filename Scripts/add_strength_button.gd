@@ -15,6 +15,15 @@ extends Button
 @onready var claymoreHolder =  get_node("/root/Main/shop/Claymore")
 @onready var drillHolder =  get_node("/root/Main/shop/Drill")
 
+var equippedWeapons = {
+	"left": null,
+	"right": null
+}
+
+# Variables to track currently equipped weapon buttons
+var equipped_left_click = null
+var equipped_right_click = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -47,7 +56,21 @@ func _on_sword_button_down():
 	toggle_visibility(swordHolder)
 
 func _on_sword_1_button_down():
-	pass # Replace with function body.
+	# Retrieve all nodes in the "Weapons" group
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	# Try to find Sword1
+	var sword1 = null
+	for node in weapons:
+		if node.name == "Sword1":
+			sword1 = node
+			break  # Exit the loop once Sword1 is found
+			
+	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			equip_weapon(sword1, "left")
+			print("LEFT")
+	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
+			equip_weapon(sword1, "right")
+			print("RIGHT")
 
 func _on_sword_2_button_down():
 	pass # Replace with function body.
@@ -85,3 +108,26 @@ func toggle_visibility(weapon_node: Node):
 			child.hide()
 		else:
 			child.show()
+
+# Function to handle equipping
+func equip_weapon(weapon_button: Button, mouse_button: String):
+	# Get the Left and Right equip symbols
+	var left_symbol = weapon_button.get_node("LeftEquipSymbol")
+	var right_symbol = weapon_button.get_node("RightEquipSymbol")
+
+	# Unequip the previously equipped weapon for this mouse button
+	if equippedWeapons[mouse_button]:
+		var previous_button = equippedWeapons[mouse_button]
+		var previous_symbol = previous_button.get_node(
+			"LeftEquipSymbol" if mouse_button == "left" else "RightEquipSymbol"
+		)
+		previous_symbol.hide()
+
+	# Equip the new weapon
+	equippedWeapons[mouse_button] = weapon_button
+	if mouse_button == "left":
+		left_symbol.show()
+	elif mouse_button == "right":
+		right_symbol.show()
+
+
