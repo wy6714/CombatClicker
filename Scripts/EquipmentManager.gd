@@ -15,6 +15,7 @@ extends Button
 @onready var claymoreHolder =  get_node("/root/Main/shop/Claymore")
 @onready var drillHolder =  get_node("/root/Main/shop/Drill")
 
+
 var equippedWeapons = {
 	"left": null,
 	"right": null
@@ -127,7 +128,44 @@ func equip_weapon(weapon_button: Button, mouse_button: String):
 	equippedWeapons[mouse_button] = weapon_button
 	if mouse_button == "left":
 		left_symbol.show()
+		right_symbol.hide()
+		if(equippedWeapons["right"] == equippedWeapons["left"]):
+			equippedWeapons["right"] = null
 	elif mouse_button == "right":
 		right_symbol.show()
+		left_symbol.hide()
+		if(equippedWeapons["left"] == equippedWeapons["right"]):
+			equippedWeapons["left"] = null
 
+func getWeaponType(weapon_button: Button) -> String:
+	# Example: Use the button's name to determine the weapon type
+	if weapon_button.name.begins_with("Sword"):
+		return "Sword"
+	elif weapon_button.name.begins_with("Claymore"):
+		return "Claymore"
+	elif weapon_button.name.begins_with("Drill"):
+		return "Drill"
+	else:
+		return "Unknown"
+		
+func performWeaponAction(mouse_button: String):
+	# Get the equipped weapon for the specified mouse button
+	var weapon = equippedWeapons[mouse_button]
+	if weapon == null:
+		print("No weapon equipped for", mouse_button, "click.")
+		return
 
+	# Determine the weapon type
+	var weaponType = getWeaponType(weapon)
+
+	# Perform the action based on the weapon type
+	match weaponType:
+		"Sword":
+			player.dealDamage()  # Sword's action for any button
+		"Claymore":
+			player.startingClaymoreAttack = true  # Claymore's action for any button
+		"Drill":
+			pass
+			print("Drill not configured yet")
+		_:
+			print("No action configured for weapon type:", weaponType)

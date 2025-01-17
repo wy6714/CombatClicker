@@ -17,6 +17,8 @@ var expToGive: int = 34
 @export var chargeDuration = 1.5
 @export var charging: bool = false
 
+@onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	anim.play()
@@ -31,12 +33,12 @@ func _process(_delta):
 	pass
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
-	#SWORD
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
-		player.dealDamage()
+		equipmentManager.performWeaponAction("left")
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
-		player.startingClaymoreAttack = true
+		equipmentManager.performWeaponAction("right")
 					
 
 func takeDamage(damage):
@@ -49,4 +51,6 @@ func defeatEnemyCheck():
 		player.gainExp(expToGive)
 		enemyManager.spawnEnemy()
 		queue_free()
+		
+
 	

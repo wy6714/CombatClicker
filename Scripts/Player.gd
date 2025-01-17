@@ -35,30 +35,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if (startingClaymoreAttack):
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-			# The right mouse button is pressed
-			if chargeMeterInstance == null:  # Check if it's already instantiated
-				print("Right mouse button is pressed")
-				charging = true
-				activateChargeMeter()  # Only instantiate the charge meter once
-		else:
-			# The right mouse button is released
-			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
-			charging = false
-			determineClaymoreDamage()
-			chargeLevel = 0
-			if (chargeMeterInstance != null):
-				chargeMeterInstance.queue_free()  # Free the charge meter when released
-				chargeMeterInstance = null  # Reset the instance tracker
-				startingClaymoreAttack = false
-				
-	if (charging):
-		chargeLevel += (maxCharge / chargeDuration) * _delta
-		chargeMeter.value = chargeLevel
-		if (chargeLevel >= 100):
-			print("RESET")
-			chargeLevel = 0
+	claymoreCharging(_delta)
 	
 func determineDamage():
 	damage = strength
@@ -102,6 +79,32 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	updateScore()
 	crit = false
 	
+func claymoreCharging(_delta):
+	if (startingClaymoreAttack):
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			# The right mouse button is pressed
+			if chargeMeterInstance == null:  # Check if it's already instantiated
+				print("Right mouse button is pressed")
+				charging = true
+				activateChargeMeter()  # Only instantiate the charge meter once
+		else:
+			# The right mouse button is released
+			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
+			charging = false
+			determineClaymoreDamage()
+			chargeLevel = 0
+			if (chargeMeterInstance != null):
+				chargeMeterInstance.queue_free()  # Free the charge meter when released
+				chargeMeterInstance = null  # Reset the instance tracker
+				startingClaymoreAttack = false
+				
+	if (charging):
+		chargeLevel += (maxCharge / chargeDuration) * _delta
+		chargeMeter.value = chargeLevel
+		if (chargeLevel >= 100):
+			print("RESET")
+			chargeLevel = 0
+			
 func dealClaymoreDamage():
 	determineDamage()
 	damage = damage * 5 # Claymores should be very strong, so...

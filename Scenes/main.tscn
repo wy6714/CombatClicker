@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://p6pqw153f1fy" path="res://Scenes/scrollingBackground.tscn" id="4_tcxoj"]
 [ext_resource type="PackedScene" uid="uid://douvpgvfai6nt" path="res://Scenes/player.tscn" id="5_yvxiw"]
 [ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
-[ext_resource type="Script" path="res://Scripts/add_strength_button.gd" id="7_o1iyn"]
+[ext_resource type="Script" path="res://Scripts/EquipmentManager.gd" id="7_o1iyn"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -46,7 +46,7 @@ offset_right = 44.0
 offset_bottom = 188.0
 text = "SHOP"
 
-[node name="Add Strength Button" type="Button" parent="shop"]
+[node name="EquipmentManager" type="Button" parent="shop"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = 37.0
@@ -376,17 +376,17 @@ offset_right = 80.0
 offset_bottom = 175.0
 text = "WEAPONS"
 
-[connection signal="button_up" from="shop/Add Strength Button" to="shop/Add Strength Button" method="_on_button_up"]
-[connection signal="button_up" from="shop/Add Crit Rate" to="shop/Add Strength Button" method="_on_add_crit_rate_button_up"]
-[connection signal="button_down" from="shop/Sword" to="shop/Add Strength Button" method="_on_sword_button_down"]
-[connection signal="button_down" from="shop/Sword/Sword1" to="shop/Add Strength Button" method="_on_sword_1_button_down"]
-[connection signal="button_down" from="shop/Sword/Sword2" to="shop/Add Strength Button" method="_on_sword_2_button_down"]
-[connection signal="button_down" from="shop/Sword/Sword3" to="shop/Add Strength Button" method="_on_sword_3_button_down"]
-[connection signal="button_down" from="shop/Claymore" to="shop/Add Strength Button" method="_on_claymore_button_down"]
-[connection signal="button_down" from="shop/Claymore/Claymore1" to="shop/Add Strength Button" method="_on_claymore_1_button_down"]
-[connection signal="button_down" from="shop/Claymore/Claymore2" to="shop/Add Strength Button" method="_on_claymore_2_button_down"]
-[connection signal="button_down" from="shop/Claymore/Claymore3" to="shop/Add Strength Button" method="_on_claymore_3_button_down"]
-[connection signal="button_down" from="shop/Drill" to="shop/Add Strength Button" method="_on_drill_button_down"]
-[connection signal="button_down" from="shop/Drill/Drill1" to="shop/Add Strength Button" method="_on_drill_1_button_down"]
-[connection signal="button_down" from="shop/Drill/Drill2" to="shop/Add Strength Button" method="_on_drill_2_button_down"]
-[connection signal="button_down" from="shop/Drill/Drill3" to="shop/Add Strength Button" method="_on_drill_3_button_down"]
+[connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
+[connection signal="button_up" from="shop/Add Crit Rate" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
+[connection signal="button_down" from="shop/Sword" to="shop/EquipmentManager" method="_on_sword_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword1" to="shop/EquipmentManager" method="_on_sword_1_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword2" to="shop/EquipmentManager" method="_on_sword_2_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword3" to="shop/EquipmentManager" method="_on_sword_3_button_down"]
+[connection signal="button_down" from="shop/Claymore" to="shop/EquipmentManager" method="_on_claymore_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore1" to="shop/EquipmentManager" method="_on_claymore_1_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore2" to="shop/EquipmentManager" method="_on_claymore_2_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore3" to="shop/EquipmentManager" method="_on_claymore_3_button_down"]
+[connection signal="button_down" from="shop/Drill" to="shop/EquipmentManager" method="_on_drill_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill1" to="shop/EquipmentManager" method="_on_drill_1_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill2" to="shop/EquipmentManager" method="_on_drill_2_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill3" to="shop/EquipmentManager" method="_on_drill_3_button_down"]
