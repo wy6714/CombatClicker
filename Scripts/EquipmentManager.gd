@@ -83,7 +83,30 @@ func _on_claymore_button_down():
 	toggle_visibility(claymoreHolder)
 	
 func _on_claymore_1_button_down():
-	pass # Replace with function body.
+	# Buying the weapon~
+	var cost = 100
+	var bought = false
+	
+	if(!bought):
+		if(player.score >= cost):
+			bought = true
+	
+	if(bought):
+		# Retrieve all nodes in the "Weapons" group
+		var weapons = get_tree().get_nodes_in_group("Weapons")
+		# Try to find Sword1
+		var claymore1 = null
+		for node in weapons:
+			if node.name == "Claymore1":
+				claymore1 = node
+				break  # Exit the loop once Sword1 is found
+			
+		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+				equip_weapon(claymore1, "left")
+				print("LEFT")
+		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
+				equip_weapon(claymore1, "right")
+				print("RIGHT")
 	
 func _on_claymore_2_button_down():
 	pass # Replace with function body.
