@@ -103,7 +103,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Sword2" type="Button" parent="shop/Sword"]
+[node name="Sword2" type="Button" parent="shop/Sword" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 150.0
@@ -134,7 +134,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Sword3" type="Button" parent="shop/Sword"]
+[node name="Sword3" type="Button" parent="shop/Sword" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 300.0
@@ -173,7 +173,7 @@ offset_bottom = 306.0
 text = "Claymore"
 script = ExtResource("7_o1iyn")
 
-[node name="Claymore1" type="Button" parent="shop/Claymore"]
+[node name="Claymore1" type="Button" parent="shop/Claymore" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 19.0
@@ -204,7 +204,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Claymore2" type="Button" parent="shop/Claymore"]
+[node name="Claymore2" type="Button" parent="shop/Claymore" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 150.0
@@ -235,7 +235,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Claymore3" type="Button" parent="shop/Claymore"]
+[node name="Claymore3" type="Button" parent="shop/Claymore" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 300.0
@@ -275,7 +275,7 @@ offset_bottom = 406.0
 text = "Drill"
 script = ExtResource("7_o1iyn")
 
-[node name="Drill1" type="Button" parent="shop/Drill"]
+[node name="Drill1" type="Button" parent="shop/Drill" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 18.0
@@ -306,7 +306,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Drill2" type="Button" parent="shop/Drill"]
+[node name="Drill2" type="Button" parent="shop/Drill" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 149.0
@@ -337,7 +337,7 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Drill3" type="Button" parent="shop/Drill"]
+[node name="Drill3" type="Button" parent="shop/Drill" groups=["Weapons"]]
 visible = false
 layout_mode = 0
 offset_left = 299.0

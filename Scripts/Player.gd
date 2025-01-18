@@ -36,7 +36,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	claymoreCharging(_delta)
-	
+
 func determineDamage():
 	damage = strength
 	var rng = randf_range(1, 100)
@@ -69,6 +69,8 @@ func levelUp():
 		#critText.text = str(critRate)
 func updateScore():
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	score += damage #Gain points based on how many points you get each click
+	maxScore += damage #Increment the maximum
 	scoreText.text = str(score) #Update text
 
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
@@ -81,7 +83,7 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttack):
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) || Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			# The right mouse button is pressed
 			if chargeMeterInstance == null:  # Check if it's already instantiated
 				print("Right mouse button is pressed")
@@ -104,6 +106,7 @@ func claymoreCharging(_delta):
 		if (chargeLevel >= 100):
 			print("RESET")
 			chargeLevel = 0
+	
 			
 func dealClaymoreDamage():
 	determineDamage()
@@ -136,14 +139,12 @@ func determineClaymoreDamage():
 	if(chargeLevel >= 90):
 		determineDamage()
 		dealClaymoreDamage()
-		score += damage * 5 #Gain points based on how many points you get each click
-		maxScore += damage * 5 #Increment the maximum
+		score += damage #Gain points based on how much damage you get do per click
+		maxScore += damage #Increment the maximum
 		updateScore()
 	else:
 		determineDamage()
 		dealDamage()
-		score += damage #Gain points based on how many points you get each click
-		maxScore += damage #Increment the maximum
 		updateScore()
 	
 func activateAttackAnim():
