@@ -75,7 +75,8 @@ func updateScore():
 
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
-	currentEnemy.takeDamage(damage)
+	if(currentEnemy != null):
+		currentEnemy.takeDamage(damage)
 	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
 	activateAttackAnim()
 	updateScore()
