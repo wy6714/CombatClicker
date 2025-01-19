@@ -21,6 +21,18 @@ var equippedWeapons = {
 	"right": null
 }
 
+var weapons_data = {
+	"Sword1": {"cost": 0, "bought": true},
+	"Sword2": {"cost": 100, "bought": false},
+	"Sword3": {"cost": 100, "bought": false},
+	"Claymore1": {"cost": 100, "bought": false},
+	"Claymore2": {"cost": 100, "bought": false},
+	"Claymore3": {"cost": 100, "bought": false},
+	"Drill1": {"cost": 100, "bought": false},
+	"Drill2": {"cost": 100, "bought": false},
+	"Drill3": {"cost": 100, "bought": false},
+}
+
 # Variables to track currently equipped weapon buttons
 var equipped_left_click = null
 var equipped_right_click = null
@@ -58,6 +70,7 @@ func _on_sword_button_down():
 
 func _on_sword_1_button_down():
 	# Retrieve all nodes in the "Weapons" group
+	# WE DONT BUY THIS ONE, WE HAVE THIS ONE BY DEFAULT
 	var weapons = get_tree().get_nodes_in_group("Weapons")
 	# Try to find Sword1
 	var sword1 = null
@@ -74,45 +87,152 @@ func _on_sword_1_button_down():
 			print("RIGHT")
 
 func _on_sword_2_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Sword2"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var sword = null
+	for node in weapons:
+		if node.name == weapon_name:
+			sword = node
+			break
+	
+	if sword:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(sword, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(sword, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func _on_sword_3_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Sword3"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
 	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var sword = null
+	for node in weapons:
+		if node.name == weapon_name:
+			sword = node
+			break
+	
+	if sword:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(sword, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(sword, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
+			
 func _on_claymore_button_down():
 	toggle_visibility(claymoreHolder)
 	
 func _on_claymore_1_button_down():
-	# Buying the weapon~
-	var cost = 100
-	var bought = false
+	var weapon_name = "Claymore1"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
 	
-	if(!bought):
-		if(player.score >= cost):
-			bought = true
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var claymore = null
+	for node in weapons:
+		if node.name == weapon_name:
+			claymore = node
+			break
 	
-	if(bought):
-		# Retrieve all nodes in the "Weapons" group
-		var weapons = get_tree().get_nodes_in_group("Weapons")
-		# Try to find Sword1
-		var claymore1 = null
-		for node in weapons:
-			if node.name == "Claymore1":
-				claymore1 = node
-				break  # Exit the loop once Sword1 is found
-			
-		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-				equip_weapon(claymore1, "left")
-				print("LEFT")
-		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
-				equip_weapon(claymore1, "right")
-				print("RIGHT")
+	if claymore:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(claymore, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(claymore, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 	
 func _on_claymore_2_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Claymore2"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var claymore = null
+	for node in weapons:
+		if node.name == weapon_name:
+			claymore = node
+			break
+	
+	if claymore:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(claymore, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(claymore, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func _on_claymore_3_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Claymore3"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var claymore = null
+	for node in weapons:
+		if node.name == weapon_name:
+			claymore = node
+			break
+	
+	if claymore:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(claymore, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(claymore, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func _on_drill_button_down():
 	toggle_visibility(drillHolder)
