@@ -30,7 +30,8 @@ var currentEnemy;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	score = 900
+	print(";")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -132,7 +133,7 @@ func activateChargeMeter():
 	# Get the current global mouse position
 	var mouse_pos = get_global_mouse_position()
 	# Set the position slightly to the left of the mouse position
-	chargeMeterInstance.position = mouse_pos - Vector2(50, 0)  # 50 pixels to the left
+	chargeMeterInstance.position = mouse_pos - Vector2(-70, -50)
 	print("Charge meter repositioned to:", chargeMeterInstance.position)
 
 func determineClaymoreDamage():
