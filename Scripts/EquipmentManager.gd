@@ -7,9 +7,16 @@ extends Button
 
 @export var strengthCost = 50;
 @export var critRateCost = 100;
+@export var critDamageCost = 100;
+@export var energyRegenCost = 100;
+
+@onready var strengthCostLabel = get_node("/root/Main/shop/EquipmentManager/StrengthCost")
+@onready var critRateCostLabel = get_node("/root/Main/shop/AddCritRate/CritRateCost")
+@onready var critDamageCostLabel = get_node("/root/Main/shop/AddCritDamage/CritDamageCost")
+@onready var energyRegenCostLabel = get_node("/root/Main/shop/AddEnergyRecharge/EnergyRegenCost")
 
 @onready var strengthButton = $"."
-@onready var critRateButton = get_node("/root/Main/shop/Add Crit Rate")
+@onready var critRateButton = get_node("/root/Main/shop/AddCritRate")
 
 @onready var swordHolder = get_node("/root/Main/shop/Sword")
 @onready var claymoreHolder =  get_node("/root/Main/shop/Claymore")
@@ -39,7 +46,11 @@ var equipped_right_click = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	strengthCostLabel.text = str(strengthCost) + " points"
+	critRateCostLabel.text = str(critRateCost) + " points"
+	energyRegenCostLabel.text = str(energyRegenCost) + " points"
+	critDamageCostLabel.text = str(critDamageCost) + " points"
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,7 +65,8 @@ func _on_button_up():
 		scoreText.text = str(player.score)
 		player.strength +=1
 		strengthText.text = str(player.strength)
-		strengthButton.text = "+1 STRENGTH (%d)" %[strengthCost]
+		strengthCostLabel.text = str(strengthCost) + " points"
+		
 
 func _on_add_crit_rate_button_up():
 	if player.score > critRateCost:
@@ -63,7 +75,7 @@ func _on_add_crit_rate_button_up():
 		scoreText.text = str(player.score)
 		player.critRate += 0.5
 		critRateText.text = str(player.critRate)
-		critRateButton.text = "+0.5 Crit Rate (%d)" %[critRateCost]
+		critRateCostLabel.text = str(critRateCost) + " points"
 
 func _on_sword_button_down():
 	toggle_visibility(swordHolder)

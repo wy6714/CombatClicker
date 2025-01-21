@@ -30,10 +30,8 @@ script = ExtResource("1_fcty1")
 
 [node name="ChargeFill" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_left = 305.333
-offset_top = 157.333
-offset_right = 422.333
-offset_bottom = 188.333
+offset_right = 117.0
+offset_bottom = 31.0
 rotation = 4.71239
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_xeucw")
