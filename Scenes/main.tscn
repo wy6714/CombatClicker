@@ -436,8 +436,8 @@ text = "WEAPONS"
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
 [connection signal="button_up" from="shop/AddCritRate" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
-[connection signal="button_up" from="shop/AddCritDamage" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
-[connection signal="button_up" from="shop/AddEnergyRecharge" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
+[connection signal="button_down" from="shop/AddCritDamage" to="shop/EquipmentManager" method="_on_add_crit_damage_button_down"]
+[connection signal="button_down" from="shop/AddEnergyRecharge" to="shop/EquipmentManager" method="_on_add_energy_recharge_button_down"]
 [connection signal="button_down" from="shop/Sword" to="shop/EquipmentManager" method="_on_sword_button_down"]
 [connection signal="button_down" from="shop/Sword/Sword1" to="shop/EquipmentManager" method="_on_sword_1_button_down"]
 [connection signal="button_down" from="shop/Sword/Sword2" to="shop/EquipmentManager" method="_on_sword_2_button_down"]
