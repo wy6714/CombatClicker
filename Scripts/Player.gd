@@ -2,7 +2,8 @@ extends Node2D
 
 @export var strength: int = 1
 @export var critRate: float = 5
-@export var critDamage: int = 2
+@export var critDamage: float = 2
+@export var energyRecharge: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var score: int = 0 #Our current score (also currency)

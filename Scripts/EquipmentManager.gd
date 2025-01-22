@@ -4,6 +4,8 @@ extends Button
 @onready var player = get_node("/root/Main/Player")
 @onready var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
 @onready var critRateText = get_node("/root/Main/Scoreboard/critRateNum")
+@onready var critDamageText = get_node("/root/Main/Scoreboard/CritDamageNum")
+@onready var energyRechargeText = get_node("/root/Main/Scoreboard/EnergyRechargeNum")
 
 @export var strengthCost = 50;
 @export var critRateCost = 100;
@@ -51,15 +53,13 @@ func _ready():
 	energyRegenCostLabel.text = str(energyRegenCost) + " points"
 	critDamageCostLabel.text = str(critDamageCost) + " points"
 	
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
 
 func _on_button_up(): 
-	if player.score > strengthCost:
+	if player.score >= strengthCost:
 		player.score -= strengthCost
 		strengthCost += strengthCost / 2
 		scoreText.text = str(player.score)
@@ -69,13 +69,31 @@ func _on_button_up():
 		
 
 func _on_add_crit_rate_button_up():
-	if player.score > critRateCost:
+	if player.score >= critRateCost:
 		player.score -= critRateCost
 		critRateCost += critRateCost / 2
 		scoreText.text = str(player.score)
 		player.critRate += 0.5
 		critRateText.text = str(player.critRate)
 		critRateCostLabel.text = str(critRateCost) + " points"
+
+func _on_add_crit_damage_button_down():
+	if player.score >= critDamageCost:
+		player.score -= critDamageCost
+		critDamageCost += critDamageCost / 2 #Insert multipliers for each 
+		scoreText.text = str(player.score)
+		player.critDamage += 0.25
+		critDamageText.text = str(player.critDamage)
+		critDamageCostLabel.text = str(critDamageCost) + " points"
+
+func _on_add_energy_recharge_button_down():
+	if player.score >= energyRegenCost:
+		player.score -= energyRegenCost
+		energyRegenCost += energyRegenCost / 2 #Insert multipliers for each 
+		scoreText.text = str(player.score)
+		player.energyRecharge += 1.0
+		energyRechargeText.text = str(player.energyRecharge)
+		energyRegenCostLabel.text = str(energyRegenCost) + " points"
 
 func _on_sword_button_down():
 	toggle_visibility(swordHolder)
