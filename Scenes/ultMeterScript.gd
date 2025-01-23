@@ -1,0 +1,25 @@
+extends Control
+
+@onready var ultProgressBar = $UltBar/ProgressBar
+@onready var ultText = $UltBar/UltText
+@export var currentUltValue: float = 0.0
+@export var ultMax: int = 1000
+@export var canUlt: bool = false
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	ultProgressBar.value = 0
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if(currentUltValue >= currentUltValue):
+		canUlt = true
+	else:
+		canUlt = false
+
+func updateUltProgress(ultRecharge):
+	currentUltValue += ultRecharge
+	ultProgressBar.value = currentUltValue
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	

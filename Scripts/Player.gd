@@ -14,6 +14,7 @@ extends Node2D
 @export var currentExp: int = 0
 @export var expToNextLevel: int = 100
 @onready var expBarSystem = get_node("/root/Main/ExpBarSystem") # Get a reference to the levelSystem
+@onready var ultBarSystem = get_node("/root/Main/UltMeter")
 
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
@@ -82,7 +83,11 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
 	activateAttackAnim()
 	updateScore()
+	ultBarSystem.updateUltProgress(energyRecharge)
+	if(crit):
+		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
+	
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttack):
@@ -117,6 +122,9 @@ func dealClaymoreDamage():
 	currentEnemy.takeDamage(damage)
 	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
 	activateAttackAnim()
+	ultBarSystem.updateUltProgress(energyRecharge * 5)
+	if(crit):
+		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 	crit = false
 	
 func activateChargeMeter():
@@ -164,4 +172,5 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
-
+func updateUltMeter():
+	pass
