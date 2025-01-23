@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=10 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://douvpgvfai6nt" path="res://Scenes/player.tscn" id="5_yvxiw"]
 [ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
 [ext_resource type="Script" path="res://Scripts/EquipmentManager.gd" id="7_o1iyn"]
+[ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -37,6 +38,9 @@ position = Vector2(555, 334)
 layout_mode = 1
 
 [node name="ExpBarSystem" parent="." instance=ExtResource("7_gst64")]
+layout_mode = 1
+
+[node name="UltMeter" parent="." instance=ExtResource("8_fgwng")]
 layout_mode = 1
 
 [node name="shop" type="Label" parent="."]
