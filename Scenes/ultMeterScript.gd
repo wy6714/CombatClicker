@@ -23,3 +23,9 @@ func updateUltProgress(ultRecharge):
 	ultProgressBar.value = currentUltValue
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
 	
+func subtractUltProgress():
+	currentUltValue -= ultMax
+	ultProgressBar.value = currentUltValue
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	
+	

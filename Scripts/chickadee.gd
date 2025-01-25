@@ -39,6 +39,11 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
 		equipmentManager.performWeaponAction("right")
+		
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
+		player.useUlt()
+		print("hi")
+	
 					
 
 func takeDamage(damage):
