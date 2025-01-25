@@ -3,7 +3,7 @@ extends Node2D
 @export var strength: int = 1
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var energyRecharge: float = 1
+@export var energyRecharge: float = 500
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var score: int = 0 #Our current score (also currency)
@@ -172,5 +172,16 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
-func updateUltMeter():
-	pass
+func useUlt():
+	if(ultBarSystem.canUlt):
+		# Ult.
+		determineDamage()
+		damage = damage * 100 # Claymores should be very strong, so...
+		currentEnemy.takeDamage(damage)
+		DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+		activateAttackAnim()
+		ultBarSystem.updateUltProgress(0)
+		if(crit):
+			ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+		crit = false
+		ultBarSystem.subtractUltProgress()
