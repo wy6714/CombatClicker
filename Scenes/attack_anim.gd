@@ -11,10 +11,14 @@ func determineAnimation(animCombo):
 	$AnimationPlayer.play(animations[animCombo])  # Play the animation corresponding to the combo index
 	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
 	#Simply allows for a satisfying animation combo
-	print(animCombo)
-	
+
+func drillAnimation():
+	$AnimationPlayer.play("Drill")
+		
 func playAlteredAudio():
 	var rng = randf_range(0.4, 1.2)
 	slashSE.pitch_scale = rng
 	slashSE.play()
 
+func stopAnimation():
+	$AnimationPlayer.play("RESET")

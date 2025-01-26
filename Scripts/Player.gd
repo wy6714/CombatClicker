@@ -20,12 +20,17 @@ extends Node2D
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 @onready var chargeMeter
 @onready var chargeMeterInstance
+
+
 @export var animComboCount: int = 0
 @export var chargeLevel = 0
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
 @export var startingClaymoreAttack: bool = false
+@export var drillActive: bool = false
+@export var drillEquipped: bool = false
+@onready var drillAttackingAnimation
 
 var currentEnemy;
 
@@ -35,11 +40,29 @@ func _ready():
 	score = 900
 	print(";")
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	claymoreCharging(_delta)
-
+		
+	if(drillActive):
+		drillAttackingAnimation.position = get_global_mouse_position()
+	
+	if(drillEquipped):
+		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive):
+			drilling()
+		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive):
+			drilling()
+			print("Right drilling???")
+		
+		if Input.is_action_just_released("left"):
+			stopDrilling()  # Stop drilling for the left mouse button
+			print("Left Click Released - Drill Stopped")
+	# Check if right mouse button is released
+		if Input.is_action_just_released("right"):
+			stopDrilling()  # Stop drilling for the right mouse button
+			print("Right Click Released - Drill Stopped")
+	
+		
 func determineDamage():
 	damage = strength
 	var rng = randf_range(1, 100)
@@ -87,7 +110,6 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	if(crit):
 		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
-	
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttack):
@@ -172,6 +194,12 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
+func activateDrillAnim():
+	drillAttackingAnimation = attackAnim.instantiate()
+	drillAttackingAnimation.position = to_local(get_global_mouse_position())
+	drillAttackingAnimation.drillAnimation()
+	add_child(drillAttackingAnimation)
+	
 func useUlt():
 	if(ultBarSystem.canUlt):
 		# Ult.
@@ -185,3 +213,31 @@ func useUlt():
 			ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 		crit = false
 		ultBarSystem.subtractUltProgress()
+		
+func drilling():
+	activateDrillAnim()
+	drillActive = true
+	drillEquipped = true
+	startDrilling()
+
+func startDrilling():
+	if(drillActive):
+		$DrillTimer.start()
+		
+func stopDrilling():
+	drillActive = false
+	drillEquipped = false
+	$DrillTimer.stop()
+	drillAttackingAnimation.stopAnimation()
+
+func _on_drill_timer_timeout():
+	determineDamage()
+	if(currentEnemy != null):
+		currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	updateScore()
+	ultBarSystem.updateUltProgress(energyRecharge)
+	if(crit):
+		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
+	crit = false
+	
