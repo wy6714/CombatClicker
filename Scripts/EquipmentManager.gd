@@ -268,13 +268,91 @@ func _on_drill_button_down():
 	toggle_visibility(drillHolder)
 	
 func _on_drill_1_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Drill1"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var drill = null
+	for node in weapons:
+		if node.name == weapon_name:
+			drill = node
+			break
+	
+	if drill:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(drill, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(drill, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func _on_drill_2_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Drill2"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var drill = null
+	for node in weapons:
+		if node.name == weapon_name:
+			drill = node
+			break
+	
+	if drill:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(drill, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(drill, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func _on_drill_3_button_down():
-	pass # Replace with function body.
+	var weapon_name = "Drill3"
+	# Check if the weapon is already bought
+	if !weapons_data[weapon_name]["bought"]:
+		var cost = weapons_data[weapon_name]["cost"]
+		if player.score >= cost:
+			weapons_data[weapon_name]["bought"] = true
+			player.score -= cost
+			print(weapon_name + " bought!")
+		else:
+			print("Not enough score to buy " + weapon_name)
+			return
+	
+	# If already bought, equip the weapon
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var drill = null
+	for node in weapons:
+		if node.name == weapon_name:
+			drill = node
+			break
+	
+	if drill:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+			equip_weapon(drill, "left")
+			print("Equipped " + weapon_name + " on LEFT hand")
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			equip_weapon(drill, "right")
+			print("Equipped " + weapon_name + " on RIGHT hand")
 
 func toggle_visibility(weapon_node: Node):
 	for child in weapon_node.get_children():
@@ -338,7 +416,6 @@ func performWeaponAction(mouse_button: String):
 		"Claymore":
 			player.startingClaymoreAttack = true  # Claymore's action for any button
 		"Drill":
-			pass
-			print("Drill not configured yet")
+			player.drilling()
 		_:
 			print("No action configured for weapon type:", weaponType)

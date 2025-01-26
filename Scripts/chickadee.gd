@@ -45,7 +45,6 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		print("hi")
 	
 					
-
 func takeDamage(damage):
 	health -= damage
 	healthBar.health = health
@@ -58,4 +57,3 @@ func defeatEnemyCheck():
 		queue_free()
 		
 
-	

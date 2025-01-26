@@ -4,3 +4,8 @@
 
 [node name="Player" type="Node2D"]
 script = ExtResource("1_nvpai")
+
+[node name="DrillTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[connection signal="timeout" from="DrillTimer" to="." method="_on_drill_timer_timeout"]

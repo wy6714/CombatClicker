@@ -13,7 +13,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if(currentUltValue >= currentUltValue):
+	if(currentUltValue >= ultMax):
 		canUlt = true
 	else:
 		canUlt = false
