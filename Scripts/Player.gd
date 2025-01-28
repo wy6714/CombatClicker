@@ -3,7 +3,7 @@ extends Node2D
 @export var strength: int = 1
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var energyRecharge: float = 500
+@export var energyRecharge: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var score: int = 0 #Our current score (also currency)
@@ -31,6 +31,7 @@ extends Node2D
 @export var drillActive: bool = false
 @export var drillEquipped: bool = false
 @onready var drillAttackingAnimation
+@onready var drillAttackingAnimation2
 
 var currentEnemy;
 
@@ -194,12 +195,6 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
-func activateDrillAnim():
-	drillAttackingAnimation = attackAnim.instantiate()
-	drillAttackingAnimation.position = to_local(get_global_mouse_position())
-	drillAttackingAnimation.drillAnimation()
-	add_child(drillAttackingAnimation)
-	
 func useUlt():
 	if(ultBarSystem.canUlt):
 		# Ult.
@@ -220,6 +215,25 @@ func drilling():
 	drillEquipped = true
 	startDrilling()
 
+func drillingRight():
+	pass
+
+func activateDrillAnim():
+	
+	if(drillAttackingAnimation != null): #IF A DRILL ALREADY EXISTS, APPLY ANOTHER ONE. (Aka, player is dual wielding drills)
+		drillAttackingAnimation2 = attackAnim.instantiate()
+		drillAttackingAnimation2.position = to_local(get_global_mouse_position())
+		drillAttackingAnimation2.drillAnimation()
+		add_child(drillAttackingAnimation2)
+		print("Double drill build???????? yo?????")
+		
+	drillAttackingAnimation = attackAnim.instantiate()
+	drillAttackingAnimation.position = to_local(get_global_mouse_position())
+	drillAttackingAnimation.drillAnimation()
+	add_child(drillAttackingAnimation)
+	
+		
+	
 func startDrilling():
 	if(drillActive):
 		$DrillTimer.start()
@@ -228,7 +242,12 @@ func stopDrilling():
 	drillActive = false
 	drillEquipped = false
 	$DrillTimer.stop()
-	drillAttackingAnimation.stopAnimation()
+	if(drillAttackingAnimation != null):
+		drillAttackingAnimation.stopAnimation()
+		drillAttackingAnimation.queue_free()
+	#if(drillAttackingAnimation2 != null):
+		#drillAttackingAnimation2.stopAnimation()
+		#drillAttackingAnimation2.queue_free()
 
 func _on_drill_timer_timeout():
 	determineDamage()

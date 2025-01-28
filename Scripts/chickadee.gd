@@ -18,6 +18,7 @@ var expToGive: int = 34
 @export var charging: bool = false
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
+@onready var mouseInsideRadius = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,16 +35,18 @@ func _process(_delta):
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
-		equipmentManager.performWeaponAction("left")
+	if(mouseInsideRadius):
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
+			equipmentManager.performWeaponAction("left")
 		
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
-		equipmentManager.performWeaponAction("right")
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
+			equipmentManager.performWeaponAction("right")
 		
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
-		player.useUlt()
-		print("hi")
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
+			player.useUlt()
+			print("hi")
 	
+
 					
 func takeDamage(damage):
 	health -= damage
@@ -53,7 +56,16 @@ func takeDamage(damage):
 func defeatEnemyCheck():
 	if(health <= 0):
 		player.gainExp(expToGive)
+		player.stopDrilling()
 		enemyManager.spawnEnemy()
 		queue_free()
 		
-
+func _on_area_2d_mouse_entered():
+	print("MOUSE ENTERED")
+	mouseInsideRadius = true
+	
+func _on_area_2d_mouse_exited():
+	print("MOUSE ENTERED")
+	mouseInsideRadius = false
+	
+	player.stopDrilling() #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
