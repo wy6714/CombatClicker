@@ -29,9 +29,10 @@ extends Node2D
 @export var charging: bool = false
 @export var startingClaymoreAttack: bool = false
 @export var drillActive: bool = false
-@export var drillEquipped: bool = false
-@onready var drillAttackingAnimation
-@onready var drillAttackingAnimation2
+@export var drillEquippedLeft: bool = false
+@export var drillEquippedRight: bool = false
+@onready var activeDrills = {}
+
 
 var currentEnemy;
 
@@ -45,24 +46,30 @@ func _ready():
 func _process(_delta):
 	claymoreCharging(_delta)
 		
-	if(drillActive):
-		drillAttackingAnimation.position = get_global_mouse_position()
+	if(drillEquippedLeft || drillEquippedRight):
+		for key in activeDrills:  # Loops through "left" and "right"
+			if activeDrills[key] != null:
+				activeDrills[key].position = (get_global_mouse_position())
+				activeDrills[key]["animation"].position = get_global_mouse_position()
 	
-	if(drillEquipped):
-		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive):
-			drilling()
-		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive):
-			drilling()
-			print("Right drilling???")
-		
-		if Input.is_action_just_released("left"):
-			stopDrilling()  # Stop drilling for the left mouse button
-			print("Left Click Released - Drill Stopped")
+	if drillEquippedLeft:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive:
+			drilling("left")
+			print("Left drilling started")
+
+	if drillEquippedRight:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive:
+			drilling("right")
+			print("Right drilling started")
+
+	# Check if left mouse button is released
+	if Input.is_action_just_released("left"):
+		stopDrilling("left")
+		print("Left Click Released - Drill Stopped")
 	# Check if right mouse button is released
-		if Input.is_action_just_released("right"):
-			stopDrilling()  # Stop drilling for the right mouse button
-			print("Right Click Released - Drill Stopped")
-	
+	if Input.is_action_just_released("right"):
+		stopDrilling("right")
+		print("Right Click Released - Drill Stopped")
 		
 func determineDamage():
 	damage = strength
@@ -209,54 +216,54 @@ func useUlt():
 		crit = false
 		ultBarSystem.subtractUltProgress()
 		
-func drilling():
-	activateDrillAnim()
-	drillActive = true
-	drillEquipped = true
-	startDrilling()
+func drilling(hand: String):
 
-func drillingRight():
-	pass
+	if hand == "left" and drillEquippedLeft:
+		return  # Left drill already equipped
+	if hand == "right" and drillEquippedRight:
+		return  # Right drill already equipped
+	
+	if hand in activeDrills and activeDrills[hand] != null:
+		return  # Prevent duplicate drills for the same hand
 
-func activateDrillAnim():
-	
-	if(drillAttackingAnimation != null): #IF A DRILL ALREADY EXISTS, APPLY ANOTHER ONE. (Aka, player is dual wielding drills)
-		drillAttackingAnimation2 = attackAnim.instantiate()
-		drillAttackingAnimation2.position = to_local(get_global_mouse_position())
-		drillAttackingAnimation2.drillAnimation()
-		add_child(drillAttackingAnimation2)
-		print("Double drill build???????? yo?????")
-		
-	drillAttackingAnimation = attackAnim.instantiate()
-	drillAttackingAnimation.position = to_local(get_global_mouse_position())
-	drillAttackingAnimation.drillAnimation()
-	add_child(drillAttackingAnimation)
-	
-		
-	
-func startDrilling():
-	if(drillActive):
-		$DrillTimer.start()
-		
-func stopDrilling():
-	drillActive = false
-	drillEquipped = false
-	$DrillTimer.stop()
-	if(drillAttackingAnimation != null):
-		drillAttackingAnimation.stopAnimation()
-		drillAttackingAnimation.queue_free()
-	#if(drillAttackingAnimation2 != null):
-		#drillAttackingAnimation2.stopAnimation()
-		#drillAttackingAnimation2.queue_free()
+	var drillAnimation = attackAnim.instantiate()
+	drillAnimation.position = to_local(get_global_mouse_position())
+	drillAnimation.drillAnimation()
+	add_child(drillAnimation)
 
-func _on_drill_timer_timeout():
+	var drillTimer = Timer.new()
+	drillTimer.wait_time = $DrillTimer.wait_time
+	drillTimer.one_shot = false
+	drillTimer.timeout.connect(func(): drillDamage(hand))
+	add_child(drillTimer)
+	drillTimer.start()
+
+	activeDrills[hand] = {"animation": drillAnimation, "timer": drillTimer}
+	# Mark the corresponding hand as equipped
+	if hand == "left":
+		drillEquippedLeft = true
+	elif hand == "right":
+		drillEquippedRight = true
+	
+func stopDrilling(hand: String):
+	if hand == "left":
+		drillEquippedLeft = false  # Reset the left drill equipped state
+	elif hand == "right":
+		drillEquippedRight = false  # Reset the right drill equipped state
+
+	# Stop the corresponding drill's animation and timer
+	if activeDrills.has(hand):
+		activeDrills[hand]["timer"].stop()
+		activeDrills[hand]["animation"].queue_free()
+		activeDrills.erase(hand)
+
+func drillDamage(hand: String):
 	determineDamage()
-	if(currentEnemy != null):
+	if currentEnemy != null:
 		currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	DamageNumber.display_number(damage, get_global_mouse_position(), crit)
 	updateScore()
 	ultBarSystem.updateUltProgress(energyRecharge)
-	if(crit):
+	if crit:
 		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
-	
