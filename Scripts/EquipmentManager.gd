@@ -416,6 +416,6 @@ func performWeaponAction(mouse_button: String):
 		"Claymore":
 			player.startingClaymoreAttack = true  # Claymore's action for any button
 		"Drill":
-			player.drilling()
+			player.drilling(mouse_button)
 		_:
 			print("No action configured for weapon type:", weaponType)

@@ -56,7 +56,8 @@ func takeDamage(damage):
 func defeatEnemyCheck():
 	if(health <= 0):
 		player.gainExp(expToGive)
-		player.stopDrilling()
+		player.stopDrilling("left")
+		player.stopDrilling("right")
 		enemyManager.spawnEnemy()
 		queue_free()
 		
@@ -68,4 +69,5 @@ func _on_area_2d_mouse_exited():
 	print("MOUSE ENTERED")
 	mouseInsideRadius = false
 	
-	player.stopDrilling() #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
+	player.stopDrilling("left") #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
+	player.stopDrilling("right")
