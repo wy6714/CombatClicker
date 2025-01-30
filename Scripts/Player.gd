@@ -106,18 +106,6 @@ func updateScore():
 	score += damage #Gain points based on how many points you get each click
 	maxScore += damage #Increment the maximum
 	scoreText.text = str(score) #Update text
-
-func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
-	determineDamage()
-	if(currentEnemy != null):
-		currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
-	activateAttackAnim()
-	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge)
-	if(crit):
-		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
-	crit = false
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttack):
@@ -144,17 +132,63 @@ func claymoreCharging(_delta):
 		if (chargeLevel >= 100):
 			print("RESET")
 			chargeLevel = 0
-	
-			
-func dealClaymoreDamage():
+
+func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
-	damage = damage * 5 # Claymores should be very strong, so...
+	
+	# BASIC SWORD DAMAGE MULTIPLIER
+	damage = damage * 5
+	
+	if(currentEnemy != null):
+		currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	activateAttackAnim()
+	updateScore()
+	ultBarSystem.updateUltProgress(energyRecharge)
+	if(crit):
+		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
+	crit = false
+			
+func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
+	determineDamage()
+	
+	#Damage multiplier
+	damage = damage * 10 # Claymores should be very strong, so...
+	
 	currentEnemy.takeDamage(damage)
 	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
 	activateAttackAnim()
 	ultBarSystem.updateUltProgress(energyRecharge * 5)
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+	crit = false
+	
+func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
+	determineDamage()
+	
+	#DAMAGE MULTIPLIER
+	damage = damage * 1 
+	currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	activateAttackAnim()
+	ultBarSystem.updateUltProgress(energyRecharge * 5)
+	if(crit):
+		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+	crit = false
+
+func drillDamage(hand: String):
+	determineDamage()
+	
+	#DRILL DAMAGE MULTIPLIER
+	damage = damage * 1
+	
+	if currentEnemy != null:
+		currentEnemy.takeDamage(damage)
+	DamageNumber.display_number(damage, get_global_mouse_position(), crit)
+	updateScore()
+	ultBarSystem.updateUltProgress(energyRecharge)
+	if crit:
+		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
 	
 func activateChargeMeter():
@@ -185,7 +219,7 @@ func determineClaymoreDamage():
 		updateScore()
 	else:
 		determineDamage()
-		dealDamage()
+		dealFlimsyClaymoreDamage()
 		updateScore()
 	
 func activateAttackAnim():
@@ -257,13 +291,3 @@ func stopDrilling(hand: String):
 		activeDrills[hand]["animation"].queue_free()
 		activeDrills.erase(hand)
 
-func drillDamage(hand: String):
-	determineDamage()
-	if currentEnemy != null:
-		currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage, get_global_mouse_position(), crit)
-	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge)
-	if crit:
-		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
-	crit = false
