@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://b5tq6xudhgo17"]
 
-[ext_resource type="Script" path="res://Scenes/attack_anim.gd" id="1_8uymx"]
+[ext_resource type="Script" path="res://Scripts/attack_anim.gd" id="1_jhmil"]
 [ext_resource type="Texture2D" uid="uid://b2flvr0yjyyo1" path="res://Art/SwordSlashes.png" id="2_kpsxr"]
 [ext_resource type="AudioStream" uid="uid://cnpbjf06hl3db" path="res://Audio/SlashSE.wav" id="3_751iw"]
 [ext_resource type="Texture2D" uid="uid://bbq2pgwjuqvll" path="res://Art/Drill.png" id="4_aa5an"]
@@ -222,7 +222,7 @@ _data = {
 
 [node name="AttackAnim" type="Node2D"]
 scale = Vector2(6, 6)
-script = ExtResource("1_8uymx")
+script = ExtResource("1_jhmil")
 
 [node name="SwordAnims" type="Sprite2D" parent="."]
 visible = false

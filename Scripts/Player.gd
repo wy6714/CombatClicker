@@ -291,3 +291,7 @@ func stopDrilling(hand: String):
 		activeDrills[hand]["animation"].queue_free()
 		activeDrills.erase(hand)
 
+func transactionScoreUpdate(value):
+	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	score += value
+	scoreText.text = str(score)
