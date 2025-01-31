@@ -1,6 +1,6 @@
 extends Node2D
 
-var health: int = 20 # Health of the enemy
+var health: int = 100 # Health of the enemy
 var expToGive: int = 34
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
@@ -25,6 +25,7 @@ func _ready():
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
 	health = health * (1 + 0.2 * (player.level - 1))
+	healthBar.max_value = health
 	healthBar.init_health(health)
 	player.currentEnemy = self
 	

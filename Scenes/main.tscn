@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=11 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
 [ext_resource type="Script" path="res://Scripts/EquipmentManager.gd" id="7_o1iyn"]
 [ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
+[ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -125,6 +126,14 @@ offset_bottom = 40.0
 theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
 theme_override_font_sizes/font_size = 14
 text = "100 points"
+
+[node name="Weapons" type="Label" parent="shop"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 152.0
+offset_right = 80.0
+offset_bottom = 175.0
+text = "WEAPONS"
 
 [node name="Sword" type="Button" parent="shop"]
 layout_mode = 0
@@ -430,13 +439,33 @@ offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
-[node name="Weapons" type="Label" parent="shop"]
+[node name="Recruitment" type="Label" parent="shop"]
 layout_mode = 0
-offset_left = 1.0
-offset_top = 152.0
-offset_right = 80.0
-offset_bottom = 175.0
-text = "WEAPONS"
+offset_left = 163.0
+offset_top = 147.0
+offset_right = 274.0
+offset_bottom = 170.0
+text = "RECRUITMENT
+"
+
+[node name="RecruitPartyMember" type="Button" parent="shop"]
+layout_mode = 0
+offset_left = 162.0
+offset_top = 178.0
+offset_right = 318.0
+offset_bottom = 206.0
+text = "Recruit Party Member!"
+script = ExtResource("10_xt3va")
+
+[node name="RecruitmentCost" type="Label" parent="shop/RecruitPartyMember"]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 20.0
+offset_right = 211.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
+theme_override_font_sizes/font_size = 14
+text = "1000 points!"
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
 [connection signal="button_up" from="shop/AddCritRate" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
@@ -454,3 +483,4 @@ text = "WEAPONS"
 [connection signal="button_down" from="shop/Drill/Drill1" to="shop/EquipmentManager" method="_on_drill_1_button_down"]
 [connection signal="button_down" from="shop/Drill/Drill2" to="shop/EquipmentManager" method="_on_drill_2_button_down"]
 [connection signal="button_down" from="shop/Drill/Drill3" to="shop/EquipmentManager" method="_on_drill_3_button_down"]
+[connection signal="button_down" from="shop/RecruitPartyMember" to="shop/RecruitPartyMember" method="_on_button_down"]
