@@ -1,0 +1,107 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7nqtkti6xlb0"]
+
+[ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="1_5tqap"]
+[ext_resource type="Script" path="res://Scenes/party_member_stat_holder_ui.gd" id="1_g07wn"]
+
+[node name="PartyMemberStatHolderUI" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g07wn")
+
+[node name="StatBox" type="Sprite2D" parent="."]
+position = Vector2(960, 145)
+scale = Vector2(3, 3)
+texture = ExtResource("1_5tqap")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 0
+offset_left = 786.0
+offset_top = 32.0
+offset_right = 833.0
+offset_bottom = 55.0
+text = "Name"
+
+[node name="STR" type="Label" parent="."]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 60.0
+offset_right = 866.0
+offset_bottom = 83.0
+text = "Strength: "
+
+[node name="StrengthPoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 60.0
+offset_right = 980.0
+offset_bottom = 83.0
+text = "1"
+
+[node name="CrR" type="Label" parent="."]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 90.0
+offset_right = 866.0
+offset_bottom = 113.0
+text = "Crit Rate:"
+
+[node name="CritRatePoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 90.0
+offset_right = 980.0
+offset_bottom = 113.0
+text = "1"
+
+[node name="CrD" type="Label" parent="."]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 120.0
+offset_right = 866.0
+offset_bottom = 143.0
+text = "Crit Damage:"
+
+[node name="CritDamagePoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 120.0
+offset_right = 980.0
+offset_bottom = 143.0
+text = "1"
+
+[node name="UR" type="Label" parent="."]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 150.0
+offset_right = 866.0
+offset_bottom = 173.0
+text = "Ult Regen: "
+
+[node name="UltRegenPoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 151.0
+offset_right = 980.0
+offset_bottom = 174.0
+text = "1"
+
+[node name="CD" type="Label" parent="."]
+layout_mode = 0
+offset_left = 790.0
+offset_top = 180.0
+offset_right = 866.0
+offset_bottom = 203.0
+text = "Cooldown:  "
+
+[node name="CooldownPoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 181.0
+offset_right = 980.0
+offset_bottom = 204.0
+text = "1"
