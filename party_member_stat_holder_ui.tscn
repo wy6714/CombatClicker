@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7nqtkti6xlb0"]
+
+[ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="1_p0oy5"]
+
+[node name="PartyMemberStatHolderUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatBox" type="Sprite2D" parent="."]
+position = Vector2(961, 145)
+scale = Vector2(3, 3)
+texture = ExtResource("1_p0oy5")
+
+[node name="Name" type="Label" parent="."]
+offset_left = 786.0
+offset_top = 32.0
+offset_right = 833.0
+offset_bottom = 55.0
+text = "Name"
+
+[node name="STR" type="Label" parent="."]
+offset_left = 790.0
+offset_top = 60.0
+offset_right = 866.0
+offset_bottom = 83.0
+text = "Strength: "
+
+[node name="CrR" type="Label" parent="."]
+offset_left = 790.0
+offset_top = 90.0
+offset_right = 866.0
+offset_bottom = 113.0
+text = "Crit Rate:"
+
+[node name="CrD" type="Label" parent="."]
+offset_left = 790.0
+offset_top = 120.0
+offset_right = 866.0
+offset_bottom = 143.0
+text = "Crit Damage:"
+
+[node name="UR" type="Label" parent="."]
+offset_left = 790.0
+offset_top = 150.0
+offset_right = 866.0
+offset_bottom = 173.0
+text = "Ult Regen: "
+
+[node name="CD" type="Label" parent="."]
+offset_left = 790.0
+offset_top = 180.0
+offset_right = 866.0
+offset_bottom = 203.0
+text = "Cooldown:  "

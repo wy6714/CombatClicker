@@ -17,7 +17,7 @@ offset_right = 54.0
 offset_bottom = -5.0
 text = "Name..."
 
-[node name="Button" type="Button" parent="CharUI"]
+[node name="Stats" type="Button" parent="CharUI"]
 offset_left = -60.0
 offset_right = -4.0
 offset_bottom = 31.0
