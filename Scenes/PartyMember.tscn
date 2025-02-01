@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cjxwnr51qki6q"]
 
-[ext_resource type="Script" path="res://Scenes/PartyMember.gd" id="1_hnggl"]
 [ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="1_j5k6k"]
+[ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 
 [node name="PartyMember" type="Node2D"]
-script = ExtResource("1_hnggl")
+script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]
 position = Vector2(300, 600)
@@ -26,4 +26,5 @@ text = "Stats"
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
 autostart = true
 
+[connection signal="button_down" from="CharUI/Stats" to="." method="_on_stats_button_down"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]

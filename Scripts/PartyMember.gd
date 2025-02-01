@@ -5,7 +5,7 @@ extends Node2D
 @export var strength: int = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var energyRecharge: float = 1
+@export var ultRegen: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var cooldown: int = 7
@@ -15,6 +15,8 @@ extends Node2D
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
 @onready var damageCooldown = $CharUI/DamageCooldown
 var currentEnemy
+
+var open = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -46,9 +48,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 		DamageNumber.display_number(damage,currentEnemy.position, crit) #Display damage number and attack animation upon hit
 		#activateAttackAnim()
 		updateScore()
-		ultBarSystem.updateUltProgress(energyRecharge)
+		ultBarSystem.updateUltProgress(ultRegen)
 		if(crit):
-			ultBarSystem.updateUltProgress(energyRecharge * critDamage)
+			ultBarSystem.updateUltProgress(ultRegen * critDamage)
 		crit = false
 	
 func updateScore():
@@ -63,3 +65,15 @@ func _on_damage_cooldown_timeout():
 	dealDamage()
 	updateTimer()
 	print("character did a thing")
+	
+func _on_stats_button_down():
+	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
+	
+	if(!open):
+		statDisplay.visible = true
+		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown)
+		open = true
+	elif(open):
+		statDisplay.visible = false
+		open = false
+		
