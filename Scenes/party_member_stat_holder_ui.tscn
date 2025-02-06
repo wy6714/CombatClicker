@@ -42,6 +42,25 @@ offset_right = 980.0
 offset_bottom = 83.0
 text = "1"
 
+[node name="Button" type="Button" parent="StrengthPoints"]
+layout_mode = 0
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "+"
+
+[node name="Button2" type="Button" parent="StrengthPoints"]
+layout_mode = 0
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "-
+"
+
 [node name="CrR" type="Label" parent="."]
 layout_mode = 0
 offset_left = 790.0
@@ -57,6 +76,23 @@ offset_top = 90.0
 offset_right = 980.0
 offset_bottom = 113.0
 text = "1"
+
+[node name="Button" type="Button" parent="CritRatePoints"]
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "+"
+
+[node name="Button2" type="Button" parent="CritRatePoints"]
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "-
+"
 
 [node name="CrD" type="Label" parent="."]
 layout_mode = 0
@@ -74,6 +110,23 @@ offset_right = 980.0
 offset_bottom = 143.0
 text = "1"
 
+[node name="Button" type="Button" parent="CritDamagePoints"]
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "+"
+
+[node name="Button2" type="Button" parent="CritDamagePoints"]
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "-
+"
+
 [node name="UR" type="Label" parent="."]
 layout_mode = 0
 offset_left = 790.0
@@ -90,6 +143,23 @@ offset_right = 980.0
 offset_bottom = 174.0
 text = "1"
 
+[node name="Button" type="Button" parent="UltRegenPoints"]
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "+"
+
+[node name="Button2" type="Button" parent="UltRegenPoints"]
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "-
+"
+
 [node name="CD" type="Label" parent="."]
 layout_mode = 0
 offset_left = 790.0
@@ -105,3 +175,48 @@ offset_top = 181.0
 offset_right = 980.0
 offset_bottom = 204.0
 text = "1"
+
+[node name="Button" type="Button" parent="CooldownPoints"]
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "+"
+
+[node name="Button2" type="Button" parent="CooldownPoints"]
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+text = "-
+"
+
+[node name="UpgradePoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 979.0
+offset_top = 216.0
+offset_right = 1116.0
+offset_bottom = 239.0
+text = "Upgrade Points: 0"
+
+[node name="BuyUpgrade" type="Button" parent="."]
+layout_mode = 0
+offset_left = 975.0
+offset_top = 241.0
+offset_right = 1140.0
+offset_bottom = 272.0
+text = "Buy Upgrade Points!"
+
+[node name="UpgradePointsCost" type="Label" parent="BuyUpgrade"]
+modulate = Color(0.878431, 0.184314, 0.490196, 1)
+layout_mode = 0
+offset_left = 98.0
+offset_top = 22.0
+offset_right = 188.0
+offset_bottom = 45.0
+scale = Vector2(0.7, 0.7)
+text = "1000 points"
+
+[connection signal="button_down" from="BuyUpgrade" to="." method="_on_buy_upgrade_button_down"]
