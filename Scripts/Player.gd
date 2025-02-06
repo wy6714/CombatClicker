@@ -55,21 +55,17 @@ func _process(_delta):
 	if drillEquippedLeft:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive:
 			drilling("left")
-			print("Left drilling started")
 
 	if drillEquippedRight:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive:
 			drilling("right")
-			print("Right drilling started")
 
 	# Check if left mouse button is released
 	if Input.is_action_just_released("left"):
 		stopDrilling("left")
-		print("Left Click Released - Drill Stopped")
 	# Check if right mouse button is released
 	if Input.is_action_just_released("right"):
 		stopDrilling("right")
-		print("Right Click Released - Drill Stopped")
 		
 func determineDamage():
 	damage = strength

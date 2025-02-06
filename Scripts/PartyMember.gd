@@ -2,13 +2,13 @@ extends Node2D
 #Party members will act as a more robust, fleshed out, "autoclicker"
 
 # STATS
-@export var strength: int = 10
+@export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
 @export var ultRegen: float = 1
 @export var crit: bool = false # Tracking IF we crit
-@export var damage: int = 0
-@export var cooldown: int = 7
+@export var damage: float = 0
+@export var cooldown: float = 7
 
 # REFERENCES
 @onready var player = get_node("/root/Main/Player")
@@ -24,6 +24,7 @@ func _ready():
 	
 func updateTimer():
 	damageCooldown.wait_time = cooldown
+	print(damageCooldown.wait_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -73,7 +74,9 @@ func _on_stats_button_down():
 		statDisplay.visible = true
 		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown)
 		open = true
+		statDisplay.member = $"."
 	elif(open):
 		statDisplay.visible = false
 		open = false
+		statDisplay.member = null
 		
