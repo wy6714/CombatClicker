@@ -9,18 +9,14 @@ extends Control
 @onready var upgradePointText = $UpgradePoints
 @onready var upgradePointCostText = $BuyUpgrade/UpgradePointsCost
 
-@export var upgradePoints: int = 10
-@export var upgradePointCost: int = 1000
-@export var upgradeCostMultiplier: float = 1.0
-@export var totalAccumulatedUpgradePoints: int = 10
+@onready var cooldownText = $CD
+@onready var cooldownPoints = $CooldownPoints
 
-@export var baseStrength: float = 10
-@export var baseCritRate: float = 5 
-@export var baseCritDamage: float = 2
-@export var baseUltRegen: float = 1
-@export var baseCooldown: float = 7
+
 
 var member
+@onready var player = get_node("/root/Main/Player")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,7 +26,8 @@ func _ready():
 	for button in get_tree().get_nodes_in_group("remove_upgrade"):
 		button.pressed.connect(_on_upgrade_button_pressed.bind(button, false))
 		
-	upgradePointText.text = "Upgrade Points " + str(upgradePoints)
+	if(member != null):
+		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -38,18 +35,38 @@ func _process(delta):
 	pass
 
 func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown):
+	cooldownText.visible = true
+	cooldownPoints.visible = true
+	
 	strengthVal.text = str(strength)
 	critRateVal.text = str(critRate)
 	critDamageVal.text = str(critDamage)
 	ultRegenVal.text = str(ultRegen)
 	cooldownVal.text = str(cooldown)
 	
+	
+	
+	
+func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
+	strengthVal.text = str(strength)
+	critRateVal.text = str(critRate)
+	critDamageVal.text = str(critDamage)
+	ultRegenVal.text = str(ultRegen)
+	
+	cooldownText.visible = false
+	cooldownPoints.visible = false
+	
+	
+
+	
 func _on_buy_upgrade_button_down():
-	upgradePoints += 1
-	upgradePointText.text = "Upgrade Points " + str(upgradePoints)
-	upgradeCostMultiplier += 0.1
-	upgradePointCost *= upgradeCostMultiplier
-	upgradePointCostText.text = str(upgradePointCost) + " points"
+	member.upgradePoints += 1
+	member.totalAccumulatedUpgradePoints += 1
+	upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+	member.upgradeCostMultiplier += 0.1
+	member.upgradePointCost *= member.upgradeCostMultiplier
+	upgradePointCostText.text = str(member.upgradePointCost) + " points"
+	print(str(member.totalAccumulatedUpgradePoints))
 	
 func _on_upgrade_button_pressed(button, is_add):
 	if is_add:
@@ -60,7 +77,7 @@ func _on_upgrade_button_pressed(button, is_add):
 func applyUpgrade(button):
 	print("Applying upgrade from:", button.name)
 	
-	if(upgradePoints > 0):
+	if(member.upgradePoints > 0):
 		if button.is_in_group("strength"):
 			member.strength += 1
 		if button.is_in_group("critRate"):
@@ -72,39 +89,51 @@ func applyUpgrade(button):
 		if button.is_in_group("cooldown"):
 			member.cooldown -= 0.2
 			
-		upgradePoints -= 1
-		upgradePointText.text = "Upgrade Points " + str(upgradePoints)
-		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+		member.upgradePoints -= 1
+		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+		if(!member.isPlayer):
+			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+		else:
+			updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
+			player.strength = member.strength
+			player.critRate = member.critRate
+			player.critDamage = member.critDamage
+			player.energyRecharge = member.ultRegen
 
 
 func removeUpgrade(button):
 	print("Removing upgrade from:", button.name)
-	
-	if(upgradePoints < totalAccumulatedUpgradePoints):
+	print("STRENGTH:", str(member.strength), "MEMBER BASE STRENGTH: ",  str(member.baseStrength))
+	if(member.upgradePoints < member.totalAccumulatedUpgradePoints):
 		if button.is_in_group("strength"):
-			if member.strength > baseStrength:
+			if member.strength > member.baseStrength:
 				member.strength -= 1
 				updateUpgradeValues()
 		if button.is_in_group("critRate"):
-			if member.critRate > baseCritRate:
+			if member.critRate > member.baseCritRate:
 				member.critRate -= 0.5
 				updateUpgradeValues()
 		if button.is_in_group("critDamage"):
-			if member.critDamage > baseCritDamage:
+			if member.critDamage > member.baseCritDamage:
 				member.critDamage -= 0.1
 				updateUpgradeValues()
 		if button.is_in_group("ultRegen"):
-			if member.ultRegen > baseUltRegen:
+			if member.ultRegen > member.baseUltRegen:
 				member.ultRegen -= 1
 				updateUpgradeValues()
 		if button.is_in_group("cooldown"):
-			if member.cooldown > baseCooldown:
+			if member.cooldown > member.baseCooldown:
 				member.cooldown += 0.2
 				updateUpgradeValues()
 				
 func updateUpgradeValues():
-	upgradePoints += 1
-	upgradePointText.text = "Upgrade Points " + str(upgradePoints)
-	updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+	if(!member.isPlayer):
+		member.upgradePoints += 1
+		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+	else:
+		member.upgradePoints += 1
+		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+		updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
 
 
