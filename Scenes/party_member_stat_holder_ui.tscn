@@ -78,6 +78,7 @@ offset_bottom = 113.0
 text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CritRatePoints" groups=["add_upgrade", "critRate"]]
+layout_mode = 0
 offset_left = 63.0
 offset_top = -1.0
 offset_right = 81.0
@@ -86,6 +87,7 @@ scale = Vector2(0.8, 0.8)
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CritRatePoints" groups=["critRate", "remove_upgrade"]]
+layout_mode = 0
 offset_left = 77.0
 offset_top = -1.0
 offset_right = 95.0
@@ -111,6 +113,7 @@ offset_bottom = 143.0
 text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CritDamagePoints" groups=["add_upgrade", "critDamage"]]
+layout_mode = 0
 offset_left = 63.0
 offset_top = -1.0
 offset_right = 81.0
@@ -119,6 +122,7 @@ scale = Vector2(0.8, 0.8)
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CritDamagePoints" groups=["critDamage", "remove_upgrade"]]
+layout_mode = 0
 offset_left = 77.0
 offset_top = -1.0
 offset_right = 95.0
@@ -144,6 +148,7 @@ offset_bottom = 174.0
 text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="UltRegenPoints" groups=["add_upgrade", "ultRegen"]]
+layout_mode = 0
 offset_left = 63.0
 offset_top = -1.0
 offset_right = 81.0
@@ -152,6 +157,7 @@ scale = Vector2(0.8, 0.8)
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="UltRegenPoints" groups=["remove_upgrade", "ultRegen"]]
+layout_mode = 0
 offset_left = 77.0
 offset_top = -1.0
 offset_right = 95.0
@@ -177,6 +183,7 @@ offset_bottom = 204.0
 text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CooldownPoints" groups=["add_upgrade", "cooldown"]]
+layout_mode = 0
 offset_left = 63.0
 offset_top = -1.0
 offset_right = 81.0
@@ -185,6 +192,7 @@ scale = Vector2(0.8, 0.8)
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CooldownPoints" groups=["cooldown", "remove_upgrade"]]
+layout_mode = 0
 offset_left = 77.0
 offset_top = -1.0
 offset_right = 95.0
