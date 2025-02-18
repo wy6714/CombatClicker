@@ -39,6 +39,7 @@ offset_bottom = 78.0
 text = "100"
 
 [node name="_Strength_" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_top = 38.0
 offset_right = 104.0
@@ -46,6 +47,7 @@ offset_bottom = 78.0
 text = "STRENGTH:"
 
 [node name="StrengthNum" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 96.0
 offset_top = 38.0
@@ -54,6 +56,7 @@ offset_bottom = 78.0
 text = "1"
 
 [node name="_CriticalRate_" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_top = 76.0
 offset_right = 135.0
@@ -61,6 +64,7 @@ offset_bottom = 116.0
 text = "CRITICAL RATE:"
 
 [node name="critRateNum" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 128.0
 offset_top = 77.0
@@ -69,6 +73,7 @@ offset_bottom = 117.0
 text = "5"
 
 [node name="CritDamage" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_top = 114.0
 offset_right = 164.0
@@ -76,6 +81,7 @@ offset_bottom = 145.0
 text = "CRITICAL DAMAGE: "
 
 [node name="CritDamageNum" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 156.0
 offset_top = 115.0
@@ -84,6 +90,7 @@ offset_bottom = 146.0
 text = "2"
 
 [node name="EnergyRecharge" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_top = 152.0
 offset_right = 159.0
@@ -91,6 +98,7 @@ offset_bottom = 198.0
 text = "ENERGY RECHARGE: "
 
 [node name="EnergyRechargeNum" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 163.0
 offset_top = 153.0
