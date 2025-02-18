@@ -49,8 +49,10 @@ func _on_stats_button_down():
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
 		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
+		statDisplay.updateMemberTextColors()
 	elif(open):
 		statDisplay.visible = false
 		open = false
+		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
 		statDisplay.member = null
 		

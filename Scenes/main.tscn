@@ -53,9 +53,9 @@ layout_mode = 0
 offset_top = 165.0
 offset_right = 44.0
 offset_bottom = 188.0
-text = "SHOP"
 
 [node name="EquipmentManager" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 2.0
 offset_top = 37.0
@@ -75,6 +75,7 @@ theme_override_font_sizes/font_size = 14
 text = "100 points"
 
 [node name="AddCritRate" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 194.0
 offset_top = 35.0
@@ -94,6 +95,7 @@ theme_override_font_sizes/font_size = 14
 text = "100 points"
 
 [node name="AddCritDamage" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 194.0
 offset_top = 90.0
@@ -113,6 +115,7 @@ theme_override_font_sizes/font_size = 14
 text = "100 points"
 
 [node name="AddEnergyRecharge" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 88.0
@@ -445,19 +448,18 @@ text = "E"
 
 [node name="Recruitment" type="Label" parent="shop"]
 layout_mode = 0
-offset_left = 163.0
-offset_top = 147.0
-offset_right = 274.0
-offset_bottom = 170.0
+offset_left = 1.0
+offset_top = 20.0
+offset_right = 112.0
+offset_bottom = 43.0
 text = "RECRUITMENT
 "
 
 [node name="RecruitPartyMember" type="Button" parent="shop"]
 layout_mode = 0
-offset_left = 162.0
-offset_top = 178.0
-offset_right = 318.0
-offset_bottom = 206.0
+offset_top = 59.0
+offset_right = 183.0
+offset_bottom = 90.0
 text = "Recruit Party Member!"
 script = ExtResource("10_xt3va")
 
