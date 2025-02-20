@@ -2,7 +2,7 @@ extends Node2D
 
 var health: int = 100 # Health of the enemy
 var baseHealth: int = 100
-var expToGive: int = 200
+var expToGive: int = 100
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
@@ -19,6 +19,7 @@ var expToGive: int = 200
 @export var charging: bool = false
 @export var scalarLevel: float = 1.0
 @export var defeatPoints: int = 100
+@export var moneyToGive: int = 100
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
@@ -36,6 +37,7 @@ func _ready():
 	scalarLevel = (1 + 0.2 * (player.level - 1))
 	expToGive *= scalarLevel
 	defeatPoints *= scalarLevel
+	moneyToGive *= scalarLevel
 	print(scalarLevel)
 	print(expToGive)
 	
@@ -66,9 +68,15 @@ func takeDamage(damage):
 	
 func defeatEnemyCheck():
 	if(health <= 0):
-		player.gainExp(expToGive)
+		
 		player.stopDrilling("left")
 		player.stopDrilling("right")
+		
+		player.gainExp(expToGive)
+		player.score += defeatPoints
+		player.updateMoney(moneyToGive)
+		print(player.money)
+		
 		enemyManager.spawnEnemy()
 		queue_free()
 		

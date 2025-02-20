@@ -8,6 +8,7 @@ extends Node2D
 @export var damage: int = 0
 @export var score: int = 0 #Our current score (also currency)
 @export var maxScore: int = 0 # Our TOTAL score accumulated throughout the entirety of playtime. (NOT currency)
+@export var money: int = 0 
 @export var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
 
 @export var level: int = 1
@@ -94,6 +95,11 @@ func updateScore():
 	score += damage #Gain points based on how many points you get each click
 	maxScore += damage #Increment the maximum
 	scoreText.text = str(score) #Update text
+
+func updateMoney(sum):
+	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
+	money += sum
+	moneyText.text = "$" + str(money)
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttack):
