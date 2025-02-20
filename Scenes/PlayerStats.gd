@@ -24,6 +24,7 @@ extends Node2D
 @onready var player = get_node("/root/Main/Player")
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
 @onready var damageCooldown = $CharUI/DamageCooldown
+@onready var nameLine = $CharUI/LineEdit
 var currentEnemy
 
 var open = false
@@ -48,11 +49,13 @@ func _on_stats_button_down():
 		open = true
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
-		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
+		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.updateMemberTextColors()
+		statDisplay.nameText.text = nameLine.text
 	elif(open):
 		statDisplay.visible = false
 		open = false
-		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
+		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.member = null
+		
 		
