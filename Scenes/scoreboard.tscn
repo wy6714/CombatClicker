@@ -14,12 +14,27 @@ offset_right = 80.0
 offset_bottom = 40.0
 text = "SCORE:"
 
+[node name="_MONEY_" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_top = 20.0
+offset_right = 80.0
+offset_bottom = 60.0
+text = "MONEY:"
+
 [node name="ScoreNumber" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 72.0
-offset_right = 215.0
+offset_left = 81.0
+offset_right = 224.0
 offset_bottom = 40.0
 text = "0"
+
+[node name="MoneyNumber" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 19.0
+offset_right = 215.0
+offset_bottom = 59.0
+text = "$0"
 
 [node name="enemy Health" type="RichTextLabel" parent="."]
 visible = false
