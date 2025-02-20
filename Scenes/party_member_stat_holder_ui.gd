@@ -15,7 +15,7 @@ extends Control
 @onready var ultRegenText = $UR
 @onready var cooldownText = $CD
 @onready var cooldownPoints = $CooldownPoints
-
+@onready var nameText = $Name
 
 
 var member
@@ -51,6 +51,7 @@ func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown):
 	
 	
 	
+	
 func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 	strengthVal.text = str(strength)
 	critRateVal.text = str(critRate)
@@ -64,13 +65,15 @@ func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 
 	
 func _on_buy_upgrade_button_down():
-	member.upgradePoints += 1
-	member.totalAccumulatedUpgradePoints += 1
-	upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
-	member.upgradeCostMultiplier += 0.1
-	member.upgradePointCost *= member.upgradeCostMultiplier
-	upgradePointCostText.text = str(member.upgradePointCost) + " points"
-	print(str(member.totalAccumulatedUpgradePoints))
+	if(player.score >= member.upgradePointCost):
+		player.transactionScoreUpdate(member.upgradePointCost * -1)
+		member.upgradePoints += 1
+		member.totalAccumulatedUpgradePoints += 1
+		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+		member.upgradeCostMultiplier += 0.1
+		member.upgradePointCost *= member.upgradeCostMultiplier
+		upgradePointCostText.text = str(member.upgradePointCost) + " points"
+		print(str(member.totalAccumulatedUpgradePoints))
 	
 func _on_upgrade_button_pressed(button, is_add):
 	if is_add:

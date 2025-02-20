@@ -80,23 +80,15 @@ func gainExp(exp):
 	expBarSystem.expBar.value = currentExp
 
 func levelUp():
-	if(currentExp >= expToNextLevel):
+	while currentExp >= expToNextLevel:  # Keep leveling up as long as there's enough EXP
 		print("levelled up!")
 		level += 1
 		expBarSystem.levelText.text = "Lv: " + str(level)
 		var expOverflow = currentExp - expToNextLevel
-		currentExp = 0
-		currentExp += expOverflow
+		currentExp = expOverflow  # Retain the leftover EXP
 		print("POST LEVEL EXP: ", currentExp)
 		
-		#Update strength text upon level...?
-		#strength += 1
-		#var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
-		#strengthText.text = str(strength) 
-		#critRate += 1
-		#crit rate text upgdate
-		#var critText = get_node("/root/Main/Scoreboard/critRateNum")
-		#critText.text = str(critRate)
+		
 func updateScore():
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
 	score += damage #Gain points based on how many points you get each click

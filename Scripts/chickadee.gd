@@ -1,7 +1,8 @@
 extends Node2D
 
 var health: int = 100 # Health of the enemy
-var expToGive: int = 34
+var baseHealth: int = 100
+var expToGive: int = 200
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
@@ -16,6 +17,8 @@ var expToGive: int = 34
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
+@export var scalarLevel: float = 1.0
+@export var defeatPoints: int = 100
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
@@ -24,10 +27,17 @@ var expToGive: int = 34
 func _ready():
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
-	health = health * (1 + 0.2 * (player.level - 1))
+	health = baseHealth * (1 + 0.2 * (player.level - 1))
 	healthBar.max_value = health
 	healthBar.init_health(health)
 	player.currentEnemy = self
+	
+	# Scalar
+	scalarLevel = (1 + 0.2 * (player.level - 1))
+	expToGive *= scalarLevel
+	defeatPoints *= scalarLevel
+	print(scalarLevel)
+	print(expToGive)
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.

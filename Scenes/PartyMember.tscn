@@ -15,7 +15,8 @@ offset_left = -57.0
 offset_top = -36.0
 offset_right = 54.0
 offset_bottom = -5.0
-text = "Name..."
+placeholder_text = "Name"
+max_length = 10
 
 [node name="Stats" type="Button" parent="CharUI"]
 offset_left = -60.0
