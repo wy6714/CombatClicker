@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scenes/PlayerStats.gd" id="1_fhgmt"]
 [ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="2_0s0e4"]
 
-[node name="PartyMember" type="Node2D"]
+[node name="PartyMemberPlayer" type="Node2D"]
 script = ExtResource("1_fhgmt")
 
 [node name="CharUI" type="Sprite2D" parent="."]

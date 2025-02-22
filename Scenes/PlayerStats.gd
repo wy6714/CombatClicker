@@ -58,4 +58,5 @@ func _on_stats_button_down():
 		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.member = null
 		
-		
+func gainUpgradePoints():
+	upgradePoints += 1

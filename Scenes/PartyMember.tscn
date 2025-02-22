@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="1_j5k6k"]
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 
-[node name="PartyMember" type="Node2D"]
+[node name="PartyMember" type="Node2D" groups=["PartyMember"]]
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]

@@ -35,7 +35,11 @@ var isPlayer = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	damageCooldown.wait_time = cooldown
+	
+	upgradePoints += player.totalUpgradePoints # Have party members start off with the total # of upgrade points the player has accumulated
+	# through levels. This way players aren't punished for recruiting party members later (they'd start off super weak relative to everyone else)
+	
+	damageCooldown.wait_time = cooldown # Have them start off swinging immediately
 	
 func updateTimer():
 	damageCooldown.wait_time = cooldown
@@ -100,6 +104,9 @@ func _on_stats_button_down():
 		statDisplay.visible = false
 		open = false
 		statDisplay.member = null
+		
+func gainUpgradePoints():
+	upgradePoints += 1
 		
 		
 		
