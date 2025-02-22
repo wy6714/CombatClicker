@@ -2,10 +2,11 @@ extends Node2D
 
 var health: int = 100 # Health of the enemy
 var baseHealth: int = 100
-var expToGive: int = 100
+var expToGive: int = 34
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
+@onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $HealthBar
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
@@ -23,6 +24,9 @@ var expToGive: int = 100
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
+
+@onready var defeatAnim = $DefeatAnim
+@onready var defeatAnimationList = ["defeatAnim"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -75,10 +79,12 @@ func defeatEnemyCheck():
 		player.gainExp(expToGive)
 		player.score += defeatPoints
 		player.updateMoney(moneyToGive)
-		print(player.money)
 		
-		enemyManager.spawnEnemy()
-		queue_free()
+		var defeatAnimRng = 0
+		defeatAnim.play(defeatAnimationList[defeatAnimRng])
+		area.visible = false
+		healthBar.visible = false
+		
 		
 func _on_area_2d_mouse_entered():
 	print("MOUSE ENTERED")
@@ -90,3 +96,7 @@ func _on_area_2d_mouse_exited():
 	
 	player.stopDrilling("left") #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
 	player.stopDrilling("right")
+
+func defeatAnimCleanup():
+	enemyManager.spawnEnemy()
+	queue_free()

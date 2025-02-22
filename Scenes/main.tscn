@@ -37,7 +37,7 @@ position = Vector2(555, 334)
 
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
-[node name="PartyMember" parent="." instance=ExtResource("6_b5i3i")]
+[node name="PartyMemberPlayer" parent="." instance=ExtResource("6_b5i3i")]
 
 [node name="Scoreboard" parent="." instance=ExtResource("2_s574t")]
 layout_mode = 1

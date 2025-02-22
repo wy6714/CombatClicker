@@ -36,7 +36,9 @@ extends Node2D
 
 
 var currentEnemy;
+@onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
 
+@export var totalUpgradePoints: int = 0 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -88,6 +90,12 @@ func levelUp():
 		var expOverflow = currentExp - expToNextLevel
 		currentExp = expOverflow  # Retain the leftover EXP
 		print("POST LEVEL EXP: ", currentExp)
+		playerStats.gainUpgradePoints()
+		totalUpgradePoints += 1
+		for node in get_tree().get_nodes_in_group("PartyMember"):
+			if node.has_method("gainUpgradePoints"):  # Ensure the node has the function/variable
+				node.gainUpgradePoints()
+		
 		
 		
 func updateScore():

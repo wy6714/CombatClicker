@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://djpoqma4i6ff2"]
+[gd_scene load_steps=16 format=3 uid="uid://djpoqma4i6ff2"]
 
 [ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
 [ext_resource type="Script" path="res://Scenes/EnemyScenes/healthBar.gd" id="3_o46l0"]
+[ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_jb5gd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q7ab8"]
 atlas = ExtResource("1_66y72")
@@ -45,7 +46,82 @@ shadow_color = Color(1, 1, 1, 0.27451)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m0k"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="Chickadee" type="Node2D"]
+[sub_resource type="Animation" id="Animation_xjjs7"]
+resource_name = "defeatAnim"
+length = 0.87
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DefeatSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.073164, 0.148117, 0.212336, 0.296234, 0.356875, 0.417515, 0.490679, 0.606781, 0.706781, 0.792556),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DefeatSprites:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.864119),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.864119),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"defeatAnimCleanup"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pkjai"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DefeatSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DefeatSprites:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k4y5v"]
+_data = {
+"RESET": SubResource("Animation_pkjai"),
+"defeatAnim": SubResource("Animation_xjjs7")
+}
+
+[node name="Enemy" type="Node2D"]
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_goma6")
 
@@ -93,6 +169,18 @@ show_percentage = false
 [node name="Timer" type="Timer" parent="HealthBar"]
 wait_time = 0.1
 one_shot = true
+
+[node name="DefeatAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_k4y5v")
+}
+
+[node name="DefeatSprites" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(13, 13)
+texture = ExtResource("4_jb5gd")
+hframes = 3
+vframes = 4
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
