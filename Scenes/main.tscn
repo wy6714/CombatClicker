@@ -33,7 +33,6 @@ script = ExtResource("1_b0x31")
 [node name="EnemyManager" parent="." instance=ExtResource("2_4tq6c")]
 
 [node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
-position = Vector2(555, 334)
 
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
