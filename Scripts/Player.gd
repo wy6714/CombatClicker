@@ -19,16 +19,21 @@ extends Node2D
 
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
-@onready var chargeMeter
-@onready var chargeMeterInstance
 
+var leftCharging = false
+var rightCharging = false
+var leftChargeLevel = 0
+var rightChargeLevel = 0
+@onready var chargeMeterLeft
+@onready var chargeMeterRight
+var chargeMeterInstanceLeft = null
+var chargeMeterInstanceRight = null
+var startingClaymoreAttackLeft: bool = false
+var startingClaymoreAttackRight: bool = false
 
 @export var animComboCount: int = 0
-@export var chargeLevel = 0
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
-@export var charging: bool = false
-@export var startingClaymoreAttack: bool = false
 @export var drillActive: bool = false
 @export var drillEquippedLeft: bool = false
 @export var drillEquippedRight: bool = false
@@ -77,8 +82,7 @@ func determineDamage():
 	if(rng <= critRate):
 		crit = true
 		damage = damage * critDamage
-		
-	particleEffect()
+	
 
 func gainExp(exp):
 	currentExp += exp;
@@ -113,31 +117,66 @@ func updateMoney(sum):
 	moneyText.text = "$" + str(money)
 	
 func claymoreCharging(_delta):
-	if (startingClaymoreAttack):
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) || Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-			# The right mouse button is pressed
-			if chargeMeterInstance == null:  # Check if it's already instantiated
-				print("Right mouse button is pressed")
-				charging = true
-				activateChargeMeter()  # Only instantiate the charge meter once
-		else:
-			# The right mouse button is released
-			print("Right mouse button is released: CHARGE LEVEL: ", chargeLevel)
-			charging = false
-			determineClaymoreDamage()
-			chargeLevel = 0
-			if (chargeMeterInstance != null):
-				chargeMeterInstance.queue_free()  # Free the charge meter when released
-				chargeMeterInstance = null  # Reset the instance tracker
-				startingClaymoreAttack = false
+	if (startingClaymoreAttackLeft):
+		claymoreChargeLeft()
 				
-	if (charging):
-		chargeLevel += (maxCharge / chargeDuration) * _delta
-		chargeMeter.value = chargeLevel
-		if (chargeLevel >= 100):
+	if(startingClaymoreAttackRight):
+		claymoreChargeRight()
+				
+	if (leftCharging):
+		leftChargeLevel += (maxCharge / chargeDuration) * _delta
+		chargeMeterLeft.value = leftChargeLevel
+		if (leftChargeLevel >= 100):
 			print("RESET")
-			chargeLevel = 0
-
+			leftChargeLevel = 0
+			
+	if (rightCharging):
+		rightChargeLevel += (maxCharge / chargeDuration) * _delta
+		chargeMeterRight.value = rightChargeLevel
+		if (rightChargeLevel >= 100):
+			print("RESET")
+			rightChargeLevel = 0
+			
+func claymoreChargeRight():
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			# A mouse button is pressed
+			if chargeMeterInstanceRight == null:  # Check if it's already instantiated
+				print("Right mouse button is pressed")
+				rightCharging = true
+				activateChargeMeterRight()  # Only instantiate the charge meter once
+	else:
+		# The right mouse button is released
+		rightCharging = false
+		determineClaymoreDamageRight()
+		rightChargeLevel = 0
+		if (chargeMeterInstanceRight != null):
+			chargeMeterInstanceRight.queue_free()  # Free the charge meter when released
+			chargeMeterInstanceRight = null  # Reset the instance tracker
+			startingClaymoreAttackRight = false
+			
+func claymoreChargeLeft():
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		# A left button is pressed
+		if chargeMeterInstanceLeft == null:  # Check if it's already instantiated
+			print("Left mouse button is pressed")
+			leftCharging = true
+			activateChargeMeterLeft()  # Only instantiate the charge meter once
+	else:
+		# The left mouse button is released
+		leftCharging = false
+		determineClaymoreDamageLeft()
+		leftChargeLevel = 0
+		if (chargeMeterInstanceLeft != null):
+			chargeMeterInstanceLeft.queue_free()  # Free the charge meter when released
+			chargeMeterInstanceLeft = null  # Reset the instance tracker
+			startingClaymoreAttackLeft = false
+	
+func determineClaymoreButton(hand: String):
+	if(hand == "left"):
+		startingClaymoreAttackLeft = true
+	if(hand == "right"):
+		startingClaymoreAttackRight = true
+		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
 	
@@ -146,7 +185,13 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	
 	if(currentEnemy != null):
 		currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	particleEffect(200, 300, 3, 5, 0.3)
 	activateAttackAnim()
 	updateScore()
 	ultBarSystem.updateUltProgress(energyRecharge)
@@ -161,7 +206,12 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	damage = damage * 10 # Claymores should be very strong, so...
 	
 	currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	particleEffect(500, 700, 4, 6, 0.25)
 	activateAttackAnim()
 	ultBarSystem.updateUltProgress(energyRecharge * 5)
 	if(crit):
@@ -174,7 +224,12 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	#DAMAGE MULTIPLIER
 	damage = damage * 1 
 	currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	particleEffect(100, 200, 2, 3, 0.3)
 	activateAttackAnim()
 	ultBarSystem.updateUltProgress(energyRecharge * 5)
 	if(crit):
@@ -189,34 +244,60 @@ func drillDamage(hand: String):
 	
 	if currentEnemy != null:
 		currentEnemy.takeDamage(damage)
-	DamageNumber.display_number(damage, get_global_mouse_position(), crit)
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	particleEffectDrill(400, 800, 4, 5, 0.13)
 	updateScore()
 	ultBarSystem.updateUltProgress(energyRecharge)
 	if crit:
 		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
 	
-func activateChargeMeter():
-	chargeMeterInstance = anim_claymore_meter.instantiate()
-	add_child(chargeMeterInstance)
+func activateChargeMeterLeft():
+	chargeMeterInstanceLeft = anim_claymore_meter.instantiate()
+	add_child(chargeMeterInstanceLeft)
 
-	# Print the position and scale
-	print("Charge meter instance position:", chargeMeterInstance.position)
-	print("Charge meter instance scale:", chargeMeterInstance.scale)
-
-	chargeMeter = chargeMeterInstance.get_node("ChargeFill")
-	if chargeMeter:
-		chargeMeter.value = 0
+	chargeMeterLeft = chargeMeterInstanceLeft.get_node("ChargeFill")
+	if chargeMeterLeft:
+		chargeMeterLeft.value = 0
 
 	# Get the current global mouse position
 	var mouse_pos = get_global_mouse_position()
 	# Set the position slightly to the left of the mouse position
-	chargeMeterInstance.position = mouse_pos - Vector2(-70, -50)
-	print("Charge meter repositioned to:", chargeMeterInstance.position)
+	chargeMeterInstanceLeft.position = mouse_pos - Vector2(70, -50)
+	
+func activateChargeMeterRight():
+	chargeMeterInstanceRight = anim_claymore_meter.instantiate()
+	add_child(chargeMeterInstanceRight)
 
-func determineClaymoreDamage():
+	chargeMeterRight = chargeMeterInstanceRight.get_node("ChargeFill")
+	if chargeMeterRight:
+		chargeMeterRight.value = 0
+
+	# Get the current global mouse position
+	var mouse_pos = get_global_mouse_position()
+	# Set the position slightly to the left of the mouse position
+	chargeMeterInstanceRight.position = mouse_pos - Vector2(-70, -50)
+
+func determineClaymoreDamageLeft():
 	totalClicks += 1 #Track totalClicks
-	if(chargeLevel >= 90):
+	if(leftChargeLevel >= 90):
+		determineDamage()
+		dealClaymoreDamage()
+		score += damage #Gain points based on how much damage you get do per click
+		maxScore += damage #Increment the maximum
+		updateScore()
+	else:
+		determineDamage()
+		dealFlimsyClaymoreDamage()
+		updateScore()
+		
+func determineClaymoreDamageRight():
+	totalClicks += 1 #Track totalClicks
+	if(rightChargeLevel >= 90):
 		determineDamage()
 		dealClaymoreDamage()
 		score += damage #Gain points based on how much damage you get do per click
@@ -247,7 +328,11 @@ func useUlt():
 		determineDamage()
 		damage = damage * 100 # Claymores should be very strong, so...
 		currentEnemy.takeDamage(damage)
-		DamageNumber.display_number(damage,get_global_mouse_position(), crit) #Display damage number and attack animation upon hit
+		var rngX = randi_range(-20, 10)
+		var rngY = randi_range(-10, 0)
+		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+		DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 		activateAttackAnim()
 		ultBarSystem.updateUltProgress(0)
 		if(crit):
@@ -301,7 +386,24 @@ func transactionScoreUpdate(value):
 	score += value
 	scoreText.text = str(score)
 
-func particleEffect():
+func particleEffect(vMin, vMax, sMin, sMax, lifetime):
+	damageParticles.initial_velocity_min = vMin
+	damageParticles.initial_velocity_max = vMax
+	damageParticles.scale_amount_min = sMin
+	damageParticles.scale_amount_max = sMax
 	damageParticles.position = get_global_mouse_position()
+	damageParticles.lifetime = lifetime
 	damageParticles.restart()
 	damageParticles.emitting = true
+	
+func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effect simply just doesn't reset, drills do constant damage.
+	damageParticles.initial_velocity_min = vMin
+	damageParticles.initial_velocity_max = vMax
+	damageParticles.scale_amount_min = sMin
+	damageParticles.scale_amount_max = sMax
+	damageParticles.position = get_global_mouse_position()
+	damageParticles.lifetime = lifetime
+	damageParticles.emitting = true
+	
+
+
