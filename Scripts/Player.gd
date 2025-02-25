@@ -39,6 +39,7 @@ var currentEnemy;
 @onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
 
 @export var totalUpgradePoints: int = 0 
+@onready var damageParticles = $DamageParticles
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -76,6 +77,8 @@ func determineDamage():
 	if(rng <= critRate):
 		crit = true
 		damage = damage * critDamage
+		
+	particleEffect()
 
 func gainExp(exp):
 	currentExp += exp;
@@ -297,3 +300,8 @@ func transactionScoreUpdate(value):
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
 	score += value
 	scoreText.text = str(score)
+
+func particleEffect():
+	damageParticles.position = get_global_mouse_position()
+	damageParticles.restart()
+	damageParticles.emitting = true

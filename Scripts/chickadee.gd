@@ -100,3 +100,6 @@ func _on_area_2d_mouse_exited():
 func defeatAnimCleanup():
 	enemyManager.spawnEnemy()
 	queue_free()
+	
+
+	
