@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dpov4rnb55tso"]
+
+[node name="DamageParticles" type="CPUParticles2D"]
+emitting = false
+amount = 15
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+randomness = 0.68
+lifetime_randomness = 0.27
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 70)
+initial_velocity_min = 200.0
+initial_velocity_max = 300.0
+scale_amount_min = 3.0
+scale_amount_max = 5.0
