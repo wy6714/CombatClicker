@@ -1,0 +1,303 @@
+[gd_scene load_steps=21 format=3 uid="uid://6q4nma76h7qw"]
+
+[ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_wl8p2"]
+[ext_resource type="Texture2D" uid="uid://bj26m5aphsnca" path="res://Art/Chicken Fly (1).png" id="2_5m1rh"]
+[ext_resource type="Script" path="res://Scenes/EnemyScenes/healthBar.gd" id="3_2y56n"]
+[ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_eg0es"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85wtu"]
+atlas = ExtResource("2_5m1rh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uu6mv"]
+atlas = ExtResource("2_5m1rh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8k6c"]
+atlas = ExtResource("2_5m1rh")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pn1oe"]
+atlas = ExtResource("2_5m1rh")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85wtu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uu6mv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8k6c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pn1oe")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
+size = Vector2(560, 513.333)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o62ts"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gv485"]
+bg_color = Color(0.748122, 0, 0.15664, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vilx3"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 1.0
+expand_margin_top = 3.0
+expand_margin_right = 1.0
+expand_margin_bottom = 3.0
+shadow_color = Color(1, 1, 1, 0.27451)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m0k"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_pkjai"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DefeatSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DefeatSprites:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xjjs7"]
+resource_name = "defeatAnim"
+length = 0.87
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DefeatSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.073164, 0.148117, 0.212336, 0.296234, 0.356875, 0.417515, 0.490679, 0.606781, 0.706781, 0.792556),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DefeatSprites:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.864119),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.864119),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"defeatAnimCleanup"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k4y5v"]
+_data = {
+"RESET": SubResource("Animation_pkjai"),
+"defeatAnim": SubResource("Animation_xjjs7")
+}
+
+[sub_resource type="Animation" id="Animation_iwom5"]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(215, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HealthBar:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qsl77"]
+resource_name = "entrance"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(680, 333), Vector2(560, 333)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HealthBar:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dg6yy"]
+_data = {
+"RESET": SubResource("Animation_iwom5"),
+"entrance": SubResource("Animation_qsl77")
+}
+
+[node name="Enemy" type="Node2D"]
+position = Vector2(215, 0)
+scale = Vector2(0.3, 0.3)
+script = ExtResource("1_wl8p2")
+health = 150
+baseHealth = 150
+expToGive = 60
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
+scale = Vector2(32, 32)
+sprite_frames = SubResource("SpriteFrames_ri8e5")
+animation = &"Idle"
+frame_progress = 0.24153
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-39.9999, 3.33333)
+shape = SubResource("RectangleShape2D_fiuce")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+z_index = 1
+offset_left = -166.667
+offset_top = -343.333
+offset_right = -126.667
+offset_bottom = -316.333
+scale = Vector2(8.7889, 1.77664)
+theme_override_styles/background = SubResource("StyleBoxEmpty_o62ts")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gv485")
+value = 60.0
+show_percentage = false
+script = ExtResource("3_2y56n")
+
+[node name="DamageBar" type="ProgressBar" parent="HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.379265
+offset_top = -1.52588e-05
+offset_right = -0.379265
+offset_bottom = -1.52588e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_vilx3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_j8m0k")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="HealthBar"]
+wait_time = 0.1
+one_shot = true
+
+[node name="DefeatAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_k4y5v")
+}
+
+[node name="DefeatSprites" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(13, 13)
+texture = ExtResource("4_eg0es")
+hframes = 3
+vframes = 4
+
+[node name="EntranceAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_dg6yy")
+}
+autoplay = "entrance"
+
+[node name="DamageNumberPosition" type="Node2D" parent="."]
+position = Vector2(0, -420)
+scale = Vector2(3.3, 3.3)
+
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="timeout" from="HealthBar/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="HealthBar/Timer" to="HealthBar" method="_on_timer_timeout"]

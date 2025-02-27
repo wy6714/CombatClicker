@@ -1,8 +1,11 @@
 extends Node2D
 
-var health: int = 100 # Health of the enemy
-var baseHealth: int = 100
-var expToGive: int = 34
+@export var health: int = 100 # Health of the enemy
+@export var baseHealth: int = 100
+@export var expToGive: int = 34
+@export var scalarLevel: float = 1.0
+@export var defeatPoints: int = 100
+@export var moneyToGive: int = 100
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
@@ -18,9 +21,7 @@ var expToGive: int = 34
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
-@export var scalarLevel: float = 1.0
-@export var defeatPoints: int = 100
-@export var moneyToGive: int = 100
+
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
@@ -28,6 +29,7 @@ var expToGive: int = 34
 @onready var defeatAnim = $DefeatAnim
 @onready var defeatAnimationList = ["defeatAnim"]
 @onready var damageNumberPosition = $DamageNumberPosition
+@onready var canGrantExp = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -73,18 +75,19 @@ func takeDamage(damage):
 	
 func defeatEnemyCheck():
 	if(health <= 0):
-		
-		player.stopDrilling("left")
-		player.stopDrilling("right")
-		
-		player.gainExp(expToGive)
-		player.score += defeatPoints
-		player.updateMoney(moneyToGive)
-		
-		var defeatAnimRng = 0
-		defeatAnim.play(defeatAnimationList[defeatAnimRng])
-		area.visible = false
-		healthBar.visible = false
+		if(canGrantExp):
+			canGrantExp = false
+			player.stopDrilling("left")
+			player.stopDrilling("right")
+			
+			player.gainExp(expToGive)
+			player.score += defeatPoints
+			player.updateMoney(moneyToGive)
+			
+			var defeatAnimRng = 0
+			defeatAnim.play(defeatAnimationList[defeatAnimRng])
+			area.visible = false
+			healthBar.visible = false
 		
 		
 func _on_area_2d_mouse_entered():
