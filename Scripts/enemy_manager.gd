@@ -4,8 +4,9 @@ var chickadee = preload("res://Scenes/EnemyScenes/chickadee.tscn")
 var chicken = preload("res://Scenes/EnemyScenes/chicken.tscn")
 var ghost = preload("res://Scenes/EnemyScenes/ghost.tscn")
 var slime = preload("res://Scenes/EnemyScenes/slime.tscn")
+var mushroom = preload("res://Scenes/EnemyScenes/mushroom.tscn")
 
-var enemyList = [chickadee, chicken, ghost, slime]
+var enemyList = [chickadee, chicken, ghost, slime, mushroom]
 var initialInstance = true
 func _ready():
 	pass
