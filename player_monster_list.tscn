@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://lfbge76tm67h"]
+
+[ext_resource type="Script" path="res://PlayerMonsterList.gd" id="1_fgjch"]
+
+[node name="PlayerMonsterList" type="Node2D"]
+script = ExtResource("1_fgjch")

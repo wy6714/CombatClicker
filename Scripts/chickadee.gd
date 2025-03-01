@@ -6,6 +6,8 @@ extends Node2D
 @export var scalarLevel: float = 1.0
 @export var defeatPoints: int = 100
 @export var moneyToGive: int = 100
+@export var enemyName: String = ""
+@export var enemyPassive: String = ""
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
@@ -21,7 +23,7 @@ extends Node2D
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
-
+@export var captureRate: int = 88
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
@@ -30,6 +32,9 @@ extends Node2D
 @onready var defeatAnimationList = ["defeatAnim"]
 @onready var damageNumberPosition = $DamageNumberPosition
 @onready var canGrantExp = true
+
+@onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -83,6 +88,7 @@ func defeatEnemyCheck():
 			player.gainExp(expToGive)
 			player.score += defeatPoints
 			player.updateMoney(moneyToGive)
+			monsterCapture()
 			
 			var defeatAnimRng = 0
 			defeatAnim.play(defeatAnimationList[defeatAnimRng])
@@ -105,5 +111,9 @@ func defeatAnimCleanup():
 	enemyManager.spawnEnemy()
 	queue_free()
 	
+func monsterCapture():
+	var captureRng = randi_range(0, 100)
+	if(captureRate >= captureRng):
+		playerCapture.captureMonster(enemyName, enemyPassive)
 
 	

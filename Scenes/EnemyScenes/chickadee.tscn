@@ -210,6 +210,8 @@ _data = {
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_goma6")
+enemyName = "Chickadee"
+enemyPassive = "Attack Boost"
 
 [node name="Area2D" type="Area2D" parent="."]
 

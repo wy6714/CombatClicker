@@ -226,6 +226,7 @@ scale = Vector2(0.3, 0.3)
 script = ExtResource("1_vatxe")
 expToGive = 80
 moneyToGive = 150
+enemyName = "Ghost"
 
 [node name="Area2D" type="Area2D" parent="."]
 

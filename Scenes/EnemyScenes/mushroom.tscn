@@ -324,6 +324,7 @@ scale = Vector2(0.3, 0.3)
 script = ExtResource("1_x7h4e")
 expToGive = 80
 moneyToGive = 150
+enemyName = "Mushroom"
 
 [node name="Area2D" type="Area2D" parent="."]
 
