@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://douvpgvfai6nt"]
+[gd_scene load_steps=4 format=3 uid="uid://douvpgvfai6nt"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_nvpai"]
+[ext_resource type="PackedScene" uid="uid://lfbge76tm67h" path="res://player_monster_list.tscn" id="2_1eiro"]
 [ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://damage_particles.tscn" id="2_7aul2"]
 
 [node name="Player" type="Node2D"]
@@ -8,6 +9,8 @@ script = ExtResource("1_nvpai")
 
 [node name="DrillTimer" type="Timer" parent="."]
 wait_time = 0.1
+
+[node name="PlayerMonsterList" parent="." instance=ExtResource("2_1eiro")]
 
 [node name="DamageParticles" parent="." instance=ExtResource("2_7aul2")]
 

@@ -227,6 +227,7 @@ script = ExtResource("1_wl8p2")
 health = 150
 baseHealth = 150
 expToGive = 60
+enemyName = "Chicken"
 
 [node name="Area2D" type="Area2D" parent="."]
 
