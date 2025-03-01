@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=14 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
+[ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://current_monster_icon_button.tscn" id="13_vp3iu"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -474,6 +475,13 @@ text = "1000 points!"
 
 [node name="PartyMemberStatHolderUI" parent="." instance=ExtResource("11_wl6rb")]
 layout_mode = 1
+
+[node name="CurrentMonsterIconButton" parent="." instance=ExtResource("13_vp3iu")]
+layout_mode = 1
+offset_left = 108.0
+offset_top = 563.0
+offset_right = 108.0
+offset_bottom = 563.0
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
 [connection signal="button_up" from="shop/AddCritRate" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
