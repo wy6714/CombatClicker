@@ -4,6 +4,8 @@ extends Node2D
 var capturedMonsters = {}
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
+@onready var playerCapturePanel = $Control
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -74,3 +76,8 @@ func get_passive_remove_function(passiveEffect: String) -> Callable:
 		"HP Regen": return Callable(self, "removeRegenHealth")
 		_:
 			return Callable()
+			
+# -------------------------------------------------------------------------
+
+func _on_close_button_button_down():
+	playerCapturePanel.visible = false
