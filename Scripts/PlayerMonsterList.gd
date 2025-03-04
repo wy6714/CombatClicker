@@ -5,7 +5,7 @@ var capturedMonsters = {}
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var playerCapturePanel = $Control
-
+@onready var captureList = $Control/GridContainer
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -79,5 +79,5 @@ func get_passive_remove_function(passiveEffect: String) -> Callable:
 			
 # -------------------------------------------------------------------------
 
-func _on_close_button_button_down():
+func _on_texture_button_button_up():
 	playerCapturePanel.visible = false
