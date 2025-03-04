@@ -8,15 +8,6 @@ extends Button
 @onready var partyMemberCount = 0
 @onready var partyMemberMax = 5
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 func _on_button_down(): # (Buying a party member)
 	if(partyMemberCount <= partyMemberMax): # (Can only have so many party members, for now at least idk)
 		if(player.score >= partyMemberCost):
