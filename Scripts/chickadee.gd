@@ -23,7 +23,7 @@ extends Node2D
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
-@export var captureRate: int = 88
+@export var captureRate: int = 99
 
 @onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
 @onready var mouseInsideRadius = false
@@ -53,6 +53,9 @@ func _ready():
 	print(scalarLevel)
 	print(expToGive)
 	
+	enemyPassive = enemyName
+	print(enemyName)
+	print(enemyPassive)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
