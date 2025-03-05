@@ -3,10 +3,10 @@ extends GridContainer
 @onready var base_button = $TextureButton
 @onready var grid = $"."
 @onready var monsterSprite = $TextureButton/Sprite2D
-
 var total_monsters = 50
 
 @onready var base_button_scene = preload("res://Scenes/GridMonsterButton.tscn")
+@onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png")},
@@ -35,19 +35,23 @@ func populate_monster_list():
 		
 		if i < monster_list.size():
 			var monster = monster_list[i]
+			var monsterSprite = monster["sprite"]
 			# Check if the monster is captured and unlocked
 			if monster["name"] in player_monster_list.capturedMonsters and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
 				sprite.texture = monster["sprite"]
+				button.pressed.connect(func(): on_monster_selected(monster["name"], monsterSprite))
 			else:
 				sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected(monster["name"]))
+
 		else:
 			# Empty slot, display a "?" or generic locked sprite
 			sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected("Unknown"))
+			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png")))
 
 		grid.add_child(button)
 	print("populated")
 
-func on_monster_selected(monster_name):
+func on_monster_selected(monster_name, sprite_texture):
 	print("Selected:", monster_name)
+	currentButtonSprite.texture = sprite_texture
+	player_monster_list.equip_monster(monster_name)
