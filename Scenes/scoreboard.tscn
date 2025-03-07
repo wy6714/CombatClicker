@@ -16,9 +16,10 @@ text = "SCORE:"
 
 [node name="_MONEY_" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_top = 20.0
-offset_right = 80.0
-offset_bottom = 60.0
+offset_left = -7.0
+offset_top = 25.0
+offset_right = 73.0
+offset_bottom = 65.0
 text = "MONEY:"
 
 [node name="ScoreNumber" type="RichTextLabel" parent="."]
@@ -30,10 +31,10 @@ text = "0"
 
 [node name="MoneyNumber" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 72.0
-offset_top = 19.0
-offset_right = 215.0
-offset_bottom = 59.0
+offset_left = 66.0
+offset_top = 24.0
+offset_right = 209.0
+offset_bottom = 64.0
 text = "$0"
 
 [node name="enemy Health" type="RichTextLabel" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=15 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
+[ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -38,9 +39,15 @@ script = ExtResource("1_b0x31")
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
 [node name="PartyMemberPlayer" parent="." instance=ExtResource("6_b5i3i")]
+position = Vector2(5, 9)
+
+[node name="ShopUI" parent="." instance=ExtResource("14_hksny")]
+layout_mode = 1
 
 [node name="Scoreboard" parent="." instance=ExtResource("2_s574t")]
 layout_mode = 1
+offset_left = 73.0
+offset_right = 73.0
 
 [node name="ExpBarSystem" parent="." instance=ExtResource("7_gst64")]
 layout_mode = 1
@@ -135,6 +142,7 @@ theme_override_font_sizes/font_size = 14
 text = "100 points"
 
 [node name="Weapons" type="Label" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 152.0
@@ -143,6 +151,7 @@ offset_bottom = 175.0
 text = "WEAPONS"
 
 [node name="Sword" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_top = 175.0
 offset_right = 155.0
@@ -244,6 +253,7 @@ theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
 [node name="Claymore" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_top = 275.0
 offset_right = 155.0
@@ -345,6 +355,7 @@ theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
 [node name="Drill" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 375.0
@@ -447,6 +458,7 @@ theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
 text = "E"
 
 [node name="Recruitment" type="Label" parent="shop"]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 20.0
@@ -456,6 +468,7 @@ text = "RECRUITMENT
 "
 
 [node name="RecruitPartyMember" type="Button" parent="shop"]
+visible = false
 layout_mode = 0
 offset_top = 59.0
 offset_right = 183.0
@@ -478,10 +491,10 @@ layout_mode = 1
 
 [node name="CurrentMonsterIconButton" parent="." instance=ExtResource("13_vp3iu")]
 layout_mode = 1
-offset_left = 108.0
-offset_top = 563.0
-offset_right = 108.0
-offset_bottom = 563.0
+offset_left = 169.0
+offset_top = 570.0
+offset_right = 169.0
+offset_bottom = 570.0
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
 [connection signal="button_up" from="shop/AddCritRate" to="shop/EquipmentManager" method="_on_add_crit_rate_button_up"]
