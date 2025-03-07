@@ -1,0 +1,137 @@
+[gd_scene load_steps=7 format=3 uid="uid://cvks11xnytli4"]
+
+[ext_resource type="Texture2D" uid="uid://olfamcy5lrt" path="res://Art/SkewedRectangleTypeBeat.png" id="1_gjx80"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="2_2xnpc"]
+[ext_resource type="Texture2D" uid="uid://sfsyubw6finl" path="res://Art/ShopLines (1).png" id="2_sajji"]
+[ext_resource type="Texture2D" uid="uid://b7bh4gh88lbp0" path="res://Art/Sword (1).png" id="4_txkhh"]
+[ext_resource type="Texture2D" uid="uid://ce34ipcf50xk7" path="res://Art/Dollar Sign-1.png.png" id="5_fgspc"]
+[ext_resource type="Texture2D" uid="uid://ct5yew26kxtxn" path="res://Art/Recruitment Icon-1.png.png" id="6_ic8i3"]
+
+[node name="ShopUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkewedRectangleTypeBeat" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.4)
+position = Vector2(429.75, 217)
+scale = Vector2(0.45651, 1)
+texture = ExtResource("1_gjx80")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 20.0
+offset_right = 338.0
+offset_bottom = 116.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="TextureButton"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 30.0
+offset_right = 127.0
+offset_bottom = 53.0
+scale = Vector2(2, 2)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "XXXXX"
+
+[node name="TextureButton2" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 209.0
+offset_right = 369.0
+offset_bottom = 305.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="TextureButton2"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 30.0
+offset_right = 127.0
+offset_bottom = 53.0
+scale = Vector2(2, 2)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "XXXXX"
+
+[node name="TextureButton3" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 289.0
+offset_right = 361.0
+offset_bottom = 385.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="TextureButton3"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 30.0
+offset_right = 127.0
+offset_bottom = 53.0
+scale = Vector2(2, 2)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "XXXXX"
+
+[node name="TextureButton4" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 364.0
+offset_right = 352.0
+offset_bottom = 460.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="TextureButton4"]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 30.0
+offset_right = 127.0
+offset_bottom = 53.0
+scale = Vector2(2, 2)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "XXXXX"
+
+[node name="Sword(1)" type="Sprite2D" parent="."]
+position = Vector2(79, 235)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_txkhh")
+
+[node name="DollarSign-1_png" type="Sprite2D" parent="."]
+position = Vector2(67, 397)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_fgspc")
+
+[node name="RecruitmentIcon-1_png" type="Sprite2D" parent="."]
+position = Vector2(71, 317)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_ic8i3")
