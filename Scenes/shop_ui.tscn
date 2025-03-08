@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cvks11xnytli4"]
+[gd_scene load_steps=8 format=3 uid="uid://cvks11xnytli4"]
 
+[ext_resource type="Script" path="res://Scenes/MainShopUI.gd" id="1_0gft2"]
 [ext_resource type="Texture2D" uid="uid://olfamcy5lrt" path="res://Art/SkewedRectangleTypeBeat.png" id="1_gjx80"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="2_2xnpc"]
 [ext_resource type="Texture2D" uid="uid://sfsyubw6finl" path="res://Art/ShopLines (1).png" id="2_sajji"]
@@ -14,14 +15,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_0gft2")
 
 [node name="SkewedRectangleTypeBeat" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 0, 0.4)
+modulate = Color(0, 0, 0, 0.294118)
 position = Vector2(429.75, 217)
 scale = Vector2(0.45651, 1)
 texture = ExtResource("1_gjx80")
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="STORE" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 82.0
 offset_top = 20.0
@@ -30,23 +32,25 @@ offset_bottom = 116.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="TextureButton"]
+[node name="Label" type="Label" parent="STORE"]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 30.0
 offset_right = 127.0
 offset_bottom = 53.0
 scale = Vector2(2, 2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -2
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
-text = "XXXXX"
+text = "STORE"
 
-[node name="TextureButton2" type="TextureButton" parent="."]
+[node name="WeaponStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
 layout_mode = 0
 offset_left = 113.0
 offset_top = 209.0
@@ -55,23 +59,26 @@ offset_bottom = 305.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="TextureButton2"]
+[node name="Label" type="Label" parent="WeaponStoreButton"]
 layout_mode = 0
-offset_left = 22.0
+offset_left = 6.0
 offset_top = 30.0
-offset_right = 127.0
+offset_right = 132.0
 offset_bottom = 53.0
 scale = Vector2(2, 2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -2
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
-text = "XXXXX"
+text = "WEAPON"
 
-[node name="TextureButton3" type="TextureButton" parent="."]
+[node name="HireStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 289.0
@@ -80,23 +87,25 @@ offset_bottom = 385.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="TextureButton3"]
+[node name="Label" type="Label" parent="HireStoreButton"]
 layout_mode = 0
-offset_left = 22.0
+offset_left = 42.0
 offset_top = 30.0
-offset_right = 127.0
+offset_right = 147.0
 offset_bottom = 53.0
 scale = Vector2(2, 2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -2
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
-text = "XXXXX"
+text = "HIRE"
 
-[node name="TextureButton4" type="TextureButton" parent="."]
+[node name="LotteryStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
 layout_mode = 0
 offset_left = 96.0
 offset_top = 364.0
@@ -105,33 +114,35 @@ offset_bottom = 460.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="TextureButton4"]
+[node name="Label" type="Label" parent="LotteryStoreButton"]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 30.0
-offset_right = 127.0
+offset_right = 169.0
 offset_bottom = 53.0
 scale = Vector2(2, 2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.458824)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -2
-theme_override_constants/outline_size = 3
-theme_override_constants/shadow_outline_size = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
-text = "XXXXX"
+text = "LOTTO"
 
-[node name="Sword(1)" type="Sprite2D" parent="."]
-position = Vector2(79, 235)
+[node name="SwordIcon" type="Sprite2D" parent="."]
+position = Vector2(79, 234)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_txkhh")
 
-[node name="DollarSign-1_png" type="Sprite2D" parent="."]
-position = Vector2(67, 397)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("5_fgspc")
-
-[node name="RecruitmentIcon-1_png" type="Sprite2D" parent="."]
-position = Vector2(71, 317)
+[node name="RecruitmentIcon" type="Sprite2D" parent="."]
+position = Vector2(71, 315)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("6_ic8i3")
+
+[node name="LotteryIcon" type="Sprite2D" parent="."]
+position = Vector2(63, 393)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_fgspc")
