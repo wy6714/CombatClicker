@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cvks11xnytli4"]
+[gd_scene load_steps=14 format=3 uid="uid://cvks11xnytli4"]
 
 [ext_resource type="Script" path="res://Scenes/MainShopUI.gd" id="1_0gft2"]
 [ext_resource type="Texture2D" uid="uid://olfamcy5lrt" path="res://Art/SkewedRectangleTypeBeat.png" id="1_gjx80"]
@@ -7,6 +7,106 @@
 [ext_resource type="Texture2D" uid="uid://b7bh4gh88lbp0" path="res://Art/Sword (1).png" id="4_txkhh"]
 [ext_resource type="Texture2D" uid="uid://ce34ipcf50xk7" path="res://Art/Dollar Sign-1.png.png" id="5_fgspc"]
 [ext_resource type="Texture2D" uid="uid://ct5yew26kxtxn" path="res://Art/Recruitment Icon-1.png.png" id="6_ic8i3"]
+
+[sub_resource type="Animation" id="Animation_8dg8q"]
+resource_name = "MainMenuSlideDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-55, 668)]
+}
+
+[sub_resource type="Animation" id="Animation_g4ay8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WeaponStoreMenu:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-999, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hpv44"]
+resource_name = "WeaponMenuSlideDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-70, 659)]
+}
+
+[sub_resource type="Animation" id="Animation_ji1yh"]
+resource_name = "WeaponMenuSlideIn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WeaponStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(61, -637), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_q1flt"]
+resource_name = "MainMenuSlideIn"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(48, -435), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_02jxe"]
+_data = {
+"MainMenuSlideDown": SubResource("Animation_8dg8q"),
+"MainMenuSlideIn": SubResource("Animation_q1flt"),
+"RESET": SubResource("Animation_g4ay8"),
+"WeaponMenuSlideDown": SubResource("Animation_hpv44"),
+"WeaponMenuSlideIn": SubResource("Animation_ji1yh")
+}
 
 [node name="ShopUI" type="Control"]
 layout_mode = 3
@@ -23,7 +123,27 @@ position = Vector2(429.75, 217)
 scale = Vector2(0.45651, 1)
 texture = ExtResource("1_gjx80")
 
-[node name="STORE" type="TextureButton" parent="."]
+[node name="MainStoreMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0002
+
+[node name="SwordIcon" type="Sprite2D" parent="MainStoreMenu"]
+position = Vector2(79, 234)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("4_txkhh")
+
+[node name="RecruitmentIcon" type="Sprite2D" parent="MainStoreMenu"]
+position = Vector2(71, 315)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_ic8i3")
+
+[node name="LotteryIcon" type="Sprite2D" parent="MainStoreMenu"]
+position = Vector2(63, 393)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_fgspc")
+
+[node name="STORE" type="TextureButton" parent="MainStoreMenu"]
 layout_mode = 0
 offset_left = 82.0
 offset_top = 20.0
@@ -32,7 +152,7 @@ offset_bottom = 116.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="STORE"]
+[node name="Label" type="Label" parent="MainStoreMenu/STORE"]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 30.0
@@ -50,7 +170,7 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "STORE"
 
-[node name="WeaponStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
+[node name="WeaponStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
 layout_mode = 0
 offset_left = 113.0
 offset_top = 209.0
@@ -59,7 +179,7 @@ offset_bottom = 305.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="WeaponStoreButton"]
+[node name="Label" type="Label" parent="MainStoreMenu/WeaponStoreButton"]
 layout_mode = 0
 offset_left = 6.0
 offset_top = 30.0
@@ -78,7 +198,7 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "WEAPON"
 
-[node name="HireStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
+[node name="HireStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
 layout_mode = 0
 offset_left = 105.0
 offset_top = 289.0
@@ -87,7 +207,7 @@ offset_bottom = 385.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="HireStoreButton"]
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreButton"]
 layout_mode = 0
 offset_left = 42.0
 offset_top = 30.0
@@ -105,7 +225,7 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "HIRE"
 
-[node name="LotteryStoreButton" type="TextureButton" parent="." groups=["ui_button"]]
+[node name="LotteryStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
 layout_mode = 0
 offset_left = 96.0
 offset_top = 364.0
@@ -114,7 +234,7 @@ offset_bottom = 460.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
-[node name="Label" type="Label" parent="LotteryStoreButton"]
+[node name="Label" type="Label" parent="MainStoreMenu/LotteryStoreButton"]
 layout_mode = 0
 offset_left = 22.0
 offset_top = 30.0
@@ -132,17 +252,148 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "LOTTO"
 
-[node name="SwordIcon" type="Sprite2D" parent="."]
-position = Vector2(79, 234)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("4_txkhh")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_02jxe")
+}
 
-[node name="RecruitmentIcon" type="Sprite2D" parent="."]
-position = Vector2(71, 315)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("6_ic8i3")
+[node name="WeaponStoreMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -999.0
+offset_right = -959.0
+offset_bottom = 40.0
 
-[node name="LotteryIcon" type="Sprite2D" parent="."]
-position = Vector2(63, 393)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("5_fgspc")
+[node name="Weapons" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 20.0
+offset_right = 338.0
+offset_bottom = 116.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="WeaponStoreMenu/Weapons"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 28.0
+offset_right = 139.0
+offset_bottom = 51.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "WEAPONS"
+
+[node name="Swords" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = 121.0
+offset_right = 339.0
+offset_bottom = 217.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="WeaponStoreMenu/Swords"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 28.0
+offset_right = 159.0
+offset_bottom = 51.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "Swords"
+
+[node name="Claymore" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 237.0
+offset_right = 322.0
+offset_bottom = 333.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="WeaponStoreMenu/Claymore"]
+layout_mode = 0
+offset_left = -16.0
+offset_top = 26.0
+offset_right = 152.0
+offset_bottom = 49.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "Claymore"
+
+[node name="Drill" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 357.0
+offset_right = 304.0
+offset_bottom = 453.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="WeaponStoreMenu/Drill"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 26.0
+offset_right = 194.0
+offset_bottom = 49.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "Drill"
+
+[node name="Back" type="TextureButton" parent="WeaponStoreMenu" groups=["back_button", "ui_button"]]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 562.0
+offset_right = 281.0
+offset_bottom = 658.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="WeaponStoreMenu/Back"]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 26.0
+offset_right = 191.0
+offset_bottom = 49.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "BACK"
