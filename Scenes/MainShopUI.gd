@@ -22,6 +22,8 @@ var darkened_color := Color(0.7, 0.7, 0.7)  # Slightly darker version of white (
 
 @onready var mainStoreMenu = $MainStoreMenu
 @onready var weaponStoreMenu = $WeaponStoreMenu
+@onready var hireStoreMenu = $HireStoreMenu
+@onready var lotteryStoreMenu = $LotteryStore
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,6 +47,23 @@ func _ready():
 		if button.is_in_group("back_button"):
 			button.connect("button_down", Callable(self, "returnToMain").bind("Weapon"))
 			
+	for button in hireStoreMenu.get_children():
+		if button.is_in_group("ui_button"):
+			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
+			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
+			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
+			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
+		if button.is_in_group("back_button"):
+			button.connect("button_down", Callable(self, "returnToMain").bind("Hire"))
+	
+	for button in lotteryStoreMenu.get_children():
+		if button.is_in_group("ui_button"):
+			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
+			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
+			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
+			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
+		if button.is_in_group("back_button"):
+			button.connect("button_down", Callable(self, "returnToMain").bind("Lottery"))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -86,6 +105,18 @@ func returnToMain(uiType: String):
 			shopAnim.queue("WeaponMenuSlideDown")
 		else:
 			shopAnim.play("WeaponMenuSlideDown")
+			
+	if(uiType == "Hire"):
+		if(shopAnim.is_playing()):
+			shopAnim.queue("HireMenuSlideDown")
+		else:
+			shopAnim.play("HireMenuSlideDown")
+	
+	if(uiType == "Lottery"):
+		if(shopAnim.is_playing()):
+			shopAnim.queue("LotteryMenuSlideDown")
+		else:
+			shopAnim.play("LotteryMenuSlideDown")
 	
 	if shopAnim.is_playing():	
 		shopAnim.queue("MainMenuSlideIn")
@@ -105,9 +136,15 @@ func getButtonName(button: TextureButton):
 				shopAnim.play("WeaponMenuSlideIn")
 			print("WEAPON")
 		"HireStoreButton":
-			pass
+			if shopAnim.is_playing():
+				shopAnim.queue("HireMenuSlideUp")
+			else:
+				shopAnim.play("HireMenuSlideUp")
 		"LotteryStoreButton":
-			pass
+			if shopAnim.is_playing():
+				shopAnim.queue("LotteryMenuSlideUp")
+			else:
+				shopAnim.play("LotteryMenuSlideUp")
 		_:
 			print("Unknown button clicked:", button.name)  # Debugging fallback
 	
