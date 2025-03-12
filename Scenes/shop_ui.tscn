@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cvks11xnytli4"]
+[gd_scene load_steps=22 format=3 uid="uid://cvks11xnytli4"]
 
 [ext_resource type="Script" path="res://Scenes/MainShopUI.gd" id="1_0gft2"]
 [ext_resource type="Texture2D" uid="uid://olfamcy5lrt" path="res://Art/SkewedRectangleTypeBeat.png" id="1_gjx80"]
@@ -7,6 +7,74 @@
 [ext_resource type="Texture2D" uid="uid://b7bh4gh88lbp0" path="res://Art/Sword (1).png" id="4_txkhh"]
 [ext_resource type="Texture2D" uid="uid://ce34ipcf50xk7" path="res://Art/Dollar Sign-1.png.png" id="5_fgspc"]
 [ext_resource type="Texture2D" uid="uid://ct5yew26kxtxn" path="res://Art/Recruitment Icon-1.png.png" id="6_ic8i3"]
+[ext_resource type="Texture2D" uid="uid://c0tqvsueyfiii" path="res://Art/Monster Container.png" id="8_j47i6"]
+[ext_resource type="Texture2D" uid="uid://dwahqlin7yals" path="res://Art/Monster Container Pressed.png" id="9_t7q8x"]
+[ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="9_xvvhv"]
+[ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="10_6gdb0"]
+
+[sub_resource type="Animation" id="Animation_rppi1"]
+resource_name = "HireMenuSlideDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HireStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-71, 642)]
+}
+
+[sub_resource type="Animation" id="Animation_qstmq"]
+resource_name = "HireMenuSlideUp"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HireStoreMenu:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(71, -655), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ropv0"]
+resource_name = "LotteryMenuSlideDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LotteryStore:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-69, 635)]
+}
+
+[sub_resource type="Animation" id="Animation_28m4u"]
+resource_name = "LotteryMenuSlideUp"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LotteryStore:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(61, -638), Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_8dg8q"]
 resource_name = "MainMenuSlideDown"
@@ -121,70 +189,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(61, -637), Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_rppi1"]
-resource_name = "HireMenuSlideDown"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HireStoreMenu:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-71, 642)]
-}
-
-[sub_resource type="Animation" id="Animation_qstmq"]
-resource_name = "HireMenuSlideUp"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("HireStoreMenu:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(71, -655), Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_ropv0"]
-resource_name = "LotteryMenuSlideDown"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LotteryStore:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-69, 635)]
-}
-
-[sub_resource type="Animation" id="Animation_28m4u"]
-resource_name = "LotteryMenuSlideUp"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("LotteryStore:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(61, -638), Vector2(0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_02jxe"]
@@ -490,6 +494,582 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "BACK"
 
+[node name="Sword1" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 79.0
+offset_top = 177.0
+offset_right = 111.0
+offset_bottom = 209.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Sword1"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Sword1"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Sword1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Sword1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Sword2" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 154.0
+offset_top = 177.0
+offset_right = 186.0
+offset_bottom = 209.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Sword2"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Sword2"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Sword2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Sword2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Sword3" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 230.0
+offset_top = 177.0
+offset_right = 262.0
+offset_bottom = 209.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Sword3"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Sword3"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Sword3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Sword3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Claymore1" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 291.0
+offset_right = 95.0
+offset_bottom = 323.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Claymore1"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Claymore1"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Claymore1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Claymore1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Claymore2" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 291.0
+offset_right = 170.0
+offset_bottom = 323.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Claymore2"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Claymore2"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Claymore2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Claymore2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Claymore3" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 214.0
+offset_top = 291.0
+offset_right = 246.0
+offset_bottom = 323.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Claymore3"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Claymore3"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Claymore3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Claymore3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Drill1" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 413.0
+offset_right = 79.0
+offset_bottom = 445.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Drill1"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Drill1"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Drill1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Drill1"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Drill2" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 122.0
+offset_top = 413.0
+offset_right = 154.0
+offset_bottom = 445.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Drill2"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Drill2"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Drill2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Drill2"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Drill3" type="TextureButton" parent="WeaponStoreMenu"]
+layout_mode = 0
+offset_left = 198.0
+offset_top = 413.0
+offset_right = 230.0
+offset_bottom = 445.0
+scale = Vector2(1.5, 1.5)
+texture_normal = ExtResource("8_j47i6")
+texture_pressed = ExtResource("9_t7q8x")
+texture_hover = ExtResource("10_6gdb0")
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponStoreMenu/Drill3"]
+position = Vector2(16, 16)
+texture = ExtResource("9_xvvhv")
+
+[node name="Cost" type="Label" parent="WeaponStoreMenu/Drill3"]
+layout_mode = 0
+offset_left = 6.66667
+offset_top = 28.0
+offset_right = 46.6667
+offset_bottom = 51.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "1000p"
+
+[node name="Left Equip" type="Label" parent="WeaponStoreMenu/Drill3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = -0.666666
+offset_top = -2.0
+offset_right = 39.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.449746, 0.448907, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
+[node name="Right Equip" type="Label" parent="WeaponStoreMenu/Drill3"]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_left = 27.3333
+offset_top = -2.0
+offset_right = 67.3333
+offset_bottom = 21.0
+theme_override_colors/font_color = Color(0.972231, 0, 0.43255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 8
+text = "E"
+
 [node name="HireStoreMenu" type="Control" parent="."]
 anchors_preset = 0
 offset_left = -999.0
@@ -497,6 +1077,7 @@ offset_right = -959.0
 offset_bottom = 40.0001
 
 [node name="HIRE" type="TextureButton" parent="HireStoreMenu"]
+layout_mode = 0
 offset_left = 79.0
 offset_top = 29.0
 offset_right = 335.0
@@ -524,6 +1105,7 @@ text = "HIRE
 "
 
 [node name="Back" type="TextureButton" parent="HireStoreMenu" groups=["back_button", "ui_button"]]
+layout_mode = 0
 offset_left = 25.0
 offset_top = 562.0
 offset_right = 281.0
@@ -556,6 +1138,7 @@ offset_right = -959.0
 offset_bottom = 40.0001
 
 [node name="Lottery" type="TextureButton" parent="LotteryStore"]
+layout_mode = 0
 offset_left = 79.0
 offset_top = 29.0
 offset_right = 335.0
@@ -583,6 +1166,7 @@ text = "LOTTERY
 "
 
 [node name="Back" type="TextureButton" parent="LotteryStore" groups=["back_button", "ui_button"]]
+layout_mode = 0
 offset_left = 25.0
 offset_top = 562.0
 offset_right = 281.0
