@@ -2,23 +2,11 @@ extends Button
 
 @onready var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
 @onready var player = get_node("/root/Main/Player")
-@onready var strengthText = get_node("/root/Main/Scoreboard/StrengthNum")
-@onready var critRateText = get_node("/root/Main/Scoreboard/critRateNum")
-@onready var critDamageText = get_node("/root/Main/Scoreboard/CritDamageNum")
-@onready var energyRechargeText = get_node("/root/Main/Scoreboard/EnergyRechargeNum")
 
 @export var strengthCost = 50;
 @export var critRateCost = 100;
 @export var critDamageCost = 100;
 @export var energyRegenCost = 100;
-
-@onready var strengthCostLabel = get_node("/root/Main/shop/EquipmentManager/StrengthCost")
-@onready var critRateCostLabel = get_node("/root/Main/shop/AddCritRate/CritRateCost")
-@onready var critDamageCostLabel = get_node("/root/Main/shop/AddCritDamage/CritDamageCost")
-@onready var energyRegenCostLabel = get_node("/root/Main/shop/AddEnergyRecharge/EnergyRegenCost")
-
-@onready var strengthButton = $"."
-@onready var critRateButton = get_node("/root/Main/shop/AddCritRate")
 
 @onready var swordHolder = get_node("/root/Main/shop/Sword")
 @onready var claymoreHolder =  get_node("/root/Main/shop/Claymore")
@@ -48,52 +36,11 @@ var equipped_right_click = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	strengthCostLabel.text = str(strengthCost) + " points"
-	critRateCostLabel.text = str(critRateCost) + " points"
-	energyRegenCostLabel.text = str(energyRegenCost) + " points"
-	critDamageCostLabel.text = str(critDamageCost) + " points"
+	pass
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-
-func _on_button_up(): 
-	if player.score >= strengthCost:
-		player.score -= strengthCost
-		strengthCost += strengthCost / 2
-		scoreText.text = str(player.score)
-		player.strength +=1
-		strengthText.text = str(player.strength)
-		strengthCostLabel.text = str(strengthCost) + " points"
-		
-
-func _on_add_crit_rate_button_up():
-	if player.score >= critRateCost:
-		player.score -= critRateCost
-		critRateCost += critRateCost / 2
-		scoreText.text = str(player.score)
-		player.critRate += 0.5
-		critRateText.text = str(player.critRate)
-		critRateCostLabel.text = str(critRateCost) + " points"
-
-func _on_add_crit_damage_button_down():
-	if player.score >= critDamageCost:
-		player.score -= critDamageCost
-		critDamageCost += critDamageCost / 2 #Insert multipliers for each 
-		scoreText.text = str(player.score)
-		player.critDamage += 0.25
-		critDamageText.text = str(player.critDamage)
-		critDamageCostLabel.text = str(critDamageCost) + " points"
-
-func _on_add_energy_recharge_button_down():
-	if player.score >= energyRegenCost:
-		player.score -= energyRegenCost
-		energyRegenCost += energyRegenCost / 2 #Insert multipliers for each 
-		scoreText.text = str(player.score)
-		player.energyRecharge += 1.0
-		energyRechargeText.text = str(player.energyRecharge)
-		energyRegenCostLabel.text = str(energyRegenCost) + " points"
 
 func _on_sword_button_down():
 	toggle_visibility(swordHolder)
