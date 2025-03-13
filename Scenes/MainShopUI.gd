@@ -43,6 +43,7 @@ var equippedWeapons = {
 }
 
 @onready var player = get_node("/root/Main/Player")
+@onready var recruitmentManager = get_node("/root/Main/shop/RecruitPartyMember")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -74,6 +75,8 @@ func _ready():
 			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
 		if button.is_in_group("back_button"):
 			button.connect("button_down", Callable(self, "returnToMain").bind("Hire"))
+		if button.is_in_group("recruit"):
+			button.connect("button_down", Callable(self, "getNewPartyMember"))
 	
 	for button in lotteryStoreMenu.get_children():
 		if button.is_in_group("ui_button"):
@@ -264,5 +267,8 @@ func performWeaponAction(mouse_button: String):
 			player.drilling(mouse_button)
 		_:
 			print("No action configured for weapon type:", weaponType)
+			
+func getNewPartyMember():
+	recruitmentManager.newPartyMember()
 
 

@@ -1085,6 +1085,49 @@ offset_left = -999.0
 offset_right = -959.0
 offset_bottom = 40.0001
 
+[node name="RecruitButton" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "recruit", "ui_button"]]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 172.0
+offset_right = 380.0
+offset_bottom = 268.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="HireStoreMenu/RecruitButton"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 33
+text = "1000p"
+
+[node name="Label" type="Label" parent="HireStoreMenu/RecruitButton"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "Recruit"
+
 [node name="HIRE" type="TextureButton" parent="HireStoreMenu"]
 layout_mode = 0
 offset_left = 79.0
