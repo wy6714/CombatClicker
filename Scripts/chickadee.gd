@@ -25,7 +25,7 @@ extends Node2D
 @export var charging: bool = false
 @export var captureRate: int = 99
 
-@onready var equipmentManager = get_node("/root/Main/shop/EquipmentManager")
+@onready var equipmentManager = get_node("/root/Main/ShopUI")
 @onready var mouseInsideRadius = false
 
 @onready var defeatAnim = $DefeatAnim

@@ -2,7 +2,6 @@ extends Control
 
 var normal_scale := Vector2(0.5, 0.5)
 var hover_scale := Vector2(0.6, 0.6)
-
 @onready var shopAnim = $AnimationPlayer
 
 var hover_colors = {
@@ -17,17 +16,37 @@ var pressed_colors = {
 	"LotteryStoreButton": Color(0, 0.5, 0)
 }
 
+var weapon_data = {
+	"Sword1": {"type": "Sword", "id": 1, "price": 0, "bought": true},
+	"Sword2": {"type": "Sword", "id": 2, "price": 150, "bought": false},
+	"Sword3": {"type": "Sword", "id": 3, "price": 200, "bought": false},
+	"Claymore1": {"type": "Claymore", "id": 1, "price": 300, "bought": false},
+	"Claymore2": {"type": "Claymore", "id": 2, "price": 350, "bought": false},
+	"Claymore3": {"type": "Claymore", "id": 3, "price": 400, "bought": false},
+	"Drill1": {"type": "Drill", "id": 1, "price": 500, "bought": false},
+	"Drill2": {"type": "Drill", "id": 2, "price": 600, "bought": false},
+	"Drill3": {"type": "Drill", "id": 3, "price": 700, "bought": false},
+}
+
 var normal_color := Color(1, 1, 1)  # Default white
 var darkened_color := Color(0.7, 0.7, 0.7)  # Slightly darker version of white (you can adjust this)
 
+@onready var sword1 = $WeaponStoreMenu/Sword1
 @onready var mainStoreMenu = $MainStoreMenu
 @onready var weaponStoreMenu = $WeaponStoreMenu
 @onready var hireStoreMenu = $HireStoreMenu
 @onready var lotteryStoreMenu = $LotteryStore
 
+var equippedWeapons = {
+	"left": null,
+	"right": null
+}
+
+@onready var player = get_node("/root/Main/Player")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
+		
 	for button in mainStoreMenu.get_children():
 		if button.is_in_group("ui_button"):
 			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
@@ -64,6 +83,11 @@ func _ready():
 			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
 		if button.is_in_group("back_button"):
 			button.connect("button_down", Callable(self, "returnToMain").bind("Lottery"))
+			
+	# Get all weapon buttons
+	for button in weaponStoreMenu.get_children():
+		if button.is_in_group("Weapons"):
+			button.connect("button_down", Callable(self, "select_weapon").bind(button.name))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -88,7 +112,7 @@ func _on_button_down(button: TextureButton):
 	var target_color = pressed_colors.get(button.name, normal_color)
 	button.modulate = target_color
 
-# Button released
+# Button released (brighten)
 func _on_button_up(button: TextureButton):
 	var target_color = hover_colors.get(button.name, normal_color)
 	button.modulate = target_color
@@ -147,6 +171,98 @@ func getButtonName(button: TextureButton):
 				shopAnim.play("LotteryMenuSlideUp")
 		_:
 			print("Unknown button clicked:", button.name)  # Debugging fallback
+
+# Choosing a weapon
+func select_weapon(weapon_name: String):
+	var weapon_info = weapon_data.get(weapon_name)
 	
-	
+	if weapon_info:
+		if weapon_info["bought"]:
+			print("Selected:", weapon_info["type"], "ID:", weapon_info["id"])
+		else:
+			var cost = weapon_info["price"]
+			if player.score >= cost:
+				player.transactionScoreUpdate(cost * -1)
+				weapon_info["bought"] = true
+				print(weapon_name, "purchased! Remaining Gold:", player.score)
+			else:
+				print("Not enough gold to buy", weapon_name)
+				return  # Stop here if we can't afford the weapon
+	else:
+		print("Unknown weapon selected:", weapon_name)
+		return  # Stop if the weapon doesn't exist
+		
+	var weapons = get_tree().get_nodes_in_group("Weapons")
+	var currentWeapon = null
+	for node in weapons:
+		if node.name == weapon_name:
+			currentWeapon = node
+			break
+			
+	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			equip_weapon(currentWeapon, "left")
+			print("LEFT")
+	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
+			equip_weapon(currentWeapon, "right")
+			print("RIGHT")
+			
+	# Function to handle equipping
+func equip_weapon(weapon_button: TextureButton, mouse_button: String):
+	# Get the Left and Right equip symbols
+	var left_symbol = weapon_button.get_node("Left Equip")
+	var right_symbol = weapon_button.get_node("Right Equip")
+
+	# Unequip the previously equipped weapon for this mouse button
+	if equippedWeapons[mouse_button]:
+		var previous_button = equippedWeapons[mouse_button]
+		var previous_symbol = previous_button.get_node(
+			"Left Equip" if mouse_button == "left" else "Right Equip"
+		)
+		previous_symbol.hide()
+
+	# Equip the new weapon
+	equippedWeapons[mouse_button] = weapon_button
+	if mouse_button == "left":
+		left_symbol.show()
+		right_symbol.hide()
+		if(equippedWeapons["right"] == equippedWeapons["left"]):
+			equippedWeapons["right"] = null
+	elif mouse_button == "right":
+		right_symbol.show()
+		left_symbol.hide()
+		if(equippedWeapons["left"] == equippedWeapons["right"]):
+			equippedWeapons["left"] = null
+			
+func getWeaponType(weapon_button: TextureButton) -> String:
+	# Example: Use the button's name to determine the weapon type
+	if weapon_button.name.begins_with("Sword"):
+		return "Sword"
+	elif weapon_button.name.begins_with("Claymore"):
+		return "Claymore"
+	elif weapon_button.name.begins_with("Drill"):
+		return "Drill"
+	else:
+		return "Unknown"
+		
+func performWeaponAction(mouse_button: String):
+	# Get the equipped weapon for the specified mouse button
+	var weapon = equippedWeapons[mouse_button]
+	if weapon == null:
+		print("No weapon equipped for", mouse_button, "click.")
+		return
+
+	# Determine the weapon type
+	var weaponType = getWeaponType(weapon)
+
+	# Perform the action based on the weapon type
+	match weaponType:
+		"Sword":
+			player.dealDamage()  # Sword's action for any button
+		"Claymore":
+			player.determineClaymoreButton(mouse_button)
+		"Drill":
+			player.drilling(mouse_button)
+		_:
+			print("No action configured for weapon type:", weaponType)
+
 

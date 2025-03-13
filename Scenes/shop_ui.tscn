@@ -494,13 +494,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "BACK"
 
-[node name="Sword1" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Sword1" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 79.0
 offset_top = 177.0
 offset_right = 111.0
 offset_bottom = 209.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -558,13 +559,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Sword2" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Sword2" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 154.0
 offset_top = 177.0
 offset_right = 186.0
 offset_bottom = 209.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -622,13 +624,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Sword3" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Sword3" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 230.0
 offset_top = 177.0
 offset_right = 262.0
 offset_bottom = 209.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -686,13 +689,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Claymore1" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Claymore1" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 63.0
 offset_top = 291.0
 offset_right = 95.0
 offset_bottom = 323.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -750,13 +754,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Claymore2" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Claymore2" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 138.0
 offset_top = 291.0
 offset_right = 170.0
 offset_bottom = 323.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -814,13 +819,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Claymore3" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Claymore3" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 214.0
 offset_top = 291.0
 offset_right = 246.0
 offset_bottom = 323.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -878,13 +884,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Drill1" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Drill1" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 47.0
 offset_top = 413.0
 offset_right = 79.0
 offset_bottom = 445.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -942,13 +949,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Drill2" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Drill2" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 122.0
 offset_top = 413.0
 offset_right = 154.0
 offset_bottom = 445.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
@@ -1006,13 +1014,14 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="Drill3" type="TextureButton" parent="WeaponStoreMenu"]
+[node name="Drill3" type="TextureButton" parent="WeaponStoreMenu" groups=["Weapons"]]
 layout_mode = 0
 offset_left = 198.0
 offset_top = 413.0
 offset_right = 230.0
 offset_bottom = 445.0
 scale = Vector2(1.5, 1.5)
+button_mask = 3
 texture_normal = ExtResource("8_j47i6")
 texture_pressed = ExtResource("9_t7q8x")
 texture_hover = ExtResource("10_6gdb0")
