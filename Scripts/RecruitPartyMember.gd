@@ -24,3 +24,13 @@ func instantiateSelf():
 			partyMembers.append(partyMember)
 			partyMemberCount += 1
 			get_tree().root.add_child.call_deferred(partyMember)
+			
+func newPartyMember():
+	if(partyMemberCount <= partyMemberMax): # (Can only have so many party members, for now at least idk)
+		if(player.score >= partyMemberCost):
+			player.transactionScoreUpdate(partyMemberCost * -1)
+			var partyMember = partyMemberTemplate.instantiate()
+			partyMembers.append(partyMember)
+			partyMemberCount += 1
+			partyMember.position.x += 130 * partyMemberCount
+			get_tree().root.add_child(partyMember)

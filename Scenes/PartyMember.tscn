@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 
 [node name="PartyMember" type="Node2D" groups=["PartyMember"]]
+position = Vector2(0, 9)
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]
