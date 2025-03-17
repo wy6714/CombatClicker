@@ -4,16 +4,20 @@ var normal_scale := Vector2(0.5, 0.5)
 var hover_scale := Vector2(0.6, 0.6)
 @onready var shopAnim = $AnimationPlayer
 
+@export var recruitButtonColorHover: Color = Color(1,1,1,1)
+@export var recruitButtonColorPressed: Color = Color(1,1,1,1)
 var hover_colors = {
 	"WeaponStoreButton": Color(0.8, 0, 0),
 	"HireStoreButton": Color(0.8, 0.8, 0),
-	"LotteryStoreButton": Color(0, 0.8, 0)
+	"LotteryStoreButton": Color(0, 0.8, 0),
+	"RecruitButton": recruitButtonColorHover
 }
 
 var pressed_colors = {
 	"WeaponStoreButton": Color(0.5, 0, 0),
 	"HireStoreButton": Color(0.5, 0.5, 0),
-	"LotteryStoreButton": Color(0, 0.5, 0)
+	"LotteryStoreButton": Color(0, 0.5, 0),
+	"RecruitButton": recruitButtonColorPressed
 }
 
 var weapon_data = {
@@ -41,13 +45,20 @@ var equippedWeapons = {
 	"left": null,
 	"right": null
 }
-
+@onready var initialWeapon = $WeaponStoreMenu/Sword1
 @onready var player = get_node("/root/Main/Player")
 @onready var recruitmentManager = get_node("/root/Main/shop/RecruitPartyMember")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-		
+	
+	# Start off with a sword equipped
+	equip_weapon(initialWeapon, "left")
+	
+	getButtonColors()
+	updateWeaponPrices()
+	updateRecruitmentPrices()
+	
 	for button in mainStoreMenu.get_children():
 		if button.is_in_group("ui_button"):
 			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
@@ -194,7 +205,10 @@ func select_weapon(weapon_name: String):
 	else:
 		print("Unknown weapon selected:", weapon_name)
 		return  # Stop if the weapon doesn't exist
-		
+	
+	#UPDATE COST FOR A WEAPON THAT YOU JUST BOUGHT
+	updateWeaponPrices()
+	
 	var weapons = get_tree().get_nodes_in_group("Weapons")
 	var currentWeapon = null
 	for node in weapons:
@@ -271,4 +285,38 @@ func performWeaponAction(mouse_button: String):
 func getNewPartyMember():
 	recruitmentManager.newPartyMember()
 
+#"Sword1": {"type": "Sword", "id": 1, "price": 0, "bought": true}
+func updateWeaponPrices():
+	for button in weaponStoreMenu.get_children():
+		if button.is_in_group("Weapons"):
+			var weapon_info = weapon_data.get(button.name)
+			if weapon_info:
+				var label = button.get_node("Cost")
+				label.text = str(weapon_info["price"])
+			# IF WE HAVE THE WEAPON, HIDE THE COST
+				if weapon_info["bought"] == true:
+					label.visible = false
+			
+func updateRecruitmentPrices():
+	for button in hireStoreMenu.get_children():
+		if button.is_in_group("recruit"):
+			var hireButton = button
+			if(hireButton):
+				var label = hireButton.get_node("Cost")
+				label.text = str(recruitmentManager.partyMemberCost)
+
+func getButtonColors():
+	hover_colors = {
+		"WeaponStoreButton": Color(0.8, 0, 0),
+		"HireStoreButton": Color(0.8, 0.8, 0),
+		"LotteryStoreButton": Color(0, 0.8, 0),
+		"RecruitButton": recruitButtonColorHover
+	}
+
+	pressed_colors = {
+		"WeaponStoreButton": Color(0.5, 0, 0),
+		"HireStoreButton": Color(0.5, 0.5, 0),
+		"LotteryStoreButton": Color(0, 0.5, 0),
+		"RecruitButton": recruitButtonColorPressed
+	}
 
