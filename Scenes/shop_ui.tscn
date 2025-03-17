@@ -212,6 +212,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0gft2")
+recruitButtonColorHover = Color(0.999999, 0.98924, 0.609839, 1)
+recruitButtonColorPressed = Color(0.818334, 0.818335, 1.54018e-06, 1)
 
 [node name="SkewedRectangleTypeBeat" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 0.294118)
@@ -523,7 +525,6 @@ theme_override_constants/shadow_offset_x = -1
 theme_override_constants/shadow_offset_y = 0
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
-text = "1000p"
 
 [node name="Left Equip" type="Label" parent="WeaponStoreMenu/Sword1"]
 visible = false
