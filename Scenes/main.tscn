@@ -46,10 +46,6 @@ layout_mode = 1
 
 [node name="Scoreboard" parent="." instance=ExtResource("2_s574t")]
 layout_mode = 1
-offset_left = 916.0
-offset_top = 97.0
-offset_right = 916.0
-offset_bottom = 97.0
 
 [node name="ExpBarSystem" parent="." instance=ExtResource("7_gst64")]
 layout_mode = 1

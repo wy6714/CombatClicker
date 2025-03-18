@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dmglenqjhas03"]
+[gd_scene load_steps=2 format=3 uid="uid://dmglenqjhas03"]
+
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_fl5pe"]
 
 [node name="Scoreboard" type="Control"]
 layout_mode = 3
@@ -10,31 +12,43 @@ grow_vertical = 2
 
 [node name="_SCORE_" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_right = 80.0
-offset_bottom = 40.0
-text = "SCORE:"
+offset_left = 480.0
+offset_top = 5.0
+offset_right = 744.0
+offset_bottom = 67.0
+theme_override_fonts/normal_font = ExtResource("1_fl5pe")
+theme_override_font_sizes/normal_font_size = 34
+text = "SCORE"
 
 [node name="_MONEY_" type="RichTextLabel" parent="."]
+visible = false
 layout_mode = 0
-offset_left = -7.0
-offset_top = 25.0
-offset_right = 73.0
-offset_bottom = 65.0
+offset_left = 911.0
+offset_top = 97.0
+offset_right = 1110.0
+offset_bottom = 137.0
+theme_override_fonts/normal_font = ExtResource("1_fl5pe")
 text = "MONEY:"
 
-[node name="ScoreNumber" type="RichTextLabel" parent="."]
+[node name="ScoreNumber" type="Label" parent="."]
 layout_mode = 0
-offset_left = 81.0
-offset_right = 224.0
-offset_bottom = 40.0
+offset_left = 479.0
+offset_top = 45.0
+offset_right = 646.0
+offset_bottom = 78.0
+theme_override_fonts/font = ExtResource("1_fl5pe")
+theme_override_font_sizes/font_size = 33
 text = "0"
+horizontal_alignment = 1
 
 [node name="MoneyNumber" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 66.0
-offset_top = 24.0
-offset_right = 209.0
-offset_bottom = 64.0
+offset_left = 915.0
+offset_top = 105.0
+offset_right = 1058.0
+offset_bottom = 145.0
+theme_override_fonts/normal_font = ExtResource("1_fl5pe")
+theme_override_font_sizes/normal_font_size = 24
 text = "$0"
 
 [node name="enemy Health" type="RichTextLabel" parent="."]
