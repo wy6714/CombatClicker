@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=7 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
+[ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
+[ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_xxfgb"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_oucss"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -18,6 +21,7 @@ grow_vertical = 2
 script = ExtResource("1_8i3nt")
 
 [node name="UltBar" type="ColorRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 911.0
 offset_top = 50.0
@@ -44,3 +48,22 @@ offset_top = 10.0
 offset_right = 53.0
 offset_bottom = 33.0
 text = "23 / 1000"
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+offset_left = 896.0
+offset_top = -31.0
+offset_right = 1184.0
+offset_bottom = 257.0
+value = 55.0
+texture_under = ExtResource("2_jhe2u")
+texture_progress = ExtResource("3_xxfgb")
+tint_progress = Color(0.488136, 0.430516, 0, 1)
+
+[node name="LevelText" type="Label" parent="TextureProgressBar"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 111.0
+offset_right = 108.0
+offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "23/1000"
