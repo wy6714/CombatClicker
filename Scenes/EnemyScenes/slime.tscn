@@ -1,9 +1,11 @@
-[gd_scene load_steps=27 format=3 uid="uid://cl7lsshpxwnyp"]
+[gd_scene load_steps=25 format=3 uid="uid://cl7lsshpxwnyp"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_4nkmx"]
 [ext_resource type="Texture2D" uid="uid://cvu3hgvw4lqos" path="res://Art/SlimeRPGColor.png" id="2_02em4"]
-[ext_resource type="Script" path="res://Scenes/EnemyScenes/healthBar.gd" id="3_8dkyi"]
+[ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_djjl4"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_kh8qp"]
+[ext_resource type="Script" path="res://Scenes/EnemyScenes/Health_Bar.gd" id="4_oexa5"]
+[ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_qqlgb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yry0r"]
 atlas = ExtResource("2_02em4")
@@ -85,22 +87,6 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
 size = Vector2(386.667, 340)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o62ts"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gv485"]
-bg_color = Color(0.748122, 0, 0.15664, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vilx3"]
-bg_color = Color(0, 0, 0, 1)
-expand_margin_left = 1.0
-expand_margin_top = 3.0
-expand_margin_right = 1.0
-expand_margin_bottom = 3.0
-shadow_color = Color(1, 1, 1, 0.27451)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8m0k"]
-bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_pkjai"]
 length = 0.001
@@ -206,14 +192,14 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("HealthBar:modulate")
+tracks/2/path = NodePath("Health_Bar:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_qsl77"]
@@ -246,7 +232,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("HealthBar:modulate")
+tracks/2/path = NodePath("Health_Bar:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -282,37 +268,29 @@ frame_progress = 0.718343
 position = Vector2(13.3334, 110)
 shape = SubResource("RectangleShape2D_fiuce")
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="Health_Bar" type="TextureProgressBar" parent="."]
+modulate = Color(1, 1, 1, 0)
 z_index = 1
-offset_left = -156.667
-offset_top = -170.0
-offset_right = -116.667
-offset_bottom = -143.0
-scale = Vector2(8.7889, 1.77664)
-theme_override_styles/background = SubResource("StyleBoxEmpty_o62ts")
-theme_override_styles/fill = SubResource("StyleBoxFlat_gv485")
-value = 60.0
-show_percentage = false
-script = ExtResource("3_8dkyi")
+offset_left = -146.667
+offset_top = -410.0
+offset_right = 141.333
+offset_bottom = -186.0
+value = 70.0
+texture_progress = ExtResource("3_djjl4")
+tint_progress = Color(0.955731, 0, 0.197092, 1)
+script = ExtResource("4_oexa5")
 
-[node name="DamageBar" type="ProgressBar" parent="HealthBar"]
+[node name="DamageBar" type="TextureProgressBar" parent="Health_Bar"]
 z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -0.379265
-offset_top = -1.52588e-05
-offset_right = -0.379265
-offset_bottom = -1.52588e-05
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_vilx3")
-theme_override_styles/fill = SubResource("StyleBoxFlat_j8m0k")
-value = 80.0
-show_percentage = false
+layout_mode = 0
+offset_top = 3.05176e-05
+offset_right = 288.0
+offset_bottom = 224.0
+value = 100.0
+texture_under = ExtResource("5_qqlgb")
+texture_progress = ExtResource("3_djjl4")
 
-[node name="Timer" type="Timer" parent="HealthBar"]
+[node name="Timer" type="Timer" parent="Health_Bar"]
 wait_time = 0.1
 one_shot = true
 
@@ -341,5 +319,4 @@ scale = Vector2(3.3, 3.3)
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
-[connection signal="timeout" from="HealthBar/Timer" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="HealthBar/Timer" to="HealthBar" method="_on_timer_timeout"]
+[connection signal="timeout" from="Health_Bar/Timer" to="Health_Bar" method="_on_timer_timeout"]

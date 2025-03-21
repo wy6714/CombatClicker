@@ -43,10 +43,10 @@ horizontal_alignment = 1
 
 [node name="MoneyNumber" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 911.0
-offset_top = 120.0
-offset_right = 1054.0
-offset_bottom = 160.0
+offset_left = 907.0
+offset_top = 131.0
+offset_right = 1050.0
+offset_bottom = 171.0
 theme_override_fonts/normal_font = ExtResource("1_fl5pe")
 theme_override_font_sizes/normal_font_size = 24
 text = "$0"

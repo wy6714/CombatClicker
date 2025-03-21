@@ -50,16 +50,18 @@ offset_bottom = 33.0
 text = "23 / 1000"
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
 offset_left = 896.0
 offset_top = -31.0
 offset_right = 1184.0
 offset_bottom = 257.0
-value = 55.0
+max_value = 1000.0
+value = 50.0
 texture_under = ExtResource("2_jhe2u")
 texture_progress = ExtResource("3_xxfgb")
 tint_progress = Color(0.488136, 0.430516, 0, 1)
 
-[node name="LevelText" type="Label" parent="TextureProgressBar"]
+[node name="UltText" type="Label" parent="TextureProgressBar"]
 layout_mode = 0
 offset_left = 28.0
 offset_top = 111.0

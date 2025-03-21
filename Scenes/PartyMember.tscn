@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjxwnr51qki6q"]
+[gd_scene load_steps=4 format=3 uid="uid://cjxwnr51qki6q"]
 
 [ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="1_j5k6k"]
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_rftqe"]
 
 [node name="PartyMember" type="Node2D" groups=["PartyMember"]]
 position = Vector2(0, 9)
@@ -16,13 +17,15 @@ offset_left = -57.0
 offset_top = -36.0
 offset_right = 54.0
 offset_bottom = -5.0
+theme_override_fonts/font = ExtResource("3_rftqe")
 placeholder_text = "Name"
 max_length = 10
 
 [node name="Stats" type="Button" parent="CharUI"]
-offset_left = -60.0
-offset_right = -4.0
+offset_left = -57.0
+offset_right = 31.0
 offset_bottom = 31.0
+theme_override_fonts/font = ExtResource("3_rftqe")
 text = "Stats"
 
 [node name="DamageCooldown" type="Timer" parent="CharUI"]

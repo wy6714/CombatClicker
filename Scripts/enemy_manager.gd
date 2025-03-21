@@ -8,12 +8,12 @@ var mushroom = preload("res://Scenes/EnemyScenes/mushroom.tscn")
 
 var enemyList = [chickadee, chicken, ghost, slime, mushroom]
 var initialInstance = true
+
 func _ready():
 	pass
 
 func spawnEnemy():
 	$EnemySpawnTimer.start()
-
 
 func _on_enemy_spawn_timer_timeout():
 	spawnRandomEnemy()

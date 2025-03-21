@@ -13,7 +13,7 @@ extends Node2D
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
-@onready var healthBar = $HealthBar
+@onready var healthBar = $Health_Bar
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 @onready var chargeMeter
@@ -35,9 +35,9 @@ extends Node2D
 
 @onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	setInvisible()
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
 	health = baseHealth * (1 + 0.2 * (player.level - 1))
@@ -119,4 +119,8 @@ func monsterCapture():
 	if(captureRate >= captureRng):
 		playerCapture.captureMonster(enemyName, enemyPassive)
 
+func setInvisible(): #Set the monster and their healthbar invisible at the start
+	$Health_Bar.modulate.a = 0
+	$Area2D.modulate.a = 0
+	
 	
