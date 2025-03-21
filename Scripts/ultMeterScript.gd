@@ -1,7 +1,7 @@
 extends Control
 
-@onready var ultProgressBar = $UltBar/ProgressBar
-@onready var ultText = $UltBar/UltText
+@onready var ultProgressBar = $TextureProgressBar
+@onready var ultText = $TextureProgressBar/UltText
 @export var currentUltValue: float = 0.0
 @export var ultMax: int = 1000
 @export var canUlt: bool = false
