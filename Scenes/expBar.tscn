@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cs3mo6u36kkcl"]
+[gd_scene load_steps=7 format=3 uid="uid://cs3mo6u36kkcl"]
 
 [ext_resource type="Script" path="res://Scripts/expBar.gd" id="1_7oioh"]
+[ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_tcnls"]
+[ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_0h4eq"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_5qtbd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -18,6 +21,7 @@ grow_vertical = 2
 script = ExtResource("1_7oioh")
 
 [node name="ExpBar" type="ColorRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 911.0
 offset_right = 1152.0
@@ -41,4 +45,24 @@ offset_left = 13.0
 offset_top = 10.0
 offset_right = 53.0
 offset_bottom = 33.0
+text = "Lv: 1"
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 896.0
+offset_top = -88.0
+offset_right = 1184.0
+offset_bottom = 200.0
+value = 55.0
+texture_under = ExtResource("2_tcnls")
+texture_progress = ExtResource("3_0h4eq")
+tint_progress = Color(0.00158004, 0.260254, 0.910674, 1)
+
+[node name="LevelText" type="Label" parent="TextureProgressBar"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 111.0
+offset_right = 108.0
+offset_bottom = 134.0
+theme_override_fonts/font = ExtResource("4_5qtbd")
 text = "Lv: 1"
