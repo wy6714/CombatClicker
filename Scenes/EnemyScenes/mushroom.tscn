@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://mvdt2c3xale3"]
+[gd_scene load_steps=35 format=3 uid="uid://mvdt2c3xale3"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_x7h4e"]
 [ext_resource type="Texture2D" uid="uid://kctbfitivfbo" path="res://Art/WiggleMushroom.png" id="2_5aaoh"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_lydhm"]
 [ext_resource type="Script" path="res://Scenes/EnemyScenes/Health_Bar.gd" id="4_ucgpc"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_drref"]
+[ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_rif11"]
+[ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_fcr41"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l2kc6"]
 atlas = ExtResource("2_5aaoh")
@@ -327,9 +329,9 @@ shape = SubResource("RectangleShape2D_fiuce")
 [node name="Health_Bar" type="TextureProgressBar" parent="."]
 z_index = 1
 offset_left = -146.667
-offset_top = -410.0
+offset_top = -463.333
 offset_right = 141.333
-offset_bottom = -186.0
+offset_bottom = -239.333
 value = 70.0
 texture_progress = ExtResource("3_2aq52")
 tint_progress = Color(0.955731, 0, 0.197092, 1)
@@ -344,6 +346,29 @@ offset_bottom = 224.0
 value = 100.0
 texture_under = ExtResource("5_drref")
 texture_progress = ExtResource("3_2aq52")
+
+[node name="BreakBar" type="TextureProgressBar" parent="Health_Bar"]
+visible = false
+z_index = 1
+offset_top = 40.0
+offset_right = 288.0
+offset_bottom = 264.0
+value = 100.0
+texture_progress = ExtResource("6_rif11")
+
+[node name="BreakDamageBar" type="TextureProgressBar" parent="Health_Bar/BreakBar"]
+z_index = -1
+layout_mode = 0
+offset_right = 288.0
+offset_bottom = 224.0
+value = 100.0
+texture_under = ExtResource("7_fcr41")
+texture_progress = ExtResource("6_rif11")
+tint_progress = Color(0.617455, 0.617455, 0.617455, 1)
+
+[node name="BreakTimer" type="Timer" parent="Health_Bar/BreakBar"]
+wait_time = 0.1
+one_shot = true
 
 [node name="Timer" type="Timer" parent="Health_Bar"]
 wait_time = 0.1
@@ -374,4 +399,5 @@ scale = Vector2(3.3, 3.3)
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="timeout" from="Health_Bar/BreakBar/BreakTimer" to="Health_Bar" method="_on_break_timer_timeout"]
 [connection signal="timeout" from="Health_Bar/Timer" to="Health_Bar" method="_on_timer_timeout"]

@@ -14,9 +14,14 @@ extends Node2D
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $Health_Bar
+
 @onready var breakAmount = 100
 @onready var breakBar = $Health_Bar/BreakBar
 @onready var breakable = false
+@onready var broken = false
+var break_recovery_time = 5.0  # Default recovery time in seconds
+var break_recovery_speed = 100.0 / break_recovery_time  # Adjusts speed dynamically
+
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 @onready var chargeMeter
@@ -64,16 +69,14 @@ func _ready():
 	expToGive *= scalarLevel
 	defeatPoints *= scalarLevel
 	moneyToGive *= scalarLevel
-	print(scalarLevel)
-	print(expToGive)
 	
 	enemyPassive = enemyName
-	print(enemyName)
-	print(enemyPassive)
+
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	pass
+	if broken:
+		recoveringFromBreak(_delta)
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
@@ -87,8 +90,6 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
 			player.useUlt()
 			print("hi")
-	
-
 					
 func takeDamage(damage, breakMult):
 	health -= damage
@@ -101,8 +102,19 @@ func takeDamage(damage, breakMult):
 	
 func takeBreakDamage(breakDamage):
 	if(breakable):
-		breakAmount -= breakDamage
+		if(!broken):
+			breakAmount -= breakDamage
+			healthBar.breakVal = breakAmount
+		if(breakAmount <= 0):
+			broken = true
+			print("BREAK")
+			
+func recoveringFromBreak(delta):
+	if(broken):
+		breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
 		healthBar.breakVal = breakAmount
+	if(breakAmount >= 100):
+		broken = false
 	
 func defeatEnemyCheck():
 	if(health <= 0):

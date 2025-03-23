@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bpykp0eem4hm8"]
+[gd_scene load_steps=21 format=3 uid="uid://bpykp0eem4hm8"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_vatxe"]
 [ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/SpoopyGhost.png" id="2_p7vgq"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://Scenes/EnemyScenes/Health_Bar.gd" id="4_2daqe"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_f7gj3"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_hil3y"]
+[ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_qy0b5"]
+[ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_e316m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fosa5"]
 atlas = ExtResource("2_p7vgq")
@@ -231,9 +233,9 @@ shape = SubResource("RectangleShape2D_fiuce")
 modulate = Color(1, 1, 1, 0)
 z_index = 1
 offset_left = -146.667
-offset_top = -410.0
+offset_top = -463.333
 offset_right = 141.333
-offset_bottom = -186.0
+offset_bottom = -239.333
 value = 70.0
 texture_progress = ExtResource("3_kyu5m")
 tint_progress = Color(0.955731, 0, 0.197092, 1)
@@ -248,6 +250,29 @@ offset_bottom = 224.0
 value = 100.0
 texture_under = ExtResource("5_hil3y")
 texture_progress = ExtResource("3_kyu5m")
+
+[node name="BreakBar" type="TextureProgressBar" parent="Health_Bar"]
+visible = false
+z_index = 1
+offset_top = 40.0
+offset_right = 288.0
+offset_bottom = 264.0
+value = 100.0
+texture_progress = ExtResource("6_qy0b5")
+
+[node name="BreakDamageBar" type="TextureProgressBar" parent="Health_Bar/BreakBar"]
+z_index = -1
+layout_mode = 0
+offset_right = 288.0
+offset_bottom = 224.0
+value = 100.0
+texture_under = ExtResource("7_e316m")
+texture_progress = ExtResource("6_qy0b5")
+tint_progress = Color(0.617455, 0.617455, 0.617455, 1)
+
+[node name="BreakTimer" type="Timer" parent="Health_Bar/BreakBar"]
+wait_time = 0.1
+one_shot = true
 
 [node name="Timer" type="Timer" parent="Health_Bar"]
 wait_time = 0.1
@@ -278,4 +303,5 @@ scale = Vector2(3.3, 3.3)
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="timeout" from="Health_Bar/BreakBar/BreakTimer" to="Health_Bar" method="_on_break_timer_timeout"]
 [connection signal="timeout" from="Health_Bar/Timer" to="Health_Bar" method="_on_timer_timeout"]
