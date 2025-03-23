@@ -10,6 +10,10 @@ extends TextureProgressBar
 var health = 0 : set = _set_health
 var breakVal = 100: set = _set_break
 
+func _process(delta):
+	pass
+	
+	
 func _set_health(newHealth):
 	var prev_health = health
 	health = min(max_value, newHealth)
@@ -35,7 +39,7 @@ func _set_break(newBreak):
 	if (breakVal < prev_break):
 		breakTimer.start()
 	else:
-		pass
+		print("um")
 
 func init_health(_health):
 	health = _health
@@ -56,3 +60,6 @@ func _on_timer_timeout():
 
 func _on_break_timer_timeout():
 	breakDamageBar.value = breakVal
+	print("uh break timer timeout")
+	
+
