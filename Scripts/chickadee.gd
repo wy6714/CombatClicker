@@ -14,6 +14,9 @@ extends Node2D
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $Health_Bar
+@onready var breakAmount = 100
+@onready var breakBar = $Health_Bar/BreakBar
+@onready var breakable = false
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 @onready var chargeMeter
@@ -43,6 +46,17 @@ func _ready():
 	health = baseHealth * (1 + 0.2 * (player.level - 1))
 	healthBar.max_value = health
 	healthBar.init_health(health)
+	
+	# Determine if a monster has a break meter or not. Early game monsters shouldn't, as the player should just get used to clicking
+	# with no other distractions for a while, and THEN we implement enemy gimmicks. 
+	
+	breakable = randi() % 2 == 1  # True or False randomly
+	if(breakable):
+		breakable = true #This enemy WILL have a break meter. Set it up
+		breakBar.visible = true
+		healthBar.init_break(breakAmount)
+	
+	
 	player.currentEnemy = self
 	
 	# Scalar
@@ -76,10 +90,19 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 
 					
-func takeDamage(damage):
+func takeDamage(damage, breakMult):
 	health -= damage
 	healthBar.health = health
+	
+	var breakTotal = ceil(damage / 4) * breakMult
+	takeBreakDamage(breakTotal)
+	
 	defeatEnemyCheck()
+	
+func takeBreakDamage(breakDamage):
+	if(breakable):
+		breakAmount -= breakDamage
+		healthBar.breakVal = breakAmount
 	
 func defeatEnemyCheck():
 	if(health <= 0):

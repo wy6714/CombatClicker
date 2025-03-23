@@ -39,6 +39,10 @@ var startingClaymoreAttackRight: bool = false
 @export var drillEquippedRight: bool = false
 @onready var activeDrills = {}
 
+var swordBreakMult = 6
+var drillBreakMult = 3
+var claymoreBreakMult = 8
+var ultBreakMult = 9
 
 var currentEnemy;
 @onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
@@ -184,7 +188,7 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	damage = damage * 5
 	
 	if(currentEnemy != null):
-		currentEnemy.takeDamage(damage)
+		currentEnemy.takeDamage(damage, swordBreakMult)
 	
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
@@ -205,7 +209,7 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	#Damage multiplier
 	damage = damage * 10 # Claymores should be very strong, so...
 	
-	currentEnemy.takeDamage(damage)
+	currentEnemy.takeDamage(damage, claymoreBreakMult)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -223,7 +227,7 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	
 	#DAMAGE MULTIPLIER
 	damage = damage * 1 
-	currentEnemy.takeDamage(damage)
+	currentEnemy.takeDamage(damage, 1)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -243,7 +247,7 @@ func drillDamage(hand: String):
 	damage = damage * 1
 	
 	if currentEnemy != null:
-		currentEnemy.takeDamage(damage)
+		currentEnemy.takeDamage(damage, drillBreakMult)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -327,7 +331,7 @@ func useUlt():
 		# Ult.
 		determineDamage()
 		damage = damage * 100 # Claymores should be very strong, so...
-		currentEnemy.takeDamage(damage)
+		currentEnemy.takeDamage(damage, ultBreakMult)
 		var rngX = randi_range(-20, 10)
 		var rngY = randi_range(-10, 0)
 		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
