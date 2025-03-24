@@ -15,12 +15,14 @@ extends Node2D
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $Health_Bar
 
-@onready var breakAmount = 100
+var breakAmount = 100
 @onready var breakBar = $Health_Bar/BreakBar
-@onready var breakable = false
-@onready var broken = false
-var break_recovery_time = 5.0  # Default recovery time in seconds
+var breakable = false
+var broken = false
+var break_recovery_time = 4.0  # Default recovery time in seconds
 var break_recovery_speed = 100.0 / break_recovery_time  # Adjusts speed dynamically
+var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREFERABLY set to 4, but, for debug, it is set to 1.
+
 
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
@@ -41,6 +43,7 @@ var break_recovery_speed = 100.0 / break_recovery_time  # Adjusts speed dynamica
 @onready var damageNumberPosition = $DamageNumberPosition
 @onready var canGrantExp = true
 
+
 @onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
 
 # Called when the node enters the scene tree for the first time.
@@ -55,11 +58,12 @@ func _ready():
 	# Determine if a monster has a break meter or not. Early game monsters shouldn't, as the player should just get used to clicking
 	# with no other distractions for a while, and THEN we implement enemy gimmicks. 
 	
-	breakable = randi() % 2 == 1  # True or False randomly
-	if(breakable):
-		breakable = true #This enemy WILL have a break meter. Set it up
-		breakBar.visible = true
-		healthBar.init_break(breakAmount)
+	if(player.level >= breakPrereqLevel):
+		breakable = randi() % 2 == 1  # True or False randomly
+		if(breakable):
+			breakable = true #This enemy WILL have a break meter. Set it up
+			breakBar.visible = true
+			healthBar.init_break(breakAmount)
 	
 	
 	player.currentEnemy = self
