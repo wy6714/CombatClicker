@@ -186,7 +186,7 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	
 	# BASIC SWORD DAMAGE MULTIPLIER
 	damage = damage * 5
-	
+	breakDamageMultiplier()
 	if(currentEnemy != null):
 		currentEnemy.takeDamage(damage, swordBreakMult)
 	
@@ -208,6 +208,7 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	
 	#Damage multiplier
 	damage = damage * 10 # Claymores should be very strong, so...
+	breakDamageMultiplier()
 	
 	currentEnemy.takeDamage(damage, claymoreBreakMult)
 	var rngX = randi_range(-20, 10)
@@ -227,6 +228,8 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	
 	#DAMAGE MULTIPLIER
 	damage = damage * 1 
+	breakDamageMultiplier()
+	
 	currentEnemy.takeDamage(damage, 1)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
@@ -245,6 +248,7 @@ func drillDamage(hand: String):
 	
 	#DRILL DAMAGE MULTIPLIER
 	damage = damage * 1
+	breakDamageMultiplier()
 	
 	if currentEnemy != null:
 		currentEnemy.takeDamage(damage, drillBreakMult)
@@ -409,5 +413,13 @@ func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effe
 	damageParticles.lifetime = lifetime
 	damageParticles.emitting = true
 	
-
-
+func breakDamageMultiplier():
+	if(currentEnemy.breakable):
+		if(currentEnemy.broken):
+			damage = floor(damage * 2)
+			print("Breakable, and BROKEN! Damage: ", damage)
+		else:
+			damage = max(1,floor(damage * 0.8)) #Ensures its not 0
+			print("Breakable, but NOT broken. Damage: ", damage)
+	else:
+		print("Regular ahh damag")

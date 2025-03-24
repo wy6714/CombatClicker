@@ -34,12 +34,11 @@ func _set_break(newBreak):
 	
 	if breakVal <= 0:
 		breakVal = 0
-		print("broken!")
 	
 	if (breakVal < prev_break):
 		breakTimer.start()
 	else:
-		print("um")
+		pass
 
 func init_health(_health):
 	health = _health
@@ -60,6 +59,5 @@ func _on_timer_timeout():
 
 func _on_break_timer_timeout():
 	breakDamageBar.value = breakVal
-	print("uh break timer timeout")
 	
 

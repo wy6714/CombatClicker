@@ -60,3 +60,4 @@ func _on_stats_button_down():
 		
 func gainUpgradePoints():
 	upgradePoints += 1
+	
