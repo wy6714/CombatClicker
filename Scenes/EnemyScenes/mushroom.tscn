@@ -350,6 +350,7 @@ texture_progress = ExtResource("3_2aq52")
 [node name="BreakBar" type="TextureProgressBar" parent="Health_Bar"]
 visible = false
 z_index = 1
+layout_mode = 0
 offset_top = 40.0
 offset_right = 288.0
 offset_bottom = 264.0
