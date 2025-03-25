@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=16 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
+[ext_resource type="PackedScene" uid="uid://dla7bxyajohr" path="res://qte.tscn" id="13_fc1vf"]
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
 [ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
 
@@ -423,6 +424,9 @@ offset_bottom = 40.0
 theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
 theme_override_font_sizes/font_size = 14
 text = "1000 points!"
+
+[node name="QTE" parent="." instance=ExtResource("13_fc1vf")]
+position = Vector2(669, 209)
 
 [node name="PartyMemberStatHolderUI" parent="." instance=ExtResource("11_wl6rb")]
 layout_mode = 1
