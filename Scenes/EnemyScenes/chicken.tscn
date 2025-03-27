@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bj26m5aphsnca" path="res://Art/Chicken Fly (1).png" id="2_5m1rh"]
 [ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_5i8hx"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_eg0es"]
-[ext_resource type="Script" path="res://Scenes/EnemyScenes/Health_Bar.gd" id="4_pq3bo"]
+[ext_resource type="Script" path="res://Scripts/Health_Bar.gd" id="4_vnktb"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_u473x"]
 [ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_4wykv"]
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_r8fdn"]
@@ -239,7 +239,7 @@ offset_bottom = -239.333
 value = 70.0
 texture_progress = ExtResource("3_5i8hx")
 tint_progress = Color(0.955731, 0, 0.197092, 1)
-script = ExtResource("4_pq3bo")
+script = ExtResource("4_vnktb")
 
 [node name="DamageBar" type="TextureProgressBar" parent="Health_Bar"]
 z_index = -1
@@ -300,6 +300,8 @@ autoplay = "entrance"
 [node name="DamageNumberPosition" type="Node2D" parent="."]
 position = Vector2(0, -420)
 scale = Vector2(3.3, 3.3)
+
+[node name="QTESpawnTimer" type="Timer" parent="."]
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

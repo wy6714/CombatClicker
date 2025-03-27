@@ -417,9 +417,5 @@ func breakDamageMultiplier():
 	if(currentEnemy.breakable):
 		if(currentEnemy.broken):
 			damage = floor(damage * 2)
-			print("Breakable, and BROKEN! Damage: ", damage)
 		else:
 			damage = max(1,floor(damage * 0.8)) #Ensures its not 0
-			print("Breakable, but NOT broken. Damage: ", damage)
-	else:
-		print("Regular ahh damag")
