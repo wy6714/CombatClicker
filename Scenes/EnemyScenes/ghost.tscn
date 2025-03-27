@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_vatxe"]
 [ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/SpoopyGhost.png" id="2_p7vgq"]
 [ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_kyu5m"]
-[ext_resource type="Script" path="res://Scenes/EnemyScenes/Health_Bar.gd" id="4_2daqe"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_f7gj3"]
+[ext_resource type="Script" path="res://Scripts/Health_Bar.gd" id="4_lx2ef"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_hil3y"]
 [ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_qy0b5"]
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_e316m"]
@@ -239,7 +239,7 @@ offset_bottom = -239.333
 value = 70.0
 texture_progress = ExtResource("3_kyu5m")
 tint_progress = Color(0.955731, 0, 0.197092, 1)
-script = ExtResource("4_2daqe")
+script = ExtResource("4_lx2ef")
 
 [node name="DamageBar" type="TextureProgressBar" parent="Health_Bar"]
 z_index = -1
@@ -300,6 +300,8 @@ autoplay = "entrance"
 [node name="DamageNumberPosition" type="Node2D" parent="."]
 position = Vector2(0, -420)
 scale = Vector2(3.3, 3.3)
+
+[node name="QTESpawnTimer" type="Timer" parent="."]
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

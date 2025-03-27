@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://n4kcq3rlkqw0"]
 
-[ext_resource type="Script" path="res://Scenes/PlayerStats.gd" id="1_fhgmt"]
+[ext_resource type="Script" path="res://Scripts/PlayerStats.gd" id="1_fhgmt"]
 [ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="2_0s0e4"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_m27gj"]
 
-[node name="PartyMemberPlayer" type="Node2D"]
+[node name="PartyMemberPlayer" type="Node2D" groups=["BreakUIShut"]]
 script = ExtResource("1_fhgmt")
 
 [node name="CharUI" type="Sprite2D" parent="."]

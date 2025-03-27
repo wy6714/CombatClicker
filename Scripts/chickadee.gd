@@ -26,6 +26,13 @@ var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREF
 
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
+
+@onready var qte = preload("res://Scenes/qte.tscn")
+@onready var qteSpawnTimer = $QTESpawnTimer
+@onready var qteCurrentCounter = 0
+var qteCount = 4
+var inQTEState = false
+
 @onready var chargeMeter
 @onready var chargeMeterInstance
 @export var animComboCount: int = 0
@@ -45,6 +52,14 @@ var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREF
 
 
 @onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
+
+# Define the screen bounds (Left, Top, Right, Bottom)
+var leftLimit = 120
+var topLimit = 120
+var rightLimit = 820
+var bottomLimit = 360
+
+var spawned_qte_positions = []  # Keeps track of where QTEs are
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -76,6 +91,7 @@ func _ready():
 	
 	enemyPassive = enemyName
 
+	qteSpawnTimer.connect("timeout", Callable(self, "_on_qte_spawn_timer_timeout"))
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -110,13 +126,38 @@ func takeBreakDamage(breakDamage):
 			breakAmount -= breakDamage
 			healthBar.breakVal = breakAmount
 		if(breakAmount <= 0):
-			broken = true
-			print("BREAK")
+			if(health >= 0):
+				broken = true
+				print("BREAK")
+				initiateBreak()
 			
+func initiateBreak():
+	qteCurrentCounter = 0  # Reset counter
+	turnOffUI()
+	inQTEState = true
+	spawned_qte_positions.clear()  # Reset list before spawning new QTEs
+	qteSpawnTimer.start()  # Start the timer, which will spawn QTEs gradually
+		
+func _on_qte_spawn_timer_timeout():
+	print(qteCurrentCounter)
+	if qteCurrentCounter < qteCount - 1:
+		spawnQTE(false)
+		qteCurrentCounter += 1
+		qteSpawnTimer.start()  # Restart the timer for the next QTE
+	elif qteCurrentCounter >= qteCount - 1:
+		spawnQTE(true)
+		qteCurrentCounter += 1
+		qteSpawnTimer.stop()
+
+func endQTEState():
+	inQTEState = false
+	turnOnUI()
+				
 func recoveringFromBreak(delta):
 	if(broken):
-		breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
-		healthBar.breakVal = breakAmount
+		if(!inQTEState):
+			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
+			healthBar.breakVal = breakAmount
 	if(breakAmount >= 100):
 		broken = false
 	
@@ -139,11 +180,9 @@ func defeatEnemyCheck():
 		
 		
 func _on_area_2d_mouse_entered():
-	print("MOUSE ENTERED")
 	mouseInsideRadius = true
 	
 func _on_area_2d_mouse_exited():
-	print("MOUSE ENTERED")
 	mouseInsideRadius = false
 	
 	player.stopDrilling("left") #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
@@ -162,4 +201,48 @@ func setInvisible(): #Set the monster and their healthbar invisible at the start
 	$Health_Bar.modulate.a = 0
 	$Area2D.modulate.a = 0
 	
+# Function to set a random position within the specified limits
+func spawnQTE(finalQteVal):
 	
+	var max_attempts = 50  # Avoid infinite loops
+	var attempts = 0
+	var valid_position = false
+	var random_position
+	var finalQte = finalQteVal 
+	
+	while !valid_position and attempts < max_attempts:
+		# Generate a random position
+		var random_x = randf_range(leftLimit, rightLimit)
+		var random_y = randf_range(topLimit, bottomLimit)
+		random_position = Vector2(random_x, random_y)
+		
+		# Check if it's too close to an existing QTE
+		valid_position = true
+		for pos in spawned_qte_positions:
+			if pos.distance_to(random_position) < 200:  # Adjust 100 to control spacing
+				valid_position = false
+				break
+		
+		attempts += 1
+
+	if valid_position:
+		var qte_instance = qte.instantiate()
+		qte_instance.final = finalQte
+		qte_instance.position = random_position
+		
+		# Find the Main node and add the QTE instance as its child
+		var mainNode = get_tree().get_root().find_child("Main", true, false)
+		if mainNode:
+			mainNode.add_child(qte_instance)
+		else:
+			print("Error: Main node not found!")
+			
+		spawned_qte_positions.append(random_position)  # Track position
+
+func turnOffUI(): #Shut off all UI to make the break more cinematic
+	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
+		ui.visible = false
+		
+func turnOnUI():
+	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
+		ui.visible = true

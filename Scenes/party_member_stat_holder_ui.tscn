@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b7nqtkti6xlb0"]
 
 [ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="1_5tqap"]
-[ext_resource type="Script" path="res://Scenes/party_member_stat_holder_ui.gd" id="1_g07wn"]
+[ext_resource type="Script" path="res://Scripts/party_member_stat_holder_ui.gd" id="1_g07wn"]
 
 [node name="PartyMemberStatHolderUI" type="Control"]
 visible = false
