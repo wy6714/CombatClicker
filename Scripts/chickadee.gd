@@ -52,6 +52,8 @@ var inQTEState = false
 
 
 @onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
+@onready var breakScreen = get_node("/root/Main/BreakEffect")
+@onready var breakScreenAnim = get_node("/root/Main/BreakEffect/AnimationPlayer")
 
 # Define the screen bounds (Left, Top, Right, Bottom)
 var leftLimit = 120
@@ -136,9 +138,13 @@ func initiateBreak():
 	turnOffUI()
 	inQTEState = true
 	spawned_qte_positions.clear()  # Reset list before spawning new QTEs
-	qteSpawnTimer.start()  # Start the timer, which will spawn QTEs gradually
-		
+	qteSpawnTimer.wait_time = 0.1
+	
+	breakScreen.visible = true
+	breakScreenAnim.play("BreakTextZoom")
+	
 func _on_qte_spawn_timer_timeout():
+	qteSpawnTimer.wait_time = 1
 	print(qteCurrentCounter)
 	if qteCurrentCounter < qteCount - 1:
 		spawnQTE(false)
@@ -204,7 +210,7 @@ func setInvisible(): #Set the monster and their healthbar invisible at the start
 # Function to set a random position within the specified limits
 func spawnQTE(finalQteVal):
 	
-	var max_attempts = 50  # Avoid infinite loops
+	var max_attempts = 120  # Avoid infinite loops
 	var attempts = 0
 	var valid_position = false
 	var random_position
@@ -224,6 +230,20 @@ func spawnQTE(finalQteVal):
 				break
 		
 		attempts += 1
+		
+	if(attempts >= max_attempts):
+		var qte_instance = qte.instantiate()
+		qte_instance.final = finalQte
+		qte_instance.position = random_position
+		
+		# Find the Main node and add the QTE instance as its child
+		var mainNode = get_tree().get_root().find_child("Main", true, false)
+		if mainNode:
+			mainNode.add_child(qte_instance)
+		else:
+			print("Error: Main node not found!")
+			
+		spawned_qte_positions.append(random_position)  # Track position
 
 	if valid_position:
 		var qte_instance = qte.instantiate()

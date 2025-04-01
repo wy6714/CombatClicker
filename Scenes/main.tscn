@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=16 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
+[ext_resource type="PackedScene" uid="uid://dmcjcfunlt6m3" path="res://break_effect.tscn" id="14_3pg7p"]
 [ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
 
 [node name="Main" type="Control"]
@@ -426,6 +427,12 @@ text = "1000 points!"
 
 [node name="PartyMemberStatHolderUI" parent="." instance=ExtResource("11_wl6rb")]
 layout_mode = 1
+
+[node name="BreakEffect" parent="." instance=ExtResource("14_3pg7p")]
+visible = false
+layout_mode = 1
+offset_right = 1070.0
+offset_bottom = 575.0
 
 [node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut"] instance=ExtResource("13_vp3iu")]
 layout_mode = 1
