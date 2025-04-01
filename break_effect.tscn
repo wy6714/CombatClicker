@@ -1,0 +1,229 @@
+[gd_scene load_steps=10 format=3 uid="uid://dmcjcfunlt6m3"]
+
+[ext_resource type="Texture2D" uid="uid://dy30qp85ob0y3" path="res://Art/Cinema_Lines_Simple-1.png.png" id="1_6ku88"]
+[ext_resource type="Script" path="res://break_effect.gd" id="1_svqi7"]
+[ext_resource type="Texture2D" uid="uid://bv5it1e2skb1d" path="res://Art/Cinema_Lines_Triangle-5.png (1).png" id="2_we5hw"]
+[ext_resource type="Texture2D" uid="uid://chdrw2i02f4to" path="res://Art/Cinema_Lines_Triangle-5.png.png" id="3_cr0xo"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_d0w3y"]
+[ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://Scenes/damage_particles.tscn" id="5_xy6uf"]
+
+[sub_resource type="Animation" id="Animation_kqtjr"]
+resource_name = "BreakTextZoom"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1), Vector2(0.9, 0.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CinemaLinesTriangle-5_png(1):modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CinemaLinesTriangle-5_png(1)2:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Node2D:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0803764, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ImpactParticles")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.197379),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_a3ji8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CinemaLinesTriangle-5_png(1):modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CinemaLinesTriangle-5_png(1)2:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Node2D:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_11sg4"]
+_data = {
+"BreakTextZoom": SubResource("Animation_kqtjr"),
+"RESET": SubResource("Animation_a3ji8")
+}
+
+[node name="BreakEffect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+size_flags_vertical = 4
+script = ExtResource("1_svqi7")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Cinema Line Top" type="Sprite2D" parent="Node2D"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(576, 192)
+scale = Vector2(38, 12)
+texture = ExtResource("1_6ku88")
+
+[node name="Cinema Line Bottom" type="Sprite2D" parent="Node2D"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(571, 744)
+scale = Vector2(38, 12)
+texture = ExtResource("1_6ku88")
+
+[node name="CinemaLinesTriangle-5_png(1)" type="Sprite2D" parent="."]
+position = Vector2(863, 289)
+scale = Vector2(18, 18)
+texture = ExtResource("2_we5hw")
+
+[node name="CinemaLinesTriangle-5_png(1)2" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(289, 361)
+scale = Vector2(18, 18)
+texture = ExtResource("3_cr0xo")
+
+[node name="Label" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -32.0
+offset_right = 192.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.153589
+scale = Vector2(2, 2)
+pivot_offset = Vector2(197, 32)
+theme_override_fonts/font = ExtResource("4_d0w3y")
+theme_override_font_sizes/font_size = 64
+text = "BREAK!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_11sg4")
+}
+
+[node name="ImpactParticles" parent="." instance=ExtResource("5_xy6uf")]
+position = Vector2(561, 317)
+amount = 40
+lifetime = 2.5
+speed_scale = 3.0
+emission_shape = 1
+emission_sphere_radius = 1.0
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
