@@ -63,6 +63,13 @@ var bottomLimit = 360
 
 var spawned_qte_positions = []  # Keeps track of where QTEs are
 
+var original_scale: Vector2
+
+var scaling = false
+var scale_timer = 0.0
+var scale_duration = 0.5  # Time in seconds for the scale transition
+var target_scale = Vector2(0.7, 0.7)  # Adjust to how large you want it to grow
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setInvisible()
@@ -94,12 +101,21 @@ func _ready():
 	enemyPassive = enemyName
 
 	qteSpawnTimer.connect("timeout", Callable(self, "_on_qte_spawn_timer_timeout"))
+	original_scale = scale
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if broken:
 		recoveringFromBreak(_delta)
+		
+	if scaling:
+		scale_timer += _delta
+		var t = clamp(scale_timer / scale_duration, 0.0, 1.0)
+		scale = lerp(scale, target_scale, t)
 
+		if t >= 1.0:
+			scaling = false  # Stop when finished
+	
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 	if(mouseInsideRadius):
@@ -142,6 +158,7 @@ func initiateBreak():
 	
 	breakScreen.visible = true
 	breakScreenAnim.play("BreakTextZoom")
+	start_scaling(original_scale * 0.9, 0.8)  # Slowly shrink a little
 	
 func _on_qte_spawn_timer_timeout():
 	qteSpawnTimer.wait_time = 1
@@ -158,6 +175,8 @@ func _on_qte_spawn_timer_timeout():
 func endQTEState():
 	inQTEState = false
 	turnOnUI()
+	start_scaling(original_scale, 0.3)  # Slowly shrink a little
+	
 				
 func recoveringFromBreak(delta):
 	if(broken):
@@ -266,3 +285,14 @@ func turnOffUI(): #Shut off all UI to make the break more cinematic
 func turnOnUI():
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
 		ui.visible = true
+		
+# Call this function to manually scale
+func start_scaling(new_scale: Vector2, duration: float):
+	target_scale = new_scale
+	scale_duration = duration
+	scale_timer = 0.0
+	scaling = true
+	
+func stop_scaling():
+	scale_timer = 0.0
+	scaling = false
