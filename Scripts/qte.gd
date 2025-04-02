@@ -4,6 +4,7 @@ extends Node2D
 @onready var anim = $AnimationPlayer
 @onready var qte = $"."
 @onready var player = get_node("/root/Main/Player")
+
 var scaleTime = 0.0
 var scaleTimeLimit = 2.0  # The time it takes to shrink
 var startScale = 9.0  # Initial scale of the circle
@@ -94,6 +95,7 @@ func _on_texture_button_button_down():
 func startShrinking():
 	shrinking = true
 
+
 # Called on animation "Fade In" which plays on autoload. Plays a Sound Effect (SE)
 func playSpawnSE():
 	pass
@@ -101,3 +103,4 @@ func playSpawnSE():
 func finalQTEEffects():
 	print("aha hi...!")
 	player.currentEnemy.endQTEState()
+	
