@@ -19,8 +19,6 @@ func _ready():
 func _process(delta):
 	pass
 
-
-
 func _on_animation_player_animation_finished(anim_name):
 	if(anim_name == "BreakTextZoom"):
 		player.currentEnemy.qteSpawnTimer.start()
@@ -35,3 +33,4 @@ func enemySpriteGrowth():
 	
 func enemySpriteShrink():
 	player.currentEnemy.start_scaling(player.currentEnemy.original_scale * 2, 788)
+	

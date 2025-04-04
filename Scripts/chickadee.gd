@@ -83,7 +83,8 @@ func _ready():
 	# with no other distractions for a while, and THEN we implement enemy gimmicks. 
 	
 	if(player.level >= breakPrereqLevel):
-		breakable = randi() % 2 == 1  # True or False randomly
+		#breakable = randi() % 2 == 1  # True or False randomly
+		breakable = true
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
@@ -174,9 +175,14 @@ func _on_qte_spawn_timer_timeout():
 
 func endQTEState():
 	inQTEState = false
-	turnOnUI()
-	start_scaling(original_scale, 0.3)  # Slowly shrink a little
+
+# Called by "Ult manager code" so that the fist animation deals damage when it is finished playing
+func shrinkAndDealDamage():
+	start_scaling(original_scale, 0.5) 
+	await get_tree().create_timer(0.1).timeout
 	
+	player.breakSlash()
+	turnOnUI()
 				
 func recoveringFromBreak(delta):
 	if(broken):
