@@ -26,6 +26,13 @@ var perfect = false
 
 var pressed = false # Is the button pressed?
 
+var breakSlashDamageMult = 10
+var goodMultAdd = 1.2
+var perfectMultAdd = 1.5
+var missMultAdd = 0.0
+
+# Spawn ult_anim
+var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -63,14 +70,18 @@ func eventCircleGrade():
 		good = true
 		miss = false
 		perfect = false
+		player.breakQTEdamageMult += goodMultAdd
 	elif eventCircle.scale.x >= perfectScaleMin and eventCircle.scale.x <= perfectScaleMax:
 		good = false
 		miss = false
 		perfect = true
+		player.breakQTEdamageMult += perfectMultAdd
 	else:
 		good = false
 		miss = true
 		perfect = false
+		player.breakQTEdamageMult += missMultAdd
+
 
 func _on_texture_button_button_down():
 	if(!pressed): # Only press once
@@ -95,7 +106,6 @@ func _on_texture_button_button_down():
 func startShrinking():
 	shrinking = true
 
-
 # Called on animation "Fade In" which plays on autoload. Plays a Sound Effect (SE)
 func playSpawnSE():
 	pass
@@ -103,4 +113,21 @@ func playSpawnSE():
 func finalQTEEffects():
 	print("aha hi...!")
 	player.currentEnemy.endQTEState()
+	
+	var ult_instance = ult_anim_scene.instantiate()
+
+	# Center it on the screen
+	var viewport_size = get_viewport().get_visible_rect().size
+	ult_instance.position = viewport_size / 2
+
+	# Play "bigFist" animation (assuming it's an AnimatedSprite2D or AnimationPlayer)
+	if ult_instance.has_node("AnimationPlayer"):
+		ult_instance.get_node("AnimationPlayer").play("bigFist")
+
+	# Add to scene
+	var main_node = get_tree().get_root().find_child("Main", true, false)
+	if main_node:
+		main_node.add_child(ult_instance)
+	else:
+		print("Couldn't find Main node!")
 	

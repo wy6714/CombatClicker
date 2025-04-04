@@ -50,6 +50,8 @@ var currentEnemy;
 @export var totalUpgradePoints: int = 0 
 @onready var damageParticles = $DamageParticles
 
+@onready var breakQTEdamageMult = 1.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	score = 900
@@ -334,7 +336,7 @@ func useUlt():
 	if(ultBarSystem.canUlt):
 		# Ult.
 		determineDamage()
-		damage = damage * 100 # Claymores should be very strong, so...
+		damage = damage * 100 
 		currentEnemy.takeDamage(damage, ultBreakMult)
 		var rngX = randi_range(-20, 10)
 		var rngY = randi_range(-10, 0)
@@ -347,6 +349,19 @@ func useUlt():
 			ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 		crit = false
 		ultBarSystem.subtractUltProgress()
+		
+func breakSlash():
+	determineDamage()
+	damage = damage * breakQTEdamageMult
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	print(damage)
+	currentEnemy.takeDamage(damage, 1)
+	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	crit = false
+	updateScore()
+	breakQTEdamageMult = 0
 		
 func drilling(hand: String):
 
