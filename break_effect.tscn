@@ -37,7 +37,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CinemaLinesTriangle-5_png(1):modulate")
+tracks/2/path = NodePath("BottomTriangle2:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -49,7 +49,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("CinemaLinesTriangle-5_png(1)2:modulate")
+tracks/3/path = NodePath("BottomTriangle:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -98,6 +98,54 @@ tracks/6/keys = {
 "method": &"enemySpriteGrowth"
 }]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GiantMovingTriangle:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(272, 374), Vector2(448, 532)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("GiantMovingTriangle2:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(863, 289), Vector2(687, 131)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("GiantMovingTriangle:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("GiantMovingTriangle2:modulate")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_a3ji8"]
 length = 0.001
@@ -128,7 +176,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CinemaLinesTriangle-5_png(1):modulate")
+tracks/2/path = NodePath("BottomTriangle2:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -140,7 +188,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("CinemaLinesTriangle-5_png(1)2:modulate")
+tracks/3/path = NodePath("BottomTriangle:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -161,6 +209,54 @@ tracks/4/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("GiantMovingTriangle:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(290, 357)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("GiantMovingTriangle2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(863, 289)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("GiantMovingTriangle:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("GiantMovingTriangle2:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_11sg4"]
 _data = {
@@ -180,6 +276,7 @@ size_flags_vertical = 4
 script = ExtResource("1_svqi7")
 
 [node name="Node2D" type="Node2D" parent="."]
+visible = false
 
 [node name="Cinema Line Top" type="Sprite2D" parent="Node2D"]
 modulate = Color(0, 0, 0, 1)
@@ -193,16 +290,29 @@ position = Vector2(571, 744)
 scale = Vector2(38, 12)
 texture = ExtResource("1_6ku88")
 
-[node name="CinemaLinesTriangle-5_png(1)" type="Sprite2D" parent="."]
+[node name="BottomTriangle" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(272, 374)
+scale = Vector2(18, 18)
+texture = ExtResource("3_cr0xo")
+
+[node name="GiantMovingTriangle" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+texture_repeat = 2
+position = Vector2(290, 357)
+scale = Vector2(54, 54)
+texture = ExtResource("3_cr0xo")
+
+[node name="BottomTriangle2" type="Sprite2D" parent="."]
 position = Vector2(863, 289)
 scale = Vector2(18, 18)
 texture = ExtResource("2_we5hw")
 
-[node name="CinemaLinesTriangle-5_png(1)2" type="Sprite2D" parent="."]
-texture_repeat = 2
-position = Vector2(289, 361)
-scale = Vector2(18, 18)
-texture = ExtResource("3_cr0xo")
+[node name="GiantMovingTriangle2" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(863, 289)
+scale = Vector2(54, 54)
+texture = ExtResource("2_we5hw")
 
 [node name="Label" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -221,6 +331,12 @@ grow_vertical = 2
 rotation = 0.153589
 scale = Vector2(2, 2)
 pivot_offset = Vector2(197, 32)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 20
+theme_override_constants/shadow_offset_y = 8
+theme_override_constants/outline_size = 10
+theme_override_constants/shadow_outline_size = 2
 theme_override_fonts/font = ExtResource("4_d0w3y")
 theme_override_font_sizes/font_size = 64
 text = "BREAK!"
