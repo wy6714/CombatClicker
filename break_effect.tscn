@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dmcjcfunlt6m3"]
+[gd_scene load_steps=16 format=3 uid="uid://dmcjcfunlt6m3"]
 
 [ext_resource type="Texture2D" uid="uid://dy30qp85ob0y3" path="res://Art/Cinema_Lines_Simple-1.png.png" id="1_6ku88"]
 [ext_resource type="Script" path="res://break_effect.gd" id="1_svqi7"]
@@ -6,6 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://chdrw2i02f4to" path="res://Art/Cinema_Lines_Triangle-5.png.png" id="3_cr0xo"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_d0w3y"]
 [ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://Scenes/damage_particles.tscn" id="5_xy6uf"]
+[ext_resource type="AudioStream" uid="uid://dmjlwygfd88l0" path="res://Audio/Drum1BitCrushed+Speed.wav" id="7_a0ti5"]
+[ext_resource type="AudioStream" uid="uid://c8xeu5yl5x3p3" path="res://Audio/Drum1BitCrush.wav" id="7_xngip"]
+[ext_resource type="AudioStream" uid="uid://viow8jwfmnyp" path="res://Audio/Drum2BitCrush.wav" id="8_5qa5e"]
+[ext_resource type="AudioStream" uid="uid://dtrisse0wsdot" path="res://Audio/shatter.wav" id="10_a0s51"]
+[ext_resource type="AudioStream" uid="uid://c46r535whloab" path="res://Audio/shatterCrunch.wav" id="11_rimqv"]
+[ext_resource type="AudioStream" uid="uid://dl22trj21kdk7" path="res://Audio/shatterResolve.wav" id="12_riqpm"]
 
 [sub_resource type="Animation" id="Animation_kqtjr"]
 resource_name = "BreakTextZoom"
@@ -145,6 +151,90 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playDrumRoll"
+}]
+}
+tracks/12/type = "method"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath(".")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playDrumCrash"
+}]
+}
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath(".")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"playDrumRoll2"
+}]
+}
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Shatter")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/15/type = "method"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("ShatterCrunch")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/16/type = "method"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("ShatterResolve")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_a3ji8"]
@@ -355,5 +445,29 @@ lifetime = 2.5
 speed_scale = 3.0
 emission_shape = 1
 emission_sphere_radius = 1.0
+
+[node name="DrumRoll" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_xngip")
+volume_db = -10.0
+
+[node name="DrumRoll2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_a0ti5")
+volume_db = -80.0
+
+[node name="DrumCrash" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_5qa5e")
+volume_db = -10.0
+
+[node name="Shatter" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_a0s51")
+volume_db = -80.0
+
+[node name="ShatterCrunch" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_rimqv")
+volume_db = -15.0
+
+[node name="ShatterResolve" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_riqpm")
+volume_db = -15.0
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

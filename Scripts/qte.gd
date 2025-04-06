@@ -40,6 +40,12 @@ var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 @onready var greatSE = preload("res://Audio/Sound Effect Great!!!.mp3")
 @onready var perfectSE = preload("res://Audio/Sound Effect PERFECT!!!.mp3")
 
+var missText = "Bruh"
+var okString = "Okay"
+var goodString = "Good!"
+var greatString = "Great!!"
+var perfectString = "PERFECT!!!"
+@onready var gradeString = $QTEHolder/gradeString
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -106,25 +112,30 @@ func determineRank():
 	if(player.rankNum == 0):
 		print("Empty")
 		print(player.rankNum)
+		gradeString.text = missText
 	elif(player.rankNum == 1):
 		print("Okay")
 		print(player.rankNum)
 		soundPlayer.stream = okSE  # Set the sound to "Okay"
+		gradeString.text = okString
 		soundPlayer.play()  # Play the sound
 	elif(player.rankNum == 2):
 		print("Good!")
 		print(player.rankNum)
 		soundPlayer.stream = goodSE  # Set the sound to "Good!"
+		gradeString.text = goodString
 		soundPlayer.play()  # Play the sound
 	elif(player.rankNum == 3):
 		print("Great!")
 		print(player.rankNum)
 		soundPlayer.stream = greatSE  # Set the sound to "Great!"
+		gradeString.text = greatString
 		soundPlayer.play()  # Play the sound
 	elif(player.rankNum >= 4):
 		print("Perfect!!!!")
 		print(player.rankNum)
 		soundPlayer.stream = perfectSE  # Set the sound to "Perfect!!!"
+		gradeString.text = perfectString
 		soundPlayer.play()  # Play the sound
 	
 func _on_texture_button_button_down():
