@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b0f8ky6m42337"
+path="res://.godot/imported/Sound Effect Okay.mp3-11586e03cc317d119e1f64c0f7a571a3.mp3str"
+
+[deps]
+
+source_file="res://Audio/Sound Effect Okay.mp3"
+dest_files=["res://.godot/imported/Sound Effect Okay.mp3-11586e03cc317d119e1f64c0f7a571a3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

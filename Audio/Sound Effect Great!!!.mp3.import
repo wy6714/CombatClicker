@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://j4ame85c6xb3"
+path="res://.godot/imported/Sound Effect Great!!!.mp3-cea27b5900294a894e4b042c490a733c.mp3str"
+
+[deps]
+
+source_file="res://Audio/Sound Effect Great!!!.mp3"
+dest_files=["res://.godot/imported/Sound Effect Great!!!.mp3-cea27b5900294a894e4b042c490a733c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

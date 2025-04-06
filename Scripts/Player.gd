@@ -52,6 +52,8 @@ var currentEnemy;
 
 @onready var breakQTEdamageMult = 1.0
 
+#Number tracking successful QTE hits
+@onready var rankNum = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	score = 900
@@ -362,6 +364,7 @@ func breakSlash():
 	crit = false
 	updateScore()
 	breakQTEdamageMult = 0
+	rankNum = 0
 		
 func drilling(hand: String):
 
