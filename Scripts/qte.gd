@@ -34,6 +34,13 @@ var missMultAdd = 0.0
 # Spawn ult_anim
 var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 
+@onready var soundPlayer = $QTEHolder/AudioStreamPlayer2D
+@onready var okSE = preload("res://Audio/Sound Effect Okay.mp3")
+@onready var goodSE = preload("res://Audio/Sound Effect Good!.mp3")
+@onready var greatSE = preload("res://Audio/Sound Effect Great!!!.mp3")
+@onready var perfectSE = preload("res://Audio/Sound Effect PERFECT!!!.mp3")
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scaleTimeLimit = randf_range(1.2, 3)
@@ -62,6 +69,7 @@ func shrinkEventCircle(delta):
 				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 				$TextureButton.disabled = true
 				anim.play("FadeOut")
+				manageRankNum()
 				if(final):
 					finalQTEEffects()
 				
@@ -81,8 +89,44 @@ func eventCircleGrade():
 		miss = true
 		perfect = false
 		player.breakQTEdamageMult += missMultAdd
+	
+	
 
-
+func manageRankNum():
+	if(perfect):
+		if(player.rankNum < 4):
+			player.rankNum += 1
+	if(miss):
+		if(player.rankNum > 0):
+			player.rankNum -= 1
+	
+	determineRank()
+		
+func determineRank():
+	if(player.rankNum == 0):
+		print("Empty")
+		print(player.rankNum)
+	elif(player.rankNum == 1):
+		print("Okay")
+		print(player.rankNum)
+		soundPlayer.stream = okSE  # Set the sound to "Okay"
+		soundPlayer.play()  # Play the sound
+	elif(player.rankNum == 2):
+		print("Good!")
+		print(player.rankNum)
+		soundPlayer.stream = goodSE  # Set the sound to "Good!"
+		soundPlayer.play()  # Play the sound
+	elif(player.rankNum == 3):
+		print("Great!")
+		print(player.rankNum)
+		soundPlayer.stream = greatSE  # Set the sound to "Great!"
+		soundPlayer.play()  # Play the sound
+	elif(player.rankNum >= 4):
+		print("Perfect!!!!")
+		print(player.rankNum)
+		soundPlayer.stream = perfectSE  # Set the sound to "Perfect!!!"
+		soundPlayer.play()  # Play the sound
+	
 func _on_texture_button_button_down():
 	if(!pressed): # Only press once
 		if(miss):
@@ -99,6 +143,7 @@ func _on_texture_button_button_down():
 			finalQTEEffects()
 			
 		pressed = true
+		manageRankNum()
 		anim.play("FadeOut")
 		
 		
