@@ -33,4 +33,13 @@ func enemySpriteGrowth():
 	
 func enemySpriteShrink():
 	player.currentEnemy.start_scaling(player.currentEnemy.original_scale * 2, 788)
+
+func playDrumRoll():
+	$DrumRoll.play()
 	
+func playDrumRoll2():
+	$DrumRoll2.play()
+	
+func playDrumCrash():
+	$DrumCrash.play()
+
