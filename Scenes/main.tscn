@@ -39,7 +39,7 @@ script = ExtResource("1_b0x31")
 
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
-[node name="PartyMemberPlayer" parent="." instance=ExtResource("6_b5i3i")]
+[node name="PartyMemberPlayer" parent="." groups=["memberData"] instance=ExtResource("6_b5i3i")]
 position = Vector2(5, 9)
 
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
@@ -425,7 +425,7 @@ theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
 theme_override_font_sizes/font_size = 14
 text = "1000 points!"
 
-[node name="PartyMemberStatHolderUI" parent="." instance=ExtResource("11_wl6rb")]
+[node name="PartyMemberStatHolderUI" parent="." groups=["BreakUIShut", "DontTurnBackOn"] instance=ExtResource("11_wl6rb")]
 layout_mode = 1
 
 [node name="BreakEffect" parent="." instance=ExtResource("14_3pg7p")]
