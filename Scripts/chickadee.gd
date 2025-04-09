@@ -14,6 +14,7 @@ extends Node2D
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
 @onready var healthBar = $Health_Bar
+@onready var collision = $Area2D/CollisionShape2D
 
 var breakAmount = 100
 @onready var breakBar = $Health_Bar/BreakBar
@@ -49,7 +50,6 @@ var inQTEState = false
 @onready var defeatAnimationList = ["defeatAnim"]
 @onready var damageNumberPosition = $DamageNumberPosition
 @onready var canGrantExp = true
-
 
 @onready var playerCapture = get_node("/root/Main/Player/PlayerMonsterList") # Get a reference to the player
 @onready var breakScreen = get_node("/root/Main/BreakEffect")
@@ -153,6 +153,7 @@ func takeBreakDamage(breakDamage):
 func initiateBreak():
 	qteCurrentCounter = 0  # Reset counter
 	turnOffUI()
+	collision.disabled = true
 	inQTEState = true
 	spawned_qte_positions.clear()  # Reset list before spawning new QTEs
 	qteSpawnTimer.wait_time = 0.1
@@ -183,6 +184,7 @@ func shrinkAndDealDamage():
 	
 	player.breakSlash()
 	turnOnUI()
+	collision.disabled = false
 				
 func recoveringFromBreak(delta):
 	if(broken):

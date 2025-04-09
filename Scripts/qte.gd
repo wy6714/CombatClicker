@@ -96,8 +96,6 @@ func eventCircleGrade():
 		perfect = false
 		player.breakQTEdamageMult += missMultAdd
 	
-	
-
 func manageRankNum():
 	if(perfect):
 		if(player.rankNum < 4):
