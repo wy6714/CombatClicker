@@ -39,6 +39,7 @@ var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 @onready var goodSE = preload("res://Audio/Sound Effect Good!.mp3")
 @onready var greatSE = preload("res://Audio/Sound Effect Great!!!.mp3")
 @onready var perfectSE = preload("res://Audio/Sound Effect PERFECT!!!.mp3")
+@onready var missSE = preload("res://Audio/Sound Effect Miss....mp3")
 
 var missText = "Bruh"
 var okString = "Okay"
@@ -49,11 +50,14 @@ var perfectString = "PERFECT!!!"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	scaleTimeLimit = randf_range(1.2, 3)
+	scaleTimeLimit = randf_range(0.5, 1.8)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	shrinkEventCircle(delta)
+	
+	if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
+		final = true
 
 func shrinkEventCircle(delta):
 	
@@ -75,7 +79,10 @@ func shrinkEventCircle(delta):
 				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 				$TextureButton.disabled = true
 				anim.play("FadeOut")
+				player.currentEnemy.qtePressedCount += 1
 				manageRankNum()
+				soundPlayer.stream = missSE
+				soundPlayer.play()
 				if(final):
 					finalQTEEffects()
 				
@@ -111,6 +118,8 @@ func determineRank():
 		print("Empty")
 		print(player.rankNum)
 		gradeString.text = missText
+		soundPlayer.stream = missSE
+		soundPlayer.play()
 	elif(player.rankNum == 1):
 		print("Okay")
 		print(player.rankNum)
@@ -152,6 +161,7 @@ func _on_texture_button_button_down():
 			finalQTEEffects()
 			
 		pressed = true
+		player.currentEnemy.qtePressedCount += 1
 		manageRankNum()
 		anim.play("FadeOut")
 		

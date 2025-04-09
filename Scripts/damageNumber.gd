@@ -3,6 +3,8 @@ extends Node
 #THIS FUNCTION IS AUTOLOADED. It is not quite attached to anything, all nodes will have access to it
 #(HOPEFULLY...)
 
+@onready var dmgFont = preload("res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf")
+
 func display_number(value: int, position: Vector2, isCrit: bool = false):
 	var number = Label.new()
 	number.global_position = position
@@ -10,12 +12,14 @@ func display_number(value: int, position: Vector2, isCrit: bool = false):
 	number.z_index = 5
 	number.label_settings = LabelSettings.new()
 	
+	
 	var color = "#FFF"
 	if isCrit:
 		color = "#B22"
 	if value == 0:
 		color = "#FFF8"
 	
+	number.label_settings.font = dmgFont
 	number.label_settings.font_color = color
 	number.label_settings.font_size = 24
 	number.label_settings.outline_color = "#000"
