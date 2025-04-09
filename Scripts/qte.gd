@@ -26,9 +26,8 @@ var perfect = false
 
 var pressed = false # Is the button pressed?
 
-var breakSlashDamageMult = 10
-var goodMultAdd = 1.2
-var perfectMultAdd = 1.5
+var goodMultAdd = 7.2
+var perfectMultAdd = 11.5
 var missMultAdd = 0.0
 
 # Spawn ult_anim
@@ -50,7 +49,7 @@ var perfectString = "PERFECT!!!"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	scaleTimeLimit = randf_range(0.5, 1.8)
+	scaleTimeLimit = randf_range(1, 2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -91,17 +90,15 @@ func eventCircleGrade():
 		good = true
 		miss = false
 		perfect = false
-		player.breakQTEdamageMult += goodMultAdd
+
 	elif eventCircle.scale.x >= perfectScaleMin and eventCircle.scale.x <= perfectScaleMax:
 		good = false
 		miss = false
 		perfect = true
-		player.breakQTEdamageMult += perfectMultAdd
 	else:
 		good = false
 		miss = true
 		perfect = false
-		player.breakQTEdamageMult += missMultAdd
 	
 func manageRankNum():
 	if(perfect):
@@ -150,12 +147,15 @@ func _on_texture_button_button_down():
 		if(miss):
 			print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 			shrinking = false
+			player.breakQTEdamageMult += missMultAdd
 		elif(good):
 			print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
 			shrinking = false
+			player.breakQTEdamageMult += goodMultAdd
 		else:
 			print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
 			shrinking = false
+			player.breakQTEdamageMult += perfectMultAdd
 		
 		if(final):
 			finalQTEEffects()

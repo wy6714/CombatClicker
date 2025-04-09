@@ -17,6 +17,7 @@ extends Node2D
 @onready var collision = $Area2D/CollisionShape2D
 
 var breakAmount = 100
+var baseBreak = 100
 @onready var breakBar = $Health_Bar/BreakBar
 var breakable = false
 var broken = false
@@ -89,6 +90,7 @@ func _ready():
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
+			breakAmount = baseBreak * (1 + 0.2 * (player.level - 1))
 			healthBar.init_break(breakAmount)
 	
 	
@@ -136,6 +138,9 @@ func takeDamage(damage, breakMult):
 	healthBar.health = health
 	
 	var breakTotal = ceil(damage / 4) * breakMult
+	if(breakTotal < 1): # At least, do 5 break damage
+		breakTotal = 5
+	print("BREAK TOTAL: ", breakTotal)
 	takeBreakDamage(breakTotal)
 	
 	defeatEnemyCheck()
@@ -291,7 +296,11 @@ func turnOffUI(): #Shut off all UI to make the break more cinematic
 		
 func turnOnUI():
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
-		ui.visible = true
+		if(ui not in get_tree().get_nodes_in_group("DontTurnBackOn")):
+			ui.visible = true
+		if(ui in get_tree().get_nodes_in_group("memberData")):
+			if("open" in ui):
+				ui.open = false
 		
 # Call this function to manually scale
 func start_scaling(new_scale: Vector2, duration: float):

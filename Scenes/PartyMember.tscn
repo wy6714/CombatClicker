@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_rftqe"]
 
-[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "PartyMember"]]
+[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "PartyMember", "memberData"]]
 position = Vector2(0, 9)
 script = ExtResource("1_lepxi")
 

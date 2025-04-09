@@ -6,6 +6,7 @@ extends Node2D
 @export var energyRecharge: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
+@export var pureDamage: int = 0
 @export var score: int = 0 #Our current score (also currency)
 @export var maxScore: int = 0 # Our TOTAL score accumulated throughout the entirety of playtime. (NOT currency)
 @export var money: int = 0 
@@ -54,6 +55,12 @@ var currentEnemy;
 
 #Number tracking successful QTE hits
 @onready var rankNum = 0
+
+# Damage Tracking Variables
+var heavy_hit_threshold := 1.3 # if actual > 130% of expected
+var low_threshold := 0.8
+var high_threshold := 1.2
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	score = 900
@@ -84,12 +91,20 @@ func _process(_delta):
 	if Input.is_action_just_released("right"):
 		stopDrilling("right")
 		
-func determineDamage():
+func determineDamage(mult):
 	damage = strength
+	damage = damage * mult
+	
+	pureDamage = damage # Raw damage value
+	var variation = randf_range(low_threshold, high_threshold) # RNG variation
+	damage = damage * variation # Apply variation
+	
+	
 	var rng = randf_range(1, 100)
 	if(rng <= critRate):
 		crit = true
 		damage = damage * critDamage
+	trackDamage(pureDamage, damage)
 	
 
 func gainExp(exp):
@@ -186,19 +201,19 @@ func determineClaymoreButton(hand: String):
 		startingClaymoreAttackRight = true
 		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
-	determineDamage()
+	determineDamage(5)
 	
-	# BASIC SWORD DAMAGE MULTIPLIER
-	damage = damage * 5
+	#Multiply break damage if broken
 	breakDamageMultiplier()
+
 	if(currentEnemy != null):
 		currentEnemy.takeDamage(damage, swordBreakMult)
 	
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	
 	particleEffect(200, 300, 3, 5, 0.3)
 	activateAttackAnim()
 	updateScore()
@@ -208,10 +223,8 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	crit = false
 			
 func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
-	determineDamage()
+	determineDamage(10)
 	
-	#Damage multiplier
-	damage = damage * 10 # Claymores should be very strong, so...
 	breakDamageMultiplier()
 	
 	currentEnemy.takeDamage(damage, claymoreBreakMult)
@@ -228,10 +241,8 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	crit = false
 	
 func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
-	determineDamage()
+	determineDamage(1)
 	
-	#DAMAGE MULTIPLIER
-	damage = damage * 1 
 	breakDamageMultiplier()
 	
 	currentEnemy.takeDamage(damage, 1)
@@ -248,10 +259,8 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	crit = false
 
 func drillDamage(hand: String):
-	determineDamage()
+	determineDamage(1)
 	
-	#DRILL DAMAGE MULTIPLIER
-	damage = damage * 1
 	breakDamageMultiplier()
 	
 	if currentEnemy != null:
@@ -297,28 +306,35 @@ func activateChargeMeterRight():
 func determineClaymoreDamageLeft():
 	totalClicks += 1 #Track totalClicks
 	if(leftChargeLevel >= 90):
-		determineDamage()
+		determineDamage(10)
 		dealClaymoreDamage()
 		score += damage #Gain points based on how much damage you get do per click
 		maxScore += damage #Increment the maximum
 		updateScore()
 	else:
-		determineDamage()
+		determineDamage(1)
 		dealFlimsyClaymoreDamage()
 		updateScore()
 		
 func determineClaymoreDamageRight():
 	totalClicks += 1 #Track totalClicks
 	if(rightChargeLevel >= 90):
-		determineDamage()
+		determineDamage(10)
 		dealClaymoreDamage()
 		score += damage #Gain points based on how much damage you get do per click
 		maxScore += damage #Increment the maximum
 		updateScore()
 	else:
-		determineDamage()
+		determineDamage(1)
 		dealFlimsyClaymoreDamage()
 		updateScore()
+	
+func trackDamage(expected: float, actual: float):
+	
+	var ratio = actual / expected # Calc damage ratio
+	print(ratio)
+	if(ratio >= heavy_hit_threshold): # If damage exceeds high damage ratio (crit, damage up or something, ult)
+		print("BIG HITT!!")
 	
 func activateAttackAnim():
 	#Later, we would put the code that determines which attack animation we use here
@@ -337,9 +353,8 @@ func activateAttackAnim():
 func useUlt():
 	if(ultBarSystem.canUlt):
 		# Ult.
-		determineDamage()
-		damage = damage * 100 
-		currentEnemy.takeDamage(damage, ultBreakMult)
+		determineDamage(100)
+		breakDamageMultiplier()
 		var rngX = randi_range(-20, 10)
 		var rngY = randi_range(-10, 0)
 		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -353,8 +368,8 @@ func useUlt():
 		ultBarSystem.subtractUltProgress()
 		
 func breakSlash():
-	determineDamage()
-	damage = damage * breakQTEdamageMult
+	determineDamage(breakQTEdamageMult)
+	
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -363,7 +378,7 @@ func breakSlash():
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	crit = false
 	updateScore()
-	breakQTEdamageMult = 0
+	breakQTEdamageMult = 1.0
 	rankNum = 0
 		
 func drilling(hand: String):
@@ -434,6 +449,6 @@ func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effe
 func breakDamageMultiplier():
 	if(currentEnemy.breakable):
 		if(currentEnemy.broken):
-			damage = floor(damage * 2)
+			damage = floor(damage * 1.4) # Take a bit more damage when broken
 		else:
-			damage = max(1,floor(damage * 0.8)) #Ensures its not 0
+			damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
