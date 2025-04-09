@@ -69,6 +69,7 @@ var scaling = false
 var scale_timer = 0.0
 var scale_duration = 0.5  # Time in seconds for the scale transition
 var target_scale = Vector2(0.7, 0.7)  # Adjust to how large you want it to grow
+var qtePressedCount = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -152,6 +153,7 @@ func takeBreakDamage(breakDamage):
 			
 func initiateBreak():
 	qteCurrentCounter = 0  # Reset counter
+	qtePressedCount = 0
 	turnOffUI()
 	collision.disabled = true
 	inQTEState = true
@@ -241,7 +243,6 @@ func spawnQTE(finalQteVal):
 	var attempts = 0
 	var valid_position = false
 	var random_position
-	var finalQte = finalQteVal 
 	
 	while !valid_position and attempts < max_attempts:
 		# Generate a random position
@@ -260,7 +261,6 @@ func spawnQTE(finalQteVal):
 		
 	if(attempts >= max_attempts):
 		var qte_instance = qte.instantiate()
-		qte_instance.final = finalQte
 		qte_instance.position = random_position
 		
 		# Find the Main node and add the QTE instance as its child
@@ -274,7 +274,6 @@ func spawnQTE(finalQteVal):
 
 	if valid_position:
 		var qte_instance = qte.instantiate()
-		qte_instance.final = finalQte
 		qte_instance.position = random_position
 		
 		# Find the Main node and add the QTE instance as its child
