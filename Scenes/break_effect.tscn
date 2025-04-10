@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://dmcjcfunlt6m3"]
 
 [ext_resource type="Texture2D" uid="uid://dy30qp85ob0y3" path="res://Art/Cinema_Lines_Simple-1.png.png" id="1_6ku88"]
-[ext_resource type="Script" path="res://break_effect.gd" id="1_svqi7"]
+[ext_resource type="Script" path="res://Scripts/break_effect.gd" id="1_svqi7"]
 [ext_resource type="Texture2D" uid="uid://bv5it1e2skb1d" path="res://Art/Cinema_Lines_Triangle-5.png (1).png" id="2_we5hw"]
 [ext_resource type="Texture2D" uid="uid://chdrw2i02f4to" path="res://Art/Cinema_Lines_Triangle-5.png.png" id="3_cr0xo"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_d0w3y"]

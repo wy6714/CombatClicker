@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bjymmfv6rr3lb"]
 
-[ext_resource type="Script" path="res://Scenes/UltAnimManager.gd" id="1_fjheg"]
+[ext_resource type="Script" path="res://Scripts/UltAnimManager.gd" id="1_0y471"]
 [ext_resource type="Texture2D" uid="uid://31rb05bq5iob" path="res://Art/HeroPunch.png" id="1_mq35g"]
 
 [sub_resource type="Animation" id="Animation_3m0oq"]
@@ -99,7 +99,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_fjheg")
+script = ExtResource("1_0y471")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
