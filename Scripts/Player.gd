@@ -60,6 +60,7 @@ var currentEnemy;
 var heavy_hit_threshold := 1.3 # if actual > 130% of expected
 var low_threshold := 0.8
 var high_threshold := 1.2
+var bigHit = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -221,6 +222,7 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	if(crit):
 		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
+	bigHit = false
 			
 func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	determineDamage(10)
@@ -239,6 +241,7 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 	crit = false
+	bigHit = false
 	
 func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	determineDamage(1)
@@ -257,6 +260,7 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 	crit = false
+	bigHit = false
 
 func drillDamage(hand: String):
 	determineDamage(1)
@@ -276,6 +280,7 @@ func drillDamage(hand: String):
 	if crit:
 		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
 	crit = false
+	bigHit = false
 	
 func activateChargeMeterLeft():
 	chargeMeterInstanceLeft = anim_claymore_meter.instantiate()
@@ -335,7 +340,8 @@ func trackDamage(expected: float, actual: float):
 	print(ratio)
 	if(ratio >= heavy_hit_threshold): # If damage exceeds high damage ratio (crit, damage up or something, ult)
 		print("BIG HITT!!")
-	
+		bigHit = true
+
 func activateAttackAnim():
 	#Later, we would put the code that determines which attack animation we use here
 	# Ex: swap from sword animation to greatsword animation depending on weapon etc
@@ -355,16 +361,18 @@ func useUlt():
 		# Ult.
 		determineDamage(100)
 		breakDamageMultiplier()
+		#currentEnemy.takeDamage(damage, 7)
 		var rngX = randi_range(-20, 10)
 		var rngY = randi_range(-10, 0)
 		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
 
-		DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+		DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 		activateAttackAnim()
 		ultBarSystem.updateUltProgress(0)
 		if(crit):
 			ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
 		crit = false
+		bigHit = false
 		ultBarSystem.subtractUltProgress()
 		
 func breakSlash():
@@ -373,10 +381,11 @@ func breakSlash():
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-	print(damage)
+	
 	currentEnemy.takeDamage(damage, 1)
-	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	crit = false
+	bigHit = false
 	updateScore()
 	breakQTEdamageMult = 1.0
 	rankNum = 0
