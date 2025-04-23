@@ -37,8 +37,8 @@ func enemySpriteShrink():
 func playDrumRoll():
 	$DrumRoll.play()
 	
-func playDrumRoll2():
-	$DrumRoll2.play()
+func playShatterCrunch():
+	$ShatterCrunch.play()
 	
 func playDrumCrash():
 	$DrumCrash.play()
