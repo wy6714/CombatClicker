@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dx475ypigwhmm"
+path="res://.godot/imported/Bass Impact Glide.mp3-2c9be2532c517a206717959f28b6c603.mp3str"
+
+[deps]
+
+source_file="res://Audio/Bass Impact Glide.mp3"
+dest_files=["res://.godot/imported/Bass Impact Glide.mp3-2c9be2532c517a206717959f28b6c603.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

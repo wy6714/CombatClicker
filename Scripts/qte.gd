@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var eventCircle = $QTEHolder/EventCircle
+@onready var eventCircle = $Visuals/QTEHolder/EventCircle
 @onready var anim = $AnimationPlayer
 @onready var qte = $"."
 @onready var player = get_node("/root/Main/Player")
@@ -33,7 +33,7 @@ var missMultAdd = 0.0
 # Spawn ult_anim
 var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 
-@onready var soundPlayer = $QTEHolder/AudioStreamPlayer2D
+@onready var soundPlayer = $AudioStreamPlayer2D
 @onready var okSE = preload("res://Audio/Sound Effect Okay.mp3")
 @onready var goodSE = preload("res://Audio/Sound Effect Good!.mp3")
 @onready var greatSE = preload("res://Audio/Sound Effect Great!!!.mp3")
@@ -45,7 +45,7 @@ var okString = "Okay"
 var goodString = "Good!"
 var greatString = "Great!!"
 var perfectString = "PERFECT!!!"
-@onready var gradeString = $QTEHolder/gradeString
+@onready var gradeString = $Visuals/QTEHolder/gradeString
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -55,8 +55,9 @@ func _ready():
 func _process(delta):
 	shrinkEventCircle(delta)
 	
-	if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
-		final = true
+	if(qte != null && player != null and is_instance_valid(player.currentEnemy)):
+		if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
+			final = true
 
 func shrinkEventCircle(delta):
 	
@@ -163,9 +164,10 @@ func _on_texture_button_button_down():
 		pressed = true
 		player.currentEnemy.qtePressedCount += 1
 		manageRankNum()
+		
 		anim.play("FadeOut")
-		
-		
+		$BounceAnim.play("bounce")
+
 # Called on animation "Fade In" which plays on autoload. Allows QTE circle to start shrinking.
 func startShrinking():
 	shrinking = true
