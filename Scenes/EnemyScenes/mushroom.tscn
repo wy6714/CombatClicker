@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://mvdt2c3xale3"]
+[gd_scene load_steps=41 format=3 uid="uid://mvdt2c3xale3"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_x7h4e"]
 [ext_resource type="Texture2D" uid="uid://kctbfitivfbo" path="res://Art/WiggleMushroom.png" id="2_5aaoh"]
@@ -306,6 +306,80 @@ _data = {
 "entrance": SubResource("Animation_qsl77")
 }
 
+[sub_resource type="Animation" id="Animation_yx2lc"]
+resource_name = "hitShake"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.00217629, 0.021189, 0.0433401, 0.0635671, 0.0817428, 0.10753, 0.138884, 0.161533, 0.188075, 0.220159, 0.251997, 0.275615, 0.291623, 0.314988, 0.337139, 0.357366, 0.375542, 0.401329, 0.417363, 0.436947, 0.461446, 0.489445, 0.519241, 0.542858),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0), Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0), Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0), Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0), Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0), Vector2(14, 0), Vector2(0, 0), Vector2(-14, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bim61"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jnsyh"]
+_data = {
+"RESET": SubResource("Animation_bim61"),
+"hitShake": SubResource("Animation_yx2lc")
+}
+
+[sub_resource type="Animation" id="Animation_rgmbt"]
+resource_name = "flashRed"
+length = 0.21
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.126225, 0.204312),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_er0w2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p5wlo"]
+_data = {
+"RESET": SubResource("Animation_er0w2"),
+"flashRed": SubResource("Animation_rgmbt")
+}
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
@@ -398,6 +472,16 @@ position = Vector2(0, -420)
 scale = Vector2(3.3, 3.3)
 
 [node name="QTESpawnTimer" type="Timer" parent="."]
+
+[node name="HitShakeAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_jnsyh")
+}
+
+[node name="DamageFlashAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_p5wlo")
+}
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

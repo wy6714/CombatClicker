@@ -62,6 +62,7 @@ var low_threshold := 0.8
 var high_threshold := 1.2
 var bigHit = false
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	score = 900
@@ -341,6 +342,7 @@ func trackDamage(expected: float, actual: float):
 	if(ratio >= heavy_hit_threshold): # If damage exceeds high damage ratio (crit, damage up or something, ult)
 		print("BIG HITT!!")
 		bigHit = true
+		
 
 func activateAttackAnim():
 	#Later, we would put the code that determines which attack animation we use here
@@ -461,3 +463,4 @@ func breakDamageMultiplier():
 			damage = floor(damage * 1.4) # Take a bit more damage when broken
 		else:
 			damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
+			

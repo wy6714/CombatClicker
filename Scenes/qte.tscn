@@ -43,12 +43,24 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.9),
+"times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"startShrinking"
 }]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TextureButton:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_b2j5g"]
@@ -190,27 +202,24 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(0.7, 0.7)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("TextureButton:disabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0tads"]
 _data = {
 "FadeIn": SubResource("Animation_pcyke"),
 "FadeOut": SubResource("Animation_b2j5g"),
 "RESET": SubResource("Animation_27ray")
-}
-
-[sub_resource type="Animation" id="Animation_m56ax"]
-resource_name = "bounce"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.7, 0.7), Vector2(0.75, 0.75), Vector2(0.7, 0.7)]
 }
 
 [sub_resource type="Animation" id="Animation_sjceu"]
@@ -226,6 +235,21 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0.7, 0.7)]
+}
+
+[sub_resource type="Animation" id="Animation_m56ax"]
+resource_name = "bounce"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.7, 0.7), Vector2(0.75, 0.75), Vector2(0.7, 0.7)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gtg8w"]
@@ -262,11 +286,9 @@ texture_hover = ExtResource("3_cbg74")
 ignore_texture_size = true
 
 [node name="Visuals" type="Sprite2D" parent="."]
-scale = Vector2(1, 1)
 
 [node name="QTEHolder" type="Node2D" parent="Visuals"]
 modulate = Color(1, 1, 1, 0)
-scale = Vector2(1, 1)
 
 [node name="gradeString" type="Label" parent="Visuals/QTEHolder"]
 modulate = Color(1, 1, 1, 0)
@@ -348,7 +370,6 @@ frame = 5
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(101.429, 100)
-scale = Vector2(1, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
