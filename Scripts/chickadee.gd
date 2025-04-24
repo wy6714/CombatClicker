@@ -57,10 +57,10 @@ var inQTEState = false
 @onready var breakScreenAnim = get_node("/root/Main/BreakEffect/AnimationPlayer")
 
 # Define the screen bounds (Left, Top, Right, Bottom)
-var leftLimit = 120
-var topLimit = 120
-var rightLimit = 820
-var bottomLimit = 360
+var leftLimit = 80
+var topLimit = 80
+var rightLimit = 860
+var bottomLimit = 400
 
 var spawned_qte_positions = []  # Keeps track of where QTEs are
 
@@ -71,6 +71,8 @@ var scale_timer = 0.0
 var scale_duration = 0.5  # Time in seconds for the scale transition
 var target_scale = Vector2(0.7, 0.7)  # Adjust to how large you want it to grow
 var qtePressedCount = 0
+
+@onready var glassShatter = get_node("/root/Main/GlassShatter")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -191,6 +193,7 @@ func shrinkAndDealDamage():
 	
 	player.breakSlash()
 	turnOnUI()
+	glassShatterEffect()
 	collision.disabled = false
 				
 func recoveringFromBreak(delta):
@@ -244,7 +247,7 @@ func setInvisible(): #Set the monster and their healthbar invisible at the start
 # Function to set a random position within the specified limits
 func spawnQTE(finalQteVal):
 	
-	var max_attempts = 120  # Avoid infinite loops
+	var max_attempts = 3333  # Avoid infinite loops
 	var attempts = 0
 	var valid_position = false
 	var random_position
@@ -258,7 +261,7 @@ func spawnQTE(finalQteVal):
 		# Check if it's too close to an existing QTE
 		valid_position = true
 		for pos in spawned_qte_positions:
-			if pos.distance_to(random_position) < 200:  # Adjust 100 to control spacing
+			if pos.distance_to(random_position) < 100:  # Adjust variable to control spacing
 				valid_position = false
 				break
 		
@@ -312,3 +315,9 @@ func start_scaling(new_scale: Vector2, duration: float):
 func stop_scaling():
 	scale_timer = 0.0
 	scaling = false
+
+func glassShatterEffect():
+	glassShatter.visible = true
+	glassShatter.playAnim()
+	$HitShakeAnim.play("hitShake")
+	$DamageFlashAnim.play("flashRed")

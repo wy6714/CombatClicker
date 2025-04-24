@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=17 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
 [ext_resource type="PackedScene" uid="uid://dmcjcfunlt6m3" path="res://Scenes/break_effect.tscn" id="14_3pg7p"]
 [ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
+[ext_resource type="PackedScene" uid="uid://x1wunamccd1u" path="res://glassShatter.tscn" id="16_q7ep8"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -23,6 +24,7 @@ offset_right = 82.0
 offset_bottom = 74.0
 
 [node name="scrollingBackground" parent="." instance=ExtResource("4_tcxoj")]
+z_index = -10
 layout_mode = 1
 offset_left = 1.0
 offset_top = -1.0
@@ -34,6 +36,9 @@ unique_name_in_owner = true
 script = ExtResource("1_b0x31")
 
 [node name="EnemyManager" parent="." instance=ExtResource("2_4tq6c")]
+
+[node name="GlassShatter" parent="." instance=ExtResource("16_q7ep8")]
+position = Vector2(570, 337)
 
 [node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
 
