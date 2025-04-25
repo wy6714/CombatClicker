@@ -3,6 +3,7 @@ extends Control
 
 @onready var player = get_node("/root/Main/Player")
 @onready var breakEffect = $"."
+@onready var explosions = $Explosions
 
 var scaleTime = 0.0
 var scaleTimeLimit = 2.0  # The time it takes to shrink
@@ -42,4 +43,19 @@ func playShatterCrunch():
 	
 func playDrumCrash():
 	$DrumCrash.play()
-
+	
+func playExplosion1():
+	breakEffect.visible = true
+	$ExplosionAnim.play("Explosion")
+	$AnimationPlayer.play("BreakFinale")
+	
+func playExplosion2():
+	$ExplosionAnim.play("Explosion2")
+	
+func triggerFinalQTEEffects():
+	finalQTEEffects()
+	
+func finalQTEEffects():
+	print("aha hi...!")
+	player.currentEnemy.endQTEState()
+	player.currentEnemy.shrinkAndDealDamage()
