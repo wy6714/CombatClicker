@@ -30,8 +30,6 @@ var goodMultAdd = 7.2
 var perfectMultAdd = 11.5
 var missMultAdd = 0.0
 
-# Spawn ult_anim
-var ult_anim_scene = preload("res://Scenes/ult_anim.tscn")
 
 @onready var soundPlayer = $AudioStreamPlayer2D
 @onready var okSE = preload("res://Audio/Sound Effect Okay.mp3")
@@ -46,6 +44,8 @@ var goodString = "Good!"
 var greatString = "Great!!"
 var perfectString = "PERFECT!!!"
 @onready var gradeString = $Visuals/QTEHolder/gradeString
+
+@onready var break_effect = get_node("/root/Main/BreakEffect")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -84,7 +84,7 @@ func shrinkEventCircle(delta):
 				soundPlayer.stream = missSE
 				soundPlayer.play()
 				if(final):
-					finalQTEEffects()
+					finalQTESetup()
 				
 func eventCircleGrade():
 	if eventCircle.scale.x >= goodScaleMin and eventCircle.scale.x <= goodScaleMax:
@@ -159,7 +159,7 @@ func _on_texture_button_button_down():
 			player.breakQTEdamageMult += perfectMultAdd
 		
 		if(final):
-			finalQTEEffects()
+			finalQTESetup()
 			
 		pressed = true
 		player.currentEnemy.qtePressedCount += 1
@@ -175,25 +175,8 @@ func startShrinking():
 # Called on animation "Fade In" which plays on autoload. Plays a Sound Effect (SE)
 func playSpawnSE():
 	pass
-	
-func finalQTEEffects():
-	print("aha hi...!")
-	player.currentEnemy.endQTEState()
-	
-	var ult_instance = ult_anim_scene.instantiate()
 
-	# Center it on the screen
-	var viewport_size = get_viewport().get_visible_rect().size
-	ult_instance.position = viewport_size / 2
-
-	# Play "bigFist" animation (assuming it's an AnimatedSprite2D or AnimationPlayer)
-	if ult_instance.has_node("AnimationPlayer"):
-		ult_instance.get_node("AnimationPlayer").play("bigFist")
-
-	# Add to scene
-	var main_node = get_tree().get_root().find_child("Main", true, false)
-	if main_node:
-		main_node.add_child(ult_instance)
-	else:
-		print("Couldn't find Main node!")
+# Play the initial explosion, which then calls finalQTEEffects once it is done...exploding.
+func finalQTESetup():
+	break_effect.playExplosion1()
 		
