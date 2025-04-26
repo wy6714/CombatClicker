@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://x1wunamccd1u"]
 
-[ext_resource type="Script" path="res://glassShatter.gd" id="1_d6tr1"]
+[ext_resource type="Script" path="res://Scripts/glassShatter.gd" id="1_d6tr1"]
 [ext_resource type="Texture2D" uid="uid://cq22hqeism4c7" path="res://Art/crackedGlass-1.png.png" id="1_q3kab"]
 [ext_resource type="AudioStream" uid="uid://bd3ssegbl33a2" path="res://Audio/glassShatterSound.wav" id="3_1qnde"]
 [ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://Scenes/damage_particles.tscn" id="4_64whi"]
@@ -85,6 +85,20 @@ tracks/3/keys = {
 "values": [{
 "args": [],
 "method": &"restart"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"enemyImpactEffects"
 }]
 }
 

@@ -103,45 +103,51 @@ func eventCircleGrade():
 	
 func manageRankNum():
 	if(perfect):
-		if(player.rankNum < 4):
+		if(player.rankNum < 4 && player.rankNum >= 0):
 			player.rankNum += 1
+		if(player.rankNum <= -1):
+			player.rankNum += 2
 	if(miss):
-		if(player.rankNum > 0):
+		if(player.rankNum > -1):
 			player.rankNum -= 1
+	if(good):
+		if(player.rankNum <= -1):
+			player.rankNum += 2
 	
 	determineRank()
 		
 func determineRank():
-	if(player.rankNum == 0):
+	if(player.rankNum <= -1):
 		print("Empty")
 		print(player.rankNum)
 		gradeString.text = missText
 		soundPlayer.stream = missSE
-		soundPlayer.play()
-	elif(player.rankNum == 1):
+
+	elif(player.rankNum == 1 || player.rankNum == 0):
 		print("Okay")
 		print(player.rankNum)
 		soundPlayer.stream = okSE  # Set the sound to "Okay"
 		gradeString.text = okString
-		soundPlayer.play()  # Play the sound
+
 	elif(player.rankNum == 2):
 		print("Good!")
 		print(player.rankNum)
 		soundPlayer.stream = goodSE  # Set the sound to "Good!"
 		gradeString.text = goodString
-		soundPlayer.play()  # Play the sound
+
 	elif(player.rankNum == 3):
 		print("Great!")
 		print(player.rankNum)
 		soundPlayer.stream = greatSE  # Set the sound to "Great!"
 		gradeString.text = greatString
-		soundPlayer.play()  # Play the sound
+
 	elif(player.rankNum >= 4):
 		print("Perfect!!!!")
 		print(player.rankNum)
 		soundPlayer.stream = perfectSE  # Set the sound to "Perfect!!!"
 		gradeString.text = perfectString
-		soundPlayer.play()  # Play the sound
+	
+	soundPlayer.play()  # Play the sound
 	
 func _on_texture_button_button_down():
 	if(!pressed): # Only press once
