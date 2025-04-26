@@ -655,6 +655,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(576, 324)
 size_flags_vertical = 4
+mouse_filter = 2
 script = ExtResource("1_svqi7")
 
 [node name="Node2D" type="Node2D" parent="."]

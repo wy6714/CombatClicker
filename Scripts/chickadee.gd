@@ -21,6 +21,7 @@ var baseBreak = 100
 @onready var breakBar = $Health_Bar/BreakBar
 var breakable = false
 var broken = false
+var recovering = false
 var break_recovery_time = 4.0  # Default recovery time in seconds
 var break_recovery_speed = 100.0 / break_recovery_time  # Adjusts speed dynamically
 var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREFERABLY set to 4, but, for debug, it is set to 1.
@@ -73,6 +74,7 @@ var target_scale = Vector2(0.7, 0.7)  # Adjust to how large you want it to grow
 var qtePressedCount = 0
 
 @onready var glassShatter = get_node("/root/Main/GlassShatter")
+@onready var background = get_node("/root/Main/scrollingBackground")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -154,22 +156,24 @@ func takeBreakDamage(breakDamage):
 			healthBar.breakVal = breakAmount
 		if(breakAmount <= 0):
 			if(health >= 0):
-				broken = true
-				print("BREAK")
-				initiateBreak()
+				if(!recovering):
+					broken = true
+					print("BREAK")
+					initiateBreak()
 			
 func initiateBreak():
-	qteCurrentCounter = 0  # Reset counter
-	qtePressedCount = 0
-	turnOffUI()
-	collision.disabled = true
-	inQTEState = true
-	spawned_qte_positions.clear()  # Reset list before spawning new QTEs
-	qteSpawnTimer.wait_time = 0.1
-	
-	breakScreen.visible = true
-	breakScreenAnim.play("BreakTextZoom")
-	start_scaling(original_scale * 0.9, 0.8)  # Slowly shrink a little
+	if(!inQTEState):
+		qteCurrentCounter = 0  # Reset counter
+		qtePressedCount = 0
+		turnOffUI()
+		collision.disabled = true
+		inQTEState = true
+		spawned_qte_positions.clear()  # Reset list before spawning new QTEs
+		qteSpawnTimer.wait_time = 0.1
+		
+		breakScreen.visible = true
+		breakScreenAnim.play("BreakTextZoom")
+		start_scaling(original_scale * 0.9, 0.8)  # Slowly shrink a little
 	
 func _on_qte_spawn_timer_timeout():
 	qteSpawnTimer.wait_time = 1
@@ -201,8 +205,10 @@ func recoveringFromBreak(delta):
 		if(!inQTEState):
 			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
 			healthBar.breakVal = breakAmount
+			recovering = true
 	if(breakAmount >= 100):
 		broken = false
+		recovering = false
 	
 func defeatEnemyCheck():
 	if(health <= 0):
@@ -261,7 +267,7 @@ func spawnQTE(finalQteVal):
 		# Check if it's too close to an existing QTE
 		valid_position = true
 		for pos in spawned_qte_positions:
-			if pos.distance_to(random_position) < 100:  # Adjust variable to control spacing
+			if pos.distance_to(random_position) < 300:  # Adjust variable to control spacing
 				valid_position = false
 				break
 		
@@ -319,5 +325,12 @@ func stop_scaling():
 func glassShatterEffect():
 	glassShatter.visible = true
 	glassShatter.playAnim()
+	
+
+func flashBackgroundRed():
+	background.flashRed()
+	
+func glassShatterImpact():
 	$HitShakeAnim.play("hitShake")
 	$DamageFlashAnim.play("flashRed")
+	flashBackgroundRed()

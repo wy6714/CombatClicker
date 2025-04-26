@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
 [ext_resource type="PackedScene" uid="uid://dmcjcfunlt6m3" path="res://Scenes/break_effect.tscn" id="14_3pg7p"]
 [ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
-[ext_resource type="PackedScene" uid="uid://x1wunamccd1u" path="res://glassShatter.tscn" id="16_q7ep8"]
+[ext_resource type="PackedScene" uid="uid://x1wunamccd1u" path="res://Scenes/glassShatter.tscn" id="16_q7ep8"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
