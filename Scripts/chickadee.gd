@@ -206,9 +206,11 @@ func recoveringFromBreak(delta):
 			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
 			healthBar.breakVal = breakAmount
 			recovering = true
+			$BreakRecoveryFlash.play("recoveryFlash")
 	if(breakAmount >= 100):
 		broken = false
 		recovering = false
+		$BreakRecoveryFlash.stop()
 	
 func defeatEnemyCheck():
 	if(health <= 0):
