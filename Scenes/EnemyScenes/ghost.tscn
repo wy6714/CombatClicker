@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://bpykp0eem4hm8"]
+[gd_scene load_steps=32 format=3 uid="uid://bpykp0eem4hm8"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_vatxe"]
 [ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/SpoopyGhost.png" id="2_p7vgq"]
 [ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_kyu5m"]
+[ext_resource type="Texture2D" uid="uid://1ebjm2341ur3" path="res://Art/SpoopyGhostShocked.png" id="3_mhb8q"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_f7gj3"]
 [ext_resource type="Script" path="res://Scripts/Health_Bar.gd" id="4_lx2ef"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_hil3y"]
@@ -25,6 +26,22 @@ region = Rect2(0, 32, 32, 32)
 atlas = ExtResource("2_p7vgq")
 region = Rect2(32, 32, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_f58ha"]
+atlas = ExtResource("3_mhb8q")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfnap"]
+atlas = ExtResource("3_mhb8q")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84vx6"]
+atlas = ExtResource("3_mhb8q")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eufyb"]
+atlas = ExtResource("3_mhb8q")
+region = Rect2(0, 32, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
 animations = [{
 "frames": [{
@@ -42,6 +59,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f58ha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mfnap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84vx6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eufyb")
+}],
+"loop": true,
+"name": &"Shock",
 "speed": 5.0
 }]
 
@@ -296,8 +330,6 @@ enemyName = "Ghost"
 scale = Vector2(18, 18)
 sprite_frames = SubResource("SpriteFrames_ri8e5")
 animation = &"Idle"
-frame = 1
-frame_progress = 0.69307
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(-13.3332, 3.33333)
