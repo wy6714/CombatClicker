@@ -201,16 +201,27 @@ func shrinkAndDealDamage():
 	collision.disabled = false
 				
 func recoveringFromBreak(delta):
-	if(broken):
-		if(!inQTEState):
+	if broken:
+		if not inQTEState:
 			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
 			healthBar.breakVal = breakAmount
 			recovering = true
 			$BreakRecoveryFlash.play("recoveryFlash")
-	if(breakAmount >= 100):
+			
+			# Switch to Shock animation but keep same frame
+			var current_frame = anim.frame
+			if anim.animation != "Shock":
+				anim.play("Shock")
+				anim.frame = current_frame
+
+	if breakAmount >= 100:
 		broken = false
 		recovering = false
 		$BreakRecoveryFlash.stop()
+		var current_frame = anim.frame
+		if anim.animation != "Idle":
+			anim.play("Idle")
+			anim.frame = current_frame
 	
 func defeatEnemyCheck():
 	if(health <= 0):

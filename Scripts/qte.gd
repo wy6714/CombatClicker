@@ -122,7 +122,13 @@ func determineRank():
 		print(player.rankNum)
 		gradeString.text = missText
 		soundPlayer.stream = missSE
-
+		
+	elif (miss):
+		print("Miss...")
+		print(player.rankNum)
+		gradeString.text = missText
+		soundPlayer.stream = missSE
+		
 	elif(player.rankNum == 1 || player.rankNum == 0):
 		print("Okay")
 		print(player.rankNum)
