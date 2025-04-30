@@ -7,3 +7,6 @@ extends Control
 func _on_texture_button_button_down():
 	playerCapturePanel.visible = true
 	player_monster_list.populate_monster_list()
+
+func newCaptureBounce():
+	$NewCaptureAnim.play("newCaptureLabelBounce")

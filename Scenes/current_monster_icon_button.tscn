@@ -1,10 +1,72 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4eqc4dg6npnh"]
+[gd_scene load_steps=10 format=3 uid="uid://d4eqc4dg6npnh"]
 
 [ext_resource type="Texture2D" uid="uid://c0tqvsueyfiii" path="res://Art/Monster Container.png" id="1_3b7wb"]
 [ext_resource type="Script" path="res://Scripts/current_monster_icon_button.gd" id="1_jxy11"]
 [ext_resource type="Texture2D" uid="uid://dwahqlin7yals" path="res://Art/Monster Container Pressed.png" id="2_2xos8"]
 [ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="3_s6kjv"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="5_f35sw"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="6_q8771"]
+
+[sub_resource type="Animation" id="Animation_xknhr"]
+resource_name = "newCaptureLabelBounce"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NewCaptureLabel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.453859, 0.6, 1.3, 1.55426, 1.60083, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 22), Vector2(1, -25), Vector2(1, -34), Vector2(1, -25), Vector2(1, -25), Vector2(1, -34), Vector2(1, -25), Vector2(1, 22)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NewCaptureLabel:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 1.6, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mlaca"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NewCaptureLabel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 22)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NewCaptureLabel:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x8kbk"]
+_data = {
+"RESET": SubResource("Animation_mlaca"),
+"newCaptureLabelBounce": SubResource("Animation_xknhr")
+}
 
 [node name="CurrentMonsterIconButton" type="Control"]
 layout_mode = 3
@@ -14,6 +76,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jxy11")
+
+[node name="NewCaptureLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 22.0
+offset_right = 129.0
+offset_bottom = 70.9999
+scale = Vector2(0.5, 0.5)
+theme_override_fonts/font = ExtResource("6_q8771")
+text = "New
+Capture!"
+horizontal_alignment = 1
 
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 0
@@ -27,5 +101,10 @@ texture_hover = ExtResource("3_s6kjv")
 [node name="MonsterIcon" type="Sprite2D" parent="TextureButton"]
 position = Vector2(16, 16)
 texture = ExtResource("5_f35sw")
+
+[node name="NewCaptureAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_x8kbk")
+}
 
 [connection signal="button_down" from="TextureButton" to="." method="_on_texture_button_button_down"]

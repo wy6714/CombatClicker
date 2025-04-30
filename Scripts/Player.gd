@@ -138,8 +138,10 @@ func updateScore():
 
 func updateMoney(sum):
 	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
+	var moneyBounceAnim = get_node("/root/Main/Scoreboard/MoneyBounceAnim")
 	money += sum
 	moneyText.text = "$" + str(money)
+	moneyBounceAnim.play("MoneyBounce")
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttackLeft):
