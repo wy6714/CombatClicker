@@ -207,7 +207,6 @@ func recoveringFromBreak(delta):
 			healthBar.breakVal = breakAmount
 			recovering = true
 			$BreakRecoveryFlash.play("recoveryFlash")
-			
 			# Switch to Shock animation but keep same frame
 			var current_frame = anim.frame
 			if anim.animation != "Shock":

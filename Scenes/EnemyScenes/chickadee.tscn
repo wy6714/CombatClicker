@@ -338,7 +338,7 @@ enemyPassive = "Attack Boost"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
 sprite_frames = SubResource("SpriteFrames_ri8e5")
 animation = &"Idle"
-frame_progress = 0.0597124
+frame_progress = 0.637871
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 3.33333)

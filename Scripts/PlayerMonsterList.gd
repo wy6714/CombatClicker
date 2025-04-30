@@ -4,6 +4,7 @@ extends Node2D
 var capturedMonsters = {}
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
+@onready var currentMonsterButton = get_node("/root/Main/CurrentMonsterIconButton")
 @onready var playerCapturePanel = $Control
 @onready var captureList = $Control/GridContainer
 
@@ -38,6 +39,7 @@ func captureMonster(monsterName: String, passiveEffect: String):
 			"removeEffect": get_passive_remove_function(passiveEffect) # Store removal function
 		}
 	print("Captured: ", monsterName, " | Total: ", capturedMonsters[monsterName]["count"])
+	currentMonsterButton.newCaptureBounce()
 
 # ----------------------------------------------------------------------------------------------------------
 func equip_monster(monsterName: String):
