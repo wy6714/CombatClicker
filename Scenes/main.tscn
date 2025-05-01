@@ -55,6 +55,10 @@ layout_mode = 1
 
 [node name="ExpBarSystem" parent="." groups=["BreakUIShut"] instance=ExtResource("7_gst64")]
 layout_mode = 1
+offset_left = 896.0
+offset_top = -88.0
+offset_right = 896.0
+offset_bottom = -88.0
 
 [node name="UltMeter" parent="." groups=["BreakUIShut"] instance=ExtResource("8_fgwng")]
 layout_mode = 1
@@ -445,6 +449,26 @@ offset_left = 169.0
 offset_top = 570.0
 offset_right = 169.0
 offset_bottom = 570.0
+
+[node name="ParticleHolders" type="Node2D" parent="."]
+
+[node name="Exp1" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(442, 323)
+
+[node name="Exp2" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(486, 228)
+
+[node name="Exp3" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(583, 256)
+
+[node name="Exp4" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(674, 259)
+
+[node name="Exp5" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(706, 351)
+
+[node name="Capture" type="Node2D" parent="ParticleHolders"]
+position = Vector2(561, 217)
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
 [connection signal="button_down" from="shop/Sword" to="shop/EquipmentManager" method="_on_sword_button_down"]

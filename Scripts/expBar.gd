@@ -7,4 +7,6 @@ extends Control
 func _ready():
 	expBar.value = 0
 
+func playJiggle():
+	$ExpBarJiggle.play("ExpBarJiggle")
 

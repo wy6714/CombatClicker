@@ -1,6 +1,7 @@
 extends Node2D
 
-@export var strength: int = 1
+#@export var strength: int = 1
+@export var strength: int = 100 # DEBUG STRENGTH
 @export var critRate: float = 5
 @export var critDamage: float = 2
 @export var energyRecharge: float = 1

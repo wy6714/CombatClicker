@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cs3mo6u36kkcl"]
+[gd_scene load_steps=10 format=3 uid="uid://cs3mo6u36kkcl"]
 
 [ext_resource type="Script" path="res://Scripts/expBar.gd" id="1_7oioh"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_tcnls"]
@@ -10,6 +10,43 @@ bg_color = Color(0.303233, 0.303233, 0.303233, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3e2x"]
 bg_color = Color(0.025925, 0.406018, 0.810559, 1)
+
+[sub_resource type="Animation" id="Animation_k4y4r"]
+resource_name = "ExpBarJiggle"
+length = 0.13
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureProgressBar:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0617762, 0.120905),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nh5mg"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureProgressBar:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r8fh3"]
+_data = {
+"ExpBarJiggle": SubResource("Animation_k4y4r"),
+"RESET": SubResource("Animation_nh5mg")
+}
 
 [node name="ExpBarSystem" type="Control"]
 layout_mode = 3
@@ -49,10 +86,9 @@ text = "Lv: 1"
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
-offset_left = 896.0
-offset_top = -88.0
-offset_right = 1184.0
-offset_bottom = 200.0
+offset_right = 288.0
+offset_bottom = 288.0
+pivot_offset = Vector2(144, 144)
 value = 55.0
 texture_under = ExtResource("2_tcnls")
 texture_progress = ExtResource("3_0h4eq")
@@ -66,3 +102,8 @@ offset_right = 108.0
 offset_bottom = 134.0
 theme_override_fonts/font = ExtResource("4_5qtbd")
 text = "Lv: 1"
+
+[node name="ExpBarJiggle" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_r8fh3")
+}
