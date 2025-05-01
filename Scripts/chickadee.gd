@@ -90,7 +90,8 @@ func _ready():
 	
 	if(player.level >= breakPrereqLevel):
 		#breakable = randi() % 2 == 1  # True or False randomly
-		breakable = true
+		#breakable = true # Debug for when always breakable is desired
+		breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
@@ -229,7 +230,9 @@ func defeatEnemyCheck():
 			player.stopDrilling("left")
 			player.stopDrilling("right")
 			
-			player.gainExp(expToGive)
+			#player.gainExp(expToGive)
+			generateExpParticles()
+			
 			player.score += defeatPoints
 			player.updateMoney(moneyToGive)
 			monsterCapture()
@@ -338,7 +341,6 @@ func glassShatterEffect():
 	glassShatter.visible = true
 	glassShatter.playAnim()
 	
-
 func flashBackgroundRed():
 	background.flashRed()
 	
@@ -346,3 +348,42 @@ func glassShatterImpact():
 	$HitShakeAnim.play("hitShake")
 	$DamageFlashAnim.play("flashRed")
 	flashBackgroundRed()
+	
+func generateExpParticles():
+	# Target Spots
+	var float_target_spots: Array[Vector2] = []
+	var particleHolders = get_node("/root/Main/ParticleHolders")
+	
+	# Get all target spot locations stored in target spot variable
+	for i in particleHolders.get_children():
+		if(i.is_in_group("ExpSpot")):
+			float_target_spots.append(i.global_position)
+			print(i.global_position)
+		
+	var num_particles = 5
+	for i in range(num_particles):
+		var particle = preload("res://Scenes/ExperienceParticle.tscn").instantiate()
+		get_tree().root.get_node("Main").add_child(particle)
+		particle.global_position = self.global_position
+		
+		var exp_bar = get_node("/root/Main/ExpBarSystem/TextureProgressBar/LevelText")
+		
+		if(i < 5): #Assign 1 to each target spot (there are 5 currently)
+			var rng = randi_range(-40, 40)
+			var posX = float_target_spots[i].x + rng
+			rng = randi_range(-40, 40)
+			var posY = float_target_spots[i].y + rng
+			particle.float_target_position = Vector2(posX, posY)
+			
+			print("PARTICLE FLOAT TARGET POSITION: ", particle.float_target_position)
+		else:
+			var rng = randi_range(0, float_target_spots.size()); #If more than 5, assign it randomly
+			particle.float_target_position = float_target_spots[rng]
+			
+		particle.target_position = exp_bar.global_position  # global position of bar
+		particle.exp_bar_ref = exp_bar
+		particle.exp_value = expToGive / num_particles  # divide the total EXP
+		
+		particle.start_float()
+
+
