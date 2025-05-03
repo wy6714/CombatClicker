@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://mvdt2c3xale3"]
+[gd_scene load_steps=67 format=3 uid="uid://mvdt2c3xale3"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_x7h4e"]
 [ext_resource type="Texture2D" uid="uid://kctbfitivfbo" path="res://Art/WiggleMushroom.png" id="2_5aaoh"]
@@ -550,6 +550,60 @@ _data = {
 "recoveryFlash": SubResource("Animation_pxyt8")
 }
 
+[sub_resource type="Animation" id="Animation_ah55l"]
+resource_name = "EnemyScaleDown"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.31, 0.31), Vector2(0.315, 0.315), Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="Animation" id="Animation_dk8rn"]
+resource_name = "EnemyScaleUp"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.3, 0.3), Vector2(0.315, 0.315), Vector2(0.31, 0.31)]
+}
+
+[sub_resource type="Animation" id="Animation_7p2j2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.3, 0.3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y0k4s"]
+_data = {
+"EnemyScaleDown": SubResource("Animation_ah55l"),
+"EnemyScaleUp": SubResource("Animation_dk8rn"),
+"RESET": SubResource("Animation_7p2j2")
+}
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
@@ -656,6 +710,11 @@ libraries = {
 root_node = NodePath("../EntranceAnim")
 libraries = {
 "": SubResource("AnimationLibrary_h8e2a")
+}
+
+[node name="EnemyScale" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_y0k4s")
 }
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

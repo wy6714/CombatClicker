@@ -76,6 +76,9 @@ var qtePressedCount = 0
 @onready var glassShatter = get_node("/root/Main/GlassShatter")
 @onready var background = get_node("/root/Main/scrollingBackground")
 
+var queued_anim: String = ""
+var ignoreMouseScale = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setInvisible()
@@ -90,8 +93,8 @@ func _ready():
 	
 	if(player.level >= breakPrereqLevel):
 		#breakable = randi() % 2 == 1  # True or False randomly
-		#breakable = true # Debug for when always breakable is desired
-		breakable = false # Debug for when never breakable is desired
+		breakable = true # Debug for when always breakable is desired
+		#breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
@@ -166,6 +169,7 @@ func initiateBreak():
 	if(!inQTEState):
 		qteCurrentCounter = 0  # Reset counter
 		qtePressedCount = 0
+		ignoreMouseScale = true
 		turnOffUI()
 		collision.disabled = true
 		inQTEState = true
@@ -204,6 +208,7 @@ func shrinkAndDealDamage():
 func recoveringFromBreak(delta):
 	if broken:
 		if not inQTEState:
+			ignoreMouseScale = false
 			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
 			healthBar.breakVal = breakAmount
 			recovering = true
@@ -245,12 +250,23 @@ func defeatEnemyCheck():
 		
 func _on_area_2d_mouse_entered():
 	mouseInsideRadius = true
-	
+	if(!ignoreMouseScale):
+		if $EnemyScale.is_playing():
+			queued_anim = "EnemyScaleUp"
+		else:
+			$EnemyScale.play("EnemyScaleUp")
+		
 func _on_area_2d_mouse_exited():
 	mouseInsideRadius = false
 	
 	player.stopDrilling("left") #Drills tend to be able to keep drilling even when cursor isnt on the enemy, so...
 	player.stopDrilling("right")
+	
+	if(!ignoreMouseScale):
+		if $EnemyScale.is_playing():
+			queued_anim = "EnemyScaleDown"
+		else:
+			$EnemyScale.play("EnemyScaleDown")
 
 func defeatAnimCleanup():
 	enemyManager.spawnEnemy()
