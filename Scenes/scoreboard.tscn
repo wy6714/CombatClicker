@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmglenqjhas03"]
+[gd_scene load_steps=8 format=3 uid="uid://dmglenqjhas03"]
 
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_fl5pe"]
 
@@ -37,6 +37,43 @@ tracks/0/keys = {
 _data = {
 "MoneyBounce": SubResource("Animation_lv2qj"),
 "RESET": SubResource("Animation_wyqli")
+}
+
+[sub_resource type="Animation" id="Animation_0opwo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScoreNumber:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(479, 45)]
+}
+
+[sub_resource type="Animation" id="Animation_fhq0w"]
+resource_name = "ScoreBounceAnim"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScoreNumber:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(479, 45), Vector2(479, 52), Vector2(479, 45)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xnyl0"]
+_data = {
+"RESET": SubResource("Animation_0opwo"),
+"ScoreBounceAnim": SubResource("Animation_fhq0w")
 }
 
 [node name="Scoreboard" type="Control"]
@@ -176,4 +213,9 @@ text = "1"
 [node name="MoneyBounceAnim" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_nx150")
+}
+
+[node name="ScoreBounceAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xnyl0")
 }

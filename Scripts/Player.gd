@@ -1,7 +1,7 @@
 extends Node2D
 
-#@export var strength: int = 1
-@export var strength: int = 100 # DEBUG STRENGTH
+@export var strength: int = 1
+#@export var strength: int = 100 # DEBUG STRENGTH
 @export var critRate: float = 5
 @export var critDamage: float = 2
 @export var energyRecharge: float = 1
@@ -136,6 +136,10 @@ func updateScore():
 	score += damage #Gain points based on how many points you get each click
 	maxScore += damage #Increment the maximum
 	scoreText.text = str(score) #Update text
+	
+	var scoreAnim = get_node("/root/Main/Scoreboard/ScoreBounceAnim")
+	scoreAnim.stop()
+	scoreAnim.play("ScoreBounceAnim")
 
 func updateMoney(sum):
 	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
