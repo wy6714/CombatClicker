@@ -114,6 +114,7 @@ func gainExp(exp):
 	currentExp += exp;
 	levelUp()
 	expBarSystem.expBar.value = currentExp
+	expBarSystem.playExpSE()
 
 func levelUp():
 	while currentExp >= expToNextLevel:  # Keep leveling up as long as there's enough EXP
@@ -128,7 +129,6 @@ func levelUp():
 		for node in get_tree().get_nodes_in_group("PartyMember"):
 			if node.has_method("gainUpgradePoints"):  # Ensure the node has the function/variable
 				node.gainUpgradePoints()
-		
 		
 		
 func updateScore():

@@ -93,8 +93,8 @@ func _ready():
 	
 	if(player.level >= breakPrereqLevel):
 		#breakable = randi() % 2 == 1  # True or False randomly
-		breakable = true # Debug for when always breakable is desired
-		#breakable = false # Debug for when never breakable is desired
+		#breakable = true # Debug for when always breakable is desired
+		breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
@@ -275,7 +275,8 @@ func defeatAnimCleanup():
 func monsterCapture():
 	var captureRng = randi_range(0, 100)
 	if(captureRate >= captureRng):
-		playerCapture.captureMonster(enemyName, enemyPassive)
+		#playerCapture.captureMonster(enemyName, enemyPassive)
+		playerCapture.generateCaptureParticle(enemyName, enemyPassive)
 
 func setInvisible(): #Set the monster and their healthbar invisible at the start
 	$Health_Bar.modulate.a = 0

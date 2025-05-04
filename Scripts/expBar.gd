@@ -10,3 +10,7 @@ func _ready():
 func playJiggle():
 	$ExpBarJiggle.play("ExpBarJiggle")
 
+func playExpSE():
+	var rng = randf_range(4, 4.5)
+	$ExpFillSE.pitch_scale = rng
+	$ExpFillSE.play()
