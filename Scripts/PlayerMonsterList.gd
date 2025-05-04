@@ -132,3 +132,32 @@ func get_passive_remove_function(passiveEffect: String) -> Callable:
 
 func _on_texture_button_button_up():
 	playerCapturePanel.visible = false
+	
+# -----------------------CAPTURE EFFECT-------------------------------------
+
+func generateCaptureParticle(enemyName: String, enemyPassive: String):
+	# Target Spot
+	var particleHolders = get_node("/root/Main/ParticleHolders")
+	var targetSpot: Vector2 = Vector2(0,0)
+	
+	# Get capture spot
+	for i in particleHolders.get_children():
+		if(i.is_in_group("CaptureSpot")):
+			targetSpot = i.global_position
+	
+	# Instantiate Particle	
+	var particle = preload("res://Scenes/CaptureParticle.tscn").instantiate()
+	particle.global_position = player.currentEnemy.global_position
+	get_tree().root.get_node("Main").add_child(particle)
+	
+	particle.float_target_position = targetSpot	
+	particle.target_position = currentMonsterButton.global_position  # global position of bar
+	particle.captureBarRef = currentMonsterButton
+	
+	particle.enemyName = enemyName
+	particle.enemyPassive = enemyPassive
+	
+	particle.start_float()
+
+
+

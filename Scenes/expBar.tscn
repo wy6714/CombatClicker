@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cs3mo6u36kkcl"]
+[gd_scene load_steps=11 format=3 uid="uid://cs3mo6u36kkcl"]
 
 [ext_resource type="Script" path="res://Scripts/expBar.gd" id="1_7oioh"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_tcnls"]
 [ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_0h4eq"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_5qtbd"]
+[ext_resource type="AudioStream" uid="uid://38bckhfsgcqp" path="res://Audio/ExpFill.mp3" id="5_3ec1f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -107,3 +108,7 @@ text = "Lv: 1"
 libraries = {
 "": SubResource("AnimationLibrary_r8fh3")
 }
+
+[node name="ExpFillSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_3ec1f")
+pitch_scale = 3.52

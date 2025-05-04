@@ -467,7 +467,7 @@ position = Vector2(674, 259)
 [node name="Exp5" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
 position = Vector2(706, 351)
 
-[node name="Capture" type="Node2D" parent="ParticleHolders"]
+[node name="Capture" type="Node2D" parent="ParticleHolders" groups=["CaptureSpot"]]
 position = Vector2(561, 217)
 
 [connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
