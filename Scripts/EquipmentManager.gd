@@ -9,8 +9,10 @@ extends Button
 @export var energyRegenCost = 100;
 
 @onready var swordHolder = get_node("/root/Main/shop/Sword")
-@onready var claymoreHolder =  get_node("/root/Main/shop/Claymore")
-@onready var drillHolder =  get_node("/root/Main/shop/Drill")
+@onready var claymoreHolder = get_node("/root/Main/shop/Claymore")
+@onready var drillHolder = get_node("/root/Main/shop/Drill")
+
+@onready var weaponDatabase = get_node("/root/Main/Weapon")
 
 
 var equippedWeapons = {
@@ -46,6 +48,7 @@ func _on_sword_button_down():
 	toggle_visibility(swordHolder)
 
 func _on_sword_1_button_down():
+	var weapon_name = "Sword1"
 	# Retrieve all nodes in the "Weapons" group
 	# WE DONT BUY THIS ONE, WE HAVE THIS ONE BY DEFAULT
 	var weapons = get_tree().get_nodes_in_group("Weapons")
@@ -58,10 +61,12 @@ func _on_sword_1_button_down():
 			
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
 			equip_weapon(sword1, "left")
-			print("LEFT")
+			get_weapon_stats(weapon_name)
+			print("LEFT uhhh")
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
 			equip_weapon(sword1, "right")
-			print("RIGHT")
+			print("RIGHT uhhh")
+		
 
 func _on_sword_2_button_down():
 	var weapon_name = "Sword2"
@@ -91,6 +96,7 @@ func _on_sword_2_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(sword, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func _on_sword_3_button_down():
 	var weapon_name = "Sword3"
@@ -120,6 +126,7 @@ func _on_sword_3_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(sword, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 			
 func _on_claymore_button_down():
 	toggle_visibility(claymoreHolder)
@@ -152,6 +159,7 @@ func _on_claymore_1_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(claymore, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 	
 func _on_claymore_2_button_down():
 	var weapon_name = "Claymore2"
@@ -181,6 +189,7 @@ func _on_claymore_2_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(claymore, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func _on_claymore_3_button_down():
 	var weapon_name = "Claymore3"
@@ -210,6 +219,7 @@ func _on_claymore_3_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(claymore, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func _on_drill_button_down():
 	toggle_visibility(drillHolder)
@@ -242,6 +252,7 @@ func _on_drill_1_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(drill, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func _on_drill_2_button_down():
 	var weapon_name = "Drill2"
@@ -271,6 +282,7 @@ func _on_drill_2_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(drill, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func _on_drill_3_button_down():
 	var weapon_name = "Drill3"
@@ -300,6 +312,7 @@ func _on_drill_3_button_down():
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			equip_weapon(drill, "right")
 			print("Equipped " + weapon_name + " on RIGHT hand")
+		get_weapon_stats(weapon_name)
 
 func toggle_visibility(weapon_node: Node):
 	for child in weapon_node.get_children():
@@ -321,7 +334,8 @@ func equip_weapon(weapon_button: Button, mouse_button: String):
 			"LeftEquipSymbol" if mouse_button == "left" else "RightEquipSymbol"
 		)
 		previous_symbol.hide()
-
+	
+	
 	# Equip the new weapon
 	equippedWeapons[mouse_button] = weapon_button
 	if mouse_button == "left":
@@ -334,6 +348,21 @@ func equip_weapon(weapon_button: Button, mouse_button: String):
 		left_symbol.hide()
 		if(equippedWeapons["left"] == equippedWeapons["right"]):
 			equippedWeapons["left"] = null
+
+func get_weapon_stats(weapon_name: String):
+	# APPLY STATS
+	var stats = weaponDatabase.weapon_stats[weapon_name]
+	print("STATS STRENGTH VALUE: ", stats.strength)
+	apply_weapon_stats_to_player(stats)
+	
+			
+func apply_weapon_stats_to_player(stats):
+	player.strength = stats.strength
+	player.crit_rate = stats.crit_rate
+	player.crit_damage = stats.crit_damage
+	player.ult_regen = stats.ult_regen
+	# And anything else you'd like
+	#should all be replaced wth bonus strength
 
 func getWeaponType(weapon_button: Button) -> String:
 	# Example: Use the button's name to determine the weapon type
@@ -355,6 +384,8 @@ func performWeaponAction(mouse_button: String):
 
 	# Determine the weapon type
 	var weaponType = getWeaponType(weapon)
+	
+
 
 	# Perform the action based on the weapon type
 	match weaponType:

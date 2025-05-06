@@ -6,6 +6,7 @@ var hover_scale := Vector2(0.6, 0.6)
 
 @export var recruitButtonColorHover: Color = Color(1,1,1,1)
 @export var recruitButtonColorPressed: Color = Color(1,1,1,1)
+
 var hover_colors = {
 	"WeaponStoreButton": Color(0.8, 0, 0),
 	"HireStoreButton": Color(0.8, 0.8, 0),
@@ -41,6 +42,8 @@ var darkened_color := Color(0.7, 0.7, 0.7)  # Slightly darker version of white (
 @onready var hireStoreMenu = $HireStoreMenu
 @onready var lotteryStoreMenu = $LotteryStore
 
+@onready var weaponDatabase = get_node("/root/Main/Weapon")
+
 var equippedWeapons = {
 	"left": null,
 	"right": null
@@ -53,7 +56,7 @@ var equippedWeapons = {
 func _ready():
 	
 	# Start off with a sword equipped
-	equip_weapon(initialWeapon, "left")
+	equip_weapon(initialWeapon, "left", "Sword1")
 	
 	getButtonColors()
 	updateWeaponPrices()
@@ -217,14 +220,15 @@ func select_weapon(weapon_name: String):
 			break
 			
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-			equip_weapon(currentWeapon, "left")
-			print("LEFT")
+		equip_weapon(currentWeapon, "left", weapon_name)
+		print("LEFT")
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
-			equip_weapon(currentWeapon, "right")
-			print("RIGHT")
+		equip_weapon(currentWeapon, "right", weapon_name)
+		print("RIGHT")
+
 			
 	# Function to handle equipping
-func equip_weapon(weapon_button: TextureButton, mouse_button: String):
+func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_name: String):
 	# Get the Left and Right equip symbols
 	var left_symbol = weapon_button.get_node("Left Equip")
 	var right_symbol = weapon_button.get_node("Right Equip")
@@ -244,11 +248,29 @@ func equip_weapon(weapon_button: TextureButton, mouse_button: String):
 		right_symbol.hide()
 		if(equippedWeapons["right"] == equippedWeapons["left"]):
 			equippedWeapons["right"] = null
+			
+		var stats = weaponDatabase.weapon_stats[weapon_name]
+		var strBon = stats["strength"]
+		var critRateBon = stats["crit_rate"]
+		var critDamageBon = stats["crit_damage"]
+		var ultRegenBon = stats["ult_regen"]
+		
+		player.setLeftWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon)
+		
 	elif mouse_button == "right":
 		right_symbol.show()
 		left_symbol.hide()
 		if(equippedWeapons["left"] == equippedWeapons["right"]):
 			equippedWeapons["left"] = null
+			
+		var stats = weaponDatabase.weapon_stats[weapon_name]
+		var strBon = stats["strength"]
+		var critRateBon = stats["crit_rate"]
+		var critDamageBon = stats["crit_damage"]
+		var ultRegenBon = stats["ult_regen"]
+		
+		player.setRightWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon)
+	
 			
 func getWeaponType(weapon_button: TextureButton) -> String:
 	# Example: Use the button's name to determine the weapon type
@@ -260,7 +282,7 @@ func getWeaponType(weapon_button: TextureButton) -> String:
 		return "Drill"
 	else:
 		return "Unknown"
-		
+
 func performWeaponAction(mouse_button: String):
 	# Get the equipped weapon for the specified mouse button
 	var weapon = equippedWeapons[mouse_button]
@@ -270,14 +292,17 @@ func performWeaponAction(mouse_button: String):
 
 	# Determine the weapon type
 	var weaponType = getWeaponType(weapon)
-
+	
 	# Perform the action based on the weapon type
 	match weaponType:
 		"Sword":
+			player.activeHand = mouse_button
 			player.dealDamage()  # Sword's action for any button
 		"Claymore":
+			player.activeHand = mouse_button
 			player.determineClaymoreButton(mouse_button)
 		"Drill":
+			player.activeHand = mouse_button
 			player.drilling(mouse_button)
 		_:
 			print("No action configured for weapon type:", weaponType)

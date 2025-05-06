@@ -12,6 +12,22 @@ extends Node2D
 @export var maxScore: int = 0 # Our TOTAL score accumulated throughout the entirety of playtime. (NOT currency)
 @export var money: int = 0 
 @export var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
+@export var activeHand: String = "left"
+
+# WEAPON BONUS STATS
+var leftWeaponStats = {
+	"strength": 0,
+	"crit_rate": 0.0,
+	"crit_damage": 0.0,
+	"ult_regen": 0.0
+}
+
+var rightWeaponStats = {
+	"strength": 0,
+	"crit_rate": 0.0,
+	"crit_damage": 0.0,
+	"ult_regen": 0.0
+}
 
 @export var level: int = 1
 @export var currentExp: int = 0
@@ -62,6 +78,7 @@ var heavy_hit_threshold := 1.3 # if actual > 130% of expected
 var low_threshold := 0.8
 var high_threshold := 1.2
 var bigHit = false
+var weaponStats: Dictionary
 
 
 # Called when the node enters the scene tree for the first time.
@@ -95,21 +112,28 @@ func _process(_delta):
 		stopDrilling("right")
 		
 func determineDamage(mult):
+	
+	if activeHand == "left":
+		weaponStats = leftWeaponStats
+	else:
+		weaponStats = rightWeaponStats
+	
 	damage = strength
-	damage = damage * mult
-	
-	pureDamage = damage # Raw damage value
-	var variation = randf_range(low_threshold, high_threshold) # RNG variation
-	damage = damage * variation # Apply variation
-	
-	
+	damage *= mult
+	damage += weaponStats["strength"]
+
+	pureDamage = damage # Raw damage before variation
+
+	var variation = randf_range(low_threshold, high_threshold)
+	damage *= variation
+
 	var rng = randf_range(1, 100)
-	if(rng <= critRate):
+	if rng <= critRate + weaponStats["crit_rate"]:
 		crit = true
-		damage = damage * critDamage
+		damage *= (critDamage + weaponStats["crit_damage"])
+
 	trackDamage(pureDamage, damage)
 	
-
 func gainExp(exp):
 	currentExp += exp;
 	levelUp()
@@ -226,9 +250,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	particleEffect(200, 300, 3, 5, 0.3)
 	activateAttackAnim()
 	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge)
+	ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
+		ultBarSystem.updateUltProgress(energyRecharge * critDamage + weaponStats["ult_regen"])
 	crit = false
 	bigHit = false
 			
@@ -245,9 +269,9 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(500, 700, 4, 6, 0.25)
 	activateAttackAnim()
-	ultBarSystem.updateUltProgress(energyRecharge * 5)
+	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
 	crit = false
 	bigHit = false
 	
@@ -264,9 +288,9 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(100, 200, 2, 3, 0.3)
 	activateAttackAnim()
-	ultBarSystem.updateUltProgress(energyRecharge * 5)
+	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
 	crit = false
 	bigHit = false
 
@@ -284,9 +308,9 @@ func drillDamage(hand: String):
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffectDrill(400, 800, 4, 5, 0.13)
 	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge)
+	ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"])
 	if crit:
-		ultBarSystem.updateUltProgress(energyRecharge * critDamage)
+		ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"] * critDamage)
 	crit = false
 	bigHit = false
 	
@@ -379,7 +403,7 @@ func useUlt():
 		activateAttackAnim()
 		ultBarSystem.updateUltProgress(0)
 		if(crit):
-			ultBarSystem.updateUltProgress((energyRecharge * 5) * critDamage)
+			ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
 		crit = false
 		bigHit = false
 		ultBarSystem.subtractUltProgress()
@@ -470,4 +494,21 @@ func breakDamageMultiplier():
 			damage = floor(damage * 1.4) # Take a bit more damage when broken
 		else:
 			damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
-			
+
+func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float) -> void:
+	leftWeaponStats["strength"] = weapStrength
+	leftWeaponStats["crit_rate"] = weapCritRate
+	leftWeaponStats["crit_damage"] = weapCritDamage
+	leftWeaponStats["ult_regen"] = weapUltRegen
+
+	print("LEFT STATS:", leftWeaponStats)
+
+
+func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float) -> void:
+	rightWeaponStats["strength"] = weapStrength
+	rightWeaponStats["crit_rate"] = weapCritRate
+	rightWeaponStats["crit_damage"] = weapCritDamage
+	rightWeaponStats["ult_regen"] = weapUltRegen
+
+	print("RIGHT STATS:", rightWeaponStats)
+

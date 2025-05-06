@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d4eqc4dg6npnh"]
+[gd_scene load_steps=13 format=3 uid="uid://d4eqc4dg6npnh"]
 
 [ext_resource type="Texture2D" uid="uid://c0tqvsueyfiii" path="res://Art/Monster Container.png" id="1_3b7wb"]
 [ext_resource type="Script" path="res://Scripts/current_monster_icon_button.gd" id="1_jxy11"]
@@ -6,6 +6,33 @@
 [ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="3_s6kjv"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="5_f35sw"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="6_q8771"]
+
+[sub_resource type="Animation" id="Animation_mlaca"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NewCaptureLabel:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 22)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NewCaptureLabel:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_xknhr"]
 resource_name = "newCaptureLabelBounce"
@@ -35,37 +62,47 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_mlaca"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x8kbk"]
+_data = {
+"RESET": SubResource("Animation_mlaca"),
+"newCaptureLabelBounce": SubResource("Animation_xknhr")
+}
+
+[sub_resource type="Animation" id="Animation_qo7jo"]
+resource_name = "buttonBounce"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.100826, 0.196669),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4u0km"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("NewCaptureLabel:position")
+tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 22)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("NewCaptureLabel:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_x8kbk"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l0au3"]
 _data = {
-"RESET": SubResource("Animation_mlaca"),
-"newCaptureLabelBounce": SubResource("Animation_xknhr")
+"RESET": SubResource("Animation_4u0km"),
+"buttonBounce": SubResource("Animation_qo7jo")
 }
 
 [node name="CurrentMonsterIconButton" type="Control"]
@@ -73,8 +110,11 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1088.0
+offset_bottom = -584.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(32, 32)
 script = ExtResource("1_jxy11")
 
 [node name="NewCaptureLabel" type="Label" parent="."]
@@ -106,5 +146,13 @@ texture = ExtResource("5_f35sw")
 libraries = {
 "": SubResource("AnimationLibrary_x8kbk")
 }
+
+[node name="ButtonBounce" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l0au3")
+}
+
+[node name="Target" type="Node2D" parent="."]
+position = Vector2(50, 7)
 
 [connection signal="button_down" from="TextureButton" to="." method="_on_texture_button_button_down"]
