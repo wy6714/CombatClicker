@@ -10,3 +10,4 @@ func _on_texture_button_button_down():
 
 func newCaptureBounce():
 	$NewCaptureAnim.play("newCaptureLabelBounce")
+	$ButtonBounce.play("buttonBounce")

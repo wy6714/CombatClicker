@@ -5,6 +5,7 @@ var capturedMonsters = {}
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var currentMonsterButton = get_node("/root/Main/CurrentMonsterIconButton")
+@onready var targetPosition = get_node("/root/Main/CurrentMonsterIconButton/Target")
 @onready var playerCapturePanel = $Control
 @onready var captureList = $Control/GridContainer
 
@@ -151,7 +152,7 @@ func generateCaptureParticle(enemyName: String, enemyPassive: String):
 	get_tree().root.get_node("Main").add_child(particle)
 	
 	particle.float_target_position = targetSpot	
-	particle.target_position = currentMonsterButton.global_position  # global position of bar
+	particle.target_position = targetPosition.global_position  # global position of bar
 	particle.captureBarRef = currentMonsterButton
 	
 	particle.enemyName = enemyName
