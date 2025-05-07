@@ -78,7 +78,7 @@ var heavy_hit_threshold := 1.3 # if actual > 130% of expected
 var low_threshold := 0.8
 var high_threshold := 1.2
 var bigHit = false
-var weaponStats: Dictionary
+var weaponStats = {}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -133,7 +133,26 @@ func determineDamage(mult):
 		damage *= (critDamage + weaponStats["crit_damage"])
 
 	trackDamage(pureDamage, damage)
+	statusEffect()
 	
+func statusEffect():
+				
+	for element in weaponStats["elements"]:
+		var rng = randi_range(0, 100)
+		if rng <= weaponStats["status_rate"]:
+			match element:
+				"Fire":
+					print("Activate the fire stuff")
+				"Water":
+					print("Activate the water stuff")
+				"Earth":
+					print("Activate the earth stuff")
+				"Wind":
+					print("Activate the wind stuff")
+				"Electric":
+					print("Activate the electric stuff")
+		
+		
 func gainExp(exp):
 	currentExp += exp;
 	levelUp()
@@ -369,7 +388,7 @@ func determineClaymoreDamageRight():
 func trackDamage(expected: float, actual: float):
 	
 	var ratio = actual / expected # Calc damage ratio
-	print(ratio)
+	print("Ratio: ", ratio)
 	if(ratio >= heavy_hit_threshold): # If damage exceeds high damage ratio (crit, damage up or something, ult)
 		print("BIG HITT!!")
 		bigHit = true
@@ -495,20 +514,24 @@ func breakDamageMultiplier():
 		else:
 			damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
 
-func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float) -> void:
+func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapElements: Array, weapStatusRate: float) -> void:
 	leftWeaponStats["strength"] = weapStrength
 	leftWeaponStats["crit_rate"] = weapCritRate
 	leftWeaponStats["crit_damage"] = weapCritDamage
 	leftWeaponStats["ult_regen"] = weapUltRegen
+	leftWeaponStats["elements"] = weapElements
+	leftWeaponStats["status_rate"] = weapStatusRate
 
 	print("LEFT STATS:", leftWeaponStats)
 
 
-func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float) -> void:
+func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapElements: Array, weapStatusRate: float) -> void:
 	rightWeaponStats["strength"] = weapStrength
 	rightWeaponStats["crit_rate"] = weapCritRate
 	rightWeaponStats["crit_damage"] = weapCritDamage
 	rightWeaponStats["ult_regen"] = weapUltRegen
+	rightWeaponStats["elements"] = weapElements
+	rightWeaponStats["status_rate"] = weapStatusRate
 
 	print("RIGHT STATS:", rightWeaponStats)
 

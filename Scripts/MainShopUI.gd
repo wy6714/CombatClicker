@@ -254,8 +254,10 @@ func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_nam
 		var critRateBon = stats["crit_rate"]
 		var critDamageBon = stats["crit_damage"]
 		var ultRegenBon = stats["ult_regen"]
+		var elements = stats["elements"]
+		var statusRate = stats["status_rate"]
 		
-		player.setLeftWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon)
+		player.setLeftWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon, elements, statusRate)
 		
 	elif mouse_button == "right":
 		right_symbol.show()
@@ -268,8 +270,10 @@ func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_nam
 		var critRateBon = stats["crit_rate"]
 		var critDamageBon = stats["crit_damage"]
 		var ultRegenBon = stats["ult_regen"]
+		var elements = stats["elements"]
+		var statusRate = stats["status_rate"]
 		
-		player.setRightWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon)
+		player.setRightWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon, elements, statusRate)
 	
 			
 func getWeaponType(weapon_button: TextureButton) -> String:

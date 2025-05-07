@@ -139,7 +139,6 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 		
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
 			player.useUlt()
-			print("hi")
 					
 func takeDamage(damage, breakMult):
 	health -= damage
@@ -148,7 +147,6 @@ func takeDamage(damage, breakMult):
 	var breakTotal = ceil(damage / 4) * breakMult
 	if(breakTotal < 1): # At least, do 5 break damage
 		breakTotal = 5
-	print("BREAK TOTAL: ", breakTotal)
 	takeBreakDamage(breakTotal)
 	
 	defeatEnemyCheck()
@@ -162,7 +160,6 @@ func takeBreakDamage(breakDamage):
 			if(health >= 0):
 				if(!recovering):
 					broken = true
-					print("BREAK")
 					initiateBreak()
 			
 func initiateBreak():
@@ -375,7 +372,6 @@ func generateExpParticles():
 	for i in particleHolders.get_children():
 		if(i.is_in_group("ExpSpot")):
 			float_target_spots.append(i.global_position)
-			print(i.global_position)
 		
 	var num_particles = 5
 	for i in range(num_particles):
@@ -391,8 +387,7 @@ func generateExpParticles():
 			rng = randi_range(-40, 40)
 			var posY = float_target_spots[i].y + rng
 			particle.float_target_position = Vector2(posX, posY)
-			
-			print("PARTICLE FLOAT TARGET POSITION: ", particle.float_target_position)
+		
 		else:
 			var rng = randi_range(0, float_target_spots.size()); #If more than 5, assign it randomly
 			particle.float_target_position = float_target_spots[rng]
