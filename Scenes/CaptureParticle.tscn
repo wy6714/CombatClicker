@@ -1,66 +1,66 @@
 [gd_scene load_steps=13 format=3 uid="uid://bvegusx0e1wll"]
 
 [ext_resource type="Script" path="res://Scripts/CaptureParticle.gd" id="1_ugdox"]
-[ext_resource type="Texture2D" uid="uid://bb1xtf40jp6do" path="res://Art/ExpParticle (5).png" id="2_thoie"]
+[ext_resource type="Texture2D" uid="uid://cnxn2yo2p10av" path="res://Art/CaptureParticle.png" id="2_v8ery"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_h61xj"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8qob"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u12uv"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_utfc1"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i16hi"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dhdg"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_m4b1i"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_c444g"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(0, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bcit6"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_iixdu"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(32, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pcixe"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_v4md7"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(64, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_emew8"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_gx0sg"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(0, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gm03o"]
-atlas = ExtResource("2_thoie")
+[sub_resource type="AtlasTexture" id="AtlasTexture_jmv8f"]
+atlas = ExtResource("2_v8ery")
 region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7ishp"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_h61xj")
+"texture": SubResource("AtlasTexture_p8qob")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_u12uv")
+"texture": SubResource("AtlasTexture_utfc1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i16hi")
+"texture": SubResource("AtlasTexture_0dhdg")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_m4b1i")
+"texture": SubResource("AtlasTexture_c444g")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bcit6")
+"texture": SubResource("AtlasTexture_iixdu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pcixe")
+"texture": SubResource("AtlasTexture_v4md7")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_emew8")
+"texture": SubResource("AtlasTexture_gx0sg")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gm03o")
+"texture": SubResource("AtlasTexture_jmv8f")
 }],
 "loop": true,
 "name": &"default",
@@ -74,10 +74,9 @@ scale = Vector2(2, 2)
 script = ExtResource("1_ugdox")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-modulate = Color(0.318966, 8.73573e-05, 0.329889, 1)
 sprite_frames = SubResource("SpriteFrames_7ishp")
 autoplay = "default"
-frame_progress = 0.857373
+frame_progress = 0.971417
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(0.2, 0.2)

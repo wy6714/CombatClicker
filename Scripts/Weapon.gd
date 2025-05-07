@@ -4,11 +4,12 @@ extends Node2D
 var weapon_stats = {
 	"Sword1": {
 		"type": "Sword",
-		"strength": 50,
+		"strength": 1,
 		"crit_rate": 1,
 		"crit_damage": 1,
 		"ult_regen": 1,
-		"elements": ["Fire"]
+		"elements": ["Fire", "Water", "Wind", "Earth", "Electric"],
+		"status_rate": 1
 	},
 	"Sword2": {
 		"type": "Sword",
@@ -16,7 +17,8 @@ var weapon_stats = {
 		"crit_rate": 0.05,
 		"crit_damage": 1.3,
 		"ult_regen": 0.05,
-		"elements": ["Fire"]
+		"elements": ["Water"],
+		"status_rate": 80
 	},
 	"Sword3": {
 		"type": "Sword",
@@ -24,7 +26,8 @@ var weapon_stats = {
 		"crit_rate": 0.05,
 		"crit_damage": 1.3,
 		"ult_regen": 0.05,
-		"elements": ["Fire"]
+		"elements": ["Wind"],
+		"status_rate": 10
 	},
 	"Claymore1": {
 		"type": "GreatSword",
@@ -32,7 +35,8 @@ var weapon_stats = {
 		"crit_rate": 0.1,
 		"crit_damage": 2.0,
 		"ult_regen": 0.02,
-		"elements": ["Earth", "Electric"]
+		"elements": ["Fire", "Water", "Wind", "Earth", "Electric"],
+		"status_rate": 1
 	},
 	"Claymore2": {
 		"type": "GreatSword",
@@ -40,7 +44,8 @@ var weapon_stats = {
 		"crit_rate": 0.1,
 		"crit_damage": 2.0,
 		"ult_regen": 0.02,
-		"elements": ["Earth", "Electric"]
+		"elements": ["Earth", "Fire"],
+		"status_rate": 10
 	}
 	# ... more weapons here
 }
