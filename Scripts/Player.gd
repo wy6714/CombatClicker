@@ -143,6 +143,8 @@ func statusEffect():
 			match element:
 				"Fire":
 					print("Activate the fire stuff")
+					currentEnemy.burn = true
+					currentEnemy.startBurn()
 				"Water":
 					print("Activate the water stuff")
 				"Earth":

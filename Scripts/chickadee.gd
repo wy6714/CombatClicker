@@ -79,6 +79,14 @@ var qtePressedCount = 0
 var queued_anim: String = ""
 var ignoreMouseScale = false
 
+var burn = false # Enemy receives damage over time.
+var burnCount = 0
+
+var dampen = false # Enemy damage received is echoed. 
+var dizzy = false # Enemy is easier to land crits on, and they do more crit damage.
+var petrify = false # Enemy takes massive damage upon status' end, based on how much damage enemy accumulated while status was active
+var paralysis = false # Player recovers extra ult points upon hit
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setInvisible()
@@ -398,4 +406,49 @@ func generateExpParticles():
 		
 		particle.start_float()
 
+#Initiate burn		
+func startBurn():
+	if(burn):
+		burnCount = 0
+		print("Burn applied")
+		#If timer exists, remove it
+		if has_node("BurnTimer"):
+			get_node("BurnTimer").queue_free()
+			
+		#Initial Burn damage
+		manageBurn()
+		
+		#Create the timer
+		var burn_timer = Timer.new()
+		burn_timer.name = "BurnTimer"
+		burn_timer.wait_time = 2.0 # Burn damage interval
+		burn_timer.one_shot = false
+		burn_timer.autostart = true
+		add_child(burn_timer)
+		burn_timer.connect("timeout", Callable(self, "_on_burn_timer_timeout"))
+		
+	
+# Deal damage, and get rid of timer when done.
+func manageBurn():
+	if(burnCount <= 5):
+		takeDamage(health / 20.0, 1)
+		burnCount += 1
+		print(burnCount)
+	else:
+		burn = false
+		burnCount = 0
+		print("Burning over")
+		
+		var timer = get_node("BurnTimer") if has_node("BurnTimer") else null
+		if timer:
+			timer.queue_free()
+
+#Inflict damage on timeout
+func _on_burn_timer_timeout():
+	if(burn):
+		manageBurn()
+			
+	
+
+	
 
