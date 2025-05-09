@@ -83,9 +83,21 @@ var burn = false # Enemy receives damage over time.
 var burnCount = 0
 
 var dampen = false # Enemy damage received is echoed. 
+@onready var dampenTimer = $DampenTimer
+
 var dizzy = false # Enemy is easier to land crits on, and they do more crit damage.
+var dizzyCritRateBoost = 30
+var dizzyCritDamageBoost = 1
+@onready var dizzyTimer = $DizzyTimer
+
 var petrify = false # Enemy takes massive damage upon status' end, based on how much damage enemy accumulated while status was active
+var petrifyDamage = 0
+@onready var petrifyTimer = $PetrifyTimer
+
 var paralysis = false # Player recovers extra ult points upon hit
+@onready var paralysisTimer = $ParalysisTimer
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -156,6 +168,10 @@ func takeDamage(damage, breakMult):
 	if(breakTotal < 1): # At least, do 5 break damage
 		breakTotal = 5
 	takeBreakDamage(breakTotal)
+	
+	manageDampen(damage)
+	managePetrify(damage)
+	manageParalysis()
 	
 	defeatEnemyCheck()
 	
@@ -447,8 +463,45 @@ func manageBurn():
 func _on_burn_timer_timeout():
 	if(burn):
 		manageBurn()
-			
-	
+		
+func manageDampen(damage: int):
+	if(dampen):
+		var dampenDamage = damage / 4
+		if(dampenDamage <= 0):
+			dampenDamage = 1	
+		health -= dampenDamage
+		healthBar.health = health
+		print("dampen damage being taken: ", dampenDamage)
+		
+		# I believe you could add managePetrify here too if desired
+		
+		defeatEnemyCheck()
 
+func managePetrify(damage: int):
+	if(petrify):
+		petrifyDamage += damage
+		
+func manageParalysis():
+	if(paralysis):
+		player.ultBarSystem.updateUltProgress(80)
 	
+# For the "Dizzy" status effect... the enemy has 2 variables called dizzyCritRateBoost and dizzyCritDamageBoost
+# Dizzy is managed in the determineDamage function of the player
+func _on_dampen_timer_timeout():
+	dampen = false
+	print("No more: Dampen")
+	
+func _on_dizzy_timer_timeout():
+	dizzy = false
+	print("No more: Dizzy")
 
+func _on_petrify_timer_timeout():
+	petrify = false
+	takeDamage(petrifyDamage, 1)
+	print("Petrify Damage = ", petrifyDamage)
+	petrifyDamage = 0
+	print("No more: Petrify")
+
+func _on_paralysis_timer_timeout():
+	paralysis = false
+	print("No more: Paralysis")

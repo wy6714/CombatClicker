@@ -128,9 +128,15 @@ func determineDamage(mult):
 	damage *= variation
 
 	var rng = randf_range(1, 100)
-	if rng <= critRate + weaponStats["crit_rate"]:
-		crit = true
-		damage *= (critDamage + weaponStats["crit_damage"])
+	if(currentEnemy != null && currentEnemy.dizzy == false):
+		if rng <= critRate + weaponStats["crit_rate"]:
+			crit = true
+			damage *= (critDamage + weaponStats["crit_damage"])
+			
+	elif(currentEnemy != null && currentEnemy.dizzy == true):
+		if rng <= critRate + weaponStats["crit_rate"] + currentEnemy.dizzyCritRateBoost: # dizzy crit rate boost
+			crit = true
+			damage *= (critDamage + weaponStats["crit_damage"] + currentEnemy.dizzyCritDamageBoost) # dizzy crit damage boost
 
 	trackDamage(pureDamage, damage)
 	statusEffect()
@@ -147,14 +153,21 @@ func statusEffect():
 					currentEnemy.startBurn()
 				"Water":
 					print("Activate the water stuff")
+					currentEnemy.dampen = true
+					currentEnemy.dampenTimer.start()
 				"Earth":
 					print("Activate the earth stuff")
+					currentEnemy.petrify = true
+					currentEnemy.petrifyTimer.start()
 				"Wind":
 					print("Activate the wind stuff")
+					currentEnemy.dizzy = true
+					currentEnemy.dizzyTimer.start()
 				"Electric":
 					print("Activate the electric stuff")
-		
-		
+					currentEnemy.paralysis = true
+					currentEnemy.paralysisTimer.start()
+				
 func gainExp(exp):
 	currentExp += exp;
 	levelUp()
