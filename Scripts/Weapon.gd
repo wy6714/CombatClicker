@@ -9,7 +9,7 @@ var weapon_stats = {
 		"crit_damage": 1,
 		"ult_regen": 1,
 		#"elements": ["Fire", "Water", "Wind", "Earth", "Electric"],
-		"elements": ["Fire"],
+		"elements": ["Wind"],
 		"status_rate": 99
 	},
 	"Sword2": {

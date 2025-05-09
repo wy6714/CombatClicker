@@ -493,8 +493,24 @@ libraries = {
 "": SubResource("AnimationLibrary_y0k4s")
 }
 
+[node name="DampenTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="DizzyTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="PetrifyTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="ParalysisTimer" type="Timer" parent="."]
+wait_time = 10.0
+
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
 [connection signal="timeout" from="Health_Bar/BreakBar/BreakTimer" to="Health_Bar" method="_on_break_timer_timeout"]
 [connection signal="timeout" from="Health_Bar/Timer" to="Health_Bar" method="_on_timer_timeout"]
+[connection signal="timeout" from="DampenTimer" to="." method="_on_dampen_timer_timeout"]
+[connection signal="timeout" from="DizzyTimer" to="." method="_on_dizzy_timer_timeout"]
+[connection signal="timeout" from="PetrifyTimer" to="." method="_on_petrify_timer_timeout"]
+[connection signal="timeout" from="ParalysisTimer" to="." method="_on_paralysis_timer_timeout"]
