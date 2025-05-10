@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://mvdt2c3xale3"]
+[gd_scene load_steps=69 format=3 uid="uid://mvdt2c3xale3"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_x7h4e"]
 [ext_resource type="Texture2D" uid="uid://kctbfitivfbo" path="res://Art/WiggleMushroom.png" id="2_5aaoh"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_drref"]
 [ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_rif11"]
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_fcr41"]
+[ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="10_fbur3"]
+[ext_resource type="Texture2D" uid="uid://de5p5250hic3m" path="res://Art/StatusSymbolBlank.png" id="11_w5ktb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l2kc6"]
 atlas = ExtResource("2_5aaoh")
@@ -717,6 +719,12 @@ libraries = {
 "": SubResource("AnimationLibrary_y0k4s")
 }
 
+[node name="BurnTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="BurnTickTimer" type="Timer" parent="."]
+wait_time = 2.0
+
 [node name="DampenTimer" type="Timer" parent="."]
 wait_time = 10.0
 
@@ -729,8 +737,134 @@ wait_time = 10.0
 [node name="ParalysisTimer" type="Timer" parent="."]
 wait_time = 10.0
 
+[node name="DampenNumberPosition" type="Node2D" parent="."]
+position = Vector2(0, -503.333)
+scale = Vector2(3.3, 3.3)
+
+[node name="BurnNumberPosition" type="Node2D" parent="."]
+position = Vector2(0, -9.53674e-07)
+scale = Vector2(3.3, 3.3)
+
+[node name="StatusHolder" type="Node2D" parent="."]
+position = Vector2(43.3333, 0)
+
+[node name="Status 1" type="Sprite2D" parent="StatusHolder"]
+visible = false
+position = Vector2(-315.333, -193)
+scale = Vector2(3, 3)
+texture = ExtResource("10_fbur3")
+hframes = 4
+vframes = 4
+
+[node name="StatusFill" type="TextureProgressBar" parent="StatusHolder/Status 1"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+max_value = 10.0
+step = 0.001
+fill_mode = 3
+texture_under = ExtResource("11_w5ktb")
+texture_progress = ExtResource("11_w5ktb")
+tint_under = Color(1, 1, 1, 0)
+tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Status 2" type="Sprite2D" parent="StatusHolder"]
+visible = false
+position = Vector2(-315.333, -88.6667)
+scale = Vector2(3, 3)
+texture = ExtResource("10_fbur3")
+hframes = 4
+vframes = 4
+frame = 1
+
+[node name="StatusFill" type="TextureProgressBar" parent="StatusHolder/Status 2"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+max_value = 10.0
+step = 0.001
+fill_mode = 3
+texture_under = ExtResource("11_w5ktb")
+texture_progress = ExtResource("11_w5ktb")
+tint_under = Color(1, 1, 1, 0)
+tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Status 3" type="Sprite2D" parent="StatusHolder"]
+visible = false
+position = Vector2(-315.333, 14.6667)
+scale = Vector2(3, 3)
+texture = ExtResource("10_fbur3")
+hframes = 4
+vframes = 4
+frame = 2
+
+[node name="StatusFill" type="TextureProgressBar" parent="StatusHolder/Status 3"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+max_value = 10.0
+step = 0.001
+fill_mode = 3
+texture_under = ExtResource("11_w5ktb")
+texture_progress = ExtResource("11_w5ktb")
+tint_under = Color(1, 1, 1, 0)
+tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Status 4" type="Sprite2D" parent="StatusHolder"]
+visible = false
+position = Vector2(-315.333, 118)
+scale = Vector2(3, 3)
+texture = ExtResource("10_fbur3")
+hframes = 4
+vframes = 4
+frame = 3
+
+[node name="StatusFill" type="TextureProgressBar" parent="StatusHolder/Status 4"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+max_value = 10.0
+step = 0.001
+fill_mode = 3
+texture_under = ExtResource("11_w5ktb")
+texture_progress = ExtResource("11_w5ktb")
+tint_under = Color(1, 1, 1, 0)
+tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Status 5" type="Sprite2D" parent="StatusHolder"]
+visible = false
+position = Vector2(-316.667, 220)
+scale = Vector2(3, 3)
+texture = ExtResource("10_fbur3")
+hframes = 4
+vframes = 4
+frame = 4
+
+[node name="StatusFill" type="TextureProgressBar" parent="StatusHolder/Status 5"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 24.0
+max_value = 10.0
+step = 0.001
+fill_mode = 3
+texture_under = ExtResource("11_w5ktb")
+texture_progress = ExtResource("11_w5ktb")
+tint_under = Color(1, 1, 1, 0)
+tint_progress = Color(1, 1, 1, 0.537255)
+
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
 [connection signal="timeout" from="Health_Bar/BreakBar/BreakTimer" to="Health_Bar" method="_on_break_timer_timeout"]
 [connection signal="timeout" from="Health_Bar/Timer" to="Health_Bar" method="_on_timer_timeout"]
+[connection signal="timeout" from="BurnTimer" to="." method="_on_burn_timer_timeout"]
+[connection signal="timeout" from="BurnTickTimer" to="." method="_on_burn_tick_timer_timeout"]
+[connection signal="timeout" from="DampenTimer" to="." method="_on_dampen_timer_timeout"]
+[connection signal="timeout" from="DizzyTimer" to="." method="_on_dizzy_timer_timeout"]
+[connection signal="timeout" from="PetrifyTimer" to="." method="_on_petrify_timer_timeout"]
+[connection signal="timeout" from="ParalysisTimer" to="." method="_on_paralysis_timer_timeout"]

@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var health: int = 100 # Health of the enemy
+@export var maxHealth : int = 0
 @export var baseHealth: int = 100
 @export var expToGive: int = 34
 @export var scalarLevel: float = 1.0
@@ -101,6 +102,9 @@ var paralysis = false # Player recovers extra ult points upon hit
 @onready var statusIconList = [$"StatusHolder/Status 1", $"StatusHolder/Status 2", $"StatusHolder/Status 3", $"StatusHolder/Status 4", $"StatusHolder/Status 5"]
 var appliedStatus = []
 
+@onready var burnNumberPosition = $BurnNumberPosition
+@onready var dampenNumberPosition = $DampenNumberPosition
+
 var statusFrames = {
 	"Burn": 0,
 	"Dampen": 1,
@@ -112,6 +116,9 @@ var statusFrames = {
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	maxHealth = health
+	
 	setInvisible()
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
@@ -438,16 +445,18 @@ func generateExpParticles():
 #Initiate burn		
 func startBurn():
 	if(burn):
-		print("Burn applied")
-		
 		#Initial Burn damage
 		manageBurn()
-		
 		burnTickTimer.start()
 		
 # Deal damage
 func manageBurn():
-	takeDamage(health / 20.0, 1)
+	
+	takeDamage(maxHealth / 20.0, 1)
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = burnNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_burn_number(maxHealth / 20.0, damageNumPos, false) #Display damage number and attack animation upon hit
 
 #Inflict damage on timeout
 func _on_burn_tick_timer_timeout():
@@ -462,6 +471,9 @@ func manageDampen(damage: int):
 		health -= dampenDamage
 		healthBar.health = health
 		print("dampen damage being taken: ", dampenDamage)
+		
+		var damageNumPos = dampenNumberPosition.global_position
+		DamageNumber.display_dampen_number(dampenDamage, damageNumPos, false) #Display damage number and attack animation upon hit
 		
 		# I believe you could add managePetrify here too if desired
 		
@@ -484,8 +496,7 @@ func _on_burn_timer_timeout():
 	print("Burning over")
 
 	clear_status_icon("Burn")
-		
-	
+			
 func _on_dampen_timer_timeout():
 	dampen = false
 	print("No more: Dampen")
@@ -500,6 +511,10 @@ func _on_petrify_timer_timeout():
 	petrify = false
 	takeDamage(petrifyDamage, 1)
 	print("Petrify Damage = ", petrifyDamage)
+	
+	var damageNumPos = damageNumberPosition.global_position
+	DamageNumber.display_petrify_number(petrifyDamage, damageNumPos, false) #Display damage number and attack animation upon hit
+	
 	petrifyDamage = 0
 	print("No more: Petrify")
 	clear_status_icon("Petrify")
