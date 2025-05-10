@@ -151,22 +151,29 @@ func statusEffect():
 					print("Activate the fire stuff")
 					currentEnemy.burn = true
 					currentEnemy.startBurn()
+					currentEnemy.burnTimer.start()
+					
+					currentEnemy.applyStatusIcon("Burn")
 				"Water":
 					print("Activate the water stuff")
 					currentEnemy.dampen = true
 					currentEnemy.dampenTimer.start()
+					currentEnemy.applyStatusIcon("Dampen")
 				"Earth":
 					print("Activate the earth stuff")
 					currentEnemy.petrify = true
 					currentEnemy.petrifyTimer.start()
+					currentEnemy.applyStatusIcon("Petrify")
 				"Wind":
 					print("Activate the wind stuff")
 					currentEnemy.dizzy = true
 					currentEnemy.dizzyTimer.start()
+					currentEnemy.applyStatusIcon("Dizzy")
 				"Electric":
 					print("Activate the electric stuff")
 					currentEnemy.paralysis = true
 					currentEnemy.paralysisTimer.start()
+					currentEnemy.applyStatusIcon("Paralysis")
 				
 func gainExp(exp):
 	currentExp += exp;

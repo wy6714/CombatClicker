@@ -80,7 +80,8 @@ var queued_anim: String = ""
 var ignoreMouseScale = false
 
 var burn = false # Enemy receives damage over time.
-var burnCount = 0
+@onready var burnTimer = $BurnTimer
+@onready var burnTickTimer = $BurnTickTimer
 
 var dampen = false # Enemy damage received is echoed. 
 @onready var dampenTimer = $DampenTimer
@@ -97,6 +98,16 @@ var petrifyDamage = 0
 var paralysis = false # Player recovers extra ult points upon hit
 @onready var paralysisTimer = $ParalysisTimer
 
+@onready var statusIconList = [$"StatusHolder/Status 1", $"StatusHolder/Status 2", $"StatusHolder/Status 3", $"StatusHolder/Status 4", $"StatusHolder/Status 5"]
+var appliedStatus = []
+
+var statusFrames = {
+	"Burn": 0,
+	"Dampen": 1,
+	"Dizzy": 2,
+	"Paralysis": 3,
+	"Petrify": 4
+}
 
 
 # Called when the node enters the scene tree for the first time.
@@ -147,6 +158,8 @@ func _process(_delta):
 
 		if t >= 1.0:
 			scaling = false  # Stop when finished
+	
+	manageStatusIcons()
 	
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
@@ -425,42 +438,19 @@ func generateExpParticles():
 #Initiate burn		
 func startBurn():
 	if(burn):
-		burnCount = 0
 		print("Burn applied")
-		#If timer exists, remove it
-		if has_node("BurnTimer"):
-			get_node("BurnTimer").queue_free()
-			
+		
 		#Initial Burn damage
 		manageBurn()
 		
-		#Create the timer
-		var burn_timer = Timer.new()
-		burn_timer.name = "BurnTimer"
-		burn_timer.wait_time = 2.0 # Burn damage interval
-		burn_timer.one_shot = false
-		burn_timer.autostart = true
-		add_child(burn_timer)
-		burn_timer.connect("timeout", Callable(self, "_on_burn_timer_timeout"))
+		burnTickTimer.start()
 		
-	
-# Deal damage, and get rid of timer when done.
+# Deal damage
 func manageBurn():
-	if(burnCount <= 5):
-		takeDamage(health / 20.0, 1)
-		burnCount += 1
-		print(burnCount)
-	else:
-		burn = false
-		burnCount = 0
-		print("Burning over")
-		
-		var timer = get_node("BurnTimer") if has_node("BurnTimer") else null
-		if timer:
-			timer.queue_free()
+	takeDamage(health / 20.0, 1)
 
 #Inflict damage on timeout
-func _on_burn_timer_timeout():
+func _on_burn_tick_timer_timeout():
 	if(burn):
 		manageBurn()
 		
@@ -487,13 +477,24 @@ func manageParalysis():
 	
 # For the "Dizzy" status effect... the enemy has 2 variables called dizzyCritRateBoost and dizzyCritDamageBoost
 # Dizzy is managed in the determineDamage function of the player
+
+func _on_burn_timer_timeout():
+	burn = false
+	burnTickTimer.stop()
+	print("Burning over")
+
+	clear_status_icon("Burn")
+		
+	
 func _on_dampen_timer_timeout():
 	dampen = false
 	print("No more: Dampen")
+	clear_status_icon("Dampen")
 	
 func _on_dizzy_timer_timeout():
 	dizzy = false
 	print("No more: Dizzy")
+	clear_status_icon("Dizzy")
 
 func _on_petrify_timer_timeout():
 	petrify = false
@@ -501,7 +502,43 @@ func _on_petrify_timer_timeout():
 	print("Petrify Damage = ", petrifyDamage)
 	petrifyDamage = 0
 	print("No more: Petrify")
+	clear_status_icon("Petrify")
 
 func _on_paralysis_timer_timeout():
 	paralysis = false
 	print("No more: Paralysis")
+	clear_status_icon("Paralysis")
+	
+func manageStatusIcons():
+	for icon in statusIconList:
+		if icon.visible:
+			var status_name = icon.get_meta("status_name")
+			var timer = get_node(status_name + "Timer")
+			
+			if timer:
+				var fill_bar = icon.get_node("StatusFill")
+				fill_bar.value = 10 - timer.time_left
+				
+func clear_status_icon(status_name: String) -> void:
+	for icon in statusIconList:
+		if icon.visible and icon.get_meta("status_name") == status_name:
+			icon.visible = false
+			icon.get_node("StatusFill").value = 0
+			icon.set_meta("status_name", null)
+			appliedStatus.erase(status_name)
+			break
+
+		
+func applyStatusIcon(status_name: String) -> void:
+	if appliedStatus.has(status_name):
+		return # Already applied
+
+	# Find the next available icon slot
+	for icon in statusIconList:
+		if icon.visible == false:
+			icon.visible = true
+			icon.frame = statusFrames[status_name]
+			icon.set_meta("status_name", status_name)
+			appliedStatus.append(status_name)
+			break
+	
