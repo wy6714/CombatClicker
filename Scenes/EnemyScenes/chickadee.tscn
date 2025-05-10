@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://djpoqma4i6ff2"]
+[gd_scene load_steps=38 format=3 uid="uid://djpoqma4i6ff2"]
 
 [ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
@@ -382,6 +382,9 @@ _data = {
 "RESET": SubResource("Animation_7p2j2")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhcj5"]
+size = Vector2(32.2222, 33.3333)
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
@@ -525,7 +528,6 @@ wait_time = 10.0
 position = Vector2(43.3333, 0)
 
 [node name="Status 1" type="Sprite2D" parent="StatusHolder"]
-visible = false
 position = Vector2(-315.333, -193)
 scale = Vector2(3, 3)
 texture = ExtResource("10_7xfqj")
@@ -537,6 +539,7 @@ offset_left = -16.0
 offset_top = -16.0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 2
 max_value = 10.0
 step = 0.001
 fill_mode = 3
@@ -544,6 +547,12 @@ texture_under = ExtResource("11_oe0yf")
 texture_progress = ExtResource("11_oe0yf")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 1/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_rhcj5")
 
 [node name="Status 2" type="Sprite2D" parent="StatusHolder"]
 visible = false
@@ -559,6 +568,7 @@ offset_left = -16.0
 offset_top = -16.0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 2
 max_value = 10.0
 step = 0.001
 fill_mode = 3
@@ -566,6 +576,12 @@ texture_under = ExtResource("11_oe0yf")
 texture_progress = ExtResource("11_oe0yf")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 2/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_rhcj5")
 
 [node name="Status 3" type="Sprite2D" parent="StatusHolder"]
 visible = false
@@ -581,6 +597,7 @@ offset_left = -16.0
 offset_top = -16.0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 2
 max_value = 10.0
 step = 0.001
 fill_mode = 3
@@ -588,6 +605,12 @@ texture_under = ExtResource("11_oe0yf")
 texture_progress = ExtResource("11_oe0yf")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 3/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_rhcj5")
 
 [node name="Status 4" type="Sprite2D" parent="StatusHolder"]
 visible = false
@@ -603,6 +626,7 @@ offset_left = -16.0
 offset_top = -16.0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 2
 max_value = 10.0
 step = 0.001
 fill_mode = 3
@@ -610,6 +634,12 @@ texture_under = ExtResource("11_oe0yf")
 texture_progress = ExtResource("11_oe0yf")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 4"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 4/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_rhcj5")
 
 [node name="Status 5" type="Sprite2D" parent="StatusHolder"]
 visible = false
@@ -625,6 +655,7 @@ offset_left = -16.0
 offset_top = -16.0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 2
 max_value = 10.0
 step = 0.001
 fill_mode = 3
@@ -632,6 +663,12 @@ texture_under = ExtResource("11_oe0yf")
 texture_progress = ExtResource("11_oe0yf")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 5"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 5/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_rhcj5")
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

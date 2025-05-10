@@ -105,6 +105,8 @@ var appliedStatus = []
 @onready var burnNumberPosition = $BurnNumberPosition
 @onready var dampenNumberPosition = $DampenNumberPosition
 
+@onready var tooltip = get_node("/root/Main/Tooltip")
+
 var statusFrames = {
 	"Burn": 0,
 	"Dampen": 1,
@@ -153,6 +155,15 @@ func _ready():
 	qteSpawnTimer.connect("timeout", Callable(self, "_on_qte_spawn_timer_timeout"))
 	original_scale = scale
 	
+	for icon in statusIconList:
+		
+		var area = icon.get_node("Area2D")
+		area.connect("mouse_entered", Callable(self, "_on_mouse_entered_status").bind(icon))
+		area.connect("mouse_exited", Callable(self, "_on_mouse_exited_status"))
+		
+		icon.visible = false
+		icon.set_meta("status_name", null)
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if broken:
@@ -556,4 +567,25 @@ func applyStatusIcon(status_name: String) -> void:
 			icon.set_meta("status_name", status_name)
 			appliedStatus.append(status_name)
 			break
+			
+func _on_mouse_entered_status(icon: Node):
+	var status_name = icon.get_meta("status_name")
+	var tooltip_text = ""
+	
+	match status_name:
+		"Burn":
+			tooltip_text = "Burn"
+		"Dampen":
+			tooltip_text = "Dampen"
+		"Dizzy":
+			tooltip_text = "Dizzy"
+		"Paralysis":
+			tooltip_text = "Paralysis"
+		"Petrify":
+			tooltip_text = "Petrify"
+			
+	tooltip.show_tooltip(tooltip_text)
+	
+func _on_mouse_exited_status():
+	tooltip.hide_tooltip()
 	
