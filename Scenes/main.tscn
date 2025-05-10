@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=19 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
 [ext_resource type="PackedScene" uid="uid://dnp4cy3xq0f0p" path="res://Scenes/enemy_manager.tscn" id="2_4tq6c"]
+[ext_resource type="PackedScene" uid="uid://fr2d3ved2h53" path="res://tooltip.tscn" id="2_mmnjf"]
 [ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
 [ext_resource type="PackedScene" uid="uid://p6pqw153f1fy" path="res://Scenes/scrollingBackground.tscn" id="4_tcxoj"]
 [ext_resource type="PackedScene" uid="uid://douvpgvfai6nt" path="res://Scenes/player.tscn" id="5_yvxiw"]
@@ -31,6 +32,14 @@ offset_left = 1.0
 offset_top = -1.0
 offset_right = 1068.0
 offset_bottom = 575.0
+
+[node name="Tooltip" parent="." instance=ExtResource("2_mmnjf")]
+visible = false
+layout_mode = 1
+offset_left = 362.0
+offset_top = 101.0
+offset_right = 362.0
+offset_bottom = 101.0
 
 [node name="GameManager" type="Node" parent="."]
 unique_name_in_owner = true

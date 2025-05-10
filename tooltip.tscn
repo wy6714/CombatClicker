@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://fr2d3ved2h53"]
+
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_2igxh"]
+[ext_resource type="Script" path="res://tooltip.gd" id="1_83qhn"]
+
+[node name="Tooltip" type="Control"]
+z_index = 99
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_83qhn")
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(0.686275, 0, 0.227451, 1)
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 89.0
+
+[node name="Label" type="Label" parent="Panel"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 89.0
+theme_override_fonts/font = ExtResource("1_2igxh")
+text = "Hi!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
