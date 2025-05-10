@@ -461,6 +461,14 @@ vframes = 4
 position = Vector2(0, -420)
 scale = Vector2(3.3, 3.3)
 
+[node name="DampenNumberPosition" type="Node2D" parent="."]
+position = Vector2(0, -503.333)
+scale = Vector2(3.3, 3.3)
+
+[node name="BurnNumberPosition" type="Node2D" parent="."]
+position = Vector2(0, -9.53674e-07)
+scale = Vector2(3.3, 3.3)
+
 [node name="QTESpawnTimer" type="Timer" parent="."]
 
 [node name="EntranceAnim" type="AnimationPlayer" parent="."]
