@@ -80,6 +80,7 @@ var high_threshold := 1.2
 var bigHit = false
 var weaponStats = {}
 
+var ultRushDamageMultiplier = 2.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -121,7 +122,10 @@ func determineDamage(mult):
 	damage = strength
 	damage *= mult
 	damage += weaponStats["strength"]
-
+	
+	if(ultBarSystem.inUltRush):
+		damage = damage * ultRushDamageMultiplier
+		
 	pureDamage = damage # Raw damage before variation
 
 	var variation = randf_range(low_threshold, high_threshold)
@@ -137,6 +141,7 @@ func determineDamage(mult):
 		if rng <= critRate + weaponStats["crit_rate"] + currentEnemy.dizzyCritRateBoost: # dizzy crit rate boost
 			crit = true
 			damage *= (critDamage + weaponStats["crit_damage"] + currentEnemy.dizzyCritDamageBoost) # dizzy crit damage boost
+			
 
 	trackDamage(pureDamage, damage)
 	statusEffect()
@@ -431,7 +436,7 @@ func activateAttackAnim():
 	add_child(attackingAnimation)
 	
 func useUlt():
-	if(ultBarSystem.canUlt):
+	if(ultBarSystem.canUlt && !ultBarSystem.canUltRush):
 		# Ult.
 		determineDamage(100)
 		breakDamageMultiplier()
@@ -440,6 +445,7 @@ func useUlt():
 		var rngY = randi_range(-10, 0)
 		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
 
+		currentEnemy.takeDamage(damage, 1)
 		DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 		activateAttackAnim()
 		ultBarSystem.updateUltProgress(0)
@@ -448,6 +454,12 @@ func useUlt():
 		crit = false
 		bigHit = false
 		ultBarSystem.subtractUltProgress()
+
+func useUltRush():
+	if(ultBarSystem.canUltRush):
+		print("Rushin")
+		ultBarSystem.ultRushSetup()
+		ultBarSystem.subtractUltRushProgress()
 		
 func breakSlash():
 	determineDamage(breakQTEdamageMult)

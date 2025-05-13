@@ -520,6 +520,7 @@ wait_time = 10.0
 
 [node name="PetrifyTimer" type="Timer" parent="."]
 wait_time = 10.0
+one_shot = true
 
 [node name="ParalysisTimer" type="Timer" parent="."]
 wait_time = 10.0

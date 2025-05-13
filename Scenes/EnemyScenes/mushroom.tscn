@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://mvdt2c3xale3"]
+[gd_scene load_steps=74 format=3 uid="uid://mvdt2c3xale3"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_x7h4e"]
 [ext_resource type="Texture2D" uid="uid://kctbfitivfbo" path="res://Art/WiggleMushroom.png" id="2_5aaoh"]
@@ -606,6 +606,21 @@ _data = {
 "RESET": SubResource("Animation_7p2j2")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2nhws"]
+size = Vector2(32.2222, 33.3333)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kwi3m"]
+size = Vector2(32.2222, 33.3333)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2igj0"]
+size = Vector2(32.2222, 33.3333)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0nd8n"]
+size = Vector2(32.2222, 33.3333)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6tan4"]
+size = Vector2(32.2222, 33.3333)
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
@@ -733,6 +748,7 @@ wait_time = 10.0
 
 [node name="PetrifyTimer" type="Timer" parent="."]
 wait_time = 10.0
+one_shot = true
 
 [node name="ParalysisTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -770,6 +786,12 @@ texture_progress = ExtResource("11_w5ktb")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
 
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 1/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_2nhws")
+
 [node name="Status 2" type="Sprite2D" parent="StatusHolder"]
 visible = false
 position = Vector2(-315.333, -88.6667)
@@ -792,6 +814,12 @@ texture_under = ExtResource("11_w5ktb")
 texture_progress = ExtResource("11_w5ktb")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 2/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_kwi3m")
 
 [node name="Status 3" type="Sprite2D" parent="StatusHolder"]
 visible = false
@@ -816,6 +844,12 @@ texture_progress = ExtResource("11_w5ktb")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
 
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 3/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_2igj0")
+
 [node name="Status 4" type="Sprite2D" parent="StatusHolder"]
 visible = false
 position = Vector2(-315.333, 118)
@@ -839,6 +873,12 @@ texture_progress = ExtResource("11_w5ktb")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
 
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 4"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 4/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_0nd8n")
+
 [node name="Status 5" type="Sprite2D" parent="StatusHolder"]
 visible = false
 position = Vector2(-316.667, 220)
@@ -861,6 +901,12 @@ texture_under = ExtResource("11_w5ktb")
 texture_progress = ExtResource("11_w5ktb")
 tint_under = Color(1, 1, 1, 0)
 tint_progress = Color(1, 1, 1, 0.537255)
+
+[node name="Area2D" type="Area2D" parent="StatusHolder/Status 5"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StatusHolder/Status 5/Area2D"]
+position = Vector2(0.111038, -0.111115)
+shape = SubResource("RectangleShape2D_6tan4")
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
