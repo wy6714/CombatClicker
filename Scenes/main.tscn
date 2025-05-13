@@ -60,7 +60,7 @@ position = Vector2(5, 9)
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
 layout_mode = 1
 
-[node name="Scoreboard" parent="." groups=["BreakUIShut"] instance=ExtResource("2_s574t")]
+[node name="Scoreboard" parent="." groups=["BreakUIShut", "Scoreboard"] instance=ExtResource("2_s574t")]
 layout_mode = 1
 
 [node name="ExpBarSystem" parent="." groups=["BreakUIShut"] instance=ExtResource("7_gst64")]
