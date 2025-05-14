@@ -60,17 +60,17 @@ position = Vector2(5, 9)
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
 layout_mode = 1
 
-[node name="Scoreboard" parent="." groups=["BreakUIShut", "Scoreboard"] instance=ExtResource("2_s574t")]
+[node name="Scoreboard" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("2_s574t")]
 layout_mode = 1
 
-[node name="ExpBarSystem" parent="." groups=["BreakUIShut"] instance=ExtResource("7_gst64")]
+[node name="ExpBarSystem" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("7_gst64")]
 layout_mode = 1
 offset_left = 896.0
 offset_top = -88.0
 offset_right = 896.0
 offset_bottom = -88.0
 
-[node name="UltMeter" parent="." groups=["BreakUIShut"] instance=ExtResource("8_fgwng")]
+[node name="UltMeter" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("8_fgwng")]
 layout_mode = 1
 
 [node name="shop" type="Label" parent="." groups=["BreakUIShut"]]
@@ -453,7 +453,7 @@ layout_mode = 1
 offset_right = 1070.0
 offset_bottom = 575.0
 
-[node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut"] instance=ExtResource("13_vp3iu")]
+[node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("13_vp3iu")]
 layout_mode = 1
 offset_left = 169.0
 offset_top = 570.0

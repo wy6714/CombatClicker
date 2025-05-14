@@ -456,10 +456,13 @@ func useUlt():
 		ultBarSystem.subtractUltProgress()
 
 func useUltRush():
-	if(ultBarSystem.canUltRush):
+	if(ultBarSystem.canUltRush && !ultBarSystem.canUltRushBurst):
 		print("Rushin")
 		ultBarSystem.ultRushSetup()
 		ultBarSystem.subtractUltRushProgress()
+	if(ultBarSystem.canUltRushBurst):
+		print("ULT RUSH BURST")
+		ultBarSystem.ultRushBurstSetup()
 		
 func breakSlash():
 	determineDamage(breakQTEdamageMult)

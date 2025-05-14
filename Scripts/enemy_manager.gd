@@ -15,6 +15,9 @@ func _ready():
 func spawnEnemy():
 	$EnemySpawnTimer.start()
 
+func spawnEnemyUltRush():
+	$EnemySpawnTimerRush.start()
+	
 func _on_enemy_spawn_timer_timeout():
 	spawnRandomEnemy()
 	
