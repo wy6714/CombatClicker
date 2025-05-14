@@ -8,6 +8,7 @@ extends Control
 @export var canUlt: bool = false
 @export var canUltRush: bool = false
 @export var inUltRush: bool = false
+@export var canUltRushBurst: bool = false
 
 @onready var ultRushTimer = get_node("/root/Main/Scoreboard/UltRushTimer")
 @onready var ultRushTimerLabel = get_node("/root/Main/Scoreboard/UltRushTimerLabel")
@@ -36,14 +37,18 @@ func subtractUltProgress():
 	updateUltState()
 	
 func subtractUltRushProgress():
-	currentUltValue -= ultRushMax
+	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
 	updateUltState()
 	
 func updateUltState():
 	canUlt = currentUltValue >= ultMax
-	canUltRush = currentUltValue >= ultRushMax
+	if(!inUltRush):
+		canUltRush = currentUltValue >= ultRushMax
+	
+	if(inUltRush):
+		canUltRushBurst = currentUltValue >= ultRushMax
 	
 func ultRushSetup():
 	inUltRush = true
@@ -51,14 +56,28 @@ func ultRushSetup():
 	ultRushTimer.start()
 	turnOffUI()
 	
-func _on_ult_rush_timer_timeout():
+func ultRushBurstSetup():
+	print("Ult Ryush Stuph would go here. Congrats you ult rushed.")
+	
+	# Resetting stuff
 	turnOnUI()
 	ultRushTimer.stop()
 	ultRushTimerLabel.hide()
+	inUltRush = false
+	canUltRushBurst = false
+	subtractUltRushProgress()
+	
+func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
+	turnOnUI()
+	ultRushTimer.stop()
+	ultRushTimerLabel.hide()
+	inUltRush = false
+	canUltRushBurst = false
+	currentUltValue = 0.0
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
-		if not ui.is_in_group("Scoreboard"):
+		if not ui.is_in_group("UltUI"):
 			ui.visible = false
 		
 func turnOnUI():

@@ -8,4 +8,9 @@ script = ExtResource("1_nfp0l")
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="EnemySpawnTimerRush" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]
+[connection signal="timeout" from="EnemySpawnTimerRush" to="." method="_on_enemy_spawn_timer_timeout"]

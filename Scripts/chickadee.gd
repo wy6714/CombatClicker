@@ -106,6 +106,7 @@ var appliedStatus = []
 @onready var dampenNumberPosition = $DampenNumberPosition
 
 @onready var tooltip = get_node("/root/Main/Tooltip")
+@onready var ultBarSystem = get_node("/root/Main/UltMeter")
 
 var statusFrames = {
 	"Burn": 0,
@@ -297,6 +298,8 @@ func defeatEnemyCheck():
 			
 			var defeatAnimRng = 0
 			defeatAnim.play(defeatAnimationList[defeatAnimRng])
+			if(ultBarSystem.inUltRush): #Skip the animation and just spawn the new enemy
+				defeatAnimCleanup()
 			area.visible = false
 			healthBar.visible = false
 		
@@ -322,8 +325,13 @@ func _on_area_2d_mouse_exited():
 			$EnemyScale.play("EnemyScaleDown")
 
 func defeatAnimCleanup():
-	enemyManager.spawnEnemy()
-	queue_free()
+	if(!ultBarSystem.inUltRush):
+		enemyManager.spawnEnemy()
+		queue_free()
+	if(ultBarSystem.inUltRush):
+		enemyManager.spawnEnemyUltRush()
+		queue_free()
+
 	
 func monsterCapture():
 	var captureRng = randi_range(0, 100)
