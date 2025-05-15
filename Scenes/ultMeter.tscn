@@ -69,3 +69,8 @@ offset_right = 108.0
 offset_bottom = 134.0
 theme_override_fonts/font = ExtResource("4_oucss")
 text = "23/1000"
+
+[node name="QTETimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]
