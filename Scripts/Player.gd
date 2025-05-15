@@ -125,6 +125,7 @@ func determineDamage(mult):
 	
 	if(ultBarSystem.inUltRush):
 		damage = damage * ultRushDamageMultiplier
+		ultBarSystem.increaseRushTimer(damage)
 		
 	pureDamage = damage # Raw damage before variation
 
