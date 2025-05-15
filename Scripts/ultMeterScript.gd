@@ -13,6 +13,12 @@ extends Control
 @onready var ultRushTimer = get_node("/root/Main/Scoreboard/UltRushTimer")
 @onready var ultRushTimerLabel = get_node("/root/Main/Scoreboard/UltRushTimerLabel")
 
+@onready var player = get_node("/root/Main/Player") # Get a reference to the player
+
+var rushAccumulatedDamage := 0.0
+var damageThreshold := 100.0
+var timeBonus := 1.0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	ultProgressBar.value = 0
@@ -56,6 +62,8 @@ func ultRushSetup():
 	ultRushTimer.start()
 	turnOffUI()
 	
+	damageThreshold = player.strength * 500
+	
 func ultRushBurstSetup():
 	print("Ult Ryush Stuph would go here. Congrats you ult rushed.")
 	
@@ -66,6 +74,17 @@ func ultRushBurstSetup():
 	inUltRush = false
 	canUltRushBurst = false
 	subtractUltRushProgress()
+	
+func increaseRushTimer(damage: int):
+	rushAccumulatedDamage += damage
+	
+	if(rushAccumulatedDamage >= damageThreshold):
+		var newTime = ultRushTimer.time_left + timeBonus
+		
+		ultRushTimer.stop()
+		ultRushTimer.start(newTime)
+		
+		rushAccumulatedDamage -= damageThreshold
 	
 func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	turnOnUI()
