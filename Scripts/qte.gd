@@ -47,6 +47,8 @@ var perfectString = "PERFECT!!!"
 
 @onready var break_effect = get_node("/root/Main/BreakEffect")
 
+@onready var ultSystem = get_node("/root/Main/UltMeter")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scaleTimeLimit = randf_range(0.7, 1.2)
@@ -55,9 +57,10 @@ func _ready():
 func _process(delta):
 	shrinkEventCircle(delta)
 	
-	if(qte != null && player != null and is_instance_valid(player.currentEnemy)):
-		if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
-			final = true
+	if(!ultSystem.inUltRush): # Ult Rush QTEs should spawn qtes "indefinitely"
+		if(qte != null && player != null and is_instance_valid(player.currentEnemy)):
+			if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
+				final = true
 
 func shrinkEventCircle(delta):
 	
@@ -161,14 +164,17 @@ func _on_texture_button_button_down():
 			print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 			shrinking = false
 			player.breakQTEdamageMult += missMultAdd
+			addUltRushTime(0)
 		elif(good):
 			print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
 			shrinking = false
 			player.breakQTEdamageMult += goodMultAdd
+			addUltRushTime(1)
 		else:
 			print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
 			shrinking = false
 			player.breakQTEdamageMult += perfectMultAdd
+			addUltRushTime(2)
 		
 		if(final):
 			finalQTESetup()
@@ -191,4 +197,8 @@ func playSpawnSE():
 # Play the initial explosion, which then calls finalQTEEffects once it is done...exploding.
 func finalQTESetup():
 	break_effect.playExplosion1()
+	
+func addUltRushTime(value: int):
+	if(ultSystem.inUltRush):
+		ultSystem.increaseRushTimerQTE(value)
 		

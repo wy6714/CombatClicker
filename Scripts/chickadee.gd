@@ -245,7 +245,7 @@ func _on_qte_spawn_timer_timeout():
 		spawnQTE(true)
 		qteCurrentCounter += 1
 		qteSpawnTimer.stop()
-
+	
 func endQTEState():
 	inQTEState = false
 

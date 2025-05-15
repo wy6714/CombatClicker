@@ -56,20 +56,25 @@ func updateUltState():
 	if(inUltRush):
 		canUltRushBurst = currentUltValue >= ultRushMax
 	
+	
 func ultRushSetup():
 	inUltRush = true
 	ultRushTimerLabel.show()
 	ultRushTimer.start()
 	turnOffUI()
-	
+	$QTETimer.start()
 	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
 	
+	
+
+	
+# Big Move
 func ultRushBurstSetup():
 	print("Ult Ryush Stuph would go here. Congrats you ult rushed.")
 	
-	# Resetting stuff
+	# Resetting stuff. Temporary, we dont have animation yet.
 	turnOnUI()
 	ultRushTimer.stop()
 	ultRushTimerLabel.hide()
@@ -87,6 +92,12 @@ func increaseRushTimer(damage: int):
 		ultRushTimer.start(newTime)
 		
 		rushAccumulatedDamage -= damageThreshold
+
+func increaseRushTimerQTE(value: int):
+	var newTime = ultRushTimer.time_left + value	
+	ultRushTimer.stop()
+	ultRushTimer.start(newTime)
+	
 	
 func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	turnOnUI()
@@ -108,5 +119,9 @@ func turnOnUI():
 		if(ui in get_tree().get_nodes_in_group("memberData")):
 			if("open" in ui):
 				ui.open = false
+				
+func spawnQTE():
+	player.currentEnemy.spawnQTE(true)
 		
-	
+func _on_qte_timer_timeout():
+	spawnQTE()
