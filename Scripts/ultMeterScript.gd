@@ -62,7 +62,9 @@ func ultRushSetup():
 	ultRushTimer.start()
 	turnOffUI()
 	
-	damageThreshold = player.strength * 500
+	#damageThreshold = player.strength * 500
+	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
+	print(damageThreshold)
 	
 func ultRushBurstSetup():
 	print("Ult Ryush Stuph would go here. Congrats you ult rushed.")
