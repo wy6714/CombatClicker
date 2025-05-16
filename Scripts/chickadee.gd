@@ -134,8 +134,8 @@ func _ready():
 	
 	if(player.level >= breakPrereqLevel):
 		#breakable = randi() % 2 == 1  # True or False randomly
-		#breakable = true # Debug for when always breakable is desired
-		breakable = false # Debug for when never breakable is desired
+		breakable = true # Debug for when always breakable is desired
+		#breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
@@ -344,6 +344,60 @@ func setInvisible(): #Set the monster and their healthbar invisible at the start
 	$Area2D.modulate.a = 0
 	
 # Function to set a random position within the specified limits
+func spawnRushQTE():
+	
+	var max_attempts = 3333  # Avoid infinite loops
+	var attempts = 0
+	var valid_position = false
+	var random_position
+	
+	while !valid_position and attempts < max_attempts:
+		# Generate a random position
+		var random_x = randf_range(leftLimit, rightLimit)
+		var random_y = randf_range(topLimit, bottomLimit)
+		random_position = Vector2(random_x, random_y)
+		
+		# Check if it's too close to an existing QTE
+		valid_position = true
+		for pos in spawned_qte_positions:
+			if pos.distance_to(random_position) < 300:  # Adjust variable to control spacing
+				valid_position = false
+				break
+		
+		attempts += 1
+		
+	if(attempts >= max_attempts):
+		var qte_instance = qte.instantiate()
+		
+		qte_instance.position = random_position
+		qte_instance.rushQTE = true
+		qte_instance.setup_qte() # THIS ISNT BEING CALLED...?
+		
+		# Find the Main node and add the QTE instance as its child
+		var mainNode = get_tree().get_root().find_child("Main", true, false)
+		if mainNode:
+			mainNode.add_child(qte_instance)
+		else:
+			print("Error: Main node not found!")
+			
+		spawned_qte_positions.append(random_position)  # Track position
+
+	if valid_position:
+		var qte_instance = qte.instantiate()
+		qte_instance.position = random_position
+		qte_instance.rushQTE = true
+		qte_instance.setup_qte() # THIS ISNT BEING CALLED...?
+		
+		# Find the Main node and add the QTE instance as its child
+		var mainNode = get_tree().get_root().find_child("Main", true, false)
+		if mainNode:
+			mainNode.add_child(qte_instance)
+		else:
+			print("Error: Main node not found!")
+			
+		spawned_qte_positions.append(random_position)  # Track position
+		
+		
 func spawnQTE(finalQteVal):
 	
 	var max_attempts = 3333  # Avoid infinite loops

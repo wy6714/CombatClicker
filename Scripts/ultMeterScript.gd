@@ -121,7 +121,7 @@ func turnOnUI():
 				ui.open = false
 				
 func spawnQTE():
-	player.currentEnemy.spawnQTE(true)
+	player.currentEnemy.spawnRushQTE()
 		
 func _on_qte_timer_timeout():
 	spawnQTE()
