@@ -43,11 +43,14 @@ var okString = "Okay"
 var goodString = "Good!"
 var greatString = "Great!!"
 var perfectString = "PERFECT!!!"
+
 @onready var gradeString = $Visuals/QTEHolder/gradeString
-
 @onready var break_effect = get_node("/root/Main/BreakEffect")
-
 @onready var ultSystem = get_node("/root/Main/UltMeter")
+
+@onready var rushQTE = false
+
+var expected_key
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -185,6 +188,92 @@ func _on_texture_button_button_down():
 		
 		anim.play("FadeOut")
 		$BounceAnim.play("bounce")
+	
+# ------------------------------------- RUSH QTE STUFF ------------------------------------		
+# Rush QTE result. Grades QTE
+func rushQTEResult():
+	if(!pressed): # Only press once
+		if(miss):
+			print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
+			shrinking = false
+			player.breakQTEdamageMult += missMultAdd
+			addUltRushTime(0)
+		elif(good):
+			print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
+			shrinking = false
+			player.breakQTEdamageMult += goodMultAdd
+			addUltRushTime(1)
+		else:
+			print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
+			shrinking = false
+			player.breakQTEdamageMult += perfectMultAdd
+			addUltRushTime(2)
+		
+		if(final):
+			finalQTESetup()
+			
+		pressed = true
+		player.currentEnemy.qtePressedCount += 1
+		manageRankNum()
+		
+		anim.play("FadeOut")
+		$BounceAnim.play("bounce")
+	
+
+
+# Setup QTE
+func setup_qte():
+	# Randomly select one of the 4 directions
+	var keys = [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]
+	expected_key = keys[randi() % keys.size()]
+	show_key_prompt(expected_key) # Show visual prompt to player
+	print("SETUP QTE")
+	pressed = false
+
+# Show icon
+func show_key_prompt(key):
+	match key:
+		KEY_LEFT:
+			#$QTEIcon.texture = preload("res://icons/left_arrow.png")
+			print("LEFT")
+		KEY_RIGHT:
+			#$QTEIcon.texture = preload("res://icons/right_arrow.png")
+			print("RIGHT")
+		KEY_UP:
+			#$QTEIcon.texture = preload("res://icons/up_arrow.png")
+			print("UP")
+		KEY_DOWN:
+			#$QTEIcon.texture = preload("res://icons/down_arrow.png")
+			print("DOWN")
+
+# Manage input			
+func _unhandled_input(event):
+	if pressed:
+		return
+
+	if event is InputEventKey and event.pressed:
+		var key = event.keycode
+		
+		# Allow arrow keys or WASD
+		var correct = (
+			(key == expected_key) or
+			(key == KEY_A and expected_key == KEY_LEFT) or
+			(key == KEY_D and expected_key == KEY_RIGHT) or
+			(key == KEY_W and expected_key == KEY_UP) or
+			(key == KEY_S and expected_key == KEY_DOWN)
+		)
+		
+		if correct:
+			rushQTEResult() # Grade the input
+		else:
+		  # they hit one of the other QTE keys → that's a miss
+			miss = true
+			good = false
+			perfect = false
+			rushQTEResult()
+			
+# -------------------------- END OF RUSH QTE STUFF  ------------------------------
+
 
 # Called on animation "Fade In" which plays on autoload. Allows QTE circle to start shrinking.
 func startShrinking():

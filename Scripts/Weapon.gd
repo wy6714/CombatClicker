@@ -10,7 +10,7 @@ var weapon_stats = {
 		"ult_regen": 499,
 		#"elements": ["Fire", "Water", "Wind", "Earth", "Electric"],
 		"elements": ["Earth", "Water", "Fire"],
-		"status_rate": 80
+		"status_rate": 1
 	},
 	"Sword2": {
 		"type": "Sword",
