@@ -455,6 +455,25 @@ func useUlt():
 		crit = false
 		bigHit = false
 		ultBarSystem.subtractUltProgress()
+		
+func useUltRushBurst():
+	if(ultBarSystem.inUltRush):
+		# Ult.
+		print("Ult Rush Bursted!")
+		determineDamage(500)
+		breakDamageMultiplier()
+		#currentEnemy.takeDamage(damage, 7)
+		var rngX = randi_range(-20, 10)
+		var rngY = randi_range(-10, 0)
+		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+		currentEnemy.takeDamage(damage, 1)
+		DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+		activateAttackAnim()
+		ultBarSystem.updateUltProgress(0)
+		crit = false
+		bigHit = false
+		ultBarSystem.resetUltProgress()
 
 func useUltRush():
 	if(ultBarSystem.canUltRush && !ultBarSystem.canUltRushBurst):

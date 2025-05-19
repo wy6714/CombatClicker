@@ -42,6 +42,12 @@ func subtractUltProgress():
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
 	updateUltState()
 	
+func resetUltProgress():
+	currentUltValue = 0
+	ultProgressBar.value = currentUltValue
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	updateUltState()
+	
 func subtractUltRushProgress():
 	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
@@ -59,6 +65,7 @@ func updateUltState():
 	
 func ultRushSetup():
 	inUltRush = true
+	canUltRush = false
 	ultRushTimerLabel.show()
 	ultRushTimer.start()
 	turnOffUI()
@@ -66,9 +73,6 @@ func ultRushSetup():
 	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
-	
-	
-
 	
 # Big Move
 func ultRushBurstSetup():
@@ -105,6 +109,16 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	ultRushTimerLabel.hide()
 	inUltRush = false
 	canUltRushBurst = false
+	$QTETimer.stop()
+	currentUltValue = 0.0
+	
+func endUltRush():
+	turnOnUI()
+	ultRushTimer.stop()
+	ultRushTimerLabel.hide()
+	inUltRush = false
+	canUltRushBurst = false
+	$QTETimer.stop()
 	currentUltValue = 0.0
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
