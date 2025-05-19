@@ -190,8 +190,16 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			equipmentManager.performWeaponAction("right")
 		
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
-			player.useUlt()
-			player.useUltRush()
+			# They can't use the ult big move....but they can enter ultRush
+			if(!player.ultBarSystem.canUltRushBurst && player.ultBarSystem.canUltRush):
+				player.useUltRush()
+			# THEY CAN USE THE ULT BIG MOVE
+			elif(player.ultBarSystem.canUltRushBurst):
+				player.useUltRushBurst()
+				player.ultBarSystem.endUltRush()
+			else:
+				# Regular ult
+				player.useUlt()
 					
 func takeDamage(damage, breakMult):
 	health -= damage
