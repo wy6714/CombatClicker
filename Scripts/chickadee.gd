@@ -36,6 +36,7 @@ var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREF
 @onready var qteCurrentCounter = 0
 var qteCount = 4
 var inQTEState = false
+var breakState = false
 
 @onready var chargeMeter
 @onready var chargeMeterInstance
@@ -206,9 +207,12 @@ func takeDamage(damage, breakMult):
 	healthBar.health = health
 	
 	var breakTotal = ceil(damage / 4) * breakMult
+	
 	if(breakTotal < 1): # At least, do 5 break damage
 		breakTotal = 5
-	takeBreakDamage(breakTotal)
+		
+	if(!ultBarSystem.inUltRush):
+		takeBreakDamage(breakTotal)
 	
 	manageDampen(damage)
 	managePetrify(damage)
@@ -231,8 +235,10 @@ func initiateBreak():
 	if(!inQTEState):
 		qteCurrentCounter = 0  # Reset counter
 		qtePressedCount = 0
+		breakState = true
 		ignoreMouseScale = true
 		turnOffUI()
+		timerPause()
 		collision.disabled = true
 		inQTEState = true
 		spawned_qte_positions.clear()  # Reset list before spawning new QTEs
@@ -265,6 +271,8 @@ func shrinkAndDealDamage():
 	player.breakSlash()
 	turnOnUI()
 	glassShatterEffect()
+	timersResume()
+	breakState = false
 	collision.disabled = false
 				
 func recoveringFromBreak(delta):
@@ -607,14 +615,15 @@ func _on_paralysis_timer_timeout():
 	clear_status_icon("Paralysis")
 	
 func manageStatusIcons():
-	for icon in statusIconList:
-		if icon.visible:
-			var status_name = icon.get_meta("status_name")
-			var timer = get_node(status_name + "Timer")
-			
-			if timer:
-				var fill_bar = icon.get_node("StatusFill")
-				fill_bar.value = 10 - timer.time_left
+	if(!breakState): #We dont manage status icons or status effects when broken
+		for icon in statusIconList:
+			if icon.visible:
+				var status_name = icon.get_meta("status_name")
+				var timer = get_node(status_name + "Timer")
+				
+				if timer:
+					var fill_bar = icon.get_node("StatusFill")
+					fill_bar.value = 10 - timer.time_left
 				
 func clear_status_icon(status_name: String) -> void:
 	for icon in statusIconList:
@@ -659,4 +668,28 @@ func _on_mouse_entered_status(icon: Node):
 	
 func _on_mouse_exited_status():
 	tooltip.hide_tooltip()
+
+var activeTimers = {}
+	
+func timerPause():
+	activeTimers.clear()
+	
+	for timer in [burnTimer, burnTickTimer, dampenTimer, dizzyTimer, petrifyTimer, paralysisTimer]:
+		if not timer.is_stopped():
+			activeTimers[timer] = true
+			timer.paused = true
+			
+	# Only hide icons that actually have a status applied
+	for icon in statusIconList:
+		if icon.has_meta("status_name") and icon.get_meta("status_name") != null:
+			icon.visible = false
+
+func timersResume():
+	for timer in activeTimers.keys():
+		timer.paused = false
+	
+	# Only re‑show icons that still have a status applied
+	for icon in statusIconList:
+		if icon.has_meta("status_name") and icon.get_meta("status_name") != null:
+			icon.visible = true
 	
