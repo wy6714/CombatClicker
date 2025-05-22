@@ -19,6 +19,8 @@ var rushAccumulatedDamage := 0.0
 var damageThreshold := 100.0
 var timeBonus := 1.0
 
+var currentQTE
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	ultProgressBar.value = 0
@@ -67,12 +69,14 @@ func ultRushSetup():
 	inUltRush = true
 	canUltRush = false
 	ultRushTimerLabel.show()
+	ultRushTimer.wait_time = 15
 	ultRushTimer.start()
 	turnOffUI()
 	$QTETimer.start()
 	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
+	player.rankNum = 0
 	
 # Big Move
 func ultRushBurstSetup():
@@ -85,6 +89,7 @@ func ultRushBurstSetup():
 	inUltRush = false
 	canUltRushBurst = false
 	subtractUltRushProgress()
+	despawnQTE()
 	
 func increaseRushTimer(damage: int):
 	rushAccumulatedDamage += damage
@@ -111,6 +116,11 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	canUltRushBurst = false
 	$QTETimer.stop()
 	currentUltValue = 0.0
+	despawnQTE()
+	
+func despawnQTE():
+	if(currentQTE != null):
+		currentQTE.queue_free()
 	
 func endUltRush():
 	turnOnUI()

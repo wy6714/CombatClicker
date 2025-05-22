@@ -32,6 +32,7 @@ var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREF
 @onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 
 @onready var qte = preload("res://Scenes/qte.tscn")
+@onready var qteRush = preload("res://Scenes/qteRush.tscn")
 @onready var qteSpawnTimer = $QTESpawnTimer
 @onready var qteCurrentCounter = 0
 var qteCount = 4
@@ -243,7 +244,7 @@ func initiateBreak():
 		inQTEState = true
 		spawned_qte_positions.clear()  # Reset list before spawning new QTEs
 		qteSpawnTimer.wait_time = 0.1
-		
+		player.rankNum = 0
 		breakScreen.visible = true
 		breakScreenAnim.play("BreakTextZoom")
 		start_scaling(original_scale * 0.9, 0.8)  # Slowly shrink a little
@@ -383,7 +384,7 @@ func spawnRushQTE():
 		attempts += 1
 		
 	if(attempts >= max_attempts):
-		var qte_instance = qte.instantiate()
+		var qte_instance = qteRush.instantiate()
 		
 		qte_instance.position = random_position
 		qte_instance.rushQTE = true

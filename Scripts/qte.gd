@@ -48,14 +48,32 @@ var perfectString = "PERFECT!!!"
 @onready var break_effect = get_node("/root/Main/BreakEffect")
 @onready var ultSystem = get_node("/root/Main/UltMeter")
 
-@onready var rushQTE = false
-
+@export var rushQTE = false
 var expected_key
+
+var left = false
+var right = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# How fast does the event circle shrink
 	scaleTimeLimit = randf_range(0.7, 1.2)
-
+	
+	# If rush QTE, give the ultSystem access. This is for RUSH. 
+	if(rushQTE):
+		ultSystem.currentQTE = self
+		print("Rush QTE")
+	
+	# Determine if left click or right click, and display the icon. This is for BREAK
+	if(!rushQTE):
+		var rng = randi() % 2
+		if(rng == 0):
+			left = true
+		else:
+			right = true
+		determineInputLabelIcon()
+		print("Not a Rush QTE")
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	shrinkEventCircle(delta)
@@ -162,32 +180,75 @@ func determineRank():
 	soundPlayer.play()  # Play the sound
 	
 func _on_texture_button_button_down():
-	if(!pressed): # Only press once
-		if(miss):
-			print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
-			shrinking = false
-			player.breakQTEdamageMult += missMultAdd
-			addUltRushTime(0)
-		elif(good):
-			print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
-			shrinking = false
-			player.breakQTEdamageMult += goodMultAdd
-			addUltRushTime(1)
-		else:
-			print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
-			shrinking = false
-			player.breakQTEdamageMult += perfectMultAdd
-			addUltRushTime(2)
-		
-		if(final):
-			finalQTESetup()
+	if(!rushQTE):
+		if(!pressed): # Only press once
 			
-		pressed = true
-		player.currentEnemy.qtePressedCount += 1
-		manageRankNum()
-		
-		anim.play("FadeOut")
-		$BounceAnim.play("bounce")
+			# Miss (wrong button)
+			if right and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
+				shrinking = false
+				player.breakQTEdamageMult += missMultAdd
+				addUltRushTime(0)
+				anim.play("FadeOut")
+				$BounceAnim.play("bounce")
+				pressed = true
+				player.currentEnemy.qtePressedCount += 1
+				print("Miss...")
+				print(player.rankNum)
+				gradeString.text = missText
+				soundPlayer.stream = missSE
+				soundPlayer.play()  # Play the sound
+				if(final):
+					finalQTESetup()
+				return  # Prevent further execution
+				
+			# Miss (wrong button)
+			if left and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
+				shrinking = false
+				player.breakQTEdamageMult += missMultAdd
+				addUltRushTime(0)
+				anim.play("FadeOut")
+				$BounceAnim.play("bounce")
+				pressed = true
+				player.currentEnemy.qtePressedCount += 1
+				print("Miss...")
+				print(player.rankNum)
+				gradeString.text = missText
+				soundPlayer.stream = missSE
+				soundPlayer.play()  # Play the sound
+				if(final):
+					finalQTESetup()
+				return  # Prevent further execution
+				
+			# Miss (Too early or too late, button was clicked)
+			if(miss):
+				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
+				shrinking = false
+				player.breakQTEdamageMult += missMultAdd
+				addUltRushTime(0)
+			# Good (Almost perfect)
+			elif(good):
+				print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
+				shrinking = false
+				player.breakQTEdamageMult += goodMultAdd
+				addUltRushTime(1)
+			# Perfect
+			else:
+				print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
+				shrinking = false
+				player.breakQTEdamageMult += perfectMultAdd
+				addUltRushTime(2)
+			
+			if(final):
+				finalQTESetup()
+				
+			pressed = true
+			player.currentEnemy.qtePressedCount += 1
+			manageRankNum()
+			
+			anim.play("FadeOut")
+			$BounceAnim.play("bounce")
 	
 # ------------------------------------- RUSH QTE STUFF ------------------------------------		
 # Rush QTE result. Grades QTE
@@ -234,43 +295,40 @@ func setup_qte():
 func show_key_prompt(key):
 	match key:
 		KEY_LEFT:
-			#$QTEIcon.texture = preload("res://icons/left_arrow.png")
-			print("LEFT")
+			determineInputLabelString("←")
 		KEY_RIGHT:
-			#$QTEIcon.texture = preload("res://icons/right_arrow.png")
-			print("RIGHT")
+			determineInputLabelString("→")
 		KEY_UP:
-			#$QTEIcon.texture = preload("res://icons/up_arrow.png")
-			print("UP")
+			determineInputLabelString("↑")
 		KEY_DOWN:
-			#$QTEIcon.texture = preload("res://icons/down_arrow.png")
-			print("DOWN")
+			determineInputLabelString("↓")
 
 # Manage input			
 func _unhandled_input(event):
-	if pressed:
-		return
+	if(rushQTE):
+		if pressed:
+			return
 
-	if event is InputEventKey and event.pressed:
-		var key = event.keycode
-		
-		# Allow arrow keys or WASD
-		var correct = (
-			(key == expected_key) or
-			(key == KEY_A and expected_key == KEY_LEFT) or
-			(key == KEY_D and expected_key == KEY_RIGHT) or
-			(key == KEY_W and expected_key == KEY_UP) or
-			(key == KEY_S and expected_key == KEY_DOWN)
-		)
-		
-		if correct:
-			rushQTEResult() # Grade the input
-		else:
-		  # they hit one of the other QTE keys → that's a miss
-			miss = true
-			good = false
-			perfect = false
-			rushQTEResult()
+		if event is InputEventKey and event.pressed:
+			var key = event.keycode
+			
+			# Allow arrow keys or WASD
+			var correct = (
+				(key == expected_key) or
+				(key == KEY_A and expected_key == KEY_LEFT) or
+				(key == KEY_D and expected_key == KEY_RIGHT) or
+				(key == KEY_W and expected_key == KEY_UP) or
+				(key == KEY_S and expected_key == KEY_DOWN)
+			)
+			
+			if correct:
+				rushQTEResult() # Grade the input
+			else:
+			  # they hit one of the other QTE keys → that's a miss
+				miss = true
+				good = false
+				perfect = false
+				rushQTEResult()
 			
 # -------------------------- END OF RUSH QTE STUFF  ------------------------------
 
@@ -290,4 +348,16 @@ func finalQTESetup():
 func addUltRushTime(value: int):
 	if(ultSystem.inUltRush):
 		ultSystem.increaseRushTimerQTE(value)
+		
+func determineInputLabelString(value: String):
+	$Visuals/QTEHolder/InputLabelString.show()
+	$Visuals/QTEHolder/InputLabelString.text = value
+
+func determineInputLabelIcon():
+	if(left):
+		$Visuals/QTEHolder/InputLabelIconLeft.show()
+	else:
+		$Visuals/QTEHolder/InputLabelIconRight.show()
+	
+
 		
