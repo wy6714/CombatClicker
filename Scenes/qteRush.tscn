@@ -1,19 +1,19 @@
-[gd_scene load_steps=21 format=3 uid="uid://dla7bxyajohr"]
+[gd_scene load_steps=21 format=3 uid="uid://b2hryl6p385tg"]
 
-[ext_resource type="Texture2D" uid="uid://c2m4xg2halde0" path="res://Art/QuickTimeEventCircle (1).png" id="1_4bssr"]
-[ext_resource type="Script" path="res://Scripts/qte.gd" id="1_e2lkj"]
-[ext_resource type="Texture2D" uid="uid://bupgxqv8pejvm" path="res://Art/QTESingleCircleIdle.png" id="2_o62j1"]
-[ext_resource type="Texture2D" uid="uid://bue5vxtn34hkf" path="res://Art/QTESingleCirclePressed.png" id="3_cbg74"]
-[ext_resource type="Texture2D" uid="uid://b5vktj2d2x0y7" path="res://Art/QTESingleCircleHover.png" id="4_a4k0i"]
-[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="5_6jru0"]
-[ext_resource type="Texture2D" uid="uid://cvcosgd0pmqce" path="res://Art/ComputerMouse.png" id="7_yj4m1"]
+[ext_resource type="Script" path="res://Scripts/qte.gd" id="1_y01ux"]
+[ext_resource type="Texture2D" uid="uid://b5vktj2d2x0y7" path="res://Art/QTESingleCircleHover.png" id="2_uyk5m"]
+[ext_resource type="Texture2D" uid="uid://bupgxqv8pejvm" path="res://Art/QTESingleCircleIdle.png" id="3_morqn"]
+[ext_resource type="Texture2D" uid="uid://bue5vxtn34hkf" path="res://Art/QTESingleCirclePressed.png" id="4_dfqfw"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="5_np88g"]
+[ext_resource type="Texture2D" uid="uid://c2m4xg2halde0" path="res://Art/QuickTimeEventCircle (1).png" id="6_8inhl"]
+[ext_resource type="Texture2D" uid="uid://cvcosgd0pmqce" path="res://Art/ComputerMouse.png" id="7_agjme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eg44x"]
-atlas = ExtResource("7_yj4m1")
+atlas = ExtResource("7_agjme")
 region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m5ot1"]
-atlas = ExtResource("7_yj4m1")
+atlas = ExtResource("7_agjme")
 region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xly8v"]
@@ -31,11 +31,11 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bwuxo"]
-atlas = ExtResource("7_yj4m1")
+atlas = ExtResource("7_agjme")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gtl7l"]
-atlas = ExtResource("7_yj4m1")
+atlas = ExtResource("7_agjme")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xm3xu"]
@@ -306,7 +306,8 @@ _data = {
 [node name="QTE" type="Node2D"]
 position = Vector2(499, 217)
 scale = Vector2(0.7, 0.7)
-script = ExtResource("1_e2lkj")
+script = ExtResource("1_y01ux")
+rushQTE = true
 
 [node name="TextureButton" type="TextureButton" parent="."]
 modulate = Color(1, 1, 1, 0.231373)
@@ -325,9 +326,9 @@ scale = Vector2(9, 9)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 button_mask = 7
-texture_normal = ExtResource("4_a4k0i")
-texture_pressed = ExtResource("2_o62j1")
-texture_hover = ExtResource("3_cbg74")
+texture_normal = ExtResource("2_uyk5m")
+texture_pressed = ExtResource("3_morqn")
+texture_hover = ExtResource("4_dfqfw")
 ignore_texture_size = true
 
 [node name="Visuals" type="Sprite2D" parent="."]
@@ -348,7 +349,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 8
 theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("5_6jru0")
+theme_override_fonts/font = ExtResource("5_np88g")
 theme_override_font_sizes/font_size = 48
 text = "Okay"
 
@@ -356,7 +357,7 @@ text = "Okay"
 modulate = Color(1, 0, 0, 0.858824)
 z_index = 3
 scale = Vector2(9, 9)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 1
@@ -364,7 +365,7 @@ frame = 1
 [node name="Outline" type="Sprite2D" parent="Visuals/QTEHolder"]
 modulate = Color(0, 0, 0, 1)
 scale = Vector2(7.5, 7.5)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 4
@@ -373,7 +374,7 @@ frame = 4
 modulate = Color(0.482353, 0, 0, 1)
 z_index = 1
 scale = Vector2(7, 7)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 4
@@ -382,7 +383,7 @@ frame = 4
 modulate = Color(0.27451, 0, 0, 0.678431)
 z_index = 1
 scale = Vector2(5, 5)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 4
@@ -391,7 +392,7 @@ frame = 4
 modulate = Color(1, 0.906147, 0.889721, 1)
 z_index = 2
 scale = Vector2(3, 3)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 4
@@ -400,7 +401,7 @@ frame = 4
 modulate = Color(0, 0, 0, 1)
 z_index = 3
 scale = Vector2(2, 2)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 4
@@ -409,7 +410,7 @@ frame = 4
 visible = false
 z_index = 5
 scale = Vector2(2, 2)
-texture = ExtResource("1_4bssr")
+texture = ExtResource("6_8inhl")
 hframes = 2
 vframes = 3
 frame = 5
@@ -425,7 +426,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.975564, 0.000976453, 0.000534251, 1)
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("5_6jru0")
+theme_override_fonts/font = ExtResource("5_np88g")
 theme_override_font_sizes/font_size = 32
 text = "↑
 "
@@ -438,7 +439,7 @@ z_index = 4
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_xly8v")
 autoplay = "default"
-frame_progress = 0.763091
+frame_progress = 0.902345
 
 [node name="InputLabelIconRight" type="AnimatedSprite2D" parent="Visuals/QTEHolder"]
 visible = false
@@ -446,7 +447,7 @@ z_index = 4
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_xm3xu")
 autoplay = "default"
-frame_progress = 0.137756
+frame_progress = 0.277007
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(101.429, 100)
