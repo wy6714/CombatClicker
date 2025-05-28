@@ -80,7 +80,7 @@ func _process(delta):
 	
 	if(!ultSystem.inUltRush): # Ult Rush QTEs should spawn qtes "indefinitely"
 		if(qte != null && player != null and is_instance_valid(player.currentEnemy)):
-			if(player.currentEnemy.qtePressedCount >= 4 - 1): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
+			if(player.currentEnemy.qtePressedCount >= 4 - 1 && player.currentEnemy.qtePressedCount != null): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
 				final = true
 
 func shrinkEventCircle(delta):
@@ -280,8 +280,6 @@ func rushQTEResult():
 		anim.play("FadeOut")
 		$BounceAnim.play("bounce")
 	
-
-
 # Setup QTE
 func setup_qte():
 	# Randomly select one of the 4 directions

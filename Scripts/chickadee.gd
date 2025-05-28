@@ -66,6 +66,12 @@ var topLimit = 80
 var rightLimit = 860
 var bottomLimit = 400
 
+#Screen bounds for RUSH QTEs
+var leftLimit2 = 280
+var topLimit2 = 240
+var rightLimit2 = 780
+var bottomLimit2 = 400
+
 var spawned_qte_positions = []  # Keeps track of where QTEs are
 
 var original_scale: Vector2
@@ -362,58 +368,40 @@ func setInvisible(): #Set the monster and their healthbar invisible at the start
 	
 # Function to set a random position within the specified limits
 func spawnRushQTE():
-	
-	var max_attempts = 3333  # Avoid infinite loops
-	var attempts = 0
-	var valid_position = false
 	var random_position
-	
-	while !valid_position and attempts < max_attempts:
-		# Generate a random position
-		var random_x = randf_range(leftLimit, rightLimit)
-		var random_y = randf_range(topLimit, bottomLimit)
-		random_position = Vector2(random_x, random_y)
-		
-		# Check if it's too close to an existing QTE
-		valid_position = true
-		for pos in spawned_qte_positions:
-			if pos.distance_to(random_position) < 300:  # Adjust variable to control spacing
-				valid_position = false
-				break
-		
-		attempts += 1
-		
-	if(attempts >= max_attempts):
-		var qte_instance = qteRush.instantiate()
-		
-		qte_instance.position = random_position
-		qte_instance.rushQTE = true
-		qte_instance.setup_qte() # THIS ISNT BEING CALLED...?
-		
-		# Find the Main node and add the QTE instance as its child
-		var mainNode = get_tree().get_root().find_child("Main", true, false)
-		if mainNode:
-			mainNode.add_child(qte_instance)
-		else:
-			print("Error: Main node not found!")
-			
-		spawned_qte_positions.append(random_position)  # Track position
+	var xPos = 0
+	var yPos = 0
 
-	if valid_position:
-		var qte_instance = qte.instantiate()
-		qte_instance.position = random_position
-		qte_instance.rushQTE = true
-		qte_instance.setup_qte() # THIS ISNT BEING CALLED...?
+	# Generate a random position
+	var rng = randi() % 2
+	if(rng == 0):
+		xPos = leftLimit2
+	else:
+		xPos = rightLimit2
+	
+	rng = randi() % 2
+	
+	if(rng == 0):
+		yPos = topLimit2
+	else:
+		yPos = bottomLimit2
 		
-		# Find the Main node and add the QTE instance as its child
-		var mainNode = get_tree().get_root().find_child("Main", true, false)
-		if mainNode:
-			mainNode.add_child(qte_instance)
-		else:
-			print("Error: Main node not found!")
-			
-		spawned_qte_positions.append(random_position)  # Track position
+	random_position = Vector2(xPos, yPos)
+	
+	var qte_instance = qteRush.instantiate()
+	qte_instance.position = random_position
+	qte_instance.rushQTE = true
+	qte_instance.setup_qte() 
+	
+	# Find the Main node and add the QTE instance as its child
+	var mainNode = get_tree().get_root().find_child("Main", true, false)
+	if mainNode:
+		mainNode.add_child(qte_instance)
+	else:
+		print("Error: Main node not found!")
 		
+	spawned_qte_positions.append(random_position)  # Track position
+	
 		
 func spawnQTE(finalQteVal):
 	
