@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=9 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
 [ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_xxfgb"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_oucss"]
+[ext_resource type="Script" path="res://Scenes/SpeedLines.gd" id="5_bwdwn"]
+[ext_resource type="Texture2D" uid="uid://bpvqv6f1s5eo4" path="res://Art/SpeedLine.png" id="6_51v12"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -72,5 +74,319 @@ text = "23/1000"
 
 [node name="QTETimer" type="Timer" parent="."]
 wait_time = 3.0
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(22, 648)
+scale = Vector2(2, 2)
+
+[node name="SpeedLineHolder" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, -4)
+script = ExtResource("5_bwdwn")
+
+[node name="SpeedLine" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(22, 28)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine2" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(79, 68)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine3" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(44, 113)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine4" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(18, 155)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine5" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(75, 195)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine6" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(40, 240)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine7" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(17, 296)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine8" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(74, 336)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine9" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(39, 381)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine10" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(13, 423)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine11" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(70, 463)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine12" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(35, 508)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine13" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(60, 553)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine14" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(34, 595)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine15" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(77, 616)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine16" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(22, 676)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine17" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(79, 716)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine18" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(44, 761)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine19" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(18, 803)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine20" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(75, 843)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine21" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(40, 888)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine22" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(17, 944)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine23" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(74, 984)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine24" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(39, 1029)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine25" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(13, 1071)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine26" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(70, 1111)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine27" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(35, 1156)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine28" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(60, 1201)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine29" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(34, 1243)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine30" type="Sprite2D" parent="SpeedLineHolder"]
+position = Vector2(77, 1264)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLineHolder2" type="Node2D" parent="."]
+visible = false
+position = Vector2(1044, -4)
+script = ExtResource("5_bwdwn")
+
+[node name="SpeedLine" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(22, 28)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine2" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(79, 68)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine3" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(44, 113)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine4" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(18, 155)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine5" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(75, 195)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine6" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(40, 240)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine7" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(17, 296)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine8" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(74, 336)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine9" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(39, 381)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine10" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(13, 423)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine11" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(70, 463)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine12" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(35, 508)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine13" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(60, 553)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine14" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(34, 595)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine15" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(77, 616)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine16" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(22, 676)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine17" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(79, 716)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine18" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(44, 761)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine19" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(18, 803)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine20" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(75, 843)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine21" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(40, 888)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine22" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(17, 944)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine23" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(74, 984)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine24" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(39, 1029)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine25" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(13, 1071)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine26" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(70, 1111)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine27" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(35, 1156)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine28" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(60, 1201)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine29" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(34, 1243)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
+
+[node name="SpeedLine30" type="Sprite2D" parent="SpeedLineHolder2"]
+position = Vector2(77, 1264)
+scale = Vector2(2, 2)
+texture = ExtResource("6_51v12")
 
 [connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]
