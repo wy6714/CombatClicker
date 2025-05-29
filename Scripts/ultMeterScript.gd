@@ -63,8 +63,7 @@ func updateUltState():
 	
 	if(inUltRush):
 		canUltRushBurst = currentUltValue >= ultRushMax
-	
-	
+		
 func ultRushSetup():
 	inUltRush = true
 	canUltRush = false
@@ -73,6 +72,8 @@ func ultRushSetup():
 	ultRushTimer.start()
 	turnOffUI()
 	$QTETimer.start()
+	$SpeedLineHolder.show()
+	$SpeedLineHolder2.show()
 	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
@@ -115,6 +116,8 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	inUltRush = false
 	canUltRushBurst = false
 	$QTETimer.stop()
+	$SpeedLineHolder.hide()
+	$SpeedLineHolder2.hide()
 	currentUltValue = 0.0
 	despawnQTE()
 	
@@ -129,6 +132,8 @@ func endUltRush():
 	inUltRush = false
 	canUltRushBurst = false
 	$QTETimer.stop()
+	$SpeedLineHolder.hide()
+	$SpeedLineHolder2.hide()
 	currentUltValue = 0.0
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
