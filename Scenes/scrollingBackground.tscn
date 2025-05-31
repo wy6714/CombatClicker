@@ -10,6 +10,9 @@
 shader = ExtResource("1_b4fin")
 shader_parameter/speedX = 0.1
 shader_parameter/speedY = -0.1
+shader_parameter/rushSpeedX = 0.3
+shader_parameter/rushSpeedY = -0.3
+shader_parameter/rushFlag = 0.0
 
 [node name="scrollingBackground" type="Control"]
 layout_mode = 3

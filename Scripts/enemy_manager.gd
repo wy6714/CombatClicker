@@ -8,12 +8,14 @@ var mushroom = preload("res://Scenes/EnemyScenes/mushroom.tscn")
 
 var enemyList = [chickadee, chicken, ghost, slime, mushroom]
 var initialInstance = true
+@onready var ultBarSystem = get_node("/root/Main/UltMeter")
 
 func _ready():
 	pass
 
 func spawnEnemy():
 	$EnemySpawnTimer.start()
+	
 
 func spawnEnemyUltRush():
 	$EnemySpawnTimerRush.start()
@@ -26,6 +28,7 @@ func spawnRandomEnemy():
 	var rng = randi_range(0, enemyList.size() - 1)
 	var enemy_instance = enemyList[rng].instantiate()
 	enemy_instance.position = get_viewport().get_size() / 2
+		
 	add_child(enemy_instance)
 
 func spawnChickadee():
