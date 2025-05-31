@@ -18,8 +18,9 @@ extends Control
 var rushAccumulatedDamage := 0.0
 var damageThreshold := 100.0
 var timeBonus := 1.0
-
 var currentQTE
+
+@onready var shaderMaterial = get_node("/root/Main/scrollingBackground/TextureRect")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -71,9 +72,13 @@ func ultRushSetup():
 	ultRushTimer.wait_time = 15
 	ultRushTimer.start()
 	turnOffUI()
+	
 	$QTETimer.start()
-	$SpeedLineHolder.show()
-	$SpeedLineHolder2.show()
+	$SpeedLineHolder.show() # Speedlines
+	$SpeedLineHolder2.show() # Speedlines
+	$ColorRect/flash.play("flash") # Flash
+	shaderMaterial.material.set_shader_parameter("rushFlag", 1.0) # Make background scroll go faster
+	
 	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
@@ -119,13 +124,14 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
 	currentUltValue = 0.0
+	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
 	despawnQTE()
 	
 func despawnQTE():
 	if(currentQTE != null):
 		currentQTE.queue_free()
 	
-func endUltRush():
+func endUltRush(): #Aka they used ult
 	turnOnUI()
 	ultRushTimer.stop()
 	ultRushTimerLabel.hide()
@@ -134,6 +140,7 @@ func endUltRush():
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
+	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
 	currentUltValue = 0.0
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
@@ -150,7 +157,8 @@ func turnOnUI():
 				ui.open = false
 				
 func spawnQTE():
-	player.currentEnemy.spawnRushQTE()
+	if is_instance_valid(player.currentEnemy):
+		player.currentEnemy.spawnRushQTE()
 		
 func _on_qte_timer_timeout():
 	spawnQTE()

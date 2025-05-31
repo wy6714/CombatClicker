@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=12 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
@@ -12,6 +12,43 @@ bg_color = Color(0.303233, 0.303233, 0.303233, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3e2x"]
 bg_color = Color(1, 1, 0, 1)
+
+[sub_resource type="Animation" id="Animation_a872r"]
+resource_name = "flash"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0428444, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.854902), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gij7a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qkmeo"]
+_data = {
+"RESET": SubResource("Animation_gij7a"),
+"flash": SubResource("Animation_a872r")
+}
 
 [node name="UltMeter" type="Control"]
 layout_mode = 3
@@ -388,5 +425,18 @@ texture = ExtResource("6_51v12")
 position = Vector2(77, 1264)
 scale = Vector2(2, 2)
 texture = ExtResource("6_51v12")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = 4096
+layout_mode = 0
+offset_right = 1160.0
+offset_bottom = 666.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="flash" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_qkmeo")
+}
 
 [connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]

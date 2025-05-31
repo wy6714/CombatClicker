@@ -103,7 +103,8 @@ func shrinkEventCircle(delta):
 				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 				$TextureButton.disabled = true
 				anim.play("FadeOut")
-				player.currentEnemy.qtePressedCount += 1
+				if(!ultSystem.inUltRush):
+					player.currentEnemy.qtePressedCount += 1
 				manageRankNum()
 				soundPlayer.stream = missSE
 				soundPlayer.play()

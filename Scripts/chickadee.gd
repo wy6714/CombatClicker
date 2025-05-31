@@ -75,6 +75,7 @@ var bottomLimit2 = 400
 var spawned_qte_positions = []  # Keeps track of where QTEs are
 
 var original_scale: Vector2
+var doubled_scale: Vector2
 
 var scaling = false
 var scale_timer = 0.0
@@ -163,6 +164,7 @@ func _ready():
 
 	qteSpawnTimer.connect("timeout", Callable(self, "_on_qte_spawn_timer_timeout"))
 	original_scale = scale
+	doubled_scale = original_scale * 2
 	
 	for icon in statusIconList:
 		
@@ -172,6 +174,8 @@ func _ready():
 		
 		icon.visible = false
 		icon.set_meta("status_name", null)
+		
+		
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -185,7 +189,7 @@ func _process(_delta):
 
 		if t >= 1.0:
 			scaling = false  # Stop when finished
-	
+			
 	manageStatusIcons()
 	
 func _on_area_2d_input_event(viewport, event, shape_idx):
