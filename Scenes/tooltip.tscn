@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://fr2d3ved2h53"]
 
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_2igxh"]
-[ext_resource type="Script" path="res://tooltip.gd" id="1_83qhn"]
+[ext_resource type="Script" path="res://Scripts/tooltip.gd" id="1_83qhn"]
 
 [node name="Tooltip" type="Control"]
 z_index = 99
