@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=20 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
@@ -6,12 +6,29 @@
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_oucss"]
 [ext_resource type="Script" path="res://Scenes/SpeedLines.gd" id="5_bwdwn"]
 [ext_resource type="Texture2D" uid="uid://bpvqv6f1s5eo4" path="res://Art/SpeedLine.png" id="6_51v12"]
+[ext_resource type="Texture2D" uid="uid://dw8ylabgxg4gn" path="res://Art/SpikyBubble (1).png" id="7_ksp4f"]
+[ext_resource type="Texture2D" uid="uid://3edfxqc8ywnk" path="res://Art/ComputerMouseCenterClick.png" id="8_mvdxn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3e2x"]
 bg_color = Color(1, 1, 0, 1)
+
+[sub_resource type="Animation" id="Animation_gij7a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_a872r"]
 resource_name = "flash"
@@ -29,26 +46,62 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.854902), Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_gij7a"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = false
-tracks/0/path = NodePath(".:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qkmeo"]
 _data = {
 "RESET": SubResource("Animation_gij7a"),
 "flash": SubResource("Animation_a872r")
 }
+
+[sub_resource type="Animation" id="Animation_7h44g"]
+resource_name = "UseUltFlash"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UseUlt:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.205476),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ykar2"]
+_data = {
+"UseUltFlash": SubResource("Animation_7h44g")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4hn4"]
+atlas = ExtResource("8_mvdxn")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uakxs"]
+atlas = ExtResource("8_mvdxn")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsjnw"]
+atlas = ExtResource("8_mvdxn")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3dbw1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w4hn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uakxs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsjnw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
 
 [node name="UltMeter" type="Control"]
 layout_mode = 3
@@ -438,5 +491,43 @@ color = Color(1, 1, 1, 0)
 libraries = {
 "": SubResource("AnimationLibrary_qkmeo")
 }
+
+[node name="UseUltFlash" type="AnimationPlayer" parent="."]
+root_node = NodePath("../UseUlt!")
+libraries = {
+"": SubResource("AnimationLibrary_ykar2")
+}
+autoplay = "UseUltFlash"
+
+[node name="UseUlt!" type="Sprite2D" parent="."]
+position = Vector2(700, 174)
+rotation = 0.0174533
+scale = Vector2(3.6, 3.6)
+texture = ExtResource("7_ksp4f")
+hframes = 2
+vframes = 2
+frame = 3
+
+[node name="Mouse" type="AnimatedSprite2D" parent="UseUlt!"]
+position = Vector2(-0.0097028, -0.555469)
+rotation = 0.10472
+sprite_frames = SubResource("SpriteFrames_3dbw1")
+autoplay = "default"
+frame_progress = 0.903241
+
+[node name="UseUlt" type="Label" parent="UseUlt!"]
+offset_left = -31.0032
+offset_top = -9.46036
+offset_right = 96.9968
+offset_bottom = 25.5396
+rotation = 0.0698132
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.859411, 0.82743, 0.815373, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 5
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "USE  ULT"
 
 [connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]

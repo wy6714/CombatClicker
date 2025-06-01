@@ -40,6 +40,8 @@ var moneyRushPos = Vector2(801, 80)
 var captureIconPos
 var captureIconRushPos = Vector2(100, 570)
 
+@onready var ultFlash = $"UseUlt!"
+var initialUltUnlock
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -52,9 +54,12 @@ func _ready():
 	moneyPos = moneyLabel.position
 	captureIconPos = captureIcon.position
 	
+	ultFlash.hide()
+	
 func _process(delta):
 	if(inUltRush):
 		ultRushTimerLabel.text = str(round(ultRushTimer.time_left))
+
 
 func updateUltProgress(ultRecharge):
 	currentUltValue += ultRecharge
@@ -82,11 +87,22 @@ func subtractUltRushProgress():
 	
 func updateUltState():
 	canUlt = currentUltValue >= ultMax
+	
 	if(!inUltRush):
 		canUltRush = currentUltValue >= ultRushMax
 	
 	if(inUltRush):
 		canUltRushBurst = currentUltValue >= ultRushMax
+		
+		if(canUltRushBurst):
+			ultFlash.show()
+			if(!initialUltUnlock):
+				$ColorRect/flash.play("flash") # Flash
+				# Probably a sound effect here too
+			initialUltUnlock = true
+			
+		else:
+			ultFlash.hide()
 		
 func ultRushSetup():
 	inUltRush = true
@@ -151,6 +167,9 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
+	$ColorRect/flash.play("flash") # Flash
+	initialUltUnlock = false
+	ultFlash.hide()
 	
 	ultProgressBar.position = ultMeterPos
 	expMeter.position = expMeterPos
@@ -177,6 +196,9 @@ func endUltRush(): #Aka they used ult
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
+	$ColorRect/flash.play("flash") # Flash
+	initialUltUnlock = false
+	ultFlash.hide()
 	
 	ultProgressBar.position = ultMeterPos
 	expMeter.position = expMeterPos
