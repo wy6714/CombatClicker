@@ -1,0 +1,498 @@
+[gd_scene load_steps=19 format=3 uid="uid://tuab648o7fxb"]
+
+[ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
+[ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
+[ext_resource type="PackedScene" uid="uid://dnp4cy3xq0f0p" path="res://Scenes/enemy_manager.tscn" id="2_4tq6c"]
+[ext_resource type="PackedScene" uid="uid://fr2d3ved2h53" path="res://tooltip.tscn" id="2_mmnjf"]
+[ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
+[ext_resource type="PackedScene" uid="uid://p6pqw153f1fy" path="res://Scenes/scrollingBackground.tscn" id="4_tcxoj"]
+[ext_resource type="PackedScene" uid="uid://douvpgvfai6nt" path="res://Scenes/player.tscn" id="5_yvxiw"]
+[ext_resource type="PackedScene" uid="uid://n4kcq3rlkqw0" path="res://Scenes/PlayerStats.tscn" id="6_b5i3i"]
+[ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
+[ext_resource type="Script" path="res://Scripts/EquipmentManager.gd" id="7_o1iyn"]
+[ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
+[ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
+[ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
+[ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
+[ext_resource type="PackedScene" uid="uid://dmcjcfunlt6m3" path="res://Scenes/break_effect.tscn" id="14_3pg7p"]
+[ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
+[ext_resource type="PackedScene" uid="uid://x1wunamccd1u" path="res://Scenes/glassShatter.tscn" id="16_q7ep8"]
+[ext_resource type="PackedScene" uid="uid://bb3kfa8sq51h3" path="res://Scenes/weapon.tscn" id="17_qrwcy"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 82.0
+offset_bottom = 74.0
+
+[node name="scrollingBackground" parent="." instance=ExtResource("4_tcxoj")]
+z_index = -10
+layout_mode = 1
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 1068.0
+offset_bottom = 575.0
+
+[node name="Tooltip" parent="." instance=ExtResource("2_mmnjf")]
+visible = false
+layout_mode = 1
+offset_left = 362.0
+offset_top = 101.0
+offset_right = 362.0
+offset_bottom = 101.0
+
+[node name="GameManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_b0x31")
+
+[node name="EnemyManager" parent="." instance=ExtResource("2_4tq6c")]
+
+[node name="GlassShatter" parent="." instance=ExtResource("16_q7ep8")]
+position = Vector2(570, 337)
+
+[node name="Chickadee" parent="." instance=ExtResource("1_246fo")]
+
+[node name="Player" parent="." instance=ExtResource("5_yvxiw")]
+
+[node name="PartyMemberPlayer" parent="." groups=["memberData"] instance=ExtResource("6_b5i3i")]
+position = Vector2(5, 9)
+
+[node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
+layout_mode = 1
+
+[node name="Scoreboard" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("2_s574t")]
+layout_mode = 1
+
+[node name="ExpBarSystem" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("7_gst64")]
+layout_mode = 1
+offset_left = 896.0
+offset_top = -88.0
+offset_right = 896.0
+offset_bottom = -88.0
+
+[node name="UltMeter" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("8_fgwng")]
+layout_mode = 1
+
+[node name="shop" type="Label" parent="." groups=["BreakUIShut"]]
+layout_mode = 0
+offset_top = 165.0
+offset_right = 44.0
+offset_bottom = 188.0
+
+[node name="EquipmentManager" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 2.0
+offset_top = 37.0
+offset_right = 157.0
+offset_bottom = 68.0
+text = "+1 STRENGTH"
+script = ExtResource("7_o1iyn")
+
+[node name="StrengthCost" type="Label" parent="shop/EquipmentManager"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 20.0
+offset_right = 180.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
+theme_override_font_sizes/font_size = 14
+text = "100 points"
+
+[node name="Weapons" type="Label" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 152.0
+offset_right = 80.0
+offset_bottom = 175.0
+text = "WEAPONS"
+
+[node name="Sword" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_top = 175.0
+offset_right = 155.0
+offset_bottom = 206.0
+text = "Sword"
+script = ExtResource("7_o1iyn")
+
+[node name="Sword1" type="Button" parent="shop/Sword" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 19.0
+offset_top = 44.0
+offset_right = 129.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 1 (--)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Sword2" type="Button" parent="shop/Sword" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 150.0
+offset_top = 44.0
+offset_right = 277.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 2 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Sword3" type="Button" parent="shop/Sword" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 300.0
+offset_top = 44.0
+offset_right = 427.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 3 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Sword/Sword3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Sword/Sword3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Claymore" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_top = 275.0
+offset_right = 155.0
+offset_bottom = 306.0
+text = "Claymore"
+script = ExtResource("7_o1iyn")
+
+[node name="Claymore1" type="Button" parent="shop/Claymore" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 19.0
+offset_top = 44.0
+offset_right = 146.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 1 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Claymore2" type="Button" parent="shop/Claymore" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 150.0
+offset_top = 44.0
+offset_right = 277.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 2 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Claymore3" type="Button" parent="shop/Claymore" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 300.0
+offset_top = 44.0
+offset_right = 427.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 3 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Claymore/Claymore3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Claymore/Claymore3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Drill" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 375.0
+offset_right = 156.0
+offset_bottom = 406.0
+text = "Drill"
+script = ExtResource("7_o1iyn")
+
+[node name="Drill1" type="Button" parent="shop/Drill" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 18.0
+offset_top = 44.0
+offset_right = 145.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 1 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill1"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Drill2" type="Button" parent="shop/Drill" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 149.0
+offset_top = 44.0
+offset_right = 276.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 2 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill2"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill2"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Drill3" type="Button" parent="shop/Drill" groups=["Weapons"]]
+visible = false
+layout_mode = 0
+offset_left = 299.0
+offset_top = 44.0
+offset_right = 426.0
+offset_bottom = 94.0
+button_mask = 3
+text = "Weapon 3 (100)"
+script = ExtResource("7_o1iyn")
+
+[node name="LeftEquipSymbol" type="Label" parent="shop/Drill/Drill3"]
+visible = false
+layout_mode = 0
+offset_left = -2.0
+offset_top = 27.0
+offset_right = 38.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.273989, 0.21327, 1)
+text = "E"
+
+[node name="RightEquipSymbol" type="Label" parent="shop/Drill/Drill3"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = 27.0
+offset_right = 145.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.329025, 0.557977, 1, 1)
+text = "E"
+
+[node name="Recruitment" type="Label" parent="shop"]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 20.0
+offset_right = 112.0
+offset_bottom = 43.0
+text = "RECRUITMENT
+"
+
+[node name="RecruitPartyMember" type="Button" parent="shop"]
+visible = false
+layout_mode = 0
+offset_top = 59.0
+offset_right = 183.0
+offset_bottom = 90.0
+text = "Recruit Party Member!"
+script = ExtResource("10_xt3va")
+
+[node name="RecruitmentCost" type="Label" parent="shop/RecruitPartyMember"]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 20.0
+offset_right = 211.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.961596, 0.417768, 0.595836, 1)
+theme_override_font_sizes/font_size = 14
+text = "1000 points!"
+
+[node name="PartyMemberStatHolderUI" parent="." groups=["BreakUIShut", "DontTurnBackOn"] instance=ExtResource("11_wl6rb")]
+layout_mode = 1
+
+[node name="BreakEffect" parent="." instance=ExtResource("14_3pg7p")]
+visible = false
+layout_mode = 1
+offset_right = 1070.0
+offset_bottom = 575.0
+
+[node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("13_vp3iu")]
+layout_mode = 1
+offset_left = 169.0
+offset_top = 570.0
+offset_right = 169.0
+offset_bottom = 570.0
+
+[node name="Weapon" parent="." instance=ExtResource("17_qrwcy")]
+
+[node name="ParticleHolders" type="Node2D" parent="."]
+
+[node name="Exp1" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(442, 323)
+
+[node name="Exp2" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(486, 228)
+
+[node name="Exp3" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(583, 256)
+
+[node name="Exp4" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(674, 259)
+
+[node name="Exp5" type="Node2D" parent="ParticleHolders" groups=["ExpSpot"]]
+position = Vector2(706, 351)
+
+[node name="Capture" type="Node2D" parent="ParticleHolders" groups=["CaptureSpot"]]
+position = Vector2(561, 217)
+
+[connection signal="button_up" from="shop/EquipmentManager" to="shop/EquipmentManager" method="_on_button_up"]
+[connection signal="button_down" from="shop/Sword" to="shop/EquipmentManager" method="_on_sword_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword1" to="shop/EquipmentManager" method="_on_sword_1_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword2" to="shop/EquipmentManager" method="_on_sword_2_button_down"]
+[connection signal="button_down" from="shop/Sword/Sword3" to="shop/EquipmentManager" method="_on_sword_3_button_down"]
+[connection signal="button_down" from="shop/Claymore" to="shop/EquipmentManager" method="_on_claymore_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore1" to="shop/EquipmentManager" method="_on_claymore_1_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore2" to="shop/EquipmentManager" method="_on_claymore_2_button_down"]
+[connection signal="button_down" from="shop/Claymore/Claymore3" to="shop/EquipmentManager" method="_on_claymore_3_button_down"]
+[connection signal="button_down" from="shop/Drill" to="shop/EquipmentManager" method="_on_drill_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill1" to="shop/EquipmentManager" method="_on_drill_1_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill2" to="shop/EquipmentManager" method="_on_drill_2_button_down"]
+[connection signal="button_down" from="shop/Drill/Drill3" to="shop/EquipmentManager" method="_on_drill_3_button_down"]
+[connection signal="button_down" from="shop/RecruitPartyMember" to="shop/RecruitPartyMember" method="_on_button_down"]

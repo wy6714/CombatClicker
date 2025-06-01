@@ -104,7 +104,8 @@ func shrinkEventCircle(delta):
 				$TextureButton.disabled = true
 				anim.play("FadeOut")
 				if(!ultSystem.inUltRush):
-					player.currentEnemy.qtePressedCount += 1
+					if(player.currentEnemy != null):
+						player.currentEnemy.qtePressedCount += 1
 				manageRankNum()
 				soundPlayer.stream = missSE
 				soundPlayer.play()
@@ -275,7 +276,8 @@ func rushQTEResult():
 			finalQTESetup()
 			
 		pressed = true
-		player.currentEnemy.qtePressedCount += 1
+		if(player.currentEnemy != null):
+			player.currentEnemy.qtePressedCount += 1
 		manageRankNum()
 		
 		anim.play("FadeOut")
