@@ -214,10 +214,20 @@ func updateScore():
 
 func updateMoney(sum):
 	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
-	var moneyBounceAnim = get_node("/root/Main/Scoreboard/MoneyBounceAnim")
 	money += sum
 	moneyText.text = "$" + str(money)
-	moneyBounceAnim.play("MoneyBounce")
+	
+	 # Record the label’s current Y so “down” is orig_y:
+	var orig_y = moneyText.position.y
+	var bounce_offset = 10.0
+	
+	# Reset position in case a previous tween left it mid‐bounce:
+	moneyText.position.y = orig_y
+	
+	# Create a tween and chain two property‐tweens:
+	var t = moneyText.create_tween()
+	t.tween_property(moneyText, "position:y", orig_y - bounce_offset, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	t.tween_property(moneyText, "position:y", orig_y, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	
 func claymoreCharging(_delta):
 	if (startingClaymoreAttackLeft):

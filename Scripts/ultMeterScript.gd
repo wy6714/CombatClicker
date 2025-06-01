@@ -22,12 +22,35 @@ var currentQTE
 
 @onready var shaderMaterial = get_node("/root/Main/scrollingBackground/TextureRect")
 
+# UI THAT I WISH TO MOVE DURING ULT RUSH ANIMATION #
+
+# We already have the ult meter progress bar reference
+var ultMeterPos
+var ultMeterRushPos = Vector2(440, 0)
+
+@onready var expMeter = get_node("/root/Main/ExpBarSystem")
+var expMeterPos
+var expMeterRushPos = Vector2(790, -88)
+
+@onready var moneyLabel = get_node("/root/Main/Scoreboard/MoneyNumber")
+var moneyPos
+var moneyRushPos = Vector2(801, 80)
+
+@onready var captureIcon = get_node("/root/Main/CurrentMonsterIconButton")
+var captureIconPos
+var captureIconRushPos = Vector2(100, 570)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	ultProgressBar.value = 0
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
-	
 	ultRushTimer.timeout.connect(_on_ult_rush_timer_timeout)
+	
+	ultMeterPos = ultProgressBar.position
+	expMeterPos = expMeter.position
+	moneyPos = moneyLabel.position
+	captureIconPos = captureIcon.position
 	
 func _process(delta):
 	if(inUltRush):
@@ -77,9 +100,14 @@ func ultRushSetup():
 	$SpeedLineHolder.show() # Speedlines
 	$SpeedLineHolder2.show() # Speedlines
 	$ColorRect/flash.play("flash") # Flash
+	
+	ultProgressBar.position = ultMeterRushPos
+	expMeter.position = expMeterRushPos
+	moneyLabel.position = moneyRushPos
+	captureIcon.position = captureIconRushPos
+	
 	shaderMaterial.material.set_shader_parameter("rushFlag", 1.0) # Make background scroll go faster
 	
-	#damageThreshold = player.strength * 500
 	damageThreshold = player.strength * 150 + player.critRate * player.critDamage * 50
 	print(damageThreshold)
 	player.rankNum = 0
@@ -123,7 +151,16 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
+	
+	ultProgressBar.position = ultMeterPos
+	expMeter.position = expMeterPos
+	moneyLabel.position = moneyPos
+	captureIcon.position = captureIconPos
+	
 	currentUltValue = 0.0
+	ultProgressBar.value = currentUltValue
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	
 	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
 	despawnQTE()
 	
@@ -140,8 +177,17 @@ func endUltRush(): #Aka they used ult
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
+	
+	ultProgressBar.position = ultMeterPos
+	expMeter.position = expMeterPos
+	moneyLabel.position = moneyPos
+	captureIcon.position = captureIconPos
+	
 	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
 	currentUltValue = 0.0
+	ultProgressBar.value = currentUltValue
+	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	despawnQTE()
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
