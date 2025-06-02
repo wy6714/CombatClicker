@@ -41,7 +41,8 @@ var captureIconPos
 var captureIconRushPos = Vector2(100, 570)
 
 @onready var ultFlash = $"UseUlt!"
-var initialUltUnlock
+var initialUltRushUnlock
+var initialUltRushBurstUnlock
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -86,20 +87,28 @@ func subtractUltRushProgress():
 	updateUltState()
 	
 func updateUltState():
+	# Can they ult?
 	canUlt = currentUltValue >= ultMax
 	
+	# If they are in ultRush
 	if(!inUltRush):
 		canUltRush = currentUltValue >= ultRushMax
+		if(canUltRush):
+			if(!initialUltRushUnlock): #Flash and play SE, ONLY ONCE
+				$UltSE.play()
+				$UltBarAnimation.play("UltBarGrow")
+			initialUltRushUnlock = true
 	
 	if(inUltRush):
 		canUltRushBurst = currentUltValue >= ultRushMax
 		
 		if(canUltRushBurst):
 			ultFlash.show()
-			if(!initialUltUnlock):
+			if(!initialUltRushBurstUnlock): #Flash and play SE, ONLY ONCE
 				$ColorRect/flash.play("flash") # Flash
-				# Probably a sound effect here too
-			initialUltUnlock = true
+				$UltRushSE.play()
+				$UltBarAnimation.play("UltBarGrow")
+			initialUltRushBurstUnlock = true
 			
 		else:
 			ultFlash.hide()
@@ -168,7 +177,8 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
 	$ColorRect/flash.play("flash") # Flash
-	initialUltUnlock = false
+	initialUltRushUnlock = false
+	initialUltRushBurstUnlock = false
 	ultFlash.hide()
 	
 	ultProgressBar.position = ultMeterPos
@@ -197,7 +207,8 @@ func endUltRush(): #Aka they used ult
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
 	$ColorRect/flash.play("flash") # Flash
-	initialUltUnlock = false
+	initialUltRushUnlock = false
+	initialUltRushBurstUnlock = false
 	ultFlash.hide()
 	
 	ultProgressBar.position = ultMeterPos
