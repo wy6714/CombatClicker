@@ -446,26 +446,35 @@ func activateAttackAnim():
 		animComboCount = 0
 	add_child(attackingAnimation)
 	
+func ultAttackAnim():
+	
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.ultAnimation()
+	add_child(attackingAnimation)
+	
 func useUlt():
 	if(ultBarSystem.canUlt && !ultBarSystem.canUltRush):
-		# Ult.
-		determineDamage(100)
-		breakDamageMultiplier()
-		#currentEnemy.takeDamage(damage, 7)
-		var rngX = randi_range(-20, 10)
-		var rngY = randi_range(-10, 0)
-		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
-		currentEnemy.takeDamage(damage, 1)
-		DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-		activateAttackAnim()
+		# Ult. (Damage of ult is called by animation)
+		
+		ultAttackAnim()
 		ultBarSystem.updateUltProgress(0)
 		if(crit):
 			ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
 		crit = false
 		bigHit = false
 		ultBarSystem.subtractUltProgress()
-		
+
+# Called in ult animation in attack_anim
+func ultDamage():
+	determineDamage(100)
+	breakDamageMultiplier()
+	currentEnemy.takeDamage(damage, 1)
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit	
+			
 func useUltRushBurst():
 	if(ultBarSystem.inUltRush):
 		# Ult.

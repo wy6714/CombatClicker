@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=26 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://3edfxqc8ywnk" path="res://Art/ComputerMouseCenterClick.png" id="8_mvdxn"]
 [ext_resource type="AudioStream" uid="uid://c185qdxbelp16" path="res://Audio/Ult Burst Rush Charged.mp3" id="9_6llt1"]
 [ext_resource type="AudioStream" uid="uid://bd2b2glc0o1ss" path="res://Audio/Ult Burst Charged.mp3" id="10_lxtbv"]
+[ext_resource type="AudioStream" uid="uid://bvyoefcp08fgj" path="res://Audio/Ult Burst Activated.mp3" id="11_ghvb8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -105,6 +106,21 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="Animation" id="Animation_ucayy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TextureProgressBar:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_o14r0"]
 resource_name = "UltBarGrow"
 length = 0.2
@@ -119,21 +135,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_ucayy"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../TextureProgressBar:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a0m1l"]
@@ -581,5 +582,9 @@ stream = ExtResource("9_6llt1")
 
 [node name="UltSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_lxtbv")
+volume_db = -7.0
+
+[node name="UltActivatedSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_ghvb8")
 
 [connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]

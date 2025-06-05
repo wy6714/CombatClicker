@@ -43,6 +43,7 @@ var captureIconRushPos = Vector2(100, 570)
 @onready var ultFlash = $"UseUlt!"
 var initialUltRushUnlock
 var initialUltRushBurstUnlock
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -125,6 +126,7 @@ func ultRushSetup():
 	$SpeedLineHolder.show() # Speedlines
 	$SpeedLineHolder2.show() # Speedlines
 	$ColorRect/flash.play("flash") # Flash
+	$UltActivatedSE.play()
 	
 	ultProgressBar.position = ultMeterRushPos
 	expMeter.position = expMeterRushPos
