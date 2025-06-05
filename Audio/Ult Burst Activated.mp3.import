@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bvyoefcp08fgj"
+path="res://.godot/imported/Ult Burst Activated.mp3-f1aaf7d141c5e443c6145fec8f1a7494.mp3str"
+
+[deps]
+
+source_file="res://Audio/Ult Burst Activated.mp3"
+dest_files=["res://.godot/imported/Ult Burst Activated.mp3-f1aaf7d141c5e443c6145fec8f1a7494.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

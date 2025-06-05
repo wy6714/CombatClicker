@@ -2,6 +2,7 @@ extends Node2D
 
 var animations = ["SwordAnim", "SwordAnim2", "SwordAnim3"]
 @onready var slashSE = $AudioStreamPlayer2D
+@onready var player = get_node("/root/Main/Player") # Get a reference to the player
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name in animations:
@@ -15,6 +16,12 @@ func determineAnimation(animCombo):
 func drillAnimation():
 	$AnimationPlayer.play("Drill")
 		
+func ultAnimation():
+	$AnimationPlayer.play("UltExplosion")
+	
+func ultDamage():
+	player.ultDamage()
+	
 func playAlteredAudio():
 	var rng = randf_range(0.4, 1.2)
 	slashSE.pitch_scale = rng
