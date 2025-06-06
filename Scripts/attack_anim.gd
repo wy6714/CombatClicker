@@ -29,3 +29,15 @@ func playAlteredAudio():
 
 func stopAnimation():
 	$AnimationPlayer.play("RESET")
+	
+func alterUltExplosionSE1():
+	var rng = randf_range(0.9, 1.1)
+	$UltExplosion1.pitch_scale = rng
+	$UltExplosion1.play()
+	
+func alterUltExplosionSE2():
+	var rng = randf_range(0.9, 1.1)
+	$UltExplosion2.pitch_scale = rng
+	$UltExplosion2.play()
+	
+

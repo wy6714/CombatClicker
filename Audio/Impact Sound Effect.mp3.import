@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://djkuo3fh1fuu5"
+path="res://.godot/imported/Impact Sound Effect.mp3-56d91ab080eac613b374921efb095498.mp3str"
+
+[deps]
+
+source_file="res://Audio/Impact Sound Effect.mp3"
+dest_files=["res://.godot/imported/Impact Sound Effect.mp3-56d91ab080eac613b374921efb095498.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
