@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnh8t48yur0ng"]
+[gd_scene load_steps=7 format=3 uid="uid://bnh8t48yur0ng"]
 
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_aqh1o"]
+[ext_resource type="AudioStream" uid="uid://cf0tdpvduc622" path="res://Audio/Impact Sound Effect 2.mp3" id="2_jxwxe"]
+[ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://Scenes/damage_particles.tscn" id="3_7oe7i"]
 
 [sub_resource type="Animation" id="Animation_jr8wu"]
 length = 0.001
@@ -39,6 +41,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DamageParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_qrnxg"]
@@ -91,6 +105,32 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(),
 "values": []
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ImpactSE")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("DamageParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qlfc2"]
 _data = {
@@ -132,3 +172,12 @@ libraries = {
 "": SubResource("AnimationLibrary_qlfc2")
 }
 autoplay = "dropIn"
+
+[node name="ImpactSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_jxwxe")
+volume_db = -19.648
+
+[node name="DamageParticles" parent="." instance=ExtResource("3_7oe7i")]
+position = Vector2(152, 76)
+lifetime = 1.3
+speed_scale = 2.0
