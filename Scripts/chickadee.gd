@@ -311,6 +311,7 @@ func recoveringFromBreak(delta):
 	
 func defeatEnemyCheck():
 	if(health <= 0):
+		broken = false
 		if(canGrantExp):
 			canGrantExp = false
 			player.stopDrilling("left")

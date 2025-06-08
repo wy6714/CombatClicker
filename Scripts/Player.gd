@@ -325,7 +325,7 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(500, 700, 4, 6, 0.25)
-	activateAttackAnim()
+	activateAttackAnimClaymore()
 	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
@@ -337,19 +337,21 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	
 	breakDamageMultiplier()
 	
-	currentEnemy.takeDamage(damage, 1)
+	currentEnemy.takeDamage(damage / 10, 1)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
 
-	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
+	
+	DamageNumber.display_number(ceili(damage / 40), damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(100, 200, 2, 3, 0.3)
-	activateAttackAnim()
+	activateAttackAnimClaymoreFlimsy() 
 	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
 	crit = false
 	bigHit = false
+	print("flimsy ;;")
 
 func drillDamage(hand: String):
 	determineDamage(1)
@@ -444,6 +446,29 @@ func activateAttackAnim():
 	animComboCount += 1
 	if(animComboCount >= 3):
 		animComboCount = 0
+	add_child(attackingAnimation)
+	
+func activateAttackAnimClaymore():
+	#Later, we would put the code that determines which attack animation we use here
+	# Ex: swap from sword animation to greatsword animation depending on weapon etc
+	
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.determineAnimationClaymore(animComboCount)
+	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
+	#Simply allows for a satisfying animation combo
+	animComboCount += 1
+	if(animComboCount >= 3):
+		animComboCount = 0
+	add_child(attackingAnimation)
+	
+func activateAttackAnimClaymoreFlimsy():
+	#Later, we would put the code that determines which attack animation we use here
+	# Ex: swap from sword animation to greatsword animation depending on weapon etc
+	
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.flimsyClaymoreAnimation()
 	add_child(attackingAnimation)
 	
 func ultAttackAnim():

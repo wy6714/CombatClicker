@@ -47,6 +47,42 @@ var weapon_stats = {
 		"ult_regen": 0.02,
 		"elements": ["Earth", "Fire"],
 		"status_rate": 10
+	},
+	"Claymore3": {
+		"type": "GreatSword",
+		"strength": 250,
+		"crit_rate": 0.1,
+		"crit_damage": 2.0,
+		"ult_regen": 0.02,
+		"elements": ["Earth", "Fire"],
+		"status_rate": 10
+	},
+	"Drill1": {
+		"type": "GreatSword",
+		"strength": 1,
+		"crit_rate": 0.1,
+		"crit_damage": 2.0,
+		"ult_regen": 0.02,
+		"elements": ["Earth", "Fire"],
+		"status_rate": 10
+	},
+	"Drll2": {
+		"type": "GreatSword",
+		"strength": 250,
+		"crit_rate": 0.1,
+		"crit_damage": 2.0,
+		"ult_regen": 0.02,
+		"elements": ["Earth", "Fire"],
+		"status_rate": 10
+	},
+	"Drill3": {
+		"type": "GreatSword",
+		"strength": 250,
+		"crit_rate": 0.1,
+		"crit_damage": 2.0,
+		"ult_regen": 0.02,
+		"elements": ["Earth", "Fire"],
+		"status_rate": 10
 	}
 	# ... more weapons here
 }
