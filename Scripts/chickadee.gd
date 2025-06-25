@@ -217,19 +217,20 @@ func takeDamage(damage, breakMult):
 	health -= damage
 	healthBar.health = health
 	
-	var breakTotal = ceil(damage / 4) * breakMult
-	
-	if(breakTotal < 1): # At least, do 5 break damage
-		breakTotal = 5
-		
-	if(!ultBarSystem.inUltRush):
-		takeBreakDamage(breakTotal)
-	
-	manageDampen(damage)
-	managePetrify(damage)
-	manageParalysis()
-	
 	defeatEnemyCheck()
+	if(health > 0):
+		var breakTotal = ceil(damage / 4) * breakMult
+		
+		if(breakTotal < 1): # At least, do 5 break damage
+			breakTotal = 5
+			
+		if(!ultBarSystem.inUltRush):
+			takeBreakDamage(breakTotal)
+		
+		manageDampen(damage)
+		managePetrify(damage)
+		manageParalysis()
+
 	
 func takeBreakDamage(breakDamage):
 	if(breakable):
