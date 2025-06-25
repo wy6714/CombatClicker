@@ -52,6 +52,7 @@ var startingClaymoreAttackRight: bool = false
 @export var animComboCount: int = 0
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
+@export var claymoreDelay = 0.1
 @export var drillActive: bool = false
 @export var drillEquippedLeft: bool = false
 @export var drillEquippedRight: bool = false
@@ -314,6 +315,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	bigHit = false
 			
 func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
+	
+	activateAttackAnimClaymore()
+	await get_tree().create_timer(claymoreDelay).timeout
 	determineDamage(10)
 	
 	breakDamageMultiplier()
@@ -325,7 +329,7 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(500, 700, 4, 6, 0.25)
-	activateAttackAnimClaymore()
+	
 	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
 	if(crit):
 		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)

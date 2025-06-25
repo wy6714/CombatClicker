@@ -1,22 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dvyn0ee575sju"]
 
 [ext_resource type="Script" path="res://Scripts/anim_claymore_meter.gd" id="1_4p004"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xeucw"]
-bg_color = Color(0.00143788, 0.000928875, 1.41008e-10, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.317647, 0.0862745, 0.0196078, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4c6h"]
-bg_color = Color(0.870588, 0.0313726, 0, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8, 0.8, 0.8, 0)
+[ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_ivcx2"]
+[ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_56743"]
 
 [node name="anim_claymore_meter" type="Control"]
 layout_mode = 3
@@ -28,22 +14,30 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_4p004")
 
-[node name="ChargeFill" type="ProgressBar" parent="."]
+[node name="ChargeFill" type="TextureProgressBar" parent="."]
+modulate = Color(1, 1, 1, 0.780392)
 layout_mode = 0
-offset_right = 117.0
-offset_bottom = 31.0
+offset_left = -44.0
+offset_right = 212.0
+offset_bottom = 256.0
 rotation = 4.71239
+scale = Vector2(0.5, 0.5)
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_xeucw")
-theme_override_styles/fill = SubResource("StyleBoxFlat_r4c6h")
 value = 90.0
+texture_under = ExtResource("2_ivcx2")
+texture_progress = ExtResource("3_56743")
+tint_progress = Color(0.572669, 1.1792e-06, 3.36915e-07, 1)
 
-[node name="ColorRect" type="ColorRect" parent="ChargeFill"]
+[node name="CriticalStrikeZone" type="TextureRect" parent="ChargeFill"]
+modulate = Color(1, 1, 1, 0.631373)
+clip_contents = true
+custom_minimum_size = Vector2(-70, 0)
 layout_mode = 0
-offset_left = 102.333
-offset_top = 4.0
-offset_right = 142.333
-offset_bottom = 44.0
-scale = Vector2(0.276332, 0.574783)
-mouse_filter = 2
-color = Color(1, 1, 1, 0.537255)
+offset_left = 256.0
+offset_top = 240.0
+offset_right = 282.0
+offset_bottom = 496.0
+rotation = 3.14159
+texture = ExtResource("3_56743")
+expand_mode = 4
+stretch_mode = 2
