@@ -5,8 +5,13 @@ extends GridContainer
 @onready var monsterSprite = $TextureButton/Sprite2D
 var total_monsters = 50
 
+
 @onready var base_button_scene = preload("res://Scenes/GridMonsterButton.tscn")
 @onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
+
+@onready var nametag = $"../Name"
+@onready var monsterAnimatedSprite = $"../Monster Animated Sprite"
+
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png")},
@@ -39,19 +44,37 @@ func populate_monster_list():
 			# Check if the monster is captured and unlocked
 			if monster["name"] in player_monster_list.capturedMonsters and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
 				sprite.texture = monster["sprite"]
-				button.pressed.connect(func(): on_monster_selected(monster["name"], monsterSprite))
+				button.pressed.connect(func(): on_monster_selected(monster["name"], monsterSprite, player_monster_list.capturedMonsters[monster["name"]]["count"]))
 			else:
 				sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
 
 		else:
 			# Empty slot, display a "?" or generic locked sprite
 			sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png")))
+			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0))
 
 		grid.add_child(button)
 	print("populated")
 
-func on_monster_selected(monster_name, sprite_texture):
+func on_monster_selected(monster_name, sprite_texture, monster_count):
 	print("Selected:", monster_name)
+	print("Count:", monster_count)
 	currentButtonSprite.texture = sprite_texture
 	player_monster_list.equip_monster(monster_name)
+	
+	nametag.text = monster_name
+	monsterAnimatedSprite = sprite_texture
+	getTrivia(monster_count)
+	
+	
+func updateMonsterPanel(monster_name, sprite_texture):
+	pass
+
+func getTrivia(captureSum):
+	var count = 0
+	for trivia in get_tree().get_nodes_in_group("Trivia"):
+		count += 1
+		if(count <= captureSum):
+			trivia.text = "--Unlocked!--" # We would somehow get access to the actual trivia blurb here
+		else:
+			trivia.text = "--Locked--"
