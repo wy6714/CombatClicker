@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://lfbge76tm67h"]
+[gd_scene load_steps=13 format=3 uid="uid://lfbge76tm67h"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerMonsterList.gd" id="1_xx8oo"]
 [ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="2_rn4ds"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dwahqlin7yals" path="res://Art/Monster Container Pressed.png" id="8_t12o5"]
 [ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="9_vpmro"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="10_f8k1m"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="11_oh0ut"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cwpu3"]
 texture = ExtResource("2_rn4ds")
@@ -18,15 +19,17 @@ texture = ExtResource("2_rn4ds")
 script = ExtResource("1_xx8oo")
 
 [node name="Control" type="Control" parent="."]
-visible = false
+modulate = Color(1, 1, 1, 0.866667)
 top_level = true
 z_index = 2
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -170.0
+offset_top = 40.0
+offset_right = -130.0
+offset_bottom = 80.0
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="MonsterPanel" type="Panel" parent="Control"]
 layout_mode = 0
 offset_left = 205.0
 offset_top = 18.0
@@ -35,16 +38,16 @@ offset_bottom = 57.0
 scale = Vector2(15, 15)
 theme_override_styles/panel = SubResource("StyleBoxTexture_cwpu3")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/Panel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/MonsterPanel"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VScrollBar" type="VScrollBar" parent="Control/Panel/ScrollContainer"]
+[node name="VScrollBar" type="VScrollBar" parent="Control/MonsterPanel/ScrollContainer"]
 layout_mode = 2
 
-[node name="TextureButton" type="TextureButton" parent="Control/Panel"]
+[node name="TextureButton" type="TextureButton" parent="Control/MonsterPanel"]
 layout_mode = 0
 offset_left = 40.8667
 offset_top = 1.0
@@ -54,6 +57,24 @@ scale = Vector2(0.1, 0.1)
 texture_normal = ExtResource("3_lb8cw")
 texture_pressed = ExtResource("4_8fvcu")
 texture_hover = ExtResource("5_b14n2")
+
+[node name="SelectedMonsterPanel" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = 885.0
+offset_top = 18.0
+offset_right = 930.0
+offset_bottom = 57.0
+scale = Vector2(9.5392, 15)
+theme_override_styles/panel = SubResource("StyleBoxTexture_cwpu3")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/SelectedMonsterPanel"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VScrollBar" type="VScrollBar" parent="Control/SelectedMonsterPanel/ScrollContainer"]
+layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="Control"]
 layout_mode = 0
@@ -77,5 +98,138 @@ texture_hover = ExtResource("9_vpmro")
 position = Vector2(16, 16)
 texture = ExtResource("10_f8k1m")
 
-[connection signal="button_down" from="Control/Panel/TextureButton" to="." method="_on_texture_button_button_down"]
-[connection signal="button_up" from="Control/Panel/TextureButton" to="." method="_on_texture_button_button_up"]
+[node name="Name" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 902.0
+offset_top = 84.0
+offset_right = 953.0
+offset_bottom = 107.0
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "Name:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control"]
+custom_minimum_size = Vector2(400, 200)
+offset_left = 901.0
+offset_top = 388.0
+offset_right = 1301.0
+offset_bottom = 588.0
+
+[node name="GridContainer" type="GridContainer" parent="Control/ScrollContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+
+[node name="MarginContainer11" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 1" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer11" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 2" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer2" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 3" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer3" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer4" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 4" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer4" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer5" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 5" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer5" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer6" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 6" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer6" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer7" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 7" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer7" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer8" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 8" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer8" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer9" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 9" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer9" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="MarginContainer10" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 40
+
+[node name="Trivia 10" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer10" groups=["Trivia"]]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_oh0ut")
+text = "- LOCKED -"
+autowrap_mode = 2
+
+[node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control"]
+position = Vector2(1102, 275)
+
+[connection signal="button_down" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_down"]
+[connection signal="button_up" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_up"]
