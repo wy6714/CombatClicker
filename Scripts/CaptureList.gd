@@ -5,20 +5,18 @@ extends GridContainer
 @onready var monsterSprite = $TextureButton/Sprite2D
 var total_monsters = 50
 
-
 @onready var base_button_scene = preload("res://Scenes/GridMonsterButton.tscn")
 @onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
 
 @onready var nametag = $"../Name"
 @onready var monsterAnimatedSprite = $"../Monster Animated Sprite"
 
-
 var monster_list = [
-	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png")},
-	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png")},
-	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png")},
-	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png")},
-	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png")},
+	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn")},
+	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn")},
+	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn")},
+	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn")},
+	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn")},
 	# Add all 50 monsters here...
 ]
 
@@ -44,29 +42,43 @@ func populate_monster_list():
 			# Check if the monster is captured and unlocked
 			if monster["name"] in player_monster_list.capturedMonsters and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
 				sprite.texture = monster["sprite"]
-				button.pressed.connect(func(): on_monster_selected(monster["name"], monsterSprite, player_monster_list.capturedMonsters[monster["name"]]["count"]))
+				button.pressed.connect(func (name=monster["name"], 
+							  tex=monster["sprite"],
+							  cnt=player_monster_list.capturedMonsters[monster["name"]]["count"],
+							  scene=monster["scene"]):
+								on_monster_selected(name, tex, cnt, scene))
 			else:
 				sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
 
 		else:
 			# Empty slot, display a "?" or generic locked sprite
 			sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0))
+			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0, null))
 
 		grid.add_child(button)
 	print("populated")
 
-func on_monster_selected(monster_name, sprite_texture, monster_count):
-	print("Selected:", monster_name)
-	print("Count:", monster_count)
-	currentButtonSprite.texture = sprite_texture
-	player_monster_list.equip_monster(monster_name)
-	
+func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene):
 	nametag.text = monster_name
-	monsterAnimatedSprite = sprite_texture
-	getTrivia(monster_count)
-	
-	
+	getTrivia(count)
+	currentButtonSprite.texture = sprite_tex   # static image, if you still want it
+
+	# — now for the animated sprite —
+	# 1) Instance the enemy scene so we can read its AnimatedSprite2D
+	var enemy_instance = monster_scene.instantiate()
+	var original_anim : AnimatedSprite2D = enemy_instance.get_node("Area2D/AnimatedSprite2D")
+
+	# 2) Copy over its SpriteFrames resource & animation state
+	#    If you want to keep the UI instance totally independent, duplicate the frames:
+	monsterAnimatedSprite.sprite_frames = original_anim.sprite_frames.duplicate()
+
+	#    Copy the current (or default) animation name
+	monsterAnimatedSprite.animation = original_anim.animation
+	monsterAnimatedSprite.play()   # start animating
+
+	# 3) (Optional) Tidy up the temporary instance
+	enemy_instance.queue_free()
+
 func updateMonsterPanel(monster_name, sprite_texture):
 	pass
 

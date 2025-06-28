@@ -109,6 +109,7 @@ text = "Name:"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control"]
 custom_minimum_size = Vector2(400, 200)
+layout_mode = 0
 offset_left = 901.0
 offset_top = 388.0
 offset_right = 1301.0
@@ -229,7 +230,14 @@ text = "- LOCKED -"
 autowrap_mode = 2
 
 [node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control"]
-position = Vector2(1102, 275)
+position = Vector2(1100, 244)
+
+[node name="MonsterAnimPosition" type="Control" parent="Control"]
+anchors_preset = 0
+offset_left = 1098.0
+offset_top = 240.0
+offset_right = 1138.0
+offset_bottom = 280.0
 
 [connection signal="button_down" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_down"]
 [connection signal="button_up" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_up"]
