@@ -12,11 +12,75 @@ var total_monsters = 50
 @onready var monsterAnimatedSprite = $"../Monster Animated Sprite"
 
 var monster_list = [
-	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn")},
-	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn")},
-	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn")},
-	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn")},
-	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn")},
+	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
+	"lore":
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	]},
+	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn"), 
+	"lore":
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	]
+		},
+	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn"),
+	"lore":
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	]
+		},
+	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn"),
+	"lore":
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	]
+		},
+	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn"), 
+	"lore":
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	]
+		},
 	# Add all 50 monsters here...
 ]
 
@@ -45,22 +109,24 @@ func populate_monster_list():
 				button.pressed.connect(func (name=monster["name"], 
 							  tex=monster["sprite"],
 							  cnt=player_monster_list.capturedMonsters[monster["name"]]["count"],
-							  scene=monster["scene"]):
-								on_monster_selected(name, tex, cnt, scene))
+							  scene=monster["scene"],
+							  lore = monster["lore"]): #Include the lore here!!
+								on_monster_selected(name, tex, cnt, scene, lore))
 			else:
 				sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
 
 		else:
 			# Empty slot, display a "?" or generic locked sprite
 			sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0, null))
+			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0, null, [null]))
 
 		grid.add_child(button)
 	print("populated")
 
-func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene):
+func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene, lore_list: Array):
 	nametag.text = monster_name
-	getTrivia(count)
+	getTrivia(count, lore_list)
+	
 	currentButtonSprite.texture = sprite_tex   # static image, if you still want it
 
 	# — now for the animated sprite —
@@ -82,11 +148,20 @@ func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int
 func updateMonsterPanel(monster_name, sprite_texture):
 	pass
 
-func getTrivia(captureSum):
-	var count = 0
-	for trivia in get_tree().get_nodes_in_group("Trivia"):
-		count += 1
-		if(count <= captureSum):
-			trivia.text = "--Unlocked!--" # We would somehow get access to the actual trivia blurb here
+func getTrivia(captureSum: int, loreList: Array) -> void:
+	var labels = get_tree().get_nodes_in_group("Trivia")
+	# If no lore passed or it's not even an array, lock everything
+	if typeof(loreList) != TYPE_ARRAY:
+		for trivia in labels:
+			trivia.text = "--Locked--"
+		return
+
+	# Make sure we never index past the end of loreList
+	var maxUnlocked = min(captureSum, loreList.size())
+
+	for i in range(labels.size()):
+		var trivia = labels[i]
+		if i < maxUnlocked:
+			trivia.text = loreList[i]
 		else:
 			trivia.text = "--Locked--"

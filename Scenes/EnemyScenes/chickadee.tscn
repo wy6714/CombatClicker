@@ -1,8 +1,7 @@
-[gd_scene load_steps=38 format=3 uid="uid://djpoqma4i6ff2"]
+[gd_scene load_steps=37 format=3 uid="uid://djpoqma4i6ff2"]
 
-[ext_resource type="Texture2D" uid="uid://dctqidbct4xut" path="res://Art/Chickadee (1).png" id="1_66y72"]
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
-[ext_resource type="Texture2D" uid="uid://dipauq3g6vr5i" path="res://Art/ChickadeeShocked.png" id="3_jasck"]
+[ext_resource type="Texture2D" uid="uid://j235eddtuhq2" path="res://Art/ChickadeeSprites.png" id="2_b8fbe"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="4_fqu6w"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_jb5gd"]
 [ext_resource type="Script" path="res://Scripts/Health_Bar.gd" id="4_mhi0l"]
@@ -12,30 +11,30 @@
 [ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="10_7xfqj"]
 [ext_resource type="Texture2D" uid="uid://de5p5250hic3m" path="res://Art/StatusSymbolBlank.png" id="11_oe0yf"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_q7ab8"]
-atlas = ExtResource("1_66y72")
-region = Rect2(0, 0, 504, 504)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rekxg"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mv24i"]
-atlas = ExtResource("1_66y72")
-region = Rect2(0, 504, 504, 504)
+[sub_resource type="AtlasTexture" id="AtlasTexture_k66s6"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_27dp1"]
-atlas = ExtResource("3_jasck")
-region = Rect2(0, 0, 504, 504)
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwxft"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(0, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_arixx"]
-atlas = ExtResource("3_jasck")
-region = Rect2(504, 0, 504, 504)
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7sop"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_q7ab8")
+"texture": SubResource("AtlasTexture_rekxg")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_mv24i")
+"texture": SubResource("AtlasTexture_k66s6")
 }],
 "loop": true,
 "name": &"Idle",
@@ -43,10 +42,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_27dp1")
+"texture": SubResource("AtlasTexture_xwxft")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_arixx")
+"texture": SubResource("AtlasTexture_t7sop")
 }],
 "loop": true,
 "name": &"Shock",
@@ -54,7 +53,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
-size = Vector2(353.333, 513.333)
+size = Vector2(716.667, 973.333)
 
 [sub_resource type="Animation" id="Animation_iwom5"]
 length = 0.5
@@ -395,12 +394,13 @@ enemyPassive = "Attack Boost"
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
+scale = Vector2(16, 16)
 sprite_frames = SubResource("SpriteFrames_ri8e5")
 animation = &"Idle"
-frame_progress = 0.637871
+frame_progress = 0.176197
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(0, 3.33333)
+position = Vector2(-5, 26.6667)
 shape = SubResource("RectangleShape2D_fiuce")
 
 [node name="Health_Bar" type="TextureProgressBar" parent="."]
