@@ -231,6 +231,7 @@ autowrap_mode = 2
 
 [node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control"]
 position = Vector2(1100, 244)
+scale = Vector2(5, 5)
 
 [node name="MonsterAnimPosition" type="Control" parent="Control"]
 anchors_preset = 0
