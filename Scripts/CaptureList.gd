@@ -9,7 +9,10 @@ var total_monsters = 50
 @onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
 
 @onready var nametag = $"../Name"
-@onready var monsterAnimatedSprite = $"../Monster Animated Sprite"
+@onready var pats_label = $"../PetLabel"
+@onready var monsterAnimatedSprite = $"../Area2D/Monster Animated Sprite"
+@onready var currentMonster
+@onready var monsterArea = $"../Area2D"
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
@@ -24,7 +27,7 @@ var monster_list = [
 	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	]},
+	], "pats": 0},
 	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn"), 
 	"lore":
 		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
@@ -37,7 +40,7 @@ var monster_list = [
 	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	]
+	], "pats": 0
 		},
 	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn"),
 	"lore":
@@ -51,7 +54,7 @@ var monster_list = [
 	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	]
+	], "pats": 0
 		},
 	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn"),
 	"lore":
@@ -65,7 +68,7 @@ var monster_list = [
 	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	]
+	], "pats": 0
 		},
 	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn"), 
 	"lore":
@@ -79,7 +82,7 @@ var monster_list = [
 	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	]
+	], "pats": 0
 		},
 	# Add all 50 monsters here...
 ]
@@ -90,42 +93,87 @@ func _ready():
 	base_button.queue_free()
 	populate_monster_list()
 
-func populate_monster_list():
-	
-	# Clear out existing buttons
+func populate_monster_list() -> void:
+	# 1) Clear out existing buttons
 	for button in grid.get_children():
-		button.queue_free()  # Free any existing buttons in the grid container
+		button.queue_free()
 
+	# 2) Build exactly total_monsters slots
 	for i in range(total_monsters):
-		var button = base_button_scene.instantiate()
-		var sprite = button.get_node("Sprite2D")
-		
+		var btn = base_button_scene.instantiate()
+		var sprite = btn.get_node("Sprite2D")
+		var cnt := 0
+
 		if i < monster_list.size():
+			# --- real monster slot ---
 			var monster = monster_list[i]
-			var monsterSprite = monster["sprite"]
-			# Check if the monster is captured and unlocked
-			if monster["name"] in player_monster_list.capturedMonsters and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
+			if monster["name"] in player_monster_list.capturedMonsters \
+					and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
+
+				# unlocked
+				cnt = player_monster_list.capturedMonsters[monster["name"]]["count"]
 				sprite.texture = monster["sprite"]
-				button.pressed.connect(func (name=monster["name"], 
-							  tex=monster["sprite"],
-							  cnt=player_monster_list.capturedMonsters[monster["name"]]["count"],
-							  scene=monster["scene"],
-							  lore = monster["lore"]): #Include the lore here!!
-								on_monster_selected(name, tex, cnt, scene, lore))
+				
+
+				btn.pressed.connect(
+					Callable(self, "_on_texture_button_button_down")
+						.bind(
+							monster,
+							monster["sprite"],
+							cnt,
+							monster["scene"],
+							monster["lore"],
+							monster["pats"]
+						)
+				)
 			else:
-				sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
+				# defined monster but locked
+				sprite.texture = preload("res://Art/QuestionMark.png")
+				btn.pressed.connect(func ():
+					# 1) Show "???" for name
+					nametag.text = "???"
+
+					# 2) Clear/stop the animated sprite
+					#    (either remove its frames or just stop it)
+					monsterAnimatedSprite.stop()
+					monsterAnimatedSprite.sprite_frames = null
+
+					# 3) Show 0 pats
+					pats_label.text = "0"
+					
+					# 4) Blank out all lore entries
+					for trivia in get_tree().get_nodes_in_group("Trivia"):
+						trivia.text = "???"
+						
+					# 5) Disable clicks
+					monsterArea.input_pickable = false
+	)
 
 		else:
-			# Empty slot, display a "?" or generic locked sprite
-			sprite.texture = preload("res://Art/QuestionMark.png")  # Use a question mark sprite
-			button.pressed.connect(func(): on_monster_selected("Unknown", preload("res://Art/QuestionMark.png"), 0, null, [null]))
+			# --- placeholder slot beyond your defined monsters ---
+			sprite.texture = preload("res://Art/QuestionMark.png")
+			btn.pressed.connect(
+				Callable(self, "_on_texture_button_button_down")
+					.bind(
+						null,
+						preload("res://Art/QuestionMark.png"),
+						0,
+						null,
+						[],
+						0
+					)
+			)
 
-		grid.add_child(button)
+		grid.add_child(btn)
+
 	print("populated")
 
-func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene, lore_list: Array):
+	
+func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene, lore_list: Array, pats: int):
 	nametag.text = monster_name
 	getTrivia(count, lore_list)
+	pats_label.text = str(currentMonster["pats"])
+	monsterArea.input_pickable = true
 	
 	currentButtonSprite.texture = sprite_tex   # static image, if you still want it
 
@@ -165,3 +213,40 @@ func getTrivia(captureSum: int, loreList: Array) -> void:
 			trivia.text = loreList[i]
 		else:
 			trivia.text = "--Locked--"
+
+func _on_area_2d_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
+		currentMonster["pats"] += 1
+		pats_label.text = str(currentMonster["pats"])
+		print(currentMonster["pats"])
+		print(currentMonster["name"])
+
+
+func _on_texture_button_button_down(
+	monster: Dictionary,
+	tex: Texture2D,
+	cnt: int,
+	scene: PackedScene,
+	lore: Array,
+	patTotal: int
+) -> void:
+
+	# 1) Capture the selected monster
+	currentMonster = monster
+
+	# 2) Figure out the name (because GDScript has no ?: operator)
+	var name: String
+	if monster:
+		name = monster["name"]
+	else:
+		name = "Unknown"
+
+	# 3) Delegate to your existing handler
+	on_monster_selected(
+		name,
+		tex,
+		cnt,
+		scene,
+		lore,
+		patTotal
+	)
