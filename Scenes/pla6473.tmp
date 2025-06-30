@@ -283,7 +283,7 @@ shape = SubResource("RectangleShape2D_6e4lr")
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_usjh4")
 autoplay = "default"
-frame_progress = 0.871734
+frame_progress = 0.891566
 
 [node name="MonsterAnimPosition" type="Control" parent="Control"]
 anchors_preset = 0
