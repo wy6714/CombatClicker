@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=24 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
@@ -11,12 +11,6 @@
 [ext_resource type="AudioStream" uid="uid://c185qdxbelp16" path="res://Audio/Ult Burst Rush Charged.mp3" id="9_6llt1"]
 [ext_resource type="AudioStream" uid="uid://bd2b2glc0o1ss" path="res://Audio/Ult Burst Charged.mp3" id="10_lxtbv"]
 [ext_resource type="AudioStream" uid="uid://bvyoefcp08fgj" path="res://Audio/Ult Burst Activated.mp3" id="11_ghvb8"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
-bg_color = Color(0.303233, 0.303233, 0.303233, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3e2x"]
-bg_color = Color(1, 1, 0, 1)
 
 [sub_resource type="Animation" id="Animation_gij7a"]
 length = 0.001
@@ -152,35 +146,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8i3nt")
 
-[node name="UltBar" type="ColorRect" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 911.0
-offset_top = 50.0
-offset_right = 1152.0
-offset_bottom = 95.0
-color = Color(0, 0, 0, 1)
-
-[node name="ProgressBar" type="ProgressBar" parent="UltBar"]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 9.0
-offset_right = 232.0
-offset_bottom = 36.0
-theme_override_styles/background = SubResource("StyleBoxFlat_vbjfs")
-theme_override_styles/fill = SubResource("StyleBoxFlat_c3e2x")
-max_value = 1000.0
-value = 23.0
-show_percentage = false
-
-[node name="UltText" type="Label" parent="UltBar"]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 10.0
-offset_right = 53.0
-offset_bottom = 33.0
-text = "23 / 1000"
-
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
 offset_left = 896.0
@@ -188,6 +153,7 @@ offset_top = -31.0
 offset_right = 1184.0
 offset_bottom = 257.0
 pivot_offset = Vector2(144, 144)
+mouse_filter = 2
 max_value = 1000.0
 value = 50.0
 texture_under = ExtResource("2_jhe2u")

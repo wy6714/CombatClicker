@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://lfbge76tm67h"]
+[gd_scene load_steps=16 format=3 uid="uid://lfbge76tm67h"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerMonsterList.gd" id="1_xx8oo"]
 [ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="2_rn4ds"]
@@ -11,42 +11,14 @@
 [ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="9_vpmro"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="10_f8k1m"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="11_oh0ut"]
-[ext_resource type="Texture2D" uid="uid://31rb05bq5iob" path="res://Art/HeroPunch.png" id="12_6wlmk"]
+[ext_resource type="Texture2D" uid="uid://dmptnbbhsvu5r" path="res://Art/HeartSamples.png" id="12_0c00a"]
+[ext_resource type="SpriteFrames" uid="uid://dchicxgujkmo8" path="res://Art/questionMarkFloat.tres" id="13_1ceps"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cwpu3"]
 texture = ExtResource("2_rn4ds")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6e4lr"]
 size = Vector2(219, 209)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bkcxm"]
-atlas = ExtResource("12_6wlmk")
-region = Rect2(0, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_47587"]
-atlas = ExtResource("12_6wlmk")
-region = Rect2(96, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qn54g"]
-atlas = ExtResource("12_6wlmk")
-region = Rect2(0, 96, 96, 96)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_usjh4"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bkcxm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_47587")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qn54g")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [node name="PlayerMonsterList" type="Node2D"]
 script = ExtResource("1_xx8oo")
@@ -139,7 +111,14 @@ offset_top = 84.0
 offset_right = 953.0
 offset_bottom = 107.0
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "Name:"
+text = "???"
+
+[node name="PetHeart" type="Sprite2D" parent="Control"]
+position = Vector2(1186, 92)
+scale = Vector2(2, 2)
+texture = ExtResource("12_0c00a")
+hframes = 3
+vframes = 4
 
 [node name="PetLabel" type="Label" parent="Control"]
 layout_mode = 0
@@ -148,7 +127,7 @@ offset_top = 84.0
 offset_right = 1289.0
 offset_bottom = 107.0
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "0"
+text = "???"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control"]
 custom_minimum_size = Vector2(400, 200)
@@ -170,7 +149,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -181,7 +160,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer3" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -192,7 +171,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer4" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -203,7 +182,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer5" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -214,7 +193,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer6" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -225,7 +204,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer7" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -236,7 +215,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer8" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -247,7 +226,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer9" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -258,7 +237,7 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="MarginContainer10" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
@@ -269,28 +248,23 @@ theme_override_constants/margin_bottom = 40
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
-text = "- LOCKED -"
+text = "???"
 autowrap_mode = 2
 
 [node name="Area2D" type="Area2D" parent="Control"]
+z_index = 5
 position = Vector2(1100, 244)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Area2D"]
+z_index = 5
 position = Vector2(-3.5, 2.5)
 shape = SubResource("RectangleShape2D_6e4lr")
 
 [node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control/Area2D"]
 scale = Vector2(4, 4)
-sprite_frames = SubResource("SpriteFrames_usjh4")
+sprite_frames = ExtResource("13_1ceps")
 autoplay = "default"
-frame_progress = 0.871734
-
-[node name="MonsterAnimPosition" type="Control" parent="Control"]
-anchors_preset = 0
-offset_left = 1098.0
-offset_top = 240.0
-offset_right = 1138.0
-offset_bottom = 280.0
+frame_progress = 0.933998
 
 [connection signal="button_down" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_down"]
 [connection signal="button_up" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_up"]

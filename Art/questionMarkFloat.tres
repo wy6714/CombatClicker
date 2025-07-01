@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://dchicxgujkmo8"]
+
+[ext_resource type="Texture2D" uid="uid://d03cc6kqut44n" path="res://Art/Question Mark Icon.png" id="1_ti4ir"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wpffc"]
+atlas = ExtResource("1_ti4ir")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tt5r4"]
+atlas = ExtResource("1_ti4ir")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2l11o"]
+atlas = ExtResource("1_ti4ir")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t6b8e"]
+atlas = ExtResource("1_ti4ir")
+region = Rect2(0, 64, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wpffc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tt5r4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2l11o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t6b8e")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

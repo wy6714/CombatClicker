@@ -53,7 +53,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fiuce"]
-size = Vector2(716.667, 973.333)
+size = Vector2(353.333, 500)
 
 [sub_resource type="Animation" id="Animation_iwom5"]
 length = 0.5
@@ -400,7 +400,7 @@ animation = &"Idle"
 frame_progress = 0.176197
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(-5, 26.6667)
+position = Vector2(0, 6.66668)
 shape = SubResource("RectangleShape2D_fiuce")
 
 [node name="Health_Bar" type="TextureProgressBar" parent="."]

@@ -11,8 +11,10 @@ var total_monsters = 50
 @onready var nametag = $"../Name"
 @onready var pats_label = $"../PetLabel"
 @onready var monsterAnimatedSprite = $"../Area2D/Monster Animated Sprite"
+@onready var monsterCollider = $"../Area2D/CollisionShape2D"
 @onready var currentMonster
 @onready var monsterArea = $"../Area2D"
+@onready var question_mark_frames: SpriteFrames = preload("res://Art/questionMarkFloat.tres")
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
@@ -92,6 +94,7 @@ var monster_list = [
 func _ready():
 	base_button.queue_free()
 	populate_monster_list()
+	
 
 func populate_monster_list() -> void:
 	# 1) Clear out existing buttons
@@ -133,13 +136,13 @@ func populate_monster_list() -> void:
 					# 1) Show "???" for name
 					nametag.text = "???"
 
-					# 2) Clear/stop the animated sprite
-					#    (either remove its frames or just stop it)
-					monsterAnimatedSprite.stop()
-					monsterAnimatedSprite.sprite_frames = null
+					# 2) ? Animation
+					monsterAnimatedSprite.sprite_frames = question_mark_frames
+					monsterAnimatedSprite.animation = "default"  # or whatever the anim is called
+					monsterAnimatedSprite.play()
 
 					# 3) Show 0 pats
-					pats_label.text = "0"
+					pats_label.text = "???"
 					
 					# 4) Blank out all lore entries
 					for trivia in get_tree().get_nodes_in_group("Trivia"):
@@ -178,23 +181,39 @@ func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int
 	currentButtonSprite.texture = sprite_tex   # static image, if you still want it
 
 	# — now for the animated sprite —
-	# 1) Instance the enemy scene so we can read its AnimatedSprite2D
+	# 1) Instance the enemy scene so we can read its AnimatedSprite2D and collider
 	var enemy_instance = monster_scene.instantiate()
-	var original_anim : AnimatedSprite2D = enemy_instance.get_node("Area2D/AnimatedSprite2D")
+	var enemy_area = enemy_instance.get_node("Area2D")
+	var original_anim: AnimatedSprite2D = enemy_area.get_node("AnimatedSprite2D")
+	var original_collider: CollisionShape2D = enemy_area.get_node("CollisionShape2D")
 
-	# 2) Copy over its SpriteFrames resource & animation state
-	#    If you want to keep the UI instance totally independent, duplicate the frames:
+	# 4) Set the animated sprite
 	monsterAnimatedSprite.sprite_frames = original_anim.sprite_frames.duplicate()
-
-	#    Copy the current (or default) animation name
 	monsterAnimatedSprite.animation = original_anim.animation
-	monsterAnimatedSprite.play()   # start animating
+	monsterAnimatedSprite.play()
 
-	# 3) (Optional) Tidy up the temporary instance
+	# 5) Set the collider shape and scale to match the enemy
+	monsterCollider.shape = original_collider.shape.duplicate()
+	monsterCollider.scale = original_collider.scale * 4
+	monsterCollider.position = original_collider.position
+
+	# 6) (Optional) If collider looks wrong, use fallback based on sprite size:
+	
+	match_collider_to_sprite()
+
+	# Lastly, tidy up the temporary instance
 	enemy_instance.queue_free()
 
-func updateMonsterPanel(monster_name, sprite_texture):
-	pass
+func match_collider_to_sprite():
+	var tex = monsterAnimatedSprite.sprite_frames.get_frame_texture(monsterAnimatedSprite.animation, 0)
+	if tex:
+		var size = tex.get_size()
+		var shape = RectangleShape2D.new()
+		shape.extents = size / 2
+		monsterCollider.shape = shape
+		monsterCollider.position = Vector2.ZERO
+		
+		
 
 func getTrivia(captureSum: int, loreList: Array) -> void:
 	var labels = get_tree().get_nodes_in_group("Trivia")
