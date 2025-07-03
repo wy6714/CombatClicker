@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://6q4nma76h7qw"]
+[gd_scene load_steps=49 format=3 uid="uid://6q4nma76h7qw"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_wl8p2"]
 [ext_resource type="Texture2D" uid="uid://cns6hlkbnb2kx" path="res://Art/ChickenSprites.png" id="2_ud2yc"]
@@ -10,6 +10,22 @@
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_r8fdn"]
 [ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="10_nywfo"]
 [ext_resource type="Texture2D" uid="uid://de5p5250hic3m" path="res://Art/StatusSymbolBlank.png" id="11_tvbje"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54o5q"]
+atlas = ExtResource("2_ud2yc")
+region = Rect2(68, 68, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_meclk"]
+atlas = ExtResource("2_ud2yc")
+region = Rect2(0, 102, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qi4h2"]
+atlas = ExtResource("2_ud2yc")
+region = Rect2(34, 102, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukwix"]
+atlas = ExtResource("2_ud2yc")
+region = Rect2(68, 102, 34, 34)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dnjt1"]
 atlas = ExtResource("2_ud2yc")
@@ -45,6 +61,23 @@ region = Rect2(0, 34, 34, 34)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_54o5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_meclk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qi4h2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukwix")
+}],
+"loop": true,
+"name": &"Happy",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dnjt1")
@@ -439,7 +472,7 @@ enemyName = "Chicken"
 scale = Vector2(19, 19)
 sprite_frames = SubResource("SpriteFrames_ri8e5")
 animation = &"Idle"
-frame_progress = 0.157139
+frame_progress = 0.889196
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(6.66666, 10)

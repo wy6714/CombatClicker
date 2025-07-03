@@ -663,19 +663,6 @@ func _on_mouse_entered_status(icon: Node):
 	
 func _on_mouse_exited_status():
 	tooltip.hide_tooltip()
-
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.pressed:
-		var space_state = get_world_2d().direct_space_state
-		var query = PhysicsPointQueryParameters2D.new()
-		query.position = event.position
-		query.collide_with_areas = true
-		query.collide_with_bodies = true
-
-		var result = space_state.intersect_point(query)
-		print("Mouse click result:", result)
-
-
 		
 var activeTimers = {}
 	
