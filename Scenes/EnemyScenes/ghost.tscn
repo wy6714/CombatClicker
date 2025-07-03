@@ -1,7 +1,8 @@
-[gd_scene load_steps=46 format=3 uid="uid://bpykp0eem4hm8"]
+[gd_scene load_steps=51 format=3 uid="uid://bpykp0eem4hm8"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_vatxe"]
 [ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/SpoopyGhost.png" id="2_p7vgq"]
+[ext_resource type="Texture2D" uid="uid://ddiaqha75gcho" path="res://Art/SpoopyGhostSprites.png" id="2_wwmkh"]
 [ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_kyu5m"]
 [ext_resource type="Texture2D" uid="uid://1ebjm2341ur3" path="res://Art/SpoopyGhostShocked.png" id="3_mhb8q"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_f7gj3"]
@@ -11,6 +12,22 @@
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_e316m"]
 [ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="10_j1li0"]
 [ext_resource type="Texture2D" uid="uid://de5p5250hic3m" path="res://Art/StatusSymbolBlank.png" id="11_ycesh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4j7if"]
+atlas = ExtResource("2_wwmkh")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tug0x"]
+atlas = ExtResource("2_wwmkh")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmyyf"]
+atlas = ExtResource("2_wwmkh")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8h8up"]
+atlas = ExtResource("2_wwmkh")
+region = Rect2(64, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fosa5"]
 atlas = ExtResource("2_p7vgq")
@@ -46,6 +63,23 @@ region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4j7if")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tug0x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmyyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8h8up")
+}],
+"loop": true,
+"name": &"Happy",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fosa5")

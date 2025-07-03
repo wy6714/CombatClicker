@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://djpoqma4i6ff2"]
+[gd_scene load_steps=39 format=3 uid="uid://djpoqma4i6ff2"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_goma6"]
 [ext_resource type="Texture2D" uid="uid://j235eddtuhq2" path="res://Art/ChickadeeSprites.png" id="2_b8fbe"]
@@ -10,6 +10,14 @@
 [ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="7_yn6p6"]
 [ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="10_7xfqj"]
 [ext_resource type="Texture2D" uid="uid://de5p5250hic3m" path="res://Art/StatusSymbolBlank.png" id="11_oe0yf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1mjl"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54bht"]
+atlas = ExtResource("2_b8fbe")
+region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rekxg"]
 atlas = ExtResource("2_b8fbe")
@@ -29,6 +37,17 @@ region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ri8e5"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1mjl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_54bht")
+}],
+"loop": true,
+"name": &"Happy",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rekxg")
@@ -397,7 +416,7 @@ enemyPassive = "Attack Boost"
 scale = Vector2(16, 16)
 sprite_frames = SubResource("SpriteFrames_ri8e5")
 animation = &"Idle"
-frame_progress = 0.176197
+frame_progress = 0.917525
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 6.66668)

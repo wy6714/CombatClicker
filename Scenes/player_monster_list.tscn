@@ -251,6 +251,10 @@ theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
+[node name="HappyTimer" type="Timer" parent="Control"]
+wait_time = 2.0
+one_shot = true
+
 [node name="Area2D" type="Area2D" parent="Control"]
 z_index = 5
 position = Vector2(1100, 244)
@@ -269,4 +273,5 @@ frame_progress = 0.933998
 [connection signal="button_down" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_down"]
 [connection signal="button_up" from="Control/MonsterPanel/TextureButton" to="." method="_on_texture_button_button_up"]
 [connection signal="button_down" from="Control/GridContainer/TextureButton" to="Control/GridContainer" method="_on_texture_button_button_down"]
+[connection signal="timeout" from="Control/HappyTimer" to="Control/GridContainer" method="_on_happy_timer_timeout"]
 [connection signal="input_event" from="Control/Area2D" to="Control/GridContainer" method="_on_area_2d_input_event"]

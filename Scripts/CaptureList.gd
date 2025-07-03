@@ -15,6 +15,9 @@ var total_monsters = 50
 @onready var currentMonster
 @onready var monsterArea = $"../Area2D"
 @onready var question_mark_frames: SpriteFrames = preload("res://Art/questionMarkFloat.tres")
+@onready var petParticles = preload("res://Scenes/pet_particles.tscn")
+@onready var happyTimer = $"../HappyTimer"
+@onready var currentlyPatting = false
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
@@ -235,11 +238,40 @@ func getTrivia(captureSum: int, loreList: Array) -> void:
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
-		currentMonster["pats"] += 1
-		pats_label.text = str(currentMonster["pats"])
-		print(currentMonster["pats"])
-		print(currentMonster["name"])
+		if(currentMonster != null):
+			currentMonster["pats"] += 1
+			pats_label.text = str(currentMonster["pats"])
+			
+				# 1) Create a fresh heart particle
+			var heart = petParticles.instantiate()
+			add_child(heart)                       # add into the scene tree
+			heart.global_position = event.position
+			heart.emitting = true                  # fire it
+			
+			# 2) Switch anim
+			var currentFrame = monsterAnimatedSprite.frame # Get the frame
+			monsterAnimatedSprite.animation = "Happy" # Happy anim name
+			
+			if(!currentlyPatting): # Only apply the current frame to the new animation ONCE (otherwise there is pausing)
+				monsterAnimatedSprite.frame = currentFrame
+			
+			monsterAnimatedSprite.play() # Play
+			currentlyPatting = true # Track patting
+			happyTimer.start(2.0) # Rewset timer
 
+			# 3) Auto‐free after its lifetime (will cause delay for anything below it)
+			var t = get_tree().create_timer(heart.lifetime)
+			await t.timeout
+			if heart.is_inside_tree():
+				heart.queue_free()
+			
+func _on_happy_timer_timeout():
+	var currentFrame = monsterAnimatedSprite.frame
+	monsterAnimatedSprite.animation = "Idle"
+	monsterAnimatedSprite.frame = currentFrame
+	monsterAnimatedSprite.play()
+	currentlyPatting = false
+		
 
 func _on_texture_button_button_down(
 	monster: Dictionary,
