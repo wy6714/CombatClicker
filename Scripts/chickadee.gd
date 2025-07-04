@@ -353,6 +353,12 @@ func _on_area_2d_mouse_exited():
 		else:
 			$EnemyScale.play("EnemyScaleDown")
 
+func _on_enemy_scale_animation_finished(anim_name):
+	if queued_anim != "":
+		var next_anim = queued_anim
+		queued_anim = "" # Clear it so it doesn't loop forever
+		$EnemyScale.play(next_anim)
+
 func defeatAnimCleanup():
 	if(!ultBarSystem.inUltRush):
 		enemyManager.spawnEnemy()
