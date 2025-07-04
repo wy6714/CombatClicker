@@ -18,6 +18,8 @@ var total_monsters = 50
 @onready var petParticles = preload("res://Scenes/pet_particles.tscn")
 @onready var happyTimer = $"../HappyTimer"
 @onready var currentlyPatting = false
+@onready var mouseInsideRadius = false
+var queued_anim: String = ""
 
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
@@ -264,7 +266,28 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			await t.timeout
 			if heart.is_inside_tree():
 				heart.queue_free()
+	
+func _on_area_2d_mouse_entered():
+	mouseInsideRadius = true
+	if $"../../EnemyScale".is_playing():
+		queued_anim = "ScaleUp"
+	else:
+		$"../../EnemyScale".play("ScaleUp")
+		
+func _on_area_2d_mouse_exited():
+	mouseInsideRadius = false
+	if $"../../EnemyScale".is_playing():
+		queued_anim = "ScaleDown"
+	else:
+		$"../../EnemyScale".play("ScaleDown")
 			
+func _on_enemy_scale_animation_finished(anim_name):
+	if queued_anim != "":
+		var next_anim = queued_anim
+		queued_anim = "" # Clear it so it doesn't loop forever
+		$"../../EnemyScale".play(next_anim)
+
+
 func _on_happy_timer_timeout():
 	var currentFrame = monsterAnimatedSprite.frame
 	monsterAnimatedSprite.animation = "Idle"
@@ -301,3 +324,4 @@ func _on_texture_button_button_down(
 		lore,
 		patTotal
 	)
+
