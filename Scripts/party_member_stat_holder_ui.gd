@@ -17,7 +17,6 @@ extends Control
 @onready var cooldownPoints = $CooldownPoints
 @onready var nameText = $Name
 
-
 var member
 @onready var player = get_node("/root/Main/Player")
 
@@ -32,13 +31,21 @@ func _ready():
 		
 	if(member != null):
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+		
+	for button in get_tree().get_nodes_in_group("ElementalButton"):
+		# ensure it's a TextureButton
+		if button is TextureButton:
+			button.pressed.connect(
+				Callable(self, "_on_elemental_button_pressed")
+					.bind(button)
+			)
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown):
+func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, element):
 	cooldownText.visible = true
 	cooldownPoints.visible = true
 	
@@ -48,9 +55,27 @@ func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown):
 	ultRegenVal.text = str(ultRegen)
 	cooldownVal.text = str(cooldown)
 	
+	# Set all elemental buttons as inactive, so that we can later set the only active button on.
+	for btn in get_tree().get_nodes_in_group("ElementalButton"):
+				btn.button_pressed = false
+				
+	match element:
+		"Fire":
+			$FireButton.button_pressed = true
+		"Water":
+			$WaterButton.button_pressed = true
+		"Wind":
+			$WindButton.button_pressed = true
+		"Earth":
+			$EarthButton.button_pressed = true
+		"Electric":
+			$ElectricButton.button_pressed = true
+		_:
+			print("None are selected. I think this can be deleted then tbh")
 	
-	
-	
+	# Party members actually set up their element, unlike the player.	
+	for btn in get_tree().get_nodes_in_group("ElementalButton"):
+		btn.visible = true
 	
 func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 	strengthVal.text = str(strength)
@@ -61,8 +86,9 @@ func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 	cooldownText.visible = false
 	cooldownPoints.visible = false
 	
-	
-
+	for btn in get_tree().get_nodes_in_group("ElementalButton"):
+		btn.visible = false
+		
 	
 func _on_buy_upgrade_button_down():
 	if(player.score >= member.upgradePointCost):
@@ -104,7 +130,7 @@ func applyUpgrade(button):
 		member.upgradePoints -= 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
 		if(!member.isPlayer):
-			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.currentElement)
 		else:
 			updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
 			player.strength = member.strength
@@ -147,7 +173,7 @@ func updateUpgradeValues():
 	if(!member.isPlayer):
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
-		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown)
+		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.currentElement)
 	else:
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
@@ -165,7 +191,56 @@ func updateMemberTextColors():
 	upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
 	if(!member.player):
 		upgradeTextColor(cooldownText, member.cooldown, member.baseCooldown)
-	
-	
 
+func _on_elemental_button_pressed(button: TextureButton):
+	var selected = button.name
+	var elementName = selected.replace("Button", "")
+	
+	# If the selected element is already active, toggle it off.
+	if (member.currentElement == elementName):
+		member.currentElement = "None"
+		member.fire = false
+		member.water = false
+		member.wind = false
+		member.earth = false
+		member.electric = false
+		button.button_pressed = false
+		print("Current Element: ", member.currentElement)
+		return
+		
+	else:
+		
+		# Select the element by first toggling off everything...
+		for btn in get_tree().get_nodes_in_group("ElementalButton"):
+			btn.button_pressed = false
+			member.fire = false
+			member.water = false
+			member.wind = false
+			member.earth = false
+			member.electric = false
+			
+		#... and then applying the chosen element.
+		match selected:
+			"FireButton":
+				member.fire = true
+				member.currentElement = "Fire"
+			"WaterButton":
+				member.water = true
+				member.currentElement = "Water"
+			"WindButton":
+				member.wind = true
+				member.currentElement = "Wind"
+			"EarthButton":
+				member.earth = true
+				member.currentElement = "Earth"
+			"ElectricButton":
+				member.electric = true
+				member.currentElement = "Electric"
+			_:
+				member.currentElement = "None"
+				
+		button.button_pressed = true  # re-toggle only the selected
 
+	print("Current element: ", member.currentElement)
+			
+		

@@ -10,6 +10,15 @@ extends Node2D
 @export var damage: float = 0
 @export var cooldown: float = 7
 
+@export var statusRate: int = 1 # Chance of inflicting a status effect
+
+@export var fire = false
+@export var water = false
+@export var wind = false
+@export var earth = false
+@export var electric = false
+@export var currentElement = "None"
+
 @export var baseStrength: float = 10
 @export var baseCritRate: float = 5 
 @export var baseCritDamage: float = 2
@@ -72,6 +81,7 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 		if(crit):
 			ultBarSystem.updateUltProgress(ultRegen * critDamage)
 		crit = false
+		determineStatusEffect()
 	
 func updateScore():
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
@@ -81,7 +91,6 @@ func updateScore():
 
 
 func _on_damage_cooldown_timeout():
-	
 	dealDamage()
 	updateTimer()
 	print("character did a thing")
@@ -91,7 +100,7 @@ func _on_stats_button_down():
 	
 	if(!open):
 		statDisplay.visible = true
-		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown)
+		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, currentElement)
 		open = true
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
@@ -108,5 +117,20 @@ func _on_stats_button_down():
 func gainUpgradePoints():
 	upgradePoints += 1
 
-		
-		
+func determineStatusEffect():
+	var rng = randi_range(0, 100)
+	
+	print("Current Element According to Member: ", currentElement)
+	
+	if(rng >= statusRate):
+		if(fire):
+			print("Burn")
+		if(water):
+			print("Dampen")
+		if(wind):
+			print("Dizzy")
+		if(earth):
+			print("Petrify")
+		if(electric):
+			print("Paralysis")
+			
