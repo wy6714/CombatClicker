@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7nqtkti6xlb0"]
+[gd_scene load_steps=5 format=3 uid="uid://b7nqtkti6xlb0"]
 
 [ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="1_5tqap"]
 [ext_resource type="Script" path="res://Scripts/party_member_stat_holder_ui.gd" id="1_g07wn"]
+[ext_resource type="Texture2D" uid="uid://ch12swh3oqulm" path="res://Art/Circle Button Unselected.png" id="3_4q1fy"]
+[ext_resource type="Texture2D" uid="uid://b1lc8f5bene27" path="res://Art/Circle Button Selected.png" id="4_em61s"]
 
 [node name="PartyMemberStatHolderUI" type="Control"]
 visible = false
@@ -226,5 +228,95 @@ offset_right = 188.0
 offset_bottom = 45.0
 scale = Vector2(0.7, 0.7)
 text = "1000 points"
+
+[node name="FireButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = 792.0
+offset_top = 219.0
+offset_right = 832.0
+offset_bottom = 259.0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+
+[node name="Element" type="Label" parent="FireButton"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 30.0
+offset_bottom = 53.0
+text = "Fire"
+
+[node name="WaterButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = 832.0
+offset_top = 219.0
+offset_right = 872.0
+offset_bottom = 259.0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+
+[node name="Element" type="Label" parent="WaterButton"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 30.0
+offset_bottom = 53.0
+text = "Water"
+
+[node name="WindButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = 872.0
+offset_top = 219.0
+offset_right = 912.0
+offset_bottom = 259.0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+
+[node name="Element" type="Label" parent="WindButton"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 30.0
+offset_bottom = 53.0
+text = "Wind"
+
+[node name="EarthButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = 912.0
+offset_top = 219.0
+offset_right = 952.0
+offset_bottom = 259.0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+
+[node name="Element" type="Label" parent="EarthButton"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 30.0
+offset_bottom = 53.0
+text = "Earth"
+
+[node name="ElectricButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = 952.0
+offset_top = 219.0
+offset_right = 992.0
+offset_bottom = 259.0
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+
+[node name="Element" type="Label" parent="ElectricButton"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 30.0
+offset_bottom = 53.0
+text = "Electric"
 
 [connection signal="button_down" from="BuyUpgrade" to="." method="_on_buy_upgrade_button_down"]
