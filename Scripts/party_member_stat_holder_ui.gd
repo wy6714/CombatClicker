@@ -125,7 +125,7 @@ func applyUpgrade(button):
 			upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
 		if button.is_in_group("cooldown"):
 			member.cooldown -= 0.2
-			upgradeTextColor(cooldownText, member.cooldown, member.baseCooldown)
+			upgradeTextColorCooldown(cooldownText, member.cooldown, member.baseCooldown)
 			
 		member.upgradePoints -= 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
@@ -164,10 +164,10 @@ func removeUpgrade(button):
 				updateUpgradeValues()
 				upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
 		if button.is_in_group("cooldown"):
-			if member.cooldown > member.baseCooldown:
+			if member.cooldown < member.baseCooldown:
 				member.cooldown += 0.2
 				updateUpgradeValues()
-				upgradeTextColor(cooldownText, member.cooldown, member.baseCooldown)
+				upgradeTextColorCooldown(cooldownText, member.cooldown, member.baseCooldown)
 				
 func updateUpgradeValues():
 	if(!member.isPlayer):
@@ -182,6 +182,11 @@ func updateUpgradeValues():
 func upgradeTextColor(statText, stat, baseStat):
 	var statDiff = stat - baseStat
 	var colorIntensity = clamp(statDiff * 0.02, 0, 1)
+	statText.modulate = Color(1.0 - colorIntensity, 1, 1.0 - colorIntensity, 1)
+	
+func upgradeTextColorCooldown(statText, stat, baseStat):
+	var statDiff = baseStat - stat
+	var colorIntensity = clamp(statDiff * 0.1, 0, 1)
 	statText.modulate = Color(1.0 - colorIntensity, 1, 1.0 - colorIntensity, 1)
 
 func updateMemberTextColors():
