@@ -18,6 +18,7 @@ extends Node2D
 @export var earth = false
 @export var electric = false
 @export var currentElement = "None"
+@export var memberNumber = 1
 
 @export var baseStrength: float = 10
 @export var baseCritRate: float = 5 
@@ -34,12 +35,15 @@ extends Node2D
 @onready var player = get_node("/root/Main/Player")
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
 @onready var damageCooldown = $CharUI/DamageCooldown
+@onready var partyMemberAnim = preload("res://Scenes/party_member_anims.tscn")
 
 @onready var nameLine = $CharUI/LineEdit
 var currentEnemy
 
 var open = false
 var isPlayer = false
+var randomOffsetX = 0.0
+var randomOffsetY = 0.0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -68,13 +72,15 @@ func determineDamage():
 		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
-	
 	# BASIC  DAMAGE MULTIPLIER (if any, idk yet lol)
 	damage = damage * 1
-	
 	if(currentEnemy != null):
 		currentEnemy.takeDamage(damage, 0)
-		DamageNumber.display_number(damage,currentEnemy.position, crit) #Display damage number and attack animation upon hit
+		randomOffsetX = randf_range(-30.0, 30.0)
+		randomOffsetY = randf_range(-30.0, 30.0)
+		var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY)
+		playDamageAnim(randomLoc)
+		DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
 		#activateAttackAnim()
 		updateScore()
 		ultBarSystem.updateUltProgress(ultRegen)
@@ -82,7 +88,27 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 			ultBarSystem.updateUltProgress(ultRegen * critDamage)
 		crit = false
 		determineStatusEffect()
+
+func playDamageAnim(position: Vector2):
+	var rng = randi() % 2	
 	
+	var attackInstance = partyMemberAnim.instantiate()
+	add_child(attackInstance)
+	
+	
+	if(currentEnemy != null):
+		attackInstance.global_position = position + Vector2(15,15) #Offset by Vector2
+	
+	var memberString = "(" + str(memberNumber) + ")"
+	attackInstance.setMemberInfo(memberString, currentElement)
+	
+	if(rng == 0):
+		attackInstance.playPunch()
+		#attackInstance.playKick()
+	if(rng == 1):
+		attackInstance.playKick()
+		
+		
 func updateScore():
 	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
 	player.score += damage #Gain points based on how many points you get each click

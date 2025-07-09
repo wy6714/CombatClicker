@@ -20,7 +20,6 @@ extends Control
 var member
 @onready var player = get_node("/root/Main/Player")
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	for button in get_tree().get_nodes_in_group("add_upgrade"):
@@ -39,8 +38,7 @@ func _ready():
 				Callable(self, "_on_elemental_button_pressed")
 					.bind(button)
 			)
-	
-	
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
