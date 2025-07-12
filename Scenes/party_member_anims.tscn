@@ -337,16 +337,29 @@ vframes = 2
 [node name="MemberNumber" type="Label" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0.623529)
-offset_left = -23.0
-offset_top = 13.0
-offset_right = 25.0
-offset_bottom = 36.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.3333
+offset_top = 10.6667
+offset_right = 34.6667
+offset_bottom = 33.6667
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0.5, 0.5)
+size_flags_horizontal = 6
+size_flags_vertical = 6
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_constants/shadow_outline_size = 5
 theme_override_fonts/font = ExtResource("3_1v6gm")
-text = "(1)"
+theme_override_font_sizes/font_size = 8
+text = "(Member)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

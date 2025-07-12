@@ -38,9 +38,12 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-	
 
-func _on_stats_button_down():
+		
+func gainUpgradePoints():
+	upgradePoints += 1
+	
+func _on_stats_button_button_down():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
 	
 	if(!open):
@@ -57,7 +60,3 @@ func _on_stats_button_down():
 		open = false
 		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.member = null
-		
-func gainUpgradePoints():
-	upgradePoints += 1
-	

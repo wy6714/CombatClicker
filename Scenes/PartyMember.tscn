@@ -1,35 +1,75 @@
-[gd_scene load_steps=4 format=3 uid="uid://cjxwnr51qki6q"]
+[gd_scene load_steps=6 format=3 uid="uid://cjxwnr51qki6q"]
 
-[ext_resource type="Texture2D" uid="uid://crpc40sac767h" path="res://Art/CharBoxUI.png" id="1_j5k6k"]
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
+[ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_37muy"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_rftqe"]
+[ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="5_r0s8o"]
+
+[sub_resource type="BitMap" id="BitMap_5mnuc"]
 
 [node name="PartyMember" type="Node2D" groups=["BreakUIShut", "PartyMember", "memberData"]]
 position = Vector2(0, 9)
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]
-position = Vector2(300, 600)
-texture = ExtResource("1_j5k6k")
+position = Vector2(304, 600)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_37muy")
+hframes = 6
+vframes = 7
 
 [node name="LineEdit" type="LineEdit" parent="CharUI"]
-offset_left = -57.0
-offset_top = -36.0
-offset_right = 54.0
-offset_bottom = -5.0
+z_index = 1
+offset_left = -36.0
+offset_top = -43.3333
+offset_right = 75.0
+offset_bottom = -12.3333
+scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_rftqe")
-placeholder_text = "Name"
+theme_override_font_sizes/font_size = 16
+placeholder_text = "Name..."
 max_length = 10
-
-[node name="Stats" type="Button" parent="CharUI"]
-offset_left = -57.0
-offset_right = 31.0
-offset_bottom = 31.0
-theme_override_fonts/font = ExtResource("3_rftqe")
-text = "Stats"
+expand_to_text_length = true
+flat = true
 
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
 autostart = true
 
-[connection signal="button_down" from="CharUI/Stats" to="." method="_on_stats_button_down"]
+[node name="NameEditorBackdrop" type="TextureButton" parent="."]
+offset_left = 246.0
+offset_top = 535.0
+offset_right = 333.0
+offset_bottom = 575.0
+scale = Vector2(1.2, 0.578)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+disabled = true
+texture_normal = ExtResource("5_r0s8o")
+texture_click_mask = SubResource("BitMap_5mnuc")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="StatsButton" type="TextureButton" parent="."]
+offset_left = 239.0
+offset_top = 565.0
+offset_right = 326.0
+offset_bottom = 605.0
+scale = Vector2(1.2, 0.578)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("5_r0s8o")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="StatsText" type="Label" parent="."]
+offset_left = 248.0
+offset_top = 571.0
+offset_right = 368.0
+offset_bottom = 595.0
+scale = Vector2(0.5, 0.5)
+theme_override_fonts/font = ExtResource("3_rftqe")
+theme_override_font_sizes/font_size = 24
+text = "Stats"
+
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
+[connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]

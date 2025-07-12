@@ -99,7 +99,7 @@ func playDamageAnim(position: Vector2):
 	if(currentEnemy != null):
 		attackInstance.global_position = position + Vector2(15,15) #Offset by Vector2
 	
-	var memberString = "(" + str(memberNumber) + ")"
+	var memberString = "(" + nameLine.text + ")"
 	attackInstance.setMemberInfo(memberString, currentElement)
 	
 	if(rng == 0):
@@ -120,25 +120,6 @@ func _on_damage_cooldown_timeout():
 	dealDamage()
 	updateTimer()
 	print("character did a thing")
-	
-func _on_stats_button_down():
-	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	
-	if(!open):
-		statDisplay.visible = true
-		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, currentElement)
-		open = true
-		statDisplay.member = $"."
-		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
-		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
-		statDisplay.updateMemberTextColors()
-		print(statDisplay.nameText.text)
-		print(nameLine.text)
-		statDisplay.nameText.text = nameLine.text
-	elif(open):
-		statDisplay.visible = false
-		open = false
-		statDisplay.member = null
 		
 func gainUpgradePoints():
 	upgradePoints += 1
@@ -160,3 +141,22 @@ func determineStatusEffect():
 		if(electric):
 			print("Paralysis")
 			
+
+func _on_stats_button_button_down():
+	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
+	
+	if(!open):
+		statDisplay.visible = true
+		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, currentElement)
+		open = true
+		statDisplay.member = $"."
+		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
+		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
+		statDisplay.updateMemberTextColors()
+		print(statDisplay.nameText.text)
+		print(nameLine.text)
+		statDisplay.nameText.text = nameLine.text
+	elif(open):
+		statDisplay.visible = false
+		open = false
+		statDisplay.member = null
