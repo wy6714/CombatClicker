@@ -75,19 +75,20 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	# BASIC  DAMAGE MULTIPLIER (if any, idk yet lol)
 	damage = damage * 1
 	if(currentEnemy != null):
-		currentEnemy.takeDamage(damage, 0)
-		randomOffsetX = randf_range(-30.0, 30.0)
-		randomOffsetY = randf_range(-30.0, 30.0)
-		var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY)
-		playDamageAnim(randomLoc)
-		DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
-		#activateAttackAnim()
-		updateScore()
-		ultBarSystem.updateUltProgress(ultRegen)
-		if(crit):
-			ultBarSystem.updateUltProgress(ultRegen * critDamage)
-		crit = false
-		determineStatusEffect()
+		if(!currentEnemy.inQTEState): #Dont attack while in QTEs
+			currentEnemy.takeDamage(damage, 0)
+			randomOffsetX = randf_range(-30.0, 30.0)
+			randomOffsetY = randf_range(-30.0, 30.0)
+			var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY)
+			playDamageAnim(randomLoc)
+			DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
+			#activateAttackAnim()
+			updateScore()
+			ultBarSystem.updateUltProgress(ultRegen)
+			if(crit):
+				ultBarSystem.updateUltProgress(ultRegen * critDamage)
+			crit = false
+			determineStatusEffect()
 
 func playDamageAnim(position: Vector2):
 	var rng = randi() % 2	

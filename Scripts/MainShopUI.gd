@@ -126,37 +126,36 @@ func _process(delta):
 	pass
 
 func _on_button_mouse_entered(btn: TextureButton):
-	# Kill any previous tween for this button
-	#if _active_tweens.has(btn):
-		#_active_tweens[btn].kill()
+	# determine the color we should hover to
+	var hover_color: Color
+	if btn.is_in_group("unlocked"):
+		hover_color = Color(1, 1, 1)
+	else:
+		hover_color = hover_colors.get(btn.name, _orig_colors[btn])
 
+	# determine the scale we should hover to
 	var normal = _orig_scales[btn]
 	var hover  = normal * 1.1
-	var hover_color = hover_colors.get(btn.name, _orig_colors[btn])
 
-	# Create a new tween *on* the button
+	# tween both scale and color
 	var tw = btn.create_tween()
-	tw.tween_property(btn, "scale", hover, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tw.tween_property(btn, "modulate", hover_color, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(btn, "scale",   hover,       0.15)
+	tw.tween_property(btn, "modulate", hover_color, 0.15)
 
-	# Remember it so we can kill it later
 	_active_tweens[btn] = tw
 
 func _on_button_mouse_exited(btn: TextureButton):
-	# Kill any previous tween for this button
-	#if _active_tweens.has(btn):
-		#_active_tweens[btn].kill()
+	var target_color: Color
+	
+	if btn.is_in_group("unlocked"):
+		target_color = Color(1, 1, 1)
+	else:
+		target_color = _orig_colors.get(btn, normal_color)
 
-	var normal = _orig_scales[btn]
-	var hover  = normal * 1.1
-
-	# Create a new tween *on* the button
+	var normal_scale = _orig_scales[btn]
 	var tw = btn.create_tween()
-	tw.tween_property(btn, "scale", normal, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tw.tween_property(btn, "modulate", _orig_colors[btn], 0.15)
-
-	# Remember it so we can kill it later
-	_active_tweens[btn] = tw
+	tw.tween_property(btn, "scale", normal_scale, 0.15)
+	tw.tween_property(btn, "modulate", target_color, 0.15)
 	
 # Called when the button is pressed (darken effect)
 func _on_button_down(button: TextureButton):
@@ -165,8 +164,13 @@ func _on_button_down(button: TextureButton):
 
 # Button released (brighten)
 func _on_button_up(button: TextureButton):
-	var target_color = hover_colors.get(button.name, normal_color)
-	button.modulate = target_color
+ # If this button is “unlocked,” always go back to white
+	if button.is_in_group("unlocked"):
+		button.modulate = Color(1, 1, 1)
+	else:
+		# Otherwise restore whatever original color we saved
+		var orig_color = _orig_colors.get(button, normal_color)
+		button.modulate = orig_color
 	
 func mainShopButtonAnim():
 	if !shopAnim.is_playing():
@@ -382,4 +386,12 @@ func getButtonColors():
 		"LotteryStoreButton": Color(0, 0.5, 0),
 		"RecruitButton": recruitButtonColorPressed
 	}
+
+func updateUnlockedButton():
+	for button in mainStoreMenu.get_children():
+		if button.is_in_group("ui_button"):
+			if button.is_in_group("unlocked"):
+				_orig_colors[button] = Color.WHITE
+				hover_colors.erase(button.name)
+				pressed_colors.erase(button.name)
 

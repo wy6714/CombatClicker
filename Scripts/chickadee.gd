@@ -174,9 +174,7 @@ func _ready():
 		
 		icon.visible = false
 		icon.set_meta("status_name", null)
-		
-		
-		
+			
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if broken:
