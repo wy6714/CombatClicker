@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjxwnr51qki6q"]
+[gd_scene load_steps=8 format=3 uid="uid://cjxwnr51qki6q"]
 
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_37muy"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_rftqe"]
+[ext_resource type="Texture2D" uid="uid://1cdri5m3wqv8" path="res://Art/SkewedRectangleUltBar.png" id="5_b3alx"]
 [ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="5_r0s8o"]
+[ext_resource type="Texture2D" uid="uid://dpeuo88o3p7a7" path="res://Art/SkewedRectanglesUltFill.png" id="6_x6dd7"]
 
 [sub_resource type="BitMap" id="BitMap_5mnuc"]
 
@@ -19,9 +21,9 @@ vframes = 7
 
 [node name="LineEdit" type="LineEdit" parent="CharUI"]
 z_index = 1
-offset_left = -36.0
+offset_left = -32.6667
 offset_top = -43.3333
-offset_right = 75.0
+offset_right = 88.3333
 offset_bottom = -12.3333
 scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_rftqe")
@@ -69,6 +71,18 @@ scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_rftqe")
 theme_override_font_sizes/font_size = 24
 text = "Stats"
+
+[node name="PartyMemberProgressBar" type="TextureProgressBar" parent="."]
+clip_contents = true
+offset_left = 231.0
+offset_top = 552.0
+offset_right = 359.0
+offset_bottom = 680.0
+mouse_filter = 2
+max_value = 500.0
+texture_under = ExtResource("5_b3alx")
+texture_progress = ExtResource("6_x6dd7")
+tint_progress = Color(1, 1, 1, 0.784314)
 
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]

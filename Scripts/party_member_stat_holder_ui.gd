@@ -5,6 +5,8 @@ extends Control
 @onready var critDamageVal = $CritDamagePoints
 @onready var ultRegenVal = $UltRegenPoints
 @onready var cooldownVal = $CooldownPoints
+@onready var statusRateVal = $StatusRatePoints
+@onready var ultPotencyVal = $UltPotencyPoints
 
 @onready var upgradePointText = $UpgradePoints
 @onready var upgradePointCostText = $BuyUpgrade/UpgradePointsCost
@@ -14,11 +16,14 @@ extends Control
 @onready var critDamageText = $CrD
 @onready var ultRegenText = $UR
 @onready var cooldownText = $CD
-@onready var cooldownPoints = $CooldownPoints
+@onready var statusRateText = $SR
+@onready var ultPotencyText = $UP
+
 @onready var nameText = $Name
 
 var member
 @onready var player = get_node("/root/Main/Player")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -43,15 +48,23 @@ func _ready():
 func _process(delta):
 	pass
 
-func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, element):
+func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusRate, ultPotency, element):
 	cooldownText.visible = true
-	cooldownPoints.visible = true
+	cooldownVal.visible = true
+	
+	statusRateText.visible = true
+	statusRateVal.visible = true
+	
+	ultPotencyText.visible = true
+	ultPotencyVal.visible = true
 	
 	strengthVal.text = str(strength)
 	critRateVal.text = str(critRate)
 	critDamageVal.text = str(critDamage)
 	ultRegenVal.text = str(ultRegen)
 	cooldownVal.text = str(cooldown)
+	statusRateVal.text = str(statusRate)
+	ultPotencyVal.text = str(ultPotency)
 	
 	# Set all elemental buttons as inactive, so that we can later set the only active button on.
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
@@ -82,7 +95,13 @@ func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 	ultRegenVal.text = str(ultRegen)
 	
 	cooldownText.visible = false
-	cooldownPoints.visible = false
+	cooldownVal.visible = false
+	
+	statusRateText.visible = false
+	statusRateVal.visible = false
+	
+	ultPotencyText.visible = false
+	ultPotencyVal.visible = false
 	
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
 		btn.visible = false
@@ -122,13 +141,20 @@ func applyUpgrade(button):
 			member.ultRegen += 1
 			upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
 		if button.is_in_group("cooldown"):
-			member.cooldown -= 0.2
+			if(member.cooldown >= 1.2): # Max cooldown of 1
+				member.cooldown -= 0.2
 			upgradeTextColorCooldown(cooldownText, member.cooldown, member.baseCooldown)
+		if button.is_in_group("statusRate"):
+			member.statusRate += 1
+			upgradeTextColor(statusRateText, member.statusRate, member.baseStatusRate)
+		if button.is_in_group("ultPotency"):
+			member.ultPotency += 1
+			upgradeTextColor(ultPotencyText, member.ultPotency, member.baseUltPotency)
 			
 		member.upgradePoints -= 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
 		if(!member.isPlayer):
-			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.currentElement)
+			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.statusRate, member.ultPotency, member.currentElement)
 		else:
 			updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
 			player.strength = member.strength
@@ -139,7 +165,6 @@ func applyUpgrade(button):
 
 func removeUpgrade(button):
 	print("Removing upgrade from:", button.name)
-	print("STRENGTH:", str(member.strength), "MEMBER BASE STRENGTH: ",  str(member.baseStrength))
 	if(member.upgradePoints < member.totalAccumulatedUpgradePoints):
 		if button.is_in_group("strength"):
 			if member.strength > member.baseStrength:
@@ -166,12 +191,24 @@ func removeUpgrade(button):
 				member.cooldown += 0.2
 				updateUpgradeValues()
 				upgradeTextColorCooldown(cooldownText, member.cooldown, member.baseCooldown)
+				upgradeTextColor(critDamageText, member.critDamage, member.baseCritDamage)
+		if button.is_in_group("statusRate"):
+			if member.statusRate > member.baseStatusRate:
+				member.statusRate -= 1
+				updateUpgradeValues()
+				upgradeTextColor(statusRateText, member.statusRate, member.baseStatusRate)
+		if button.is_in_group("ultPotency"):
+			if member.ultPotency > member.baseUltPotency:
+				member.ultPotency -= 1
+				updateUpgradeValues()
+				upgradeTextColor(ultPotencyText, member.ultPotency, member.baseUltPotency)
+			
 				
 func updateUpgradeValues():
 	if(!member.isPlayer):
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
-		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.currentElement)
+		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.statusRate, member.ultPotency, member.currentElement)
 	else:
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
@@ -194,6 +231,8 @@ func updateMemberTextColors():
 	upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
 	if(!member.player):
 		upgradeTextColor(cooldownText, member.cooldown, member.baseCooldown)
+		upgradeTextColor(ultRegenText, member.statusRate, member.baseStatusRate)
+		upgradeTextColor(ultRegenText, member.ultPotency, member.baseUltPotency)
 
 func _on_elemental_button_pressed(button: TextureButton):
 	var selected = button.name

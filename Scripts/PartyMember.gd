@@ -9,8 +9,8 @@ extends Node2D
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: float = 0
 @export var cooldown: float = 7
-
-@export var statusRate: int = 1 # Chance of inflicting a status effect
+@export var statusRate: float = 5
+@export var ultPotency: float = 1
 
 @export var fire = false
 @export var water = false
@@ -25,6 +25,8 @@ extends Node2D
 @export var baseCritDamage: float = 2
 @export var baseUltRegen: float = 1
 @export var baseCooldown: float = 7
+@export var baseStatusRate: float = 5
+@export var baseUltPotency: float = 1
 
 @export var upgradePoints: int = 10
 @export var upgradeCostMultiplier: float = 1.0
@@ -45,6 +47,10 @@ var isPlayer = false
 var randomOffsetX = 0.0
 var randomOffsetY = 0.0
 
+@onready var ultCharge = 0
+@onready var ultLimit = 500
+
+@onready var partyMemberProgressBar = $PartyMemberProgressBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -76,19 +82,24 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	damage = damage * 1
 	if(currentEnemy != null):
 		if(!currentEnemy.inQTEState): #Dont attack while in QTEs
-			currentEnemy.takeDamage(damage, 0)
-			randomOffsetX = randf_range(-30.0, 30.0)
-			randomOffsetY = randf_range(-30.0, 30.0)
-			var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY)
-			playDamageAnim(randomLoc)
+			
+			currentEnemy.takeDamage(damage, 0) # Deal damage (no break damage)
+			
+			randomOffsetX = randf_range(-30.0, 30.0) # Offset animation positioning (X)
+			randomOffsetY = randf_range(-30.0, 30.0) # Offset animation positioning (Y)
+			var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY) # Random loc
+			playDamageAnim(randomLoc) #Now play the animation
 			DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
-			#activateAttackAnim()
-			updateScore()
-			ultBarSystem.updateUltProgress(ultRegen)
+			
+			updateScore() #Update score
+			ultBarSystem.updateUltProgress(ultRegen) #Update player's ult
 			if(crit):
 				ultBarSystem.updateUltProgress(ultRegen * critDamage)
 			crit = false
-			determineStatusEffect()
+			
+			updatePartyMemberUlt() # Gain party member ult points
+			useUlt() # See if party member can use their upt
+			determineStatusEffect() # See if status was applied, and determine which status
 
 func playDamageAnim(position: Vector2):
 	var rng = randi() % 2	
@@ -148,7 +159,7 @@ func _on_stats_button_button_down():
 	
 	if(!open):
 		statDisplay.visible = true
-		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, currentElement)
+		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusRate, ultPotency, currentElement)
 		open = true
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
@@ -161,3 +172,29 @@ func _on_stats_button_button_down():
 		statDisplay.visible = false
 		open = false
 		statDisplay.member = null
+		
+func updatePartyMemberUlt():
+	ultCharge += ultRegen * 5
+	partyMemberProgressBar.value = ultCharge
+	
+func useUlt():
+	if(ultCharge >= ultLimit):
+		partyMemberProgressBar.value = ultCharge
+		print("usingUlt")
+		match currentElement:
+			"Fire":
+				pass
+			"Water":
+				pass
+			"Wind":
+				pass
+			"Earth":
+				pass
+			"Electric":
+				pass
+			_:
+				pass
+				# Maybe non elementals just have a heavy hit?
+	
+		ultCharge = 0 #reset ult charge
+		#flash, maybe?
