@@ -225,6 +225,84 @@ theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
+[node name="SR" type="Label" parent="."]
+layout_mode = 0
+offset_left = 667.0
+offset_top = 221.0
+offset_right = 843.0
+offset_bottom = 244.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "Status Rate:"
+
+[node name="StatusRatePoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 877.0
+offset_top = 222.0
+offset_right = 953.0
+offset_bottom = 245.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "1"
+
+[node name="AddUpgradePoints" type="Button" parent="StatusRatePoints" groups=["add_upgrade", "statusRate"]]
+layout_mode = 0
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "+"
+
+[node name="RemoveUpgradePoints" type="Button" parent="StatusRatePoints" groups=["remove_upgrade", "statusRate"]]
+layout_mode = 0
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "-
+"
+
+[node name="UP" type="Label" parent="."]
+layout_mode = 0
+offset_left = 667.0
+offset_top = 249.0
+offset_right = 859.0
+offset_bottom = 272.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "Ult Potency:"
+
+[node name="UltPotencyPoints" type="Label" parent="."]
+layout_mode = 0
+offset_left = 877.0
+offset_top = 250.0
+offset_right = 953.0
+offset_bottom = 273.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "1"
+
+[node name="AddUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["add_upgrade", "ultPotency"]]
+layout_mode = 0
+offset_left = 63.0
+offset_top = -1.0
+offset_right = 81.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "+"
+
+[node name="RemoveUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["remove_upgrade", "ultPotency"]]
+layout_mode = 0
+offset_left = 77.0
+offset_top = -1.0
+offset_right = 95.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "-
+"
+
 [node name="UpgradePoints" type="Label" parent="."]
 layout_mode = 0
 offset_left = 756.0
