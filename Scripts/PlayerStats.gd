@@ -1,6 +1,7 @@
 extends Node2D
 
 # STATS
+@export var characterName: String = "You"
 @export var strength: float = 1
 @export var critRate: float = 5
 @export var critDamage: float = 2
@@ -8,6 +9,16 @@ extends Node2D
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: float = 0
 @export var cooldown: float = 7
+@export var statusRate: float = 0
+@export var ultPotency: float = 0
+
+@export var bonusStrength: float = 0
+@export var bonusCritRate: float = 0
+@export var bonusCritDamage: float = 0
+@export var bonusUltRegen: float = 0
+@export var bonusCooldown: float = 0
+@export var bonusStatusRate: float = 0
+@export var bonusUltPotency: float = 0
 
 @export var baseStrength: float = 1
 @export var baseCritRate: float = 5 
@@ -48,7 +59,7 @@ func _on_stats_button_button_down():
 	
 	if(!open):
 		statDisplay.visible = true
-		statDisplay.updateAllPlayerValues(player.strength, player.critRate, player.critDamage, player.energyRecharge)
+		statDisplay.updateAllPlayerValues(self)
 		open = true
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
@@ -60,3 +71,7 @@ func _on_stats_button_button_down():
 		open = false
 		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.member = null
+
+
+func _on_line_edit_text_changed(new_text):
+	characterName = new_text

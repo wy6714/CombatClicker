@@ -4,7 +4,7 @@ extends Node2D
 #@export var strength: int = 100 # DEBUG STRENGTH
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var energyRecharge: float = 1
+@export var ultRegen: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var pureDamage: int = 0
@@ -82,6 +82,7 @@ var bigHit = false
 var weaponStats = {}
 
 var ultRushDamageMultiplier = 2.0
+var characterName = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -308,9 +309,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	particleEffect(200, 300, 3, 5, 0.3)
 	activateAttackAnim()
 	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"])
+	ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress(energyRecharge * critDamage + weaponStats["ult_regen"])
+		ultBarSystem.updateUltProgress(ultRegen * critDamage + weaponStats["ult_regen"])
 	crit = false
 	bigHit = false
 			
@@ -330,9 +331,9 @@ func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(500, 700, 4, 6, 0.25)
 	
-	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
+	ultBarSystem.updateUltProgress(ultRegen * 5 + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
+		ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
 	crit = false
 	bigHit = false
 	
@@ -350,9 +351,9 @@ func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
 	DamageNumber.display_number(ceili(damage / 40), damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffect(100, 200, 2, 3, 0.3)
 	activateAttackAnimClaymoreFlimsy() 
-	ultBarSystem.updateUltProgress(energyRecharge * 5 + weaponStats["ult_regen"])
+	ultBarSystem.updateUltProgress(ultRegen * 5 + weaponStats["ult_regen"])
 	if(crit):
-		ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
+		ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
 	crit = false
 	bigHit = false
 	print("flimsy ;;")
@@ -371,9 +372,9 @@ func drillDamage(hand: String):
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	particleEffectDrill(400, 800, 4, 5, 0.13)
 	updateScore()
-	ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"])
+	ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"])
 	if crit:
-		ultBarSystem.updateUltProgress(energyRecharge + weaponStats["ult_regen"] * critDamage)
+		ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"] * critDamage)
 	crit = false
 	bigHit = false
 	
@@ -489,7 +490,7 @@ func useUlt():
 		ultAttackAnim()
 		ultBarSystem.updateUltProgress(0)
 		if(crit):
-			ultBarSystem.updateUltProgress((energyRecharge * 5 + weaponStats["ult_regen"]) * critDamage)
+			ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
 		crit = false
 		bigHit = false
 		ultBarSystem.subtractUltProgress()

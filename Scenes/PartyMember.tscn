@@ -9,7 +9,7 @@
 
 [sub_resource type="BitMap" id="BitMap_5mnuc"]
 
-[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "PartyMember", "memberData"]]
+[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "memberData"]]
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]
@@ -84,5 +84,6 @@ texture_under = ExtResource("5_b3alx")
 texture_progress = ExtResource("6_x6dd7")
 tint_progress = Color(1, 1, 1, 0.784314)
 
+[connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]

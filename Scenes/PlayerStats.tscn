@@ -68,5 +68,6 @@ theme_override_fonts/font = ExtResource("3_m27gj")
 theme_override_font_sizes/font_size = 24
 text = "Stats"
 
+[connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]

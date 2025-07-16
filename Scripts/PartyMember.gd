@@ -2,6 +2,7 @@ extends Node2D
 #Party members will act as a more robust, fleshed out, "autoclicker"
 
 # STATS
+@export var characterName: String = "Member"
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
@@ -181,7 +182,7 @@ func _on_stats_button_button_down():
 	
 	if(!open):
 		statDisplay.visible = true
-		statDisplay.updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusRate, ultPotency, currentElement)
+		statDisplay.updateAllValues(self)
 		open = true
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
@@ -200,35 +201,66 @@ func updatePartyMemberUlt():
 	partyMemberProgressBar.value = ultCharge
 	
 func useUlt():
+	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
+	
+	#If you have ult
 	if(ultCharge >= ultLimit):	
-		
 		print("usingUlt")
 		ultCharge = 0 #reset ult charge
 		partyMemberProgressBar.value = ultCharge
 		
 		var amount = ultPotency + bonusUltPotency  # how much every ult gives
 		
+		# Get the buff, and apply it to whole team. Teammates are in "Buffable"
 		match currentElement:
 			"Fire":
-				bonusStrength += amount
-				print("BONUS STRENGTH APPLICATION: ", amount)
+				for teammate in get_tree().get_nodes_in_group("Buffable"):
+					if teammate.is_in_group("Player"):
+						teammate.bonusStrength += amount
+						#statDisplay.playerStatUpdate(teammate)
+					else:
+						teammate.bonusStrength += amount
+						#statDisplay.memberStatUpdate(teammate)
+						
+					print("BONUS STRENGTH APPLICATION: ", amount)
 			"Water":
-				bonusStatusRate += amount
-				print("BONUS STATUS RATE (?) APPLICATION: ", amount)
+				for teammate in get_tree().get_nodes_in_group("Buffable"):
+					if teammate.is_in_group("Player"):
+						teammate.bonusCritDamage += amount
+						#statDisplay.playerStatUpdate(teammate)
+					else:
+						teammate.bonusCritDamage += amount
+						#statDisplay.memberStatUpdate(teammate)
+					print("BONUS STATUS RATE (?) APPLICATION: ", amount)
 			"Wind":
-				bonusCritRate += amount
-				print("BONUS CRIT RATE APPLICATION: ", amount)
+				for teammate in get_tree().get_nodes_in_group("Buffable"):
+					if teammate.is_in_group("Player"):
+						teammate.bonusCritRate += amount
+						#statDisplay.playerStatUpdate(teammate)
+					else:
+						teammate.bonusCritRate += amount
+						#statDisplay.memberStatUpdate(teammate)
+					print("BONUS CRIT RATE APPLICATION: ", amount)
 			"Earth":
-				bonusCritDamage += amount
-				print("BONUS CRIT DAMAGE APPLICATION: ", amount)
+				for teammate in get_tree().get_nodes_in_group("Buffable"):
+					if teammate.is_in_group("Player"):
+						teammate.bonusCritDamage += amount
+						#statDisplay.playerStatUpdate(teammate)
+					else:
+						teammate.bonusCritDamage += amount
+						#statDisplay.memberStatUpdate(teammate)
+					print("BONUS CRIT DAMAGE APPLICATION: ", amount)
 			"Electric":
-				bonusUltRegen += amount
-				print("BONUS ULT REGEN APPLICATION: ", amount)
+				for teammate in get_tree().get_nodes_in_group("Buffable"):
+					if teammate.is_in_group("Player"):
+						teammate.bonusUltRegen += amount
+						#statDisplay.playerStatUpdate(teammate)
+					else:
+						teammate.bonusUltRegen += amount
+						#statDisplay.memberStatUpdate(teammate)
+					print("BONUS ULT REGEN APPLICATION: ", amount)
 			_:
 				return	
-			
-		
-		# These need to be applied to the whole team...
 			
 		# Spawn a brand‐new timer for this buff
 		var t = Timer.new()
@@ -238,25 +270,34 @@ func useUlt():
 		# When it fires, remove precisely this amount
 		t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
 		t.start()
+		
 
 func _on_buff_timeout(element: String, amount: float) -> void:
+	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
 	# remove the buff we applied earlier
-	match element:
-		"Fire":
-			bonusStrength -= amount
-		"Water":
-			bonusStatusRate -= amount
-		"Wind":
-			bonusCritRate -= amount
-		"Earth":
-			bonusCritDamage -= amount
-		"Electric":
-			bonusUltRegen -= amount
-
+	for teammate in get_tree().get_nodes_in_group("Buffable"):
+		match element:
+			"Fire":
+				teammate.bonusStrength -= amount
+			"Water":
+				teammate.bonusCritDamage -= amount
+			"Wind":
+				teammate.bonusCritRate -= amount
+			"Earth":
+				teammate.bonusCritDamage -= amount
+			"Electric":
+				teammate.bonusUltRegen -= amount
+			
+		# Update stat display (live time)	
+		#if teammate.is_in_group("Player"):
+			#statDisplay.playerStatUpdate(teammate)
+		#else:
+			#statDisplay.memberStatUpdate(teammate)
+			
 	# clean up
 	if _active_buffs.has(element):
 		_active_buffs[element].queue_free()
 		_active_buffs.erase(element)
 
-
-
+func _on_line_edit_text_changed(new_text):
+	characterName = new_text

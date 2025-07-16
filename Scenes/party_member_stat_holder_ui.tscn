@@ -50,9 +50,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StrengthPoints" groups=["add_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -60,14 +60,25 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StrengthPoints" groups=["remove_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsSTR" type="Label" parent="StrengthPoints"]
+layout_mode = 0
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="CrR" type="Label" parent="."]
 layout_mode = 0
@@ -89,9 +100,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CritRatePoints" groups=["add_upgrade", "critRate"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -99,14 +110,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CritRatePoints" groups=["critRate", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsCR" type="Label" parent="CritRatePoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="CrD" type="Label" parent="."]
 layout_mode = 0
@@ -128,9 +149,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CritDamagePoints" groups=["add_upgrade", "critDamage"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -138,14 +159,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CritDamagePoints" groups=["critDamage", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsCrD" type="Label" parent="CritDamagePoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="UR" type="Label" parent="."]
 layout_mode = 0
@@ -167,9 +198,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="UltRegenPoints" groups=["add_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -177,14 +208,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="UltRegenPoints" groups=["remove_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsUR" type="Label" parent="UltRegenPoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="CD" type="Label" parent="."]
 layout_mode = 0
@@ -206,9 +247,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="CooldownPoints" groups=["add_upgrade", "cooldown"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -216,14 +257,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="CooldownPoints" groups=["cooldown", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsCD" type="Label" parent="CooldownPoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="SR" type="Label" parent="."]
 layout_mode = 0
@@ -245,9 +296,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatusRatePoints" groups=["add_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -255,14 +306,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatusRatePoints" groups=["remove_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsSR" type="Label" parent="StatusRatePoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="UP" type="Label" parent="."]
 layout_mode = 0
@@ -284,9 +345,9 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["add_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 63.0
+offset_left = 135.0
 offset_top = -1.0
-offset_right = 81.0
+offset_right = 159.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -294,14 +355,24 @@ text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["remove_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 77.0
+offset_left = 156.0
 offset_top = -1.0
-offset_right = 95.0
+offset_right = 180.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
+
+[node name="BonusBuffPointsUP" type="Label" parent="UltPotencyPoints"]
+offset_left = 69.0
+offset_top = 4.0
+offset_right = 109.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
 
 [node name="UpgradePoints" type="Label" parent="."]
 layout_mode = 0
