@@ -48,7 +48,9 @@ func _ready():
 func _process(delta):
 	pass
 
-func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusRate, ultPotency, element):
+func updateAllValues(member):
+	nameText.text = member.characterName
+
 	cooldownText.visible = true
 	cooldownVal.visible = true
 	
@@ -58,19 +60,29 @@ func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusR
 	ultPotencyText.visible = true
 	ultPotencyVal.visible = true
 	
-	strengthVal.text = str(strength)
-	critRateVal.text = str(critRate)
-	critDamageVal.text = str(critDamage)
-	ultRegenVal.text = str(ultRegen)
-	cooldownVal.text = str(cooldown)
-	statusRateVal.text = str(statusRate)
-	ultPotencyVal.text = str(ultPotency)
+	strengthVal.text = str(member.strength)
+	critRateVal.text = str(member.critRate)
+	critDamageVal.text = str(member.critDamage)
+	ultRegenVal.text = str(member.ultRegen)
+	cooldownVal.text = str(member.cooldown)
+	statusRateVal.text = str(member.statusRate)
+	ultPotencyVal.text = str(member.ultPotency)
+	
+	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
+	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
+	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
+	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
+	
+	$CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
+	$StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
+	$UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
+	
 	
 	# Set all elemental buttons as inactive, so that we can later set the only active button on.
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
 				btn.button_pressed = false
 				
-	match element:
+	match member.currentElement:
 		"Fire":
 			$FireButton.button_pressed = true
 		"Water":
@@ -88,11 +100,57 @@ func updateAllValues(strength, critRate, critDamage, ultRegen, cooldown, statusR
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
 		btn.visible = true
 	
-func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
-	strengthVal.text = str(strength)
-	critRateVal.text = str(critRate)
-	critDamageVal.text = str(critDamage)
-	ultRegenVal.text = str(ultRegen)
+# Updates all member values, but is invisible.	(Doesnt bring up UI)
+func memberStatUpdate(member):
+	nameText.text = member.characterName
+	strengthVal.text = str(member.strength)
+	critRateVal.text = str(member.critRate)
+	critDamageVal.text = str(member.critDamage)
+	ultRegenVal.text = str(member.ultRegen)
+	cooldownVal.text = str(member.cooldown)
+	statusRateVal.text = str(member.statusRate)
+	ultPotencyVal.text = str(member.ultPotency)
+	
+	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
+	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
+	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
+	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
+	
+	$CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
+	$StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
+	$UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
+	
+	
+	# Set all elemental buttons as inactive, so that we can later set the only active button on.
+	for btn in get_tree().get_nodes_in_group("ElementalButton"):
+				btn.button_pressed = false
+				
+	match member.currentElement:
+		"Fire":
+			$FireButton.button_pressed = true
+		"Water":
+			$WaterButton.button_pressed = true
+		"Wind":
+			$WindButton.button_pressed = true
+		"Earth":
+			$EarthButton.button_pressed = true
+		"Electric":
+			$ElectricButton.button_pressed = true
+		_:
+			print("None are selected. I think this can be deleted then tbh")
+	
+func updateAllPlayerValues(player):
+	
+	nameText.text = player.characterName
+	strengthVal.text = str(player.strength)
+	critRateVal.text = str(player.critRate)
+	critDamageVal.text = str(player.critDamage)
+	ultRegenVal.text = str(player.ultRegen)
+	
+	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
+	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
+	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
+	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
 	
 	cooldownText.visible = false
 	cooldownVal.visible = false
@@ -105,7 +163,20 @@ func updateAllPlayerValues(strength, critRate, critDamage, ultRegen):
 	
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
 		btn.visible = false
-		
+
+# Updates all player stats, but is invisible (doesnt bring up UI)		
+func playerStatUpdate(player):
+	
+	nameText.text = player.characterName
+	strengthVal.text = str(player.strength)
+	critRateVal.text = str(player.critRate)
+	critDamageVal.text = str(player.critDamage)
+	ultRegenVal.text = str(player.ultRegen)
+	
+	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
+	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
+	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
+	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
 	
 func _on_buy_upgrade_button_down():
 	if(player.score >= member.upgradePointCost):
@@ -154,9 +225,9 @@ func applyUpgrade(button):
 		member.upgradePoints -= 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
 		if(!member.isPlayer):
-			updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.statusRate, member.ultPotency, member.currentElement)
+			updateAllValues(member)
 		else:
-			updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
+			updateAllPlayerValues(member)
 			player.strength = member.strength
 			player.critRate = member.critRate
 			player.critDamage = member.critDamage
@@ -208,11 +279,11 @@ func updateUpgradeValues():
 	if(!member.isPlayer):
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
-		updateAllValues(member.strength, member.critRate, member.critDamage, member.ultRegen, member.cooldown, member.statusRate, member.ultPotency, member.currentElement)
+		updateAllValues(member)
 	else:
 		member.upgradePoints += 1
 		upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
-		updateAllPlayerValues(member.strength, member.critRate, member.critDamage, member.ultRegen)
+		updateAllPlayerValues(member)
 
 func upgradeTextColor(statText, stat, baseStat):
 	var statDiff = stat - baseStat

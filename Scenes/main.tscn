@@ -54,7 +54,7 @@ position = Vector2(570, 337)
 
 [node name="Player" parent="." instance=ExtResource("5_yvxiw")]
 
-[node name="PartyMemberPlayer" parent="." groups=["memberData"] instance=ExtResource("6_b5i3i")]
+[node name="PartyMemberPlayer" parent="." groups=["Buffable", "Player", "memberData"] instance=ExtResource("6_b5i3i")]
 position = Vector2(42, 0)
 
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
