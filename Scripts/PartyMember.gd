@@ -5,12 +5,30 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 1
-@export var crit: bool = false # Tracking IF we crit
-@export var damage: float = 0
+@export var ultRegen: float = 90
 @export var cooldown: float = 7
 @export var statusRate: float = 5
-@export var ultPotency: float = 1
+@export var ultPotency: float = 10
+
+@export var crit: bool = false # Tracking IF we crit
+@export var damage: float = 0
+
+@export var bonusStrength: float = 0
+@export var bonusCritRate: float = 0
+@export var bonusCritDamage: float = 0
+@export var bonusUltRegen: float = 0
+@export var bonusCooldown: float = 0
+@export var bonusStatusRate: float = 0
+@export var bonusUltPotency: float = 0
+
+# map element names directly to your bonus‑field names
+var ULT_BUFFS = {
+	"Fire":     "bonusStrength",
+	"Water":    "bonusUltPotency",
+	"Wind":     "bonusCritRate",
+	"Earth":    "bonusCritDamage",
+	"Electric": "bonusUltRegen",
+}
 
 @export var fire = false
 @export var water = false
@@ -32,6 +50,10 @@ extends Node2D
 @export var upgradeCostMultiplier: float = 1.0
 @export var totalAccumulatedUpgradePoints: int = 10
 @export var upgradePointCost: int = 1000
+@export var buffDuration: float = 10
+
+# track active buff‐timers by element
+var _active_buffs := {}    # element (String) → Timer
 
 # REFERENCES
 @onready var player = get_node("/root/Main/Player")
@@ -61,7 +83,7 @@ func _ready():
 	damageCooldown.wait_time = cooldown # Have them start off swinging immediately
 	
 func updateTimer():
-	damageCooldown.wait_time = cooldown
+	damageCooldown.wait_time = cooldown - bonusCooldown
 	print(damageCooldown.wait_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -70,11 +92,11 @@ func _process(delta):
 	
 func determineDamage():
 	currentEnemy = player.currentEnemy
-	damage = strength
+	damage = strength + bonusStrength # (Bonus from potential buff)
 	var rng = randf_range(1, 100)
-	if(rng <= critRate):
+	if(rng <= critRate + bonusCritRate):
 		crit = true
-		damage = damage * critDamage
+		damage = damage * (critDamage + bonusCritDamage)
 		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
@@ -92,9 +114,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 			DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
 			
 			updateScore() #Update score
-			ultBarSystem.updateUltProgress(ultRegen) #Update player's ult
+			ultBarSystem.updateUltProgress(ultRegen + bonusUltRegen) #Update player's ult
 			if(crit):
-				ultBarSystem.updateUltProgress(ultRegen * critDamage)
+				ultBarSystem.updateUltProgress((ultRegen + bonusUltRegen) * critDamage)
 			crit = false
 			
 			updatePartyMemberUlt() # Gain party member ult points
@@ -141,7 +163,7 @@ func determineStatusEffect():
 	
 	print("Current Element According to Member: ", currentElement)
 	
-	if(rng >= statusRate):
+	if(rng >= statusRate + bonusStatusRate):
 		if(fire):
 			print("Burn")
 		if(water):
@@ -174,27 +196,67 @@ func _on_stats_button_button_down():
 		statDisplay.member = null
 		
 func updatePartyMemberUlt():
-	ultCharge += ultRegen * 5
+	ultCharge += (ultRegen + bonusUltRegen) * 5
 	partyMemberProgressBar.value = ultCharge
 	
 func useUlt():
-	if(ultCharge >= ultLimit):
-		partyMemberProgressBar.value = ultCharge
+	if(ultCharge >= ultLimit):	
+		
 		print("usingUlt")
+		ultCharge = 0 #reset ult charge
+		partyMemberProgressBar.value = ultCharge
+		
+		var amount = ultPotency + bonusUltPotency  # how much every ult gives
+		
 		match currentElement:
 			"Fire":
-				pass
+				bonusStrength += amount
+				print("BONUS STRENGTH APPLICATION: ", amount)
 			"Water":
-				pass
+				bonusStatusRate += amount
+				print("BONUS STATUS RATE (?) APPLICATION: ", amount)
 			"Wind":
-				pass
+				bonusCritRate += amount
+				print("BONUS CRIT RATE APPLICATION: ", amount)
 			"Earth":
-				pass
+				bonusCritDamage += amount
+				print("BONUS CRIT DAMAGE APPLICATION: ", amount)
 			"Electric":
-				pass
+				bonusUltRegen += amount
+				print("BONUS ULT REGEN APPLICATION: ", amount)
 			_:
-				pass
-				# Maybe non elementals just have a heavy hit?
-	
-		ultCharge = 0 #reset ult charge
-		#flash, maybe?
+				return	
+			
+		
+		# These need to be applied to the whole team...
+			
+		# Spawn a brand‐new timer for this buff
+		var t = Timer.new()
+		t.one_shot = true
+		t.wait_time = buffDuration
+		add_child(t)
+		# When it fires, remove precisely this amount
+		t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
+		t.start()
+
+func _on_buff_timeout(element: String, amount: float) -> void:
+	# remove the buff we applied earlier
+	match element:
+		"Fire":
+			bonusStrength -= amount
+		"Water":
+			bonusStatusRate -= amount
+		"Wind":
+			bonusCritRate -= amount
+		"Earth":
+			bonusCritDamage -= amount
+		"Electric":
+			bonusUltRegen -= amount
+
+	# clean up
+	if _active_buffs.has(element):
+		_active_buffs[element].queue_free()
+		_active_buffs.erase(element)
+
+
+
