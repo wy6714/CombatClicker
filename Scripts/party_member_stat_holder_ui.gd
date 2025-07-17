@@ -18,10 +18,11 @@ extends Control
 @onready var cooldownText = $CD
 @onready var statusRateText = $SR
 @onready var ultPotencyText = $UP
-
 @onready var nameText = $Name
 
 var member
+var currentlyDisplayingMember
+var currentElement = ""
 @onready var player = get_node("/root/Main/Player")
 
 
@@ -81,20 +82,21 @@ func updateAllValues(member):
 	# Set all elemental buttons as inactive, so that we can later set the only active button on.
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
 				btn.button_pressed = false
-				
-	match member.currentElement:
-		"Fire":
-			$FireButton.button_pressed = true
-		"Water":
-			$WaterButton.button_pressed = true
-		"Wind":
-			$WindButton.button_pressed = true
-		"Earth":
-			$EarthButton.button_pressed = true
-		"Electric":
-			$ElectricButton.button_pressed = true
-		_:
-			print("None are selected. I think this can be deleted then tbh")
+	
+	if(currentElement != null):			
+		match member.currentElement:
+			"Fire":
+				$FireButton.button_pressed = true
+			"Water":
+				$WaterButton.button_pressed = true
+			"Wind":
+				$WindButton.button_pressed = true
+			"Earth":
+				$EarthButton.button_pressed = true
+			"Electric":
+				$ElectricButton.button_pressed = true
+			_:
+				print("None are selected. This might be the player")
 	
 	# Party members actually set up their element, unlike the player.	
 	for btn in get_tree().get_nodes_in_group("ElementalButton"):
@@ -356,4 +358,16 @@ func _on_elemental_button_pressed(button: TextureButton):
 
 	print("Current element: ", member.currentElement)
 			
-		
+func realTimeStatMenuUpdate():
+	for teammate in get_tree().get_nodes_in_group("Buffable"):
+		if(teammate.is_in_group("Player")):
+			playerStatUpdate(teammate)
+		else:
+			memberStatUpdate(teammate)
+			
+	self.visible = true
+	updateAllValues(currentlyDisplayingMember)
+	upgradePointText.text = "Upgrade Points " + str(currentlyDisplayingMember.upgradePoints)
+	upgradePointCostText.text = str(currentlyDisplayingMember.upgradePointCost) + " points"
+	updateMemberTextColors()
+	nameText.text = currentlyDisplayingMember.characterName

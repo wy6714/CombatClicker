@@ -6,7 +6,7 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 90
+@export var ultRegen: float = 40
 @export var cooldown: float = 7
 @export var statusRate: float = 5
 @export var ultPotency: float = 10
@@ -51,7 +51,7 @@ var ULT_BUFFS = {
 @export var upgradeCostMultiplier: float = 1.0
 @export var totalAccumulatedUpgradePoints: int = 10
 @export var upgradePointCost: int = 1000
-@export var buffDuration: float = 10
+@export var buffDuration: float = 15
 
 # track active buff‐timers by element
 var _active_buffs := {}    # element (String) → Timer
@@ -188,9 +188,8 @@ func _on_stats_button_button_down():
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
 		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
 		statDisplay.updateMemberTextColors()
-		print(statDisplay.nameText.text)
-		print(nameLine.text)
-		statDisplay.nameText.text = nameLine.text
+		statDisplay.nameText.text = characterName
+		statDisplay.currentlyDisplayingMember = self
 	elif(open):
 		statDisplay.visible = false
 		open = false
@@ -217,50 +216,51 @@ func useUlt():
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					if teammate.is_in_group("Player"):
 						teammate.bonusStrength += amount
-						#statDisplay.playerStatUpdate(teammate)
 					else:
 						teammate.bonusStrength += amount
-						#statDisplay.memberStatUpdate(teammate)
 						
 					print("BONUS STRENGTH APPLICATION: ", amount)
 			"Water":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					if teammate.is_in_group("Player"):
 						teammate.bonusCritDamage += amount
-						#statDisplay.playerStatUpdate(teammate)
 					else:
 						teammate.bonusCritDamage += amount
-						#statDisplay.memberStatUpdate(teammate)
 					print("BONUS STATUS RATE (?) APPLICATION: ", amount)
 			"Wind":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					if teammate.is_in_group("Player"):
 						teammate.bonusCritRate += amount
-						#statDisplay.playerStatUpdate(teammate)
 					else:
 						teammate.bonusCritRate += amount
-						#statDisplay.memberStatUpdate(teammate)
 					print("BONUS CRIT RATE APPLICATION: ", amount)
 			"Earth":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					if teammate.is_in_group("Player"):
 						teammate.bonusCritDamage += amount
-						#statDisplay.playerStatUpdate(teammate)
 					else:
 						teammate.bonusCritDamage += amount
-						#statDisplay.memberStatUpdate(teammate)
 					print("BONUS CRIT DAMAGE APPLICATION: ", amount)
 			"Electric":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					if teammate.is_in_group("Player"):
 						teammate.bonusUltRegen += amount
-						#statDisplay.playerStatUpdate(teammate)
 					else:
 						teammate.bonusUltRegen += amount
-						#statDisplay.memberStatUpdate(teammate)
 					print("BONUS ULT REGEN APPLICATION: ", amount)
 			_:
 				return	
+			
+		if(open):
+			if(statDisplay.currentlyDisplayingMember.is_in_group("Player")):
+				statDisplay.updateAllPlayerValues(statDisplay.currentlyDisplayingMember)
+			else:
+				statDisplay.updateAllValues(statDisplay.currentlyDisplayingMember)
+				
+			statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.currentlyDisplayingMember.upgradePoints)
+			statDisplay.upgradePointCostText.text = str(statDisplay.currentlyDisplayingMember.upgradePointCost) + " points"
+			statDisplay.updateMemberTextColors()
+			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
 			
 		# Spawn a brand‐new timer for this buff
 		var t = Timer.new()
@@ -274,6 +274,7 @@ func useUlt():
 
 func _on_buff_timeout(element: String, amount: float) -> void:
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
+	print("buff is off............")
 	# remove the buff we applied earlier
 	for teammate in get_tree().get_nodes_in_group("Buffable"):
 		match element:
@@ -288,16 +289,23 @@ func _on_buff_timeout(element: String, amount: float) -> void:
 			"Electric":
 				teammate.bonusUltRegen -= amount
 			
-		# Update stat display (live time)	
-		#if teammate.is_in_group("Player"):
-			#statDisplay.playerStatUpdate(teammate)
-		#else:
-			#statDisplay.memberStatUpdate(teammate)
+		
 			
 	# clean up
 	if _active_buffs.has(element):
 		_active_buffs[element].queue_free()
 		_active_buffs.erase(element)
+	
+	if(open):
+			if(statDisplay.currentlyDisplayingMember.is_in_group("Player")):
+				statDisplay.updateAllPlayerValues(statDisplay.currentlyDisplayingMember)
+			else:
+				statDisplay.updateAllValues(statDisplay.currentlyDisplayingMember)
+				
+			statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.currentlyDisplayingMember.upgradePoints)
+			statDisplay.upgradePointCostText.text = str(statDisplay.currentlyDisplayingMember.upgradePointCost) + " points"
+			statDisplay.updateMemberTextColors()
+			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
 
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text

@@ -11,6 +11,7 @@ extends Node2D
 @export var cooldown: float = 7
 @export var statusRate: float = 0
 @export var ultPotency: float = 0
+var currentElement = ""
 
 @export var bonusStrength: float = 0
 @export var bonusCritRate: float = 0
@@ -61,11 +62,13 @@ func _on_stats_button_button_down():
 		statDisplay.visible = true
 		statDisplay.updateAllPlayerValues(self)
 		open = true
+		
 		statDisplay.member = $"."
 		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
 		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
 		statDisplay.updateMemberTextColors()
-		statDisplay.nameText.text = nameLine.text
+		statDisplay.nameText.text = characterName
+		statDisplay.currentlyDisplayingMember = self
 	elif(open):
 		statDisplay.visible = false
 		open = false
