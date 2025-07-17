@@ -120,6 +120,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsCR" type="Label" parent="CritRatePoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
@@ -169,6 +170,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsCrD" type="Label" parent="CritDamagePoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
@@ -218,6 +220,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsUR" type="Label" parent="UltRegenPoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
@@ -267,6 +270,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsCD" type="Label" parent="CooldownPoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
@@ -316,6 +320,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsSR" type="Label" parent="StatusRatePoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
@@ -365,6 +370,7 @@ text = "-
 "
 
 [node name="BonusBuffPointsUP" type="Label" parent="UltPotencyPoints"]
+layout_mode = 0
 offset_left = 69.0
 offset_top = 4.0
 offset_right = 109.0
