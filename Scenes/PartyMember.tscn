@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cjxwnr51qki6q"]
+[gd_scene load_steps=14 format=3 uid="uid://cjxwnr51qki6q"]
 
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_37muy"]
@@ -6,8 +6,124 @@
 [ext_resource type="Texture2D" uid="uid://1cdri5m3wqv8" path="res://Art/SkewedRectangleUltBar.png" id="5_b3alx"]
 [ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="5_r0s8o"]
 [ext_resource type="Texture2D" uid="uid://dpeuo88o3p7a7" path="res://Art/SkewedRectanglesUltFill.png" id="6_x6dd7"]
+[ext_resource type="Texture2D" uid="uid://ctulebq7ybhap" path="res://Art/SkewedRectangleFlash.png" id="7_4fhky"]
+[ext_resource type="Texture2D" uid="uid://c3dh0i2oxpvut" path="res://Art/SkewedSquareLines.png" id="8_h4336"]
 
 [sub_resource type="BitMap" id="BitMap_5mnuc"]
+
+[sub_resource type="Animation" id="Animation_po7sk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BuffLines2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CharUIFlash:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CharUIFlash:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BuffLines2:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_lgo5r"]
+resource_name = "buff"
+length = 0.65
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BuffLines2:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0499388, 0.100321, 0.156142, 0.205283, 0.256362, 0.308894, 0.363847, 0.419285, 0.47327, 0.527255, 0.578334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BuffLines2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.640405),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
+[sub_resource type="Animation" id="Animation_unpg4"]
+resource_name = "flash"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CharUIFlash:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.00102138, 0, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CharUIFlash:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_icp1n"]
+_data = {
+"RESET": SubResource("Animation_po7sk"),
+"buff": SubResource("Animation_lgo5r"),
+"flash": SubResource("Animation_unpg4")
+}
 
 [node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "memberData"]]
 script = ExtResource("1_lepxi")
@@ -36,6 +152,41 @@ flat = true
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
 autostart = true
 
+[node name="PartyMemberProgressBar" type="TextureProgressBar" parent="."]
+clip_contents = true
+offset_left = 231.0
+offset_top = 552.0
+offset_right = 359.0
+offset_bottom = 680.0
+mouse_filter = 2
+max_value = 500.0
+texture_under = ExtResource("5_b3alx")
+texture_progress = ExtResource("6_x6dd7")
+tint_progress = Color(1, 1, 1, 0.784314)
+
+[node name="StatsText" type="Label" parent="."]
+z_index = 98
+offset_left = 248.0
+offset_top = 571.0
+offset_right = 368.0
+offset_bottom = 595.0
+scale = Vector2(0.5, 0.5)
+theme_override_fonts/font = ExtResource("3_rftqe")
+theme_override_font_sizes/font_size = 24
+text = "Stats"
+
+[node name="StatsButton" type="TextureButton" parent="."]
+offset_left = 239.0
+offset_top = 565.0
+offset_right = 326.0
+offset_bottom = 605.0
+scale = Vector2(1.2, 0.578)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("5_r0s8o")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="NameEditorBackdrop" type="TextureButton" parent="."]
 offset_left = 246.0
 offset_top = 535.0
@@ -50,39 +201,30 @@ texture_click_mask = SubResource("BitMap_5mnuc")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="StatsButton" type="TextureButton" parent="."]
-offset_left = 239.0
-offset_top = 565.0
-offset_right = 326.0
-offset_bottom = 605.0
-scale = Vector2(1.2, 0.578)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture_normal = ExtResource("5_r0s8o")
-ignore_texture_size = true
-stretch_mode = 0
+[node name="CharUIFlash" type="Sprite2D" parent="."]
+visible = false
+z_index = 999
+position = Vector2(300, 600)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("7_4fhky")
 
-[node name="StatsText" type="Label" parent="."]
-offset_left = 248.0
-offset_top = 571.0
-offset_right = 368.0
-offset_bottom = 595.0
-scale = Vector2(0.5, 0.5)
-theme_override_fonts/font = ExtResource("3_rftqe")
-theme_override_font_sizes/font_size = 24
-text = "Stats"
+[node name="BuffLines2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(300, 600)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_h4336")
+hframes = 2
+vframes = 3
 
-[node name="PartyMemberProgressBar" type="TextureProgressBar" parent="."]
-clip_contents = true
-offset_left = 231.0
-offset_top = 552.0
-offset_right = 359.0
-offset_bottom = 680.0
-mouse_filter = 2
-max_value = 500.0
-texture_under = ExtResource("5_b3alx")
-texture_progress = ExtResource("6_x6dd7")
-tint_progress = Color(1, 1, 1, 0.784314)
+[node name="UltFlash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_icp1n")
+}
+
+[node name="BuffLines" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_icp1n")
+}
 
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]

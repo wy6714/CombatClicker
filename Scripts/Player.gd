@@ -160,7 +160,6 @@ func statusEffect():
 					currentEnemy.burn = true
 					currentEnemy.startBurn()
 					currentEnemy.burnTimer.start()
-					
 					currentEnemy.applyStatusIcon("Burn")
 				"Water":
 					print("Activate the water stuff")

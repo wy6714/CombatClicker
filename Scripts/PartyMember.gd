@@ -8,7 +8,7 @@ extends Node2D
 @export var critDamage: float = 2
 @export var ultRegen: float = 40
 @export var cooldown: float = 7
-@export var statusRate: float = 5
+@export var statusRate: float = 80
 @export var ultPotency: float = 10
 
 @export var crit: bool = false # Tracking IF we crit
@@ -74,6 +74,8 @@ var randomOffsetY = 0.0
 @onready var ultLimit = 500
 
 @onready var partyMemberProgressBar = $PartyMemberProgressBar
+@onready var buffAnim = $BuffLines
+@onready var ultFlashAnim = $UltFlash
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -165,16 +167,33 @@ func determineStatusEffect():
 	print("Current Element According to Member: ", currentElement)
 	
 	if(rng >= statusRate + bonusStatusRate):
-		if(fire):
-			print("Burn")
-		if(water):
-			print("Dampen")
-		if(wind):
-			print("Dizzy")
-		if(earth):
-			print("Petrify")
-		if(electric):
-			print("Paralysis")
+		match currentElement:
+			"Fire":
+				print("Activate the fire stuff")
+				currentEnemy.burn = true
+				currentEnemy.startBurn()
+				currentEnemy.burnTimer.start()
+				currentEnemy.applyStatusIcon("Burn")
+			"Water":
+				print("Activate the water stuff")
+				currentEnemy.dampen = true
+				currentEnemy.dampenTimer.start()
+				currentEnemy.applyStatusIcon("Dampen")
+			"Earth":
+				print("Activate the earth stuff")
+				currentEnemy.petrify = true
+				currentEnemy.petrifyTimer.start()
+				currentEnemy.applyStatusIcon("Petrify")
+			"Wind":
+				print("Activate the wind stuff")
+				currentEnemy.dizzy = true
+				currentEnemy.dizzyTimer.start()
+				currentEnemy.applyStatusIcon("Dizzy")
+			"Electric":
+				print("Activate the electric stuff")
+				currentEnemy.paralysis = true
+				currentEnemy.paralysisTimer.start()
+				currentEnemy.applyStatusIcon("Paralysis")
 			
 
 func _on_stats_button_button_down():
@@ -201,15 +220,13 @@ func updatePartyMemberUlt():
 	
 func useUlt():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	
 	#If you have ult
 	if(ultCharge >= ultLimit):	
+		$UltFlash.play("flash")
 		print("usingUlt")
 		ultCharge = 0 #reset ult charge
 		partyMemberProgressBar.value = ultCharge
-		
 		var amount = ultPotency + bonusUltPotency  # how much every ult gives
-		
 		# Get the buff, and apply it to whole team. Teammates are in "Buffable"
 		match currentElement:
 			"Fire":
@@ -218,7 +235,7 @@ func useUlt():
 						teammate.bonusStrength += amount
 					else:
 						teammate.bonusStrength += amount
-						
+					teammate.buffAnim.play("buff")
 					print("BONUS STRENGTH APPLICATION: ", amount)
 			"Water":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
@@ -226,6 +243,7 @@ func useUlt():
 						teammate.bonusCritDamage += amount
 					else:
 						teammate.bonusCritDamage += amount
+					teammate.buffAnim.play("buff")	
 					print("BONUS STATUS RATE (?) APPLICATION: ", amount)
 			"Wind":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
@@ -233,6 +251,7 @@ func useUlt():
 						teammate.bonusCritRate += amount
 					else:
 						teammate.bonusCritRate += amount
+					teammate.buffAnim.play("buff")
 					print("BONUS CRIT RATE APPLICATION: ", amount)
 			"Earth":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
@@ -240,6 +259,7 @@ func useUlt():
 						teammate.bonusCritDamage += amount
 					else:
 						teammate.bonusCritDamage += amount
+					teammate.buffAnim.play("buff")
 					print("BONUS CRIT DAMAGE APPLICATION: ", amount)
 			"Electric":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
@@ -247,7 +267,9 @@ func useUlt():
 						teammate.bonusUltRegen += amount
 					else:
 						teammate.bonusUltRegen += amount
+					teammate.buffAnim.play("buff")
 					print("BONUS ULT REGEN APPLICATION: ", amount)
+					
 			_:
 				return	
 			
@@ -271,7 +293,6 @@ func useUlt():
 		t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
 		t.start()
 		
-
 func _on_buff_timeout(element: String, amount: float) -> void:
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
 	print("buff is off............")
@@ -288,9 +309,7 @@ func _on_buff_timeout(element: String, amount: float) -> void:
 				teammate.bonusCritDamage -= amount
 			"Electric":
 				teammate.bonusUltRegen -= amount
-			
-		
-			
+				
 	# clean up
 	if _active_buffs.has(element):
 		_active_buffs[element].queue_free()
