@@ -42,6 +42,9 @@ var currentEnemy
 var open = false
 var isPlayer = true
 
+@onready var buffAnim = $BuffLines
+@onready var ultFlashAnim = $UltFlash
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
