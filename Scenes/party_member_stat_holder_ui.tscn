@@ -1,404 +1,602 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7nqtkti6xlb0"]
+[gd_scene load_steps=14 format=3 uid="uid://b7nqtkti6xlb0"]
 
-[ext_resource type="Texture2D" uid="uid://c7gist6gabs3f" path="res://Art/CharDialogueBox.png" id="1_5tqap"]
 [ext_resource type="Script" path="res://Scripts/party_member_stat_holder_ui.gd" id="1_g07wn"]
+[ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_l8v5w"]
 [ext_resource type="Texture2D" uid="uid://ch12swh3oqulm" path="res://Art/Circle Button Unselected.png" id="3_4q1fy"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_hdsew"]
 [ext_resource type="Texture2D" uid="uid://b1lc8f5bene27" path="res://Art/Circle Button Selected.png" id="4_em61s"]
 
+[sub_resource type="Animation" id="Animation_rshy7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.6)]
+}
+
+[sub_resource type="Animation" id="Animation_ynfwp"]
+resource_name = "fade"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.588235)]
+}
+
+[sub_resource type="Animation" id="Animation_6sfjr"]
+resource_name = "fadeOut"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.588235), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nm3xb"]
+_data = {
+"RESET": SubResource("Animation_rshy7"),
+"fade": SubResource("Animation_ynfwp"),
+"fadeOut": SubResource("Animation_6sfjr")
+}
+
+[sub_resource type="Animation" id="Animation_6fmnr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StatBox:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4.576, 5.07817)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StatMenuItems:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_laiqh"]
+resource_name = "open"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StatBox:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 5.078), Vector2(5.1, 5.1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StatMenuItems:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_n02op"]
+resource_name = "close"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StatBox:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(5.1, 5.1), Vector2(0, 5.1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StatMenuItems:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nrqvp"]
+_data = {
+"RESET": SubResource("Animation_6fmnr"),
+"close": SubResource("Animation_n02op"),
+"open": SubResource("Animation_laiqh")
+}
+
 [node name="PartyMemberStatHolderUI" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 31.0
+offset_right = 31.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_g07wn")
 
-[node name="StatBox" type="Sprite2D" parent="."]
-position = Vector2(896, 192)
-scale = Vector2(4, 4)
-texture = ExtResource("1_5tqap")
-
-[node name="Name" type="Label" parent="."]
+[node name="FadeRectangle" type="ColorRect" parent="."]
+visible = false
 layout_mode = 0
-offset_left = 663.0
-offset_top = 43.0
-offset_right = 727.0
-offset_bottom = 66.0
+offset_left = -160.0
+offset_top = -108.0
+offset_right = -120.0
+offset_bottom = -68.0
+scale = Vector2(43.5489, 23.6088)
+color = Color(0, 0, 0, 0.6)
+
+[node name="StatBox" type="Sprite2D" parent="."]
+position = Vector2(866, 325)
+scale = Vector2(4.576, 5.07817)
+texture = ExtResource("2_l8v5w")
+hframes = 6
+vframes = 7
+frame = 5
+
+[node name="StatMenuItems" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 866.0
+offset_top = 325.0
+offset_right = 906.0
+offset_bottom = 365.0
+
+[node name="Name" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = -150.0
+offset_top = -300.0
+offset_right = -50.0
+offset_bottom = -284.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Name"
 
-[node name="STR" type="Label" parent="."]
+[node name="STR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 71.0
-offset_right = 827.0
-offset_bottom = 94.0
+offset_left = -150.0
+offset_top = -260.0
+offset_right = 50.0
+offset_bottom = -244.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Strength: "
 
-[node name="StrengthPoints" type="Label" parent="."]
+[node name="StrengthPoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 71.0
-offset_right = 953.0
-offset_bottom = 94.0
+offset_left = 60.0
+offset_top = -260.0
+offset_right = 140.0
+offset_bottom = -244.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="StrengthPoints" groups=["add_upgrade", "strength"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/StrengthPoints" groups=["add_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="StrengthPoints" groups=["remove_upgrade", "strength"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/StrengthPoints" groups=["remove_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsSTR" type="Label" parent="StrengthPoints"]
+[node name="BonusBuffPointsSTR" type="Label" parent="StatMenuItems/StrengthPoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="CrR" type="Label" parent="."]
+[node name="CrR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 101.0
-offset_right = 827.0
-offset_bottom = 124.0
+offset_left = -155.0
+offset_top = -220.0
+offset_right = 45.0
+offset_bottom = -204.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Crit Rate:"
 
-[node name="CritRatePoints" type="Label" parent="."]
+[node name="CritRatePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 101.0
-offset_right = 953.0
-offset_bottom = 124.0
+offset_left = 55.0
+offset_top = -220.0
+offset_right = 135.0
+offset_bottom = -204.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="CritRatePoints" groups=["add_upgrade", "critRate"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CritRatePoints" groups=["add_upgrade", "critRate"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="CritRatePoints" groups=["critRate", "remove_upgrade"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CritRatePoints" groups=["critRate", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsCR" type="Label" parent="CritRatePoints"]
+[node name="BonusBuffPointsCR" type="Label" parent="StatMenuItems/CritRatePoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="CrD" type="Label" parent="."]
+[node name="CrD" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 131.0
-offset_right = 859.0
-offset_bottom = 154.0
+offset_left = -160.0
+offset_top = -180.0
+offset_right = 140.0
+offset_bottom = -164.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Crit Damage:"
 
-[node name="CritDamagePoints" type="Label" parent="."]
+[node name="CritDamagePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 131.0
-offset_right = 953.0
-offset_bottom = 154.0
+offset_left = 50.0
+offset_top = -180.0
+offset_right = 130.0
+offset_bottom = -164.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="CritDamagePoints" groups=["add_upgrade", "critDamage"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CritDamagePoints" groups=["add_upgrade", "critDamage"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="CritDamagePoints" groups=["critDamage", "remove_upgrade"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CritDamagePoints" groups=["critDamage", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsCrD" type="Label" parent="CritDamagePoints"]
+[node name="BonusBuffPointsCrD" type="Label" parent="StatMenuItems/CritDamagePoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="UR" type="Label" parent="."]
+[node name="UR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 161.0
-offset_right = 843.0
-offset_bottom = 184.0
+offset_left = -170.0
+offset_top = -140.0
+offset_right = 130.0
+offset_bottom = -124.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Ult Regen: "
 
-[node name="UltRegenPoints" type="Label" parent="."]
+[node name="UltRegenPoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 162.0
-offset_right = 953.0
-offset_bottom = 185.0
+offset_left = 45.0
+offset_top = -140.0
+offset_right = 125.0
+offset_bottom = -124.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="UltRegenPoints" groups=["add_upgrade", "ultRegen"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/UltRegenPoints" groups=["add_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="UltRegenPoints" groups=["remove_upgrade", "ultRegen"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/UltRegenPoints" groups=["remove_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsUR" type="Label" parent="UltRegenPoints"]
+[node name="BonusBuffPointsUR" type="Label" parent="StatMenuItems/UltRegenPoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="CD" type="Label" parent="."]
+[node name="CD" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 191.0
-offset_right = 843.0
-offset_bottom = 214.0
+offset_left = -180.0
+offset_top = -62.0
+offset_right = 120.0
+offset_bottom = -42.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Cooldown:  "
 
-[node name="CooldownPoints" type="Label" parent="."]
+[node name="CooldownPoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 192.0
-offset_right = 953.0
-offset_bottom = 215.0
+offset_left = 40.0
+offset_top = -62.0
+offset_right = 120.0
+offset_bottom = -42.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="CooldownPoints" groups=["add_upgrade", "cooldown"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["add_upgrade", "cooldown"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="CooldownPoints" groups=["cooldown", "remove_upgrade"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["cooldown", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsCD" type="Label" parent="CooldownPoints"]
+[node name="BonusBuffPointsCD" type="Label" parent="StatMenuItems/CooldownPoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="SR" type="Label" parent="."]
+[node name="SR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 221.0
-offset_right = 843.0
-offset_bottom = 244.0
+offset_left = -190.0
+offset_top = -22.0
+offset_right = 110.0
+offset_bottom = -2.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Status Rate:"
 
-[node name="StatusRatePoints" type="Label" parent="."]
+[node name="StatusRatePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 222.0
-offset_right = 953.0
-offset_bottom = 245.0
+offset_left = 35.0
+offset_top = -22.0
+offset_right = 111.0
+offset_bottom = -2.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="StatusRatePoints" groups=["add_upgrade", "statusRate"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/StatusRatePoints" groups=["add_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="StatusRatePoints" groups=["remove_upgrade", "statusRate"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/StatusRatePoints" groups=["remove_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsSR" type="Label" parent="StatusRatePoints"]
+[node name="BonusBuffPointsSR" type="Label" parent="StatMenuItems/StatusRatePoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="UP" type="Label" parent="."]
+[node name="UP" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 249.0
-offset_right = 859.0
-offset_bottom = 272.0
+offset_left = -201.0
+offset_top = 18.0
+offset_right = 99.0
+offset_bottom = 48.0
 theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
 text = "Ult Potency:"
 
-[node name="UltPotencyPoints" type="Label" parent="."]
+[node name="UltPotencyPoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 877.0
-offset_top = 250.0
-offset_right = 953.0
-offset_bottom = 273.0
+offset_left = 30.0
+offset_top = 18.0
+offset_right = 106.0
+offset_bottom = 48.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
-[node name="AddUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["add_upgrade", "ultPotency"]]
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/UltPotencyPoints" groups=["add_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 135.0
+offset_left = 125.0
 offset_top = -1.0
-offset_right = 159.0
+offset_right = 149.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
-[node name="RemoveUpgradePoints" type="Button" parent="UltPotencyPoints" groups=["remove_upgrade", "ultPotency"]]
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/UltPotencyPoints" groups=["remove_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 156.0
+offset_left = 146.0
 offset_top = -1.0
-offset_right = 180.0
+offset_right = 170.0
 offset_bottom = 30.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
-[node name="BonusBuffPointsUP" type="Label" parent="UltPotencyPoints"]
+[node name="BonusBuffPointsUP" type="Label" parent="StatMenuItems/UltPotencyPoints"]
 layout_mode = 0
-offset_left = 69.0
+offset_left = 70.0
 offset_top = 4.0
-offset_right = 109.0
+offset_right = 110.0
 offset_bottom = 27.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="UpgradePoints" type="Label" parent="."]
+[node name="BuyUpgrade" type="Button" parent="StatMenuItems"]
+visible = false
 layout_mode = 0
-offset_left = 756.0
-offset_top = 276.0
-offset_right = 1028.0
-offset_bottom = 299.0
-theme_override_fonts/font = ExtResource("3_hdsew")
-text = "Upgrade Points: 0"
-
-[node name="BuyUpgrade" type="Button" parent="."]
-layout_mode = 0
-offset_left = 728.0
-offset_top = 402.0
-offset_right = 1040.0
-offset_bottom = 433.0
+offset_right = 312.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Buy Upgrade Points!"
 
-[node name="UpgradePointsCost" type="Label" parent="BuyUpgrade"]
+[node name="UpgradePointsCost" type="Label" parent="StatMenuItems/BuyUpgrade"]
 modulate = Color(0.878431, 0.184314, 0.490196, 1)
 layout_mode = 0
 offset_left = 98.0
@@ -409,104 +607,128 @@ scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1000 points"
 
-[node name="FireButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+[node name="UpgradePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 680.0
-offset_top = 306.0
-offset_right = 720.0
-offset_bottom = 346.0
+offset_left = -206.0
+offset_top = 75.0
+offset_right = 94.0
+offset_bottom = 105.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "Upgrade Points: 0"
+
+[node name="FireButton" type="TextureButton" parent="StatMenuItems" groups=["ElementalButton"]]
+layout_mode = 0
+offset_left = -221.0
+offset_top = 118.0
+offset_right = -189.0
+offset_bottom = 150.0
 toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
 
-[node name="Element" type="Label" parent="FireButton"]
+[node name="Element" type="Label" parent="StatMenuItems/FireButton"]
 layout_mode = 0
 offset_left = -10.0
-offset_top = 38.0
+offset_top = 47.0
 offset_right = 54.0
-offset_bottom = 61.0
+offset_bottom = 70.0
+scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Fire"
 
-[node name="WaterButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+[node name="WaterButton" type="TextureButton" parent="StatMenuItems" groups=["ElementalButton"]]
 layout_mode = 0
-offset_left = 780.0
-offset_top = 306.0
-offset_right = 820.0
-offset_bottom = 346.0
+offset_left = -141.0
+offset_top = 118.0
+offset_right = -109.0
+offset_bottom = 150.0
 toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
 
-[node name="Element" type="Label" parent="WaterButton"]
+[node name="Element" type="Label" parent="StatMenuItems/WaterButton"]
 layout_mode = 0
-offset_left = -18.0
-offset_top = 37.0
-offset_right = 62.0
-offset_bottom = 60.0
+offset_left = -15.0
+offset_top = 46.0
+offset_right = 65.0
+offset_bottom = 69.0
+scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Water"
 
-[node name="EarthButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+[node name="EarthButton" type="TextureButton" parent="StatMenuItems" groups=["ElementalButton"]]
 layout_mode = 0
-offset_left = 880.0
-offset_top = 306.0
-offset_right = 920.0
-offset_bottom = 346.0
+offset_left = -61.0
+offset_top = 118.0
+offset_right = -21.0
+offset_bottom = 150.0
 toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
 
-[node name="Element" type="Label" parent="EarthButton"]
+[node name="Element" type="Label" parent="StatMenuItems/EarthButton"]
 layout_mode = 0
-offset_left = -15.0
-offset_top = 38.0
-offset_right = 65.0
-offset_bottom = 61.0
+offset_left = -13.0
+offset_top = 47.0
+offset_right = 67.0
+offset_bottom = 70.0
+scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Earth"
 
-[node name="WindButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+[node name="WindButton" type="TextureButton" parent="StatMenuItems" groups=["ElementalButton"]]
 layout_mode = 0
-offset_left = 980.0
-offset_top = 306.0
-offset_right = 1020.0
-offset_bottom = 346.0
+offset_left = 11.0
+offset_top = 118.0
+offset_right = 51.0
+offset_bottom = 150.0
 toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
 
-[node name="Element" type="Label" parent="WindButton"]
+[node name="Element" type="Label" parent="StatMenuItems/WindButton"]
 layout_mode = 0
-offset_left = -13.0
-offset_top = 38.0
-offset_right = 51.0
-offset_bottom = 61.0
+offset_left = -8.0
+offset_top = 47.0
+offset_right = 56.0
+offset_bottom = 70.0
+scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Wind"
 
-[node name="ElectricButton" type="TextureButton" parent="." groups=["ElementalButton"]]
+[node name="ElectricButton" type="TextureButton" parent="StatMenuItems" groups=["ElementalButton"]]
 layout_mode = 0
-offset_left = 1080.0
-offset_top = 306.0
-offset_right = 1120.0
-offset_bottom = 346.0
+offset_left = 89.0
+offset_top = 118.0
+offset_right = 129.0
+offset_bottom = 150.0
 toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
 
-[node name="Element" type="Label" parent="ElectricButton"]
+[node name="Element" type="Label" parent="StatMenuItems/ElectricButton"]
 layout_mode = 0
-offset_left = -11.0
-offset_top = 38.0
-offset_right = 117.0
-offset_bottom = 61.0
+offset_left = -6.0
+offset_top = 47.0
+offset_right = 122.0
+offset_bottom = 70.0
+scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Elec"
 
-[connection signal="button_down" from="BuyUpgrade" to="." method="_on_buy_upgrade_button_down"]
+[node name="PanelFade" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nm3xb")
+}
+
+[node name="StatMenuEntryAndExit" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nrqvp")
+}
+
+[connection signal="button_down" from="StatMenuItems/BuyUpgrade" to="." method="_on_buy_upgrade_button_down"]
