@@ -1,24 +1,24 @@
 extends Control
 
-@onready var strengthVal = $StrengthPoints
-@onready var critRateVal = $CritRatePoints
-@onready var critDamageVal = $CritDamagePoints
-@onready var ultRegenVal = $UltRegenPoints
-@onready var cooldownVal = $CooldownPoints
-@onready var statusRateVal = $StatusRatePoints
-@onready var ultPotencyVal = $UltPotencyPoints
+@onready var strengthVal = $StatMenuItems/StrengthPoints
+@onready var critRateVal = $StatMenuItems/CritRatePoints
+@onready var critDamageVal = $StatMenuItems/CritDamagePoints
+@onready var ultRegenVal = $StatMenuItems/UltRegenPoints
+@onready var cooldownVal = $StatMenuItems/CooldownPoints
+@onready var statusRateVal = $StatMenuItems/StatusRatePoints
+@onready var ultPotencyVal = $StatMenuItems/UltPotencyPoints
 
-@onready var upgradePointText = $UpgradePoints
-@onready var upgradePointCostText = $BuyUpgrade/UpgradePointsCost
+@onready var upgradePointText = $StatMenuItems/UpgradePoints
+@onready var upgradePointCostText = $StatMenuItems/BuyUpgrade/UpgradePointsCost
 
-@onready var strengthText = $STR
-@onready var critRateText = $CrR
-@onready var critDamageText = $CrD
-@onready var ultRegenText = $UR
-@onready var cooldownText = $CD
-@onready var statusRateText = $SR
-@onready var ultPotencyText = $UP
-@onready var nameText = $Name
+@onready var strengthText = $StatMenuItems/STR
+@onready var critRateText = $StatMenuItems/CrR
+@onready var critDamageText = $StatMenuItems/CrD
+@onready var ultRegenText = $StatMenuItems/UR
+@onready var cooldownText = $StatMenuItems/CD
+@onready var statusRateText = $StatMenuItems/SR
+@onready var ultPotencyText = $StatMenuItems/UP
+@onready var nameText = $StatMenuItems/Name
 
 var member
 var currentlyDisplayingMember
@@ -69,14 +69,14 @@ func updateAllValues(member):
 	statusRateVal.text = str(member.statusRate)
 	ultPotencyVal.text = str(member.ultPotency)
 	
-	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
-	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
-	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
-	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
+	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
+	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
+	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
+	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
 	
-	$CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
-	$StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
-	$UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
+	$StatMenuItems/CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
+	$StatMenuItems/StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
+	$StatMenuItems/UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
 	
 	
 	# Set all elemental buttons as inactive, so that we can later set the only active button on.
@@ -86,15 +86,15 @@ func updateAllValues(member):
 	if(currentElement != null):			
 		match member.currentElement:
 			"Fire":
-				$FireButton.button_pressed = true
+				$StatMenuItems/FireButton.button_pressed = true
 			"Water":
-				$WaterButton.button_pressed = true
+				$StatMenuItems/WaterButton.button_pressed = true
 			"Wind":
-				$WindButton.button_pressed = true
+				$StatMenuItems/WindButton.button_pressed = true
 			"Earth":
-				$EarthButton.button_pressed = true
+				$StatMenuItems/EarthButton.button_pressed = true
 			"Electric":
-				$ElectricButton.button_pressed = true
+				$StatMenuItems/ElectricButton.button_pressed = true
 			_:
 				print("None are selected. This might be the player")
 	
@@ -113,14 +113,14 @@ func memberStatUpdate(member):
 	statusRateVal.text = str(member.statusRate)
 	ultPotencyVal.text = str(member.ultPotency)
 	
-	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
-	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
-	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
-	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
+	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(member.bonusStrength) + ")"
+	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(member.bonusCritRate) + ")"
+	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(member.bonusCritDamage) + ")"
+	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(member.bonusUltRegen) + ")"
 	
-	$CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
-	$StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
-	$UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
+	$StatMenuItems/CooldownPoints/BonusBuffPointsCD.text = "(" +str(member.bonusCooldown) + ")"
+	$StatMenuItems/StatusRatePoints/BonusBuffPointsSR.text = "(" + str(member.bonusStatusRate) + ")"
+	$StatMenuItems/UltPotencyPoints/BonusBuffPointsUP.text = "(" + str(member.bonusUltPotency) + ")"
 	
 	
 	# Set all elemental buttons as inactive, so that we can later set the only active button on.
@@ -129,15 +129,15 @@ func memberStatUpdate(member):
 				
 	match member.currentElement:
 		"Fire":
-			$FireButton.button_pressed = true
+			$StatMenuItems/FireButton.button_pressed = true
 		"Water":
-			$WaterButton.button_pressed = true
+			$StatMenuItems/WaterButton.button_pressed = true
 		"Wind":
-			$WindButton.button_pressed = true
+			$StatMenuItems/WindButton.button_pressed = true
 		"Earth":
-			$EarthButton.button_pressed = true
+			$StatMenuItems/EarthButton.button_pressed = true
 		"Electric":
-			$ElectricButton.button_pressed = true
+			$StatMenuItems/ElectricButton.button_pressed = true
 		_:
 			print("None are selected. I think this can be deleted then tbh")
 	
@@ -149,10 +149,10 @@ func updateAllPlayerValues(player):
 	critDamageVal.text = str(player.critDamage)
 	ultRegenVal.text = str(player.ultRegen)
 	
-	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
-	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
-	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
-	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
+	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
+	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
+	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
+	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
 	
 	cooldownText.visible = false
 	cooldownVal.visible = false
@@ -175,10 +175,10 @@ func playerStatUpdate(player):
 	critDamageVal.text = str(player.critDamage)
 	ultRegenVal.text = str(player.ultRegen)
 	
-	$StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
-	$CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
-	$CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
-	$UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
+	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
+	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
+	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
+	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
 	
 func _on_buy_upgrade_button_down():
 	if(player.score >= member.upgradePointCost):
@@ -302,10 +302,12 @@ func updateMemberTextColors():
 	upgradeTextColor(critRateText, member.critRate, member.baseCritRate)
 	upgradeTextColor(critDamageText, member.critDamage, member.baseCritDamage)
 	upgradeTextColor(ultRegenText, member.ultRegen, member.baseUltRegen)
-	if(!member.player):
+	if !(member.is_in_group("Player")):
+		print("NOT A PLAYER> UHHHH")
 		upgradeTextColor(cooldownText, member.cooldown, member.baseCooldown)
-		upgradeTextColor(ultRegenText, member.statusRate, member.baseStatusRate)
-		upgradeTextColor(ultRegenText, member.ultPotency, member.baseUltPotency)
+		upgradeTextColor(statusRateText, member.statusRate, member.baseStatusRate)
+		upgradeTextColor(ultPotencyText, member.ultPotency, member.baseUltPotency)
+		print(member.characterName)
 
 func _on_elemental_button_pressed(button: TextureButton):
 	var selected = button.name

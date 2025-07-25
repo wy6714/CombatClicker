@@ -6,10 +6,10 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 40
+@export var ultRegen: float = 1
 @export var cooldown: float = 7
-@export var statusRate: float = 80
-@export var ultPotency: float = 10
+@export var statusRate: float = 5
+@export var ultPotency: float = 1
 
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: float = 0
@@ -84,6 +84,8 @@ func _ready():
 	# through levels. This way players aren't punished for recruiting party members later (they'd start off super weak relative to everyone else)
 	
 	damageCooldown.wait_time = cooldown # Have them start off swinging immediately
+	
+	totalAccumulatedUpgradePoints = (totalAccumulatedUpgradePoints + player.level) - 1 # Their starting accumulated points are... this formula.
 	
 func updateTimer():
 	damageCooldown.wait_time = cooldown - bonusCooldown
