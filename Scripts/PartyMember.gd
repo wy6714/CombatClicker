@@ -211,10 +211,11 @@ func _on_stats_button_button_down():
 		statDisplay.updateMemberTextColors()
 		statDisplay.nameText.text = characterName
 		statDisplay.currentlyDisplayingMember = self
-	elif(open):
-		statDisplay.visible = false
-		open = false
-		statDisplay.member = null
+		statDisplay.statOpen()
+	#elif(open):
+		#open = false
+		#statDisplay.member = null
+		#statDisplay.statClose()
 		
 func updatePartyMemberUlt():
 	ultCharge += (ultRegen + bonusUltRegen) * 5
