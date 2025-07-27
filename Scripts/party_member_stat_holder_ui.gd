@@ -373,3 +373,17 @@ func realTimeStatMenuUpdate():
 	upgradePointCostText.text = str(currentlyDisplayingMember.upgradePointCost) + " points"
 	updateMemberTextColors()
 	nameText.text = currentlyDisplayingMember.characterName
+	
+func statOpen():
+	$PanelFade.play("fade")
+	$StatMenuEntryAndExit.play("open")
+	
+func statClose():
+	$PanelFade.play("fadeOut")
+	$StatMenuEntryAndExit.play("close")
+
+func _on_close_button_button_down():
+	statClose()
+	currentlyDisplayingMember.open = false
+	member = null
+	

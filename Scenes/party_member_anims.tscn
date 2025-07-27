@@ -295,6 +295,7 @@ waterColor = Color(0.253319, 0.473894, 1, 1)
 windColor = Color(0.325915, 1, 0.298232, 1)
 earthColor = Color(0.615493, 0.341357, 0.00861954, 1)
 electricColor = Color(0.956977, 0.956977, 4.62055e-06, 1)
+metadata/_edit_horizontal_guides_ = [-163.0]
 
 [node name="Impact" type="Sprite2D" parent="."]
 visible = false

@@ -72,12 +72,9 @@ func _on_stats_button_button_down():
 		statDisplay.updateMemberTextColors()
 		statDisplay.nameText.text = characterName
 		statDisplay.currentlyDisplayingMember = self
+		statDisplay.statOpen()
 	elif(open):
-		statDisplay.visible = false
-		open = false
-		statDisplay.upgradePointCostText.text = str(upgradePointCost) + " points"
-		statDisplay.member = null
-
-
+		statDisplay.statClose()
+		
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text
