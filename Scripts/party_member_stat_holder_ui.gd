@@ -23,6 +23,7 @@ extends Control
 var member
 var currentlyDisplayingMember
 var currentElement = ""
+var open = false
 @onready var player = get_node("/root/Main/Player")
 
 
@@ -386,4 +387,5 @@ func _on_close_button_button_down():
 	statClose()
 	currentlyDisplayingMember.open = false
 	member = null
+	open = false
 	
