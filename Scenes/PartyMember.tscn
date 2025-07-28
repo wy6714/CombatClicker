@@ -226,6 +226,13 @@ libraries = {
 "": SubResource("AnimationLibrary_icp1n")
 }
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(392, 514, 358, 695, 204, 695, 242, 513)
+
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

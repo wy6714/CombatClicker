@@ -77,6 +77,11 @@ var randomOffsetY = 0.0
 @onready var buffAnim = $BuffLines
 @onready var ultFlashAnim = $UltFlash
 
+var original_position: Vector2
+var tween: Tween
+var hovering := false
+@onready var poly = $Area2D/CollisionPolygon2D
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -87,13 +92,24 @@ func _ready():
 	
 	totalAccumulatedUpgradePoints = (totalAccumulatedUpgradePoints + player.level) - 1 # Their starting accumulated points are... this formula.
 	
+	original_position = position
+	
 func updateTimer():
 	damageCooldown.wait_time = cooldown - bonusCooldown
 	print(damageCooldown.wait_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	var world_pos = get_global_mouse_position()
+	var local_pos = poly.to_local(world_pos)
+	var inside = Geometry2D.is_point_in_polygon(local_pos, poly.polygon)
+
+	if inside and not hovering:
+		hovering = true
+		onHoverEnter()
+	elif not inside and hovering:
+		hovering = false
+		onHoverExit()
 	
 func determineDamage():
 	currentEnemy = player.currentEnemy
@@ -200,22 +216,34 @@ func determineStatusEffect():
 
 func _on_stats_button_button_down():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
+	var clicked = self  # the member whose button you just hit
 	
-	if(!open):
+	# CASE A: the menu is closed
+	if not statDisplay.open:
 		statDisplay.visible = true
-		statDisplay.updateAllValues(self)
-		open = true
-		statDisplay.member = $"."
-		statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.member.upgradePoints)
-		statDisplay.upgradePointCostText.text = str(statDisplay.member.upgradePointCost) + " points"
-		statDisplay.updateMemberTextColors()
-		statDisplay.nameText.text = characterName
-		statDisplay.currentlyDisplayingMember = self
-		statDisplay.statOpen()
-	#elif(open):
-		#open = false
-		#statDisplay.member = null
-		#statDisplay.statClose()
+		statDisplay.statOpen()  # play opening animation
+		_applyMemberToDisplay(statDisplay, clicked)
+		statDisplay.open = true
+		return
+		
+	# CASE B: the menu is open on the same member → close it
+	if statDisplay.currentlyDisplayingMember == clicked:
+		statDisplay.statClose()  # play closing animation
+		statDisplay.open = false
+		return
+	
+	# CASE C: the menu is open but on a DIFFERENT member → just swap data
+	_applyMemberToDisplay(statDisplay, clicked)
+	# no change to statDisplay.open, no anim
+	
+func _applyMemberToDisplay(statDisplay, member):
+	statDisplay.updateAllValues(member)  
+	statDisplay.member = member
+	statDisplay.currentlyDisplayingMember = member
+	statDisplay.upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
+	statDisplay.upgradePointCostText.text = str(member.upgradePointCost) + " points"
+	statDisplay.updateMemberTextColors()
+	statDisplay.nameText.text = member.characterName
 		
 func updatePartyMemberUlt():
 	ultCharge += (ultRegen + bonusUltRegen) * 5
@@ -331,3 +359,15 @@ func _on_buff_timeout(element: String, amount: float) -> void:
 
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text
+	
+
+func onHoverEnter():
+	if tween: tween.kill() # cancel old tween if it's still running
+	tween = create_tween()
+	var target_pos = original_position + Vector2(5, -5)
+	tween.tween_property(self, "position", target_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+func onHoverExit():
+	if tween: tween.kill()
+	tween = create_tween()
+	tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

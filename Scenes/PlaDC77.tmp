@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://n4kcq3rlkqw0"]
+[gd_scene load_steps=13 format=3 uid="uid://n4kcq3rlkqw0"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerStats.gd" id="1_fhgmt"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_ayqdn"]
@@ -6,6 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="4_p8car"]
 [ext_resource type="Texture2D" uid="uid://ctulebq7ybhap" path="res://Art/SkewedRectangleFlash.png" id="5_ir787"]
 [ext_resource type="Texture2D" uid="uid://c3dh0i2oxpvut" path="res://Art/SkewedSquareLines.png" id="6_hcmuj"]
+
+[sub_resource type="GDScript" id="GDScript_m8cip"]
+script/source = "extends Control
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton or event is InputEventMouseMotion:
+		ignore_event()
+		# now this click/motion will continue past the GUI stage
+"
 
 [sub_resource type="BitMap" id="BitMap_r5o7a"]
 
@@ -133,6 +142,7 @@ hframes = 6
 vframes = 7
 
 [node name="LineEdit" type="LineEdit" parent="CharUI"]
+visible = false
 z_index = 1
 offset_left = -33.3333
 offset_top = -43.3333
@@ -143,11 +153,12 @@ theme_override_fonts/font = ExtResource("3_m27gj")
 theme_override_font_sizes/font_size = 16
 placeholder_text = "You"
 flat = true
+script = SubResource("GDScript_m8cip")
 
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
 autostart = true
 
-[node name="NameEditorBackdrop" type="TextureButton" parent="." groups=["ui"]]
+[node name="NameEditorBackdrop" type="TextureButton" parent="."]
 offset_left = 246.0
 offset_top = 535.0
 offset_right = 333.0
@@ -160,8 +171,9 @@ texture_normal = ExtResource("4_p8car")
 texture_click_mask = SubResource("BitMap_r5o7a")
 ignore_texture_size = true
 stretch_mode = 0
+script = SubResource("GDScript_m8cip")
 
-[node name="StatsButton" type="TextureButton" parent="." groups=["ui"]]
+[node name="StatsButton" type="TextureButton" parent="."]
 offset_left = 239.0
 offset_top = 565.0
 offset_right = 326.0
@@ -172,8 +184,10 @@ size_flags_vertical = 4
 texture_normal = ExtResource("4_p8car")
 ignore_texture_size = true
 stretch_mode = 0
+script = SubResource("GDScript_m8cip")
 
-[node name="StatsText" type="Label" parent="." groups=["ui"]]
+[node name="StatsText" type="Label" parent="."]
+visible = false
 offset_left = 248.0
 offset_top = 571.0
 offset_right = 368.0
@@ -182,6 +196,7 @@ scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_m27gj")
 theme_override_font_sizes/font_size = 24
 text = "Stats"
+script = SubResource("GDScript_m8cip")
 
 [node name="CharUIFlash" type="Sprite2D" parent="."]
 visible = false
