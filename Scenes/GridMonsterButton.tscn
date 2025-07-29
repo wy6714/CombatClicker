@@ -1,17 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://d17n6mle1j2lw"]
 
-[ext_resource type="Texture2D" uid="uid://c0tqvsueyfiii" path="res://Art/Monster Container.png" id="1_uwdjb"]
-[ext_resource type="Texture2D" uid="uid://dwahqlin7yals" path="res://Art/Monster Container Pressed.png" id="2_j2mt3"]
-[ext_resource type="Texture2D" uid="uid://couhtdhlc1d2v" path="res://Art/Monster Container Highlight.png" id="3_q2q48"]
+[ext_resource type="Texture2D" uid="uid://bx1mk3uc1wauw" path="res://Art/CaptureIcon-1.png" id="1_1dlpr"]
+[ext_resource type="Texture2D" uid="uid://dunwhu727g70f" path="res://Art/CaptureIcon-3.png" id="2_55cve"]
+[ext_resource type="Texture2D" uid="uid://6pdl5jhewalo" path="res://Art/CaptureIcon-2.png" id="3_0a0q7"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="4_0geu7"]
 
 [node name="GridMonsterButton" type="TextureButton"]
 offset_right = 40.0
 offset_bottom = 40.0
-texture_normal = ExtResource("1_uwdjb")
-texture_pressed = ExtResource("2_j2mt3")
-texture_hover = ExtResource("3_q2q48")
+texture_normal = ExtResource("1_1dlpr")
+texture_pressed = ExtResource("2_55cve")
+texture_hover = ExtResource("3_0a0q7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(16, 16)
+position = Vector2(26, 21.5)
 texture = ExtResource("4_0geu7")

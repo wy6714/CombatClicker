@@ -378,14 +378,21 @@ func realTimeStatMenuUpdate():
 func statOpen():
 	$PanelFade.play("fade")
 	$StatMenuEntryAndExit.play("open")
+	randomizePitch($MenuOpen)
 	
 func statClose():
 	$PanelFade.play("fadeOut")
 	$StatMenuEntryAndExit.play("close")
+	randomizePitch($MenuClose)
 
 func _on_close_button_button_down():
 	statClose()
 	currentlyDisplayingMember.open = false
 	member = null
 	open = false
+
+func randomizePitch(audio):
+	var rng = randf_range(0.7, 1.3)
+	audio.pitch_scale = rng
+	audio.play()
 	
