@@ -455,10 +455,10 @@ offset_bottom = 575.0
 
 [node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("13_vp3iu")]
 layout_mode = 1
-offset_left = 169.0
-offset_top = 570.0
-offset_right = 169.0
-offset_bottom = 570.0
+offset_left = 165.0
+offset_top = 554.0
+offset_right = 165.0
+offset_bottom = 554.0
 
 [node name="Weapon" parent="." instance=ExtResource("17_qrwcy")]
 
