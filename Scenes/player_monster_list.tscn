@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://lfbge76tm67h"]
+[gd_scene load_steps=30 format=3 uid="uid://lfbge76tm67h"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerMonsterList.gd" id="1_xx8oo"]
 [ext_resource type="Texture2D" uid="uid://cedbap7mfr3yy" path="res://Art/ParallelogramClose-1.png" id="2_ogbsi"]
@@ -29,7 +29,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control/Area2D:scale")
+tracks/0/path = NodePath("Control/CaptureInfoPanelItems/Area2D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -45,7 +45,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control/Area2D:scale")
+tracks/0/path = NodePath("Control/CaptureInfoPanelItems/Area2D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -61,7 +61,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Control/Area2D:scale")
+tracks/0/path = NodePath("Control/CaptureInfoPanelItems/Area2D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -78,6 +78,222 @@ _data = {
 "ScaleUp": SubResource("Animation_2hsey")
 }
 
+[sub_resource type="Animation" id="Animation_4byx4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/MonsterPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-300, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/CaptureInfoPanelItems:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-3, -707)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_wsg7e"]
+resource_name = "slideOut"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/MonsterPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(900, 0), Vector2(-300, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/CaptureInfoPanelItems:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-3, 0), Vector2(-3, -707)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_u1gih"]
+resource_name = "slide"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/MonsterPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-300, 0), Vector2(900, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/CaptureInfoPanelItems:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-3, -707), Vector2(-3, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sm5t0"]
+_data = {
+"RESET": SubResource("Animation_4byx4"),
+"slide": SubResource("Animation_u1gih"),
+"slideOut": SubResource("Animation_wsg7e")
+}
+
+[sub_resource type="Animation" id="Animation_rshy7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.6)]
+}
+
+[sub_resource type="Animation" id="Animation_ynfwp"]
+resource_name = "fade"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.588235)]
+}
+
+[sub_resource type="Animation" id="Animation_6sfjr"]
+resource_name = "fadeOut"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FadeRectangle:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0.588235), Color(0, 0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FadeRectangle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nm3xb"]
+_data = {
+"RESET": SubResource("Animation_rshy7"),
+"fade": SubResource("Animation_ynfwp"),
+"fadeOut": SubResource("Animation_6sfjr")
+}
+
 [node name="PlayerMonsterList" type="Node2D"]
 script = ExtResource("1_xx8oo")
 
@@ -92,17 +308,62 @@ offset_top = 40.0
 offset_right = -130.0
 offset_bottom = 80.0
 
-[node name="MonsterPanel" type="Panel" parent="Control"]
+[node name="FadeRectangle" type="ColorRect" parent="Control"]
+visible = false
+offset_left = 10.0
+offset_top = -141.0
+offset_right = 50.0
+offset_bottom = -101.0
+scale = Vector2(43.5489, 23.6088)
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="MonsterPanelItems" type="Control" parent="Control"]
+anchors_preset = 0
+offset_left = -300.0
+offset_right = -260.0
+offset_bottom = 40.0
+
+[node name="MonsterPanel" type="Panel" parent="Control/MonsterPanelItems"]
 layout_mode = 0
-offset_left = 172.0
+offset_left = -730.0
 offset_top = -4.0
-offset_right = 217.0
+offset_right = -685.0
 offset_bottom = 35.0
 scale = Vector2(25.6, 15)
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_cwpu3")
 
-[node name="SelectedMonsterPanel" type="Panel" parent="Control"]
+[node name="GridContainer" type="GridContainer" parent="Control/MonsterPanelItems"]
+layout_mode = 0
+offset_left = -712.0
+offset_top = 51.0
+offset_right = -662.0
+offset_bottom = 95.0
+scale = Vector2(1.3, 1.3)
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 20
+columns = 9
+script = ExtResource("6_4eavr")
+
+[node name="TextureButton" type="TextureButton" parent="Control/MonsterPanelItems/GridContainer"]
+layout_mode = 2
+texture_normal = ExtResource("7_b2gfg")
+texture_pressed = ExtResource("8_nwmss")
+texture_hover = ExtResource("9_8vyjl")
+
+[node name="Sprite2D" type="Sprite2D" parent="Control/MonsterPanelItems/GridContainer/TextureButton"]
+position = Vector2(26, 21.5)
+texture = ExtResource("10_f8k1m")
+
+[node name="CaptureInfoPanelItems" type="Control" parent="Control"]
+anchors_preset = 0
+offset_left = -3.0
+offset_top = -707.0
+offset_right = 37.0
+offset_bottom = -667.0
+
+[node name="SelectedMonsterPanel" type="Panel" parent="Control/CaptureInfoPanelItems"]
 layout_mode = 0
 offset_left = 792.0
 offset_top = -73.0
@@ -112,38 +373,16 @@ scale = Vector2(12, 18)
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_2871q")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/SelectedMonsterPanel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/CaptureInfoPanelItems/SelectedMonsterPanel"]
 visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VScrollBar" type="VScrollBar" parent="Control/SelectedMonsterPanel/ScrollContainer"]
+[node name="VScrollBar" type="VScrollBar" parent="Control/CaptureInfoPanelItems/SelectedMonsterPanel/ScrollContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="Control"]
-layout_mode = 0
-offset_left = 191.0
-offset_top = 51.0
-offset_right = 241.0
-offset_bottom = 95.0
-scale = Vector2(1.3, 1.3)
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 20
-columns = 9
-script = ExtResource("6_4eavr")
-
-[node name="TextureButton" type="TextureButton" parent="Control/GridContainer"]
-layout_mode = 2
-texture_normal = ExtResource("7_b2gfg")
-texture_pressed = ExtResource("8_nwmss")
-texture_hover = ExtResource("9_8vyjl")
-
-[node name="Sprite2D" type="Sprite2D" parent="Control/GridContainer/TextureButton"]
-position = Vector2(26, 21.5)
-texture = ExtResource("10_f8k1m")
-
-[node name="Name" type="Label" parent="Control"]
+[node name="Name" type="Label" parent="Control/CaptureInfoPanelItems"]
 layout_mode = 0
 offset_left = 902.0
 offset_top = 84.0
@@ -152,7 +391,7 @@ offset_bottom = 107.0
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 
-[node name="TextureButton" type="TextureButton" parent="Control"]
+[node name="CloseButton" type="TextureButton" parent="Control/CaptureInfoPanelItems"]
 layout_mode = 0
 offset_left = 1194.0
 offset_top = -40.0
@@ -163,14 +402,14 @@ texture_normal = ExtResource("2_ogbsi")
 texture_pressed = ExtResource("3_xbelp")
 texture_hover = ExtResource("4_mibmp")
 
-[node name="PetHeart" type="Sprite2D" parent="Control"]
+[node name="PetHeart" type="Sprite2D" parent="Control/CaptureInfoPanelItems"]
 position = Vector2(1186, 92)
 scale = Vector2(2, 2)
 texture = ExtResource("12_0c00a")
 hframes = 3
 vframes = 4
 
-[node name="PetLabel" type="Label" parent="Control"]
+[node name="PetLabel" type="Label" parent="Control/CaptureInfoPanelItems"]
 layout_mode = 0
 offset_left = 1209.0
 offset_top = 84.0
@@ -179,7 +418,7 @@ offset_bottom = 107.0
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/CaptureInfoPanelItems"]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 0
 offset_left = 901.0
@@ -187,149 +426,160 @@ offset_top = 370.0
 offset_right = 1301.0
 offset_bottom = 570.0
 
-[node name="GridContainer" type="GridContainer" parent="Control/ScrollContainer"]
+[node name="GridContainer" type="GridContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 0
 
-[node name="MarginContainer11" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer11" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 1" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer11" groups=["Trivia"]]
+[node name="Trivia 1" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer11" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 2" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer2" groups=["Trivia"]]
+[node name="Trivia 2" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer2" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer3" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 3" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer3" groups=["Trivia"]]
+[node name="Trivia 3" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer3" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer4" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer4" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 4" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer4" groups=["Trivia"]]
+[node name="Trivia 4" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer4" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer5" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer5" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 5" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer5" groups=["Trivia"]]
+[node name="Trivia 5" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer5" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer6" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer6" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 6" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer6" groups=["Trivia"]]
+[node name="Trivia 6" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer6" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer7" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer7" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 7" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer7" groups=["Trivia"]]
+[node name="Trivia 7" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer7" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer8" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer8" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 8" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer8" groups=["Trivia"]]
+[node name="Trivia 8" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer8" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer9" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer9" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 9" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer9" groups=["Trivia"]]
+[node name="Trivia 9" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer9" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="MarginContainer10" type="MarginContainer" parent="Control/ScrollContainer/GridContainer"]
+[node name="MarginContainer10" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 10" type="Label" parent="Control/ScrollContainer/GridContainer/MarginContainer10" groups=["Trivia"]]
+[node name="Trivia 10" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer10" groups=["Trivia"]]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 autowrap_mode = 2
 
-[node name="HappyTimer" type="Timer" parent="Control"]
-wait_time = 2.0
-one_shot = true
-
-[node name="Area2D" type="Area2D" parent="Control"]
+[node name="Area2D" type="Area2D" parent="Control/CaptureInfoPanelItems"]
 z_index = 5
 position = Vector2(1100, 244)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/CaptureInfoPanelItems/Area2D"]
 z_index = 5
 position = Vector2(-3.5, 2.5)
 shape = SubResource("RectangleShape2D_6e4lr")
 
-[node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control/Area2D"]
+[node name="Monster Animated Sprite" type="AnimatedSprite2D" parent="Control/CaptureInfoPanelItems/Area2D"]
 scale = Vector2(4, 4)
 sprite_frames = ExtResource("13_1ceps")
 autoplay = "default"
 frame_progress = 0.933998
+
+[node name="HappyTimer" type="Timer" parent="Control"]
+wait_time = 2.0
+one_shot = true
 
 [node name="EnemyScale" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_8kp86")
 }
 
-[connection signal="button_down" from="Control/GridContainer/TextureButton" to="Control/GridContainer" method="_on_texture_button_button_down"]
-[connection signal="button_down" from="Control/TextureButton" to="." method="_on_texture_button_button_down"]
-[connection signal="button_up" from="Control/TextureButton" to="." method="_on_texture_button_button_up"]
-[connection signal="timeout" from="Control/HappyTimer" to="Control/GridContainer" method="_on_happy_timer_timeout"]
-[connection signal="input_event" from="Control/Area2D" to="Control/GridContainer" method="_on_area_2d_input_event"]
-[connection signal="mouse_entered" from="Control/Area2D" to="Control/GridContainer" method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Control/Area2D" to="Control/GridContainer" method="_on_area_2d_mouse_exited"]
-[connection signal="animation_finished" from="EnemyScale" to="Control/GridContainer" method="_on_enemy_scale_animation_finished"]
+[node name="UISlide" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sm5t0")
+}
+
+[node name="PanelFade" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Control")
+libraries = {
+"": SubResource("AnimationLibrary_nm3xb")
+}
+
+[connection signal="button_down" from="Control/MonsterPanelItems/GridContainer/TextureButton" to="Control/MonsterPanelItems/GridContainer" method="_on_texture_button_button_down"]
+[connection signal="button_down" from="Control/CaptureInfoPanelItems/CloseButton" to="." method="_on_texture_button_button_down"]
+[connection signal="button_up" from="Control/CaptureInfoPanelItems/CloseButton" to="." method="_on_texture_button_button_up"]
+[connection signal="input_event" from="Control/CaptureInfoPanelItems/Area2D" to="Control/MonsterPanelItems/GridContainer" method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Control/CaptureInfoPanelItems/Area2D" to="Control/MonsterPanelItems/GridContainer" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Control/CaptureInfoPanelItems/Area2D" to="Control/MonsterPanelItems/GridContainer" method="_on_area_2d_mouse_exited"]
+[connection signal="timeout" from="Control/HappyTimer" to="Control/MonsterPanelItems/GridContainer" method="_on_happy_timer_timeout"]
+[connection signal="animation_finished" from="EnemyScale" to="Control/MonsterPanelItems/GridContainer" method="_on_enemy_scale_animation_finished"]

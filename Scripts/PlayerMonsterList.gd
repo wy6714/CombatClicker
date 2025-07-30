@@ -7,7 +7,7 @@ var capturedMonsters = {}
 @onready var currentMonsterButton = get_node("/root/Main/CurrentMonsterIconButton")
 @onready var targetPosition = get_node("/root/Main/CurrentMonsterIconButton/Target")
 @onready var playerCapturePanel = $Control
-@onready var captureList = $Control/GridContainer
+@onready var captureList = $Control/CaptureInfoPanelItems/ScrollContainer/GridContainer
 
 # VARIABLES FOR HOLDING CHANGED STATS
 @onready var ogStrength
@@ -132,7 +132,12 @@ func get_passive_remove_function(passiveEffect: String) -> Callable:
 # -------------------------------------------------------------------------
 
 func _on_texture_button_button_up():
-	playerCapturePanel.visible = false
+	$PanelFade.play("fadeOut")
+	$UISlide.play("slideOut")
+	
+func uiSlideIn():
+	$PanelFade.play("fade")
+	$UISlide.play("slide")
 	
 # -----------------------CAPTURE EFFECT-------------------------------------
 

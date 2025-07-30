@@ -8,15 +8,15 @@ var total_monsters = 50
 @onready var base_button_scene = preload("res://Scenes/GridMonsterButton.tscn")
 @onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
 
-@onready var nametag = $"../Name"
-@onready var pats_label = $"../PetLabel"
-@onready var monsterAnimatedSprite = $"../Area2D/Monster Animated Sprite"
-@onready var monsterCollider = $"../Area2D/CollisionShape2D"
+@onready var nametag = $"../../CaptureInfoPanelItems/Name"
+@onready var pats_label = $"../../CaptureInfoPanelItems/PetLabel"
+@onready var monsterAnimatedSprite = $"../../CaptureInfoPanelItems/Area2D/Monster Animated Sprite"
+@onready var monsterCollider = $"../../CaptureInfoPanelItems/Area2D/CollisionShape2D"
 @onready var currentMonster
-@onready var monsterArea = $"../Area2D"
+@onready var monsterArea = $"../../CaptureInfoPanelItems/Area2D"
 @onready var question_mark_frames: SpriteFrames = preload("res://Art/questionMarkFloat.tres")
 @onready var petParticles = preload("res://Scenes/pet_particles.tscn")
-@onready var happyTimer = $"../HappyTimer"
+@onready var happyTimer = $"../../HappyTimer"
 @onready var currentlyPatting = false
 @onready var mouseInsideRadius = false
 var queued_anim: String = ""
@@ -269,24 +269,23 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 func _on_area_2d_mouse_entered():
 	mouseInsideRadius = true
-	if $"../../EnemyScale".is_playing():
+	if $"../../../EnemyScale".is_playing():
 		queued_anim = "ScaleUp"
 	else:
-		$"../../EnemyScale".play("ScaleUp")
+		$"../../../EnemyScale".play("ScaleUp")
 		
 func _on_area_2d_mouse_exited():
 	mouseInsideRadius = false
-	if $"../../EnemyScale".is_playing():
+	if $"../../../EnemyScale".is_playing():
 		queued_anim = "ScaleDown"
 	else:
-		$"../../EnemyScale".play("ScaleDown")
+		$"../../../EnemyScale".play("ScaleDown")
 			
 func _on_enemy_scale_animation_finished(anim_name):
 	if queued_anim != "":
 		var next_anim = queued_anim
 		queued_anim = "" # Clear it so it doesn't loop forever
-		$"../../EnemyScale".play(next_anim)
-
+		$"../../../EnemyScale".play(next_anim)
 
 func _on_happy_timer_timeout():
 	var currentFrame = monsterAnimatedSprite.frame
