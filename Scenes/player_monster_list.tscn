@@ -117,46 +117,6 @@ tracks/2/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_wsg7e"]
-resource_name = "slideOut"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Control/MonsterPanelItems:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(900, 0), Vector2(-300, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Control/CaptureInfoPanelItems:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(-3, 0), Vector2(-3, -707)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
 [sub_resource type="Animation" id="Animation_u1gih"]
 resource_name = "slide"
 length = 0.2
@@ -195,6 +155,46 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_wsg7e"]
+resource_name = "slideOut"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/MonsterPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(900, 0), Vector2(2100, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/CaptureInfoPanelItems:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-3, 0), Vector2(-3, 707)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sm5t0"]
@@ -310,6 +310,7 @@ offset_bottom = 80.0
 
 [node name="FadeRectangle" type="ColorRect" parent="Control"]
 visible = false
+layout_mode = 0
 offset_left = 10.0
 offset_top = -141.0
 offset_right = 50.0
@@ -419,23 +420,27 @@ theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control/CaptureInfoPanelItems"]
-custom_minimum_size = Vector2(400, 200)
+custom_minimum_size = Vector2(500, 200)
 layout_mode = 0
-offset_left = 901.0
-offset_top = 370.0
-offset_right = 1301.0
-offset_bottom = 570.0
+offset_left = 796.0
+offset_top = 367.0
+offset_right = 1296.0
+offset_bottom = 567.0
+follow_focus = true
+horizontal_scroll_mode = 0
 
 [node name="GridContainer" type="GridContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer"]
+clip_contents = true
 layout_mode = 2
 theme_override_constants/h_separation = 0
 
-[node name="MarginContainer11" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
+[node name="MarginContainer1" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
-[node name="Trivia 1" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer11" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+[node name="Trivia 1" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer1" groups=["Trivia"]]
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -443,10 +448,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 2" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer2" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -454,10 +460,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer3" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 3" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer3" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -465,10 +472,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer4" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 4" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer4" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -476,10 +484,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer5" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 5" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer5" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -487,10 +496,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer6" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 6" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer6" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -498,10 +508,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer7" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 7" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer7" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -509,10 +520,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer8" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 8" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer8" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -520,10 +532,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer9" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 9" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer9" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -531,10 +544,11 @@ autowrap_mode = 2
 
 [node name="MarginContainer10" type="MarginContainer" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 60
 theme_override_constants/margin_bottom = 40
 
 [node name="Trivia 10" type="Label" parent="Control/CaptureInfoPanelItems/ScrollContainer/GridContainer/MarginContainer10" groups=["Trivia"]]
-custom_minimum_size = Vector2(400, 100)
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("11_oh0ut")
 text = "???"
@@ -542,7 +556,7 @@ autowrap_mode = 2
 
 [node name="Area2D" type="Area2D" parent="Control/CaptureInfoPanelItems"]
 z_index = 5
-position = Vector2(1100, 244)
+position = Vector2(1066, 250)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Control/CaptureInfoPanelItems/Area2D"]
 z_index = 5
