@@ -384,6 +384,10 @@ func statClose():
 	$PanelFade.play("fadeOut")
 	$StatMenuEntryAndExit.play("close")
 	randomizePitch($MenuClose)
+	# Return to white
+	for member in get_tree().get_nodes_in_group("UIMember"):
+		member.charUI1.modulate = Color.WHITE
+		member.charUI2.modulate = Color.WHITE
 
 func _on_close_button_button_down():
 	statClose()
