@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7mfddfgxam7i"
-path="res://.godot/imported/SkewedRectangleUltBar.png-1770ea699bacfef4d67486e67aa53f25.ctex"
+uid="uid://cm5q1dhih64t8"
+path="res://.godot/imported/SlantedUIMeter.png-d01b89299a38d3969133b6034757fe22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/SkewedRectangleUltBar.png"
-dest_files=["res://.godot/imported/SkewedRectangleUltBar.png-1770ea699bacfef4d67486e67aa53f25.ctex"]
+source_file="res://Art/SlantedUIMeter.png"
+dest_files=["res://.godot/imported/SlantedUIMeter.png-d01b89299a38d3969133b6034757fe22.ctex"]
 
 [params]
 

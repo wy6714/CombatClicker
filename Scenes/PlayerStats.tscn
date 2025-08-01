@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://n4kcq3rlkqw0"]
+[gd_scene load_steps=14 format=3 uid="uid://n4kcq3rlkqw0"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerStats.gd" id="1_fhgmt"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_ayqdn"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ctulebq7ybhap" path="res://Art/SkewedRectangleFlash.png" id="5_ir787"]
 [ext_resource type="Texture2D" uid="uid://c3dh0i2oxpvut" path="res://Art/SkewedSquareLines.png" id="6_hcmuj"]
 [ext_resource type="AudioStream" uid="uid://dtujjuqhqm13l" path="res://Audio/MenuHover.wav" id="7_ga28u"]
+[ext_resource type="AudioStream" uid="uid://c7a1g8ua5imgw" path="res://Audio/StatMenuOpen.wav" id="8_6vijj"]
 
 [sub_resource type="BitMap" id="BitMap_r5o7a"]
 
@@ -216,6 +217,10 @@ polygon = PackedVector2Array(392, 514, 358, 695, 204, 695, 242, 513)
 
 [node name="MenuHover" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_ga28u")
+volume_db = -10.0
+
+[node name="MenuOpen" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_6vijj")
 volume_db = -10.0
 
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]

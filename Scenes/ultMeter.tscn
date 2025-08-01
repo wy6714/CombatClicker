@@ -1,10 +1,10 @@
 [gd_scene load_steps=24 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
-[ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_jhe2u"]
-[ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_xxfgb"]
+[ext_resource type="Texture2D" uid="uid://vwtmosia4ooi" path="res://Art/SlantedUltMeterBlack.png" id="2_fvrke"]
+[ext_resource type="Texture2D" uid="uid://cb5cq7wwuvt8a" path="res://Art/SlantedUltMeterFillBlack.png" id="3_cnr66"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_oucss"]
-[ext_resource type="Script" path="res://Scenes/SpeedLines.gd" id="5_bwdwn"]
+[ext_resource type="Script" path="res://Scripts/SpeedLines.gd" id="5_sdlk3"]
 [ext_resource type="Texture2D" uid="uid://bpvqv6f1s5eo4" path="res://Art/SpeedLine.png" id="6_51v12"]
 [ext_resource type="Texture2D" uid="uid://dw8ylabgxg4gn" path="res://Art/SpikyBubble (1).png" id="7_ksp4f"]
 [ext_resource type="Texture2D" uid="uid://3edfxqc8ywnk" path="res://Art/ComputerMouseCenterClick.png" id="8_mvdxn"]
@@ -148,24 +148,24 @@ script = ExtResource("1_8i3nt")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
-offset_left = 896.0
-offset_top = -31.0
-offset_right = 1184.0
-offset_bottom = 257.0
+offset_left = 892.0
+offset_top = -71.0
+offset_right = 1180.0
+offset_bottom = 217.0
 pivot_offset = Vector2(144, 144)
 mouse_filter = 2
 max_value = 1000.0
 value = 50.0
-texture_under = ExtResource("2_jhe2u")
-texture_progress = ExtResource("3_xxfgb")
+texture_under = ExtResource("2_fvrke")
+texture_progress = ExtResource("3_cnr66")
 tint_progress = Color(0.488136, 0.430516, 0, 1)
 
 [node name="UltText" type="Label" parent="TextureProgressBar"]
 layout_mode = 0
 offset_left = 28.0
-offset_top = 111.0
-offset_right = 108.0
-offset_bottom = 134.0
+offset_top = 129.0
+offset_right = 140.0
+offset_bottom = 152.0
 theme_override_fonts/font = ExtResource("4_oucss")
 text = "23/1000"
 
@@ -179,7 +179,7 @@ scale = Vector2(2, 2)
 [node name="SpeedLineHolder" type="Node2D" parent="."]
 visible = false
 position = Vector2(0, -4)
-script = ExtResource("5_bwdwn")
+script = ExtResource("5_sdlk3")
 
 [node name="SpeedLine" type="Sprite2D" parent="SpeedLineHolder"]
 position = Vector2(22, 28)
@@ -334,7 +334,7 @@ texture = ExtResource("6_51v12")
 [node name="SpeedLineHolder2" type="Node2D" parent="."]
 visible = false
 position = Vector2(1044, -4)
-script = ExtResource("5_bwdwn")
+script = ExtResource("5_sdlk3")
 
 [node name="SpeedLine" type="Sprite2D" parent="SpeedLineHolder2"]
 position = Vector2(22, 28)

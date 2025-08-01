@@ -56,6 +56,7 @@ func equip_monster(monsterName: String):
 			monster["applyEffect"].call(monsterName)
 			print(monsterName, " equipped! Passive activated:", monster["effect"], "Monster Count: ", monster["count"])
 			print("EQUIIIIIIIIIIIIIIIIIIIIIIIIIPPPPPPPPPPPPPPED")
+			randomizePitch($MonsterSelected)
 	else:
 		print("You don't have this monster")
 		
@@ -134,10 +135,31 @@ func get_passive_remove_function(passiveEffect: String) -> Callable:
 func _on_texture_button_button_up():
 	$PanelFade.play("fadeOut")
 	$UISlide.play("slideOut")
+	randomizePitch($CaptureMenuClose)
+	
+	for node in get_tree().get_nodes_in_group("Player"):
+		if "hoverBlocked" in node:
+			node.hoverBlocked = false
+	for node in get_tree().get_nodes_in_group("PartyMember"):
+		if "hoverBlocked" in node:
+			node.hoverBlocked = false
 	
 func uiSlideIn():
 	$PanelFade.play("fade")
 	$UISlide.play("slide")
+	randomizePitch($CaptureMenuOpen)
+	
+	for node in get_tree().get_nodes_in_group("Player"):
+		if "hoverBlocked" in node:
+			node.hoverBlocked = true
+	for node in get_tree().get_nodes_in_group("PartyMember"):
+		if "hoverBlocked" in node:
+			node.hoverBlocked = true
+	
+func randomizePitch(audio):
+	var rng = randf_range(0.7, 1.3)
+	audio.pitch_scale = rng
+	audio.play()
 	
 # -----------------------CAPTURE EFFECT-------------------------------------
 
