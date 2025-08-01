@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://lfbge76tm67h"]
+[gd_scene load_steps=33 format=3 uid="uid://lfbge76tm67h"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerMonsterList.gd" id="1_xx8oo"]
 [ext_resource type="Texture2D" uid="uid://cedbap7mfr3yy" path="res://Art/ParallelogramClose-1.png" id="2_ogbsi"]
@@ -14,6 +14,9 @@
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="11_oh0ut"]
 [ext_resource type="Texture2D" uid="uid://dmptnbbhsvu5r" path="res://Art/HeartSamples.png" id="12_0c00a"]
 [ext_resource type="SpriteFrames" uid="uid://dchicxgujkmo8" path="res://Art/questionMarkFloat.tres" id="13_1ceps"]
+[ext_resource type="AudioStream" uid="uid://c20mpstdj805d" path="res://Audio/UiOpen2.wav" id="15_ujjcy"]
+[ext_resource type="AudioStream" uid="uid://bqg8efxpl25sd" path="res://Audio/UiClose2.wav" id="16_nrrcx"]
+[ext_resource type="AudioStream" uid="uid://7nnswem086nr" path="res://Audio/MonsterSelectSound.wav" id="17_xefac"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cwpu3"]
 texture = ExtResource("5_2e473")
@@ -588,6 +591,15 @@ root_node = NodePath("../Control")
 libraries = {
 "": SubResource("AnimationLibrary_nm3xb")
 }
+
+[node name="CaptureMenuOpen" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_ujjcy")
+
+[node name="CaptureMenuClose" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_nrrcx")
+
+[node name="MonsterSelected" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("17_xefac")
 
 [connection signal="button_down" from="Control/MonsterPanelItems/GridContainer/TextureButton" to="Control/MonsterPanelItems/GridContainer" method="_on_texture_button_button_down"]
 [connection signal="button_down" from="Control/CaptureInfoPanelItems/CloseButton" to="." method="_on_texture_button_button_down"]

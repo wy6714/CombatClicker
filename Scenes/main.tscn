@@ -65,10 +65,10 @@ layout_mode = 1
 
 [node name="ExpBarSystem" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("7_gst64")]
 layout_mode = 1
-offset_left = 896.0
-offset_top = -88.0
-offset_right = 896.0
-offset_bottom = -88.0
+offset_left = 903.0
+offset_top = -91.0
+offset_right = 903.0
+offset_bottom = -91.0
 
 [node name="UltMeter" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("8_fgwng")]
 layout_mode = 1

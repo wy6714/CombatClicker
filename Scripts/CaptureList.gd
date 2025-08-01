@@ -21,6 +21,7 @@ var total_monsters = 50
 @onready var mouseInsideRadius = false
 var queued_anim: String = ""
 
+
 var monster_list = [
 	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
 	"lore":
@@ -306,7 +307,7 @@ func _on_texture_button_button_down(
 
 	# 1) Capture the selected monster
 	currentMonster = monster
-
+	
 	# 2) Figure out the name (because GDScript has no ?: operator)
 	var name: String
 	if monster:
@@ -323,4 +324,12 @@ func _on_texture_button_button_down(
 		lore,
 		patTotal
 	)
+	
+	# 4) Play sound effect
+	
+	$"../../../MonsterSelected".play()
+	
+	# 5)
+	
+	
 

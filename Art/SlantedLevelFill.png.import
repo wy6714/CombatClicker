@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7mfddfgxam7i"
-path="res://.godot/imported/SkewedRectangleUltBar.png-1770ea699bacfef4d67486e67aa53f25.ctex"
+uid="uid://chvkf7vvkp2b1"
+path="res://.godot/imported/SlantedLevelFill.png-fbf859664d2ad05785d97cccb650dfa5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/SkewedRectangleUltBar.png"
-dest_files=["res://.godot/imported/SkewedRectangleUltBar.png-1770ea699bacfef4d67486e67aa53f25.ctex"]
+source_file="res://Art/SlantedLevelFill.png"
+dest_files=["res://.godot/imported/SlantedLevelFill.png-fbf859664d2ad05785d97cccb650dfa5.ctex"]
 
 [params]
 

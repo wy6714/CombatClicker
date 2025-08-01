@@ -81,6 +81,7 @@ var original_position: Vector2
 var tween: Tween
 var hovering := false
 @onready var poly = $Area2D/CollisionPolygon2D
+var hoverBlocked: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -234,6 +235,7 @@ func _on_stats_button_button_down():
 	
 	# CASE C: the menu is open but on a DIFFERENT member → just swap data
 	_applyMemberToDisplay(statDisplay, clicked)
+	statDisplay.randomizePitch($MenuOpen)
 	# no change to statDisplay.open, no anim
 	
 func _applyMemberToDisplay(statDisplay, member):
@@ -362,13 +364,15 @@ func _on_line_edit_text_changed(new_text):
 	
 
 func onHoverEnter():
-	if tween: tween.kill() # cancel old tween if it's still running
-	tween = create_tween()
-	var target_pos = original_position + Vector2(5, -5)
-	tween.tween_property(self, "position", target_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	$MenuHover.play()
+	if !hoverBlocked:
+		if tween: tween.kill() # cancel old tween if it's still running
+		tween = create_tween()
+		var target_pos = original_position + Vector2(5, -5)
+		tween.tween_property(self, "position", target_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		$MenuHover.play()
 	
 func onHoverExit():
-	if tween: tween.kill()
-	tween = create_tween()
-	tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if !hoverBlocked:
+		if tween: tween.kill()
+		tween = create_tween()
+		tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

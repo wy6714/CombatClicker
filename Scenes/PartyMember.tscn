@@ -1,14 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://cjxwnr51qki6q"]
+[gd_scene load_steps=16 format=3 uid="uid://cjxwnr51qki6q"]
 
 [ext_resource type="Script" path="res://Scripts/PartyMember.gd" id="1_lepxi"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_37muy"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_rftqe"]
-[ext_resource type="Texture2D" uid="uid://1cdri5m3wqv8" path="res://Art/SkewedRectangleUltBar.png" id="5_b3alx"]
 [ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="5_r0s8o"]
 [ext_resource type="Texture2D" uid="uid://dpeuo88o3p7a7" path="res://Art/SkewedRectanglesUltFill.png" id="6_x6dd7"]
 [ext_resource type="Texture2D" uid="uid://ctulebq7ybhap" path="res://Art/SkewedRectangleFlash.png" id="7_4fhky"]
 [ext_resource type="Texture2D" uid="uid://c3dh0i2oxpvut" path="res://Art/SkewedSquareLines.png" id="8_h4336"]
 [ext_resource type="AudioStream" uid="uid://dtujjuqhqm13l" path="res://Audio/MenuHover.wav" id="9_h54ff"]
+[ext_resource type="AudioStream" uid="uid://c7a1g8ua5imgw" path="res://Audio/StatMenuOpen.wav" id="10_vecu2"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_0a4u5"]
+load_path = "res://.godot/imported/SkewedRectangleUltBar.png-1770ea699bacfef4d67486e67aa53f25.ctex"
 
 [sub_resource type="BitMap" id="BitMap_5mnuc"]
 
@@ -161,7 +164,7 @@ offset_right = 359.0
 offset_bottom = 680.0
 mouse_filter = 2
 max_value = 500.0
-texture_under = ExtResource("5_b3alx")
+texture_under = SubResource("CompressedTexture2D_0a4u5")
 texture_progress = ExtResource("6_x6dd7")
 tint_progress = Color(1, 1, 1, 0.784314)
 
@@ -234,6 +237,10 @@ polygon = PackedVector2Array(392, 514, 358, 695, 204, 695, 242, 513)
 
 [node name="MenuHover" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_h54ff")
+volume_db = -10.0
+
+[node name="MenuOpen" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_vecu2")
 volume_db = -10.0
 
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://p6pqw153f1fy"]
 
 [ext_resource type="Shader" path="res://Scripts/scrollingBackground.gdshader" id="1_b4fin"]
-[ext_resource type="Script" path="res://Scenes/scrollingBackground.gd" id="1_uq24m"]
+[ext_resource type="Script" path="res://Scripts/scrollingBackground.gd" id="1_uq24m"]
 [ext_resource type="Texture2D" uid="uid://dq6nvvh45uc0j" path="res://Art/Background.png" id="2_u0krj"]
 [ext_resource type="Texture2D" uid="uid://hp3rmxlkt0lj" path="res://Art/BackgroundRed.png" id="3_g5t02"]
 [ext_resource type="Texture2D" uid="uid://bapgy2s8inja5" path="res://Art/BackgroundWhite.png" id="4_iijgk"]

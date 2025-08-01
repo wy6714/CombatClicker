@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://cs3mo6u36kkcl"]
 
 [ext_resource type="Script" path="res://Scripts/expBar.gd" id="1_7oioh"]
-[ext_resource type="Texture2D" uid="uid://ckaeblyvhhml3" path="res://Art/UI_Outline_Meter-1.png (2).png" id="2_tcnls"]
-[ext_resource type="Texture2D" uid="uid://dml1wbet1teiu" path="res://Art/UI_Outline_Meter-2.png (2).png" id="3_0h4eq"]
+[ext_resource type="Texture2D" uid="uid://d3jwty8yupuo" path="res://Art/SlantedLevelUIMeterBlack.png" id="2_moor1"]
+[ext_resource type="Texture2D" uid="uid://cnggnlidhe0bp" path="res://Art/SlantedLevelUIFillBlack.png" id="3_ojyt4"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_5qtbd"]
 [ext_resource type="AudioStream" uid="uid://38bckhfsgcqp" path="res://Audio/ExpFill.mp3" id="5_3ec1f"]
 
@@ -54,6 +54,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 7.0
+offset_right = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7oioh")
@@ -87,20 +89,21 @@ text = "Lv: 1"
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
+offset_top = -12.0
 offset_right = 288.0
-offset_bottom = 288.0
+offset_bottom = 276.0
 pivot_offset = Vector2(144, 144)
 value = 55.0
-texture_under = ExtResource("2_tcnls")
-texture_progress = ExtResource("3_0h4eq")
+texture_under = ExtResource("2_moor1")
+texture_progress = ExtResource("3_ojyt4")
 tint_progress = Color(0.00158004, 0.260254, 0.910674, 1)
 
 [node name="LevelText" type="Label" parent="TextureProgressBar"]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 111.0
-offset_right = 108.0
-offset_bottom = 134.0
+offset_left = 31.0
+offset_top = 121.0
+offset_right = 111.0
+offset_bottom = 144.0
 theme_override_fonts/font = ExtResource("4_5qtbd")
 text = "Lv: 1"
 
