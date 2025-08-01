@@ -48,9 +48,12 @@ var isPlayer = true
 var original_position: Vector2
 var tween: Tween
 var hovering := false
-@onready var poly = $Area2D/CollisionPolygon2D
+@onready var poly = $CharUI2/Area2D/CollisionPolygon2D
 
 var hoverBlocked: bool = false
+
+@onready var charUI1 = $CharUI
+@onready var charUI2 = $CharUI2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -77,24 +80,51 @@ func _on_stats_button_button_down():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
 	var clicked = self  # the member whose button you just hit
 	
-	# CASE A: the menu is closed
+	# Gray out everyone except the selected one
+	for member in get_tree().get_nodes_in_group("UIMember"):
+		if member != clicked:
+			member.charUI1.modulate = Color.DARK_GRAY
+			member.charUI2.modulate = Color.DARK_GRAY
+
+	# CASE A: the menu is closed, open it
 	if not statDisplay.open:
 		statDisplay.visible = true
 		statDisplay.statOpen()  # play opening animation
 		_applyMemberToDisplay(statDisplay, clicked)
 		statDisplay.open = true
+		$CharUI.modulate = Color.WHITE # Make them show as white
+		$CharUI2.modulate = Color.WHITE
 		return
 		
 	# CASE B: the menu is open on the same member → close it
 	if statDisplay.currentlyDisplayingMember == clicked:
 		statDisplay.statClose()  # play closing animation
 		statDisplay.open = false
+		
+		# Return to white
+		for member in get_tree().get_nodes_in_group("UIMember"):
+			member.charUI1.modulate = Color.WHITE
+			member.charUI2.modulate = Color.WHITE
+			
 		return
 	
 	# CASE C: the menu is open but on a DIFFERENT member → just swap data
-	_applyMemberToDisplay(statDisplay, clicked)
-	statDisplay.randomizePitch($MenuOpen)
+	var previousUI1 = statDisplay.currentlyDisplayingMember.charUI1
+	if previousUI1:
+		previousUI1.modulate = Color.DARK_GRAY
+		
+	var previousUI2 = statDisplay.currentlyDisplayingMember.charUI2
+	if previousUI2:
+		previousUI2.modulate = Color.DARK_GRAY
+		
+	# bring the new one forward
+	$CharUI.modulate = Color.WHITE # it SHOULD make the newly selected party member show as white, but it doesnt...
+	$CharUI2.modulate = Color.WHITE
+	
 	# no change to statDisplay.open, no anim
+	_applyMemberToDisplay(statDisplay, clicked)
+	statDisplay.randomizePitch($MenuOpen)	
+	
 
 func _applyMemberToDisplay(statDisplay, member):
 	statDisplay.updateAllPlayerValues(member)  
@@ -104,6 +134,7 @@ func _applyMemberToDisplay(statDisplay, member):
 	statDisplay.upgradePointCostText.text = str(member.upgradePointCost) + " points"
 	statDisplay.updateMemberTextColors()
 	statDisplay.nameText.text = member.characterName
+
 
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text

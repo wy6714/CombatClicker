@@ -20,7 +20,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BuffLines2:frame")
+tracks/0/path = NodePath("CharUI2/BuffLines2:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -32,7 +32,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CharUIFlash:visible")
+tracks/1/path = NodePath("CharUI2/CharUIFlash:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -44,7 +44,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CharUIFlash:modulate")
+tracks/2/path = NodePath("CharUI2/CharUIFlash:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -56,7 +56,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("BuffLines2:visible")
+tracks/3/path = NodePath("CharUI2/BuffLines2:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -72,7 +72,7 @@ length = 0.65
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BuffLines2:frame")
+tracks/0/path = NodePath("CharUI2/BuffLines2:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -84,7 +84,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("BuffLines2:visible")
+tracks/1/path = NodePath("CharUI2/BuffLines2:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -100,7 +100,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CharUIFlash:visible")
+tracks/0/path = NodePath("CharUI2/CharUIFlash:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -112,7 +112,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CharUIFlash:modulate")
+tracks/1/path = NodePath("CharUI2/CharUIFlash:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -129,10 +129,11 @@ _data = {
 "flash": SubResource("Animation_unpg4")
 }
 
-[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "memberData"]]
+[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "UIMember", "memberData"]]
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]
+z_index = 1
 position = Vector2(300, 600)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_37muy")
@@ -156,7 +157,10 @@ flat = true
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
 autostart = true
 
-[node name="PartyMemberProgressBar" type="TextureProgressBar" parent="."]
+[node name="CharUI2" type="Node2D" parent="."]
+z_index = 1
+
+[node name="PartyMemberProgressBar" type="TextureProgressBar" parent="CharUI2"]
 clip_contents = true
 offset_left = 231.0
 offset_top = 552.0
@@ -168,8 +172,8 @@ texture_under = SubResource("CompressedTexture2D_0a4u5")
 texture_progress = ExtResource("6_x6dd7")
 tint_progress = Color(1, 1, 1, 0.784314)
 
-[node name="StatsText" type="Label" parent="."]
-z_index = 98
+[node name="StatsText" type="Label" parent="CharUI2"]
+z_index = 2
 offset_left = 248.0
 offset_top = 571.0
 offset_right = 368.0
@@ -179,7 +183,7 @@ theme_override_fonts/font = ExtResource("3_rftqe")
 theme_override_font_sizes/font_size = 24
 text = "Stats"
 
-[node name="StatsButton" type="TextureButton" parent="."]
+[node name="StatsButton" type="TextureButton" parent="CharUI2"]
 offset_left = 239.0
 offset_top = 565.0
 offset_right = 326.0
@@ -191,7 +195,7 @@ texture_normal = ExtResource("5_r0s8o")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NameEditorBackdrop" type="TextureButton" parent="."]
+[node name="NameEditorBackdrop" type="TextureButton" parent="CharUI2"]
 offset_left = 246.0
 offset_top = 535.0
 offset_right = 333.0
@@ -205,20 +209,25 @@ texture_click_mask = SubResource("BitMap_5mnuc")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CharUIFlash" type="Sprite2D" parent="."]
+[node name="CharUIFlash" type="Sprite2D" parent="CharUI2"]
 visible = false
 z_index = 999
 position = Vector2(300, 600)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("7_4fhky")
 
-[node name="BuffLines2" type="Sprite2D" parent="."]
+[node name="BuffLines2" type="Sprite2D" parent="CharUI2"]
 visible = false
 position = Vector2(300, 600)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("8_h4336")
 hframes = 2
 vframes = 3
+
+[node name="Area2D" type="Area2D" parent="CharUI2"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CharUI2/Area2D"]
+polygon = PackedVector2Array(392, 514, 358, 695, 204, 695, 242, 513)
 
 [node name="UltFlash" type="AnimationPlayer" parent="."]
 libraries = {
@@ -230,11 +239,6 @@ libraries = {
 "": SubResource("AnimationLibrary_icp1n")
 }
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
-polygon = PackedVector2Array(392, 514, 358, 695, 204, 695, 242, 513)
-
 [node name="MenuHover" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_h54ff")
 volume_db = -10.0
@@ -245,6 +249,6 @@ volume_db = -10.0
 
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
-[connection signal="button_down" from="StatsButton" to="." method="_on_stats_button_button_down"]
-[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
-[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="button_down" from="CharUI2/StatsButton" to="." method="_on_stats_button_button_down"]
+[connection signal="mouse_entered" from="CharUI2/Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="CharUI2/Area2D" to="." method="_on_area_2d_mouse_exited"]
