@@ -5,6 +5,8 @@ var capturedMonsters = {}
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 @onready var currentMonsterButton = get_node("/root/Main/CurrentMonsterIconButton")
+@onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
+@onready var unequippedSpriteTex: Texture2D = load("res://Art/QuestionMark.png") as Texture2D
 @onready var targetPosition = get_node("/root/Main/CurrentMonsterIconButton/Target")
 @onready var playerCapturePanel = $Control
 @onready var captureList = $Control/CaptureInfoPanelItems/ScrollContainer/GridContainer
@@ -48,14 +50,14 @@ func equip_monster(monsterName: String):
 	for name in capturedMonsters.keys():
 		if capturedMonsters[name]["passiveActive"]:
 			unequip_monster(name)  # Call the unequip function on active monsters
+			return
 			
 	if monsterName in capturedMonsters:
 		var monster = capturedMonsters[monsterName]
 		if not monster["passiveActive"]:
 			monster["passiveActive"] = true
 			monster["applyEffect"].call(monsterName)
-			print(monsterName, " equipped! Passive activated:", monster["effect"], "Monster Count: ", monster["count"])
-			print("EQUIIIIIIIIIIIIIIIIIIIIIIIIIPPPPPPPPPPPPPPED")
+			print(monsterName, " equipped! Passive activated: ", monster["effect"], "Monster Count: ", monster["count"])
 			randomizePitch($MonsterSelected)
 	else:
 		print("You don't have this monster")
@@ -67,6 +69,7 @@ func unequip_monster(monsterName: String):
 			monster["passiveActive"] = false
 			monster["removeEffect"].call(monsterName)
 			print(monsterName, " unequipped! Passive deactivated. aaaaaaaaaaaaaaaaaaaaaaaaa")
+			currentButtonSprite.texture = unequippedSpriteTex 
 	else:
 		print("You don't have this monster")
 
@@ -157,7 +160,7 @@ func uiSlideIn():
 			node.hoverBlocked = true
 	
 func randomizePitch(audio):
-	var rng = randf_range(0.7, 1.3)
+	var rng = randf_range(0.9, 1.1)
 	audio.pitch_scale = rng
 	audio.play()
 	
