@@ -204,7 +204,6 @@ func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int
 	monsterCollider.position = original_collider.position
 
 	# 6) (Optional) If collider looks wrong, use fallback based on sprite size:
-	
 	match_collider_to_sprite()
 
 	# Lastly, tidy up the temporary instance
@@ -325,11 +324,11 @@ func _on_texture_button_button_down(
 		patTotal
 	)
 	
-	# 4) Play sound effect
+	# 4) Equip the monster
 	
-	$"../../../MonsterSelected".play()
+	player_monster_list.equip_monster(monster["name"])
 	
-	# 5)
+
 	
 	
 
