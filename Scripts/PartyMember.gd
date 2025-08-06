@@ -6,7 +6,7 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 1
+@export var ultRegen: float = 43
 @export var cooldown: float = 7
 @export var statusRate: float = 5
 @export var ultPotency: float = 1
@@ -396,7 +396,7 @@ func onHoverEnter():
 	if !hoverBlocked:
 		if tween: tween.kill() # cancel old tween if it's still running
 		tween = create_tween()
-		var target_pos = original_position + Vector2(5, -5)
+		var target_pos = original_position + Vector2(3, -5)
 		tween.tween_property(self, "position", target_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		$MenuHover.play()
 	
