@@ -143,7 +143,7 @@ func onHoverEnter():
 	if(!hoverBlocked):
 		if tween: tween.kill() # cancel old tween if it's still running
 		tween = create_tween()
-		var target_pos = original_position + Vector2(5, -5)
+		var target_pos = original_position + Vector2(2, -5)
 		tween.tween_property(self, "position", target_pos, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		$MenuHover.play()
 	

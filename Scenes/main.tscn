@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=20 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
+[ext_resource type="PackedScene" uid="uid://bi1ealiv7ea6h" path="res://DialogueBox.tscn" id="12_ueyge"]
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
 [ext_resource type="PackedScene" uid="uid://dmcjcfunlt6m3" path="res://Scenes/break_effect.tscn" id="14_3pg7p"]
 [ext_resource type="PackedScene" uid="uid://cvks11xnytli4" path="res://Scenes/shop_ui.tscn" id="14_hksny"]
@@ -72,6 +73,10 @@ offset_bottom = -91.0
 
 [node name="UltMeter" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("8_fgwng")]
 layout_mode = 1
+offset_left = 28.0
+offset_top = 13.0
+offset_right = 28.0
+offset_bottom = 13.0
 
 [node name="shop" type="Label" parent="." groups=["BreakUIShut"]]
 layout_mode = 0
@@ -446,6 +451,13 @@ text = "1000 points!"
 
 [node name="PartyMemberStatHolderUI" parent="." groups=["BreakUIShut", "DontTurnBackOn"] instance=ExtResource("11_wl6rb")]
 layout_mode = 1
+
+[node name="DialogueBox" parent="." instance=ExtResource("12_ueyge")]
+layout_mode = 1
+offset_left = 313.0
+offset_top = 226.0
+offset_right = 313.0
+offset_bottom = 226.0
 
 [node name="BreakEffect" parent="." instance=ExtResource("14_3pg7p")]
 visible = false

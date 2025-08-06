@@ -129,7 +129,7 @@ script = ExtResource("1_fhgmt")
 
 [node name="CharUI" type="Sprite2D" parent="."]
 z_index = 1
-position = Vector2(300, 600)
+position = Vector2(300, 622)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_ayqdn")
 hframes = 6
@@ -152,6 +152,7 @@ autostart = true
 
 [node name="CharUI2" type="Node2D" parent="."]
 z_index = 1
+position = Vector2(0, 22)
 
 [node name="NameEditorBackdrop" type="TextureButton" parent="CharUI2" groups=["ui"]]
 offset_left = 246.0
