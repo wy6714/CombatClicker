@@ -6,7 +6,7 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 50
+@export var ultRegen: float = 10
 @export var cooldown: float = 7
 @export var statusRate: float = 5
 @export var ultPotency: float = 1
@@ -21,6 +21,7 @@ extends Node2D
 @export var bonusCooldown: float = 0
 @export var bonusStatusRate: float = 0
 @export var bonusUltPotency: float = 0
+
 
 # map element names directly to your bonus‑field names
 var ULT_BUFFS = {
@@ -52,6 +53,11 @@ var ULT_BUFFS = {
 @export var totalAccumulatedUpgradePoints: int = 10
 @export var upgradePointCost: int = 1000
 @export var buffDuration: float = 15
+const SMOOTH_SPEED := 4.0
+
+# maximum allowed duration for an extended buff (seconds)
+var MAX_BUFF_DURATION: float = 60.0
+
 
 # track active buff‐timers by element
 var _active_buffs := {}    # element (String) → Timer
@@ -115,6 +121,16 @@ var hoverBlocked: bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	# make sure each StatusFill uses a fine step and sensible defaults
+	for icon in buffIconList:
+		var fill = icon.get_node("StatusFill")
+		if "step" in fill:
+			fill.step = 0.01
+		fill.min_value = 0
+		fill.max_value = buffDuration
+		fill.value = 0
+
+
 	upgradePoints += player.totalUpgradePoints # Have party members start off with the total # of upgrade points the player has accumulated
 	# through levels. This way players aren't punished for recruiting party members later (they'd start off super weak relative to everyone else)
 	
@@ -141,7 +157,9 @@ func _process(delta):
 		hovering = false
 		onHoverExit()
 		
-	manageBuffIcons()
+	# always update icons every frame so UI never freezes when enemy dies
+	manageBuffIcons(delta)
+
 	
 func determineDamage():
 	currentEnemy = player.currentEnemy
@@ -310,145 +328,184 @@ func updatePartyMemberUlt():
 	
 func useUlt():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	#If you have ult
-	if(ultCharge >= ultLimit):	
+	# If you have ult
+	if ultCharge >= ultLimit:
 		$UltFlash.play("flash")
 		print("usingUlt")
-		ultCharge = 0 #reset ult charge
+		# reset ult charge
+		ultCharge = 0
 		partyMemberProgressBar.value = ultCharge
+
 		var amount = ultPotency + bonusUltPotency  # how much every ult gives
-		# Get the buff, and apply it to whole team. Teammates are in "Buffable"
+
+		# Validate currentElement
+		if currentElement == "None" or currentElement == "":
+			return
+
+		# Look for a global timer under /root/Main named "<Element>Timer"
+		var main = get_node("/root/Main")
+		var timer_path = "/root/Main/" + currentElement + "Timer"
+		var timer = get_node_or_null(timer_path)
+
+		if timer and is_instance_valid(timer):
+			# Extend remaining time by buffDuration (clamped)
+			var new_remaining = clamp(timer.time_left + buffDuration, 0.0, MAX_BUFF_DURATION)
+			timer.stop()
+			timer.wait_time = new_remaining
+			timer.start()
+			print("Extended existing ", currentElement, " timer -> new_remaining: ", new_remaining)
+			print("Total duration for ", currentElement, ": ", new_remaining, " seconds")
+		else:
+			# Create a new timer under /root/Main so it's global/team-wide
+			var t = Timer.new()
+			t.one_shot = true
+			t.wait_time = buffDuration
+			t.name = currentElement + "Timer"
+			main.add_child(t)
+			_active_buffs[currentElement] = t
+			t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
+			t.start()
+			print("Created new ", currentElement, " timer with duration ", buffDuration)
+			print("Total duration for ", currentElement, ": ", buffDuration, " seconds")
+
+		# Apply the buff's numeric effect to all teammates (and play buff anims)
 		match currentElement:
 			"Fire":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					if teammate.is_in_group("Player"):
-						teammate.bonusStrength += amount
-					else:
-						teammate.bonusStrength += amount
-						
-					applyBuffIcon(currentElement)
-					teammate.buffAnim.play("buff")
-					print("BONUS STRENGTH APPLICATION: ", amount)
+					teammate.bonusStrength += amount
+					if teammate.buffAnim:
+						teammate.buffAnim.play("buff")
+				print("BONUS STRENGTH APPLICATION: ", amount)
 			"Water":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					if teammate.is_in_group("Player"):
-						teammate.bonusCritDamage += amount
-					else:
-						teammate.bonusCritDamage += amount
-					
-					applyBuffIcon(currentElement)
-					teammate.buffAnim.play("buff")	
-					print("BONUS STATUS RATE (?) APPLICATION: ", amount)
+					teammate.bonusCritDamage += amount
+					if teammate.buffAnim:
+						teammate.buffAnim.play("buff")
+				print("BONUS STATUS RATE (?) APPLICATION: ", amount)
 			"Wind":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					if teammate.is_in_group("Player"):
-						teammate.bonusCritRate += amount
-					else:
-						teammate.bonusCritRate += amount
-					
-					applyBuffIcon(currentElement)
-					teammate.buffAnim.play("buff")
-					print("BONUS CRIT RATE APPLICATION: ", amount)
+					teammate.bonusCritRate += amount
+					if teammate.buffAnim:
+						teammate.buffAnim.play("buff")
+				print("BONUS CRIT RATE APPLICATION: ", amount)
 			"Earth":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					if teammate.is_in_group("Player"):
-						teammate.bonusCritDamage += amount
-					else:
-						teammate.bonusCritDamage += amount
-					
-					applyBuffIcon(currentElement)
-					teammate.buffAnim.play("buff")
-					print("BONUS CRIT DAMAGE APPLICATION: ", amount)
+					teammate.bonusCritDamage += amount
+					if teammate.buffAnim:
+						teammate.buffAnim.play("buff")
+				print("BONUS CRIT DAMAGE APPLICATION: ", amount)
 			"Electric":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					if teammate.is_in_group("Player"):
-						teammate.bonusUltRegen += amount
-					else:
-						teammate.bonusUltRegen += amount
-						
-					applyBuffIcon(currentElement)
-					teammate.buffAnim.play("buff")
-					print("BONUS ULT REGEN APPLICATION: ", amount)
-					
+					teammate.bonusUltRegen += amount
+					if teammate.buffAnim:
+						teammate.buffAnim.play("buff")
+				print("BONUS ULT REGEN APPLICATION: ", amount)
 			_:
-				return	
-			
-		if(open):
-			if(statDisplay.currentlyDisplayingMember.is_in_group("Player")):
+				return
+
+		# Show / restart the buff icon (call once — applyBuffIcon handles restarting if needed)
+		applyBuffIcon(currentElement)
+
+		# Update the stat display UI if it's open & currently showing someone
+		if open:
+			if statDisplay.currentlyDisplayingMember.is_in_group("Player"):
 				statDisplay.updateAllPlayerValues(statDisplay.currentlyDisplayingMember)
 			else:
 				statDisplay.updateAllValues(statDisplay.currentlyDisplayingMember)
-				
+
 			statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.currentlyDisplayingMember.upgradePoints)
 			statDisplay.upgradePointCostText.text = str(statDisplay.currentlyDisplayingMember.upgradePointCost) + " points"
 			statDisplay.updateMemberTextColors()
 			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
 			
-		# Spawn a brand‐new timer for this buff
-		var t = Timer.new()
-		t.one_shot = true
-		t.wait_time = buffDuration
-		
-		if(currentElement != "None" || currentElement != ""):
-			t.name = currentElement + "Timer"
-			
-		print(t.name)
-		add_child(t)
-		# When it fires, remove precisely this amount
-		t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
-		t.start()
 
-func manageBuffIcons():
-	if currentEnemy and is_instance_valid(currentEnemy) and not currentEnemy.breakState:# If current enemy exists...
-		for icon in buffIconList:
-			if icon.visible:
-				var buff_name = icon.get_meta("buff_name")
-				var timer = get_node(buff_name + "Timer")
-				
-				if timer:
-					var fill_bar = icon.get_node("StatusFill")
-					fill_bar.value = buffDuration - timer.time_left
-					
+
+func manageBuffIcons(delta):
+	# update icons every frame (no currentEnemy gate) so they don't freeze while enemies are dead
+	for icon in buffIconList:
+		if icon.visible:
+			var buff_name = icon.get_meta("buff_name")
+			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
+			var fill_bar = icon.get_node("StatusFill")
+
+			# fine granularity for smooth movement
+			if "step" in fill_bar:
+				fill_bar.step = 0.01
+
+			if timer and is_instance_valid(timer):
+				# visual max uses timer meta "display_total" when available (created/extended earlier)
+				var display_total = timer.get_meta("display_total", timer.wait_time)
+				var remaining = timer.time_left
+				var target_value = clamp(display_total - remaining, 0.0, display_total)
+
+				if fill_bar.max_value != display_total:
+					fill_bar.max_value = display_total
+
+				# smooth the displayed value toward the true target
+				var t = clamp(delta * SMOOTH_SPEED, 0.0, 1.0)
+				fill_bar.value = lerp(fill_bar.value, target_value, t)
+			else:
+				# no timer: slowly lerp back to empty
+				if fill_bar.max_value != buffDuration:
+					fill_bar.max_value = buffDuration
+				var tt = clamp(delta * SMOOTH_SPEED, 0.0, 1.0)
+				fill_bar.value = lerp(fill_bar.value, 0.0, tt)
+
+
 func applyBuffIcon(buff_name: String) -> void:
-	# If it’s already active, just restart its timer & reset the fill bar
-	if buff_name in appliedBuffs:
-		# restart the Timer
-		var t = null
-		if has_node(buff_name + "Timer"):
-			t = get_node(buff_name + "Timer")
-		if t:
-			t.stop()
-			t.start()
-		# reset the fill bar
-		for icon in buffIconList:
-			if icon.visible and icon.get_meta("buff_name") == buff_name:
-				var fill = icon.get_node("StatusFill")
+	# FIRST: if a global icon for this buff already exists, update it and return
+	for icon in buffIconList:
+		if icon.visible and icon.get_meta("buff_name") == buff_name:
+			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
+			var fill = icon.get_node("StatusFill")
+			if timer and is_instance_valid(timer):
+				# ensure the fill bar's max matches the timer's total wait_time
+				fill.max_value = timer.wait_time
+				# set fill to elapsed so it visually matches the current timer progress
+				fill.value = timer.wait_time - timer.time_left
+			else:
+				# No timer (shouldn't usually happen) — reset to default duration
+				fill.max_value = buffDuration
 				fill.value = 0
-				break
-		return
+			return
 
-	# Otherwise, apply it for the first time
+	# OTHERWISE: allocate the first free (invisible) icon for this buff
 	for icon in buffIconList:
 		if not icon.visible:
 			icon.visible = true
-			icon.frame = buffStatusFrames[buff_name]
+			icon.frame = buffStatusFrames.get(buff_name, 0)
 			icon.set_meta("buff_name", buff_name)
-			appliedBuffs.append(buff_name)
-			# initialize its fill bar
+			# keep per-instance list for completeness, but we no longer rely on it to prevent duplicates
+			if not (buff_name in appliedBuffs):
+				appliedBuffs.append(buff_name)
+
 			var fill = icon.get_node("StatusFill")
-			fill.min_value = 0
-			fill.max_value = buffDuration
-			fill.value     = 0
+			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
+			if timer and is_instance_valid(timer):
+				fill.min_value = 0
+				fill.max_value = timer.wait_time
+				fill.value     = timer.wait_time - timer.time_left
+			else:
+				fill.min_value = 0
+				fill.max_value = buffDuration
+				fill.value     = 0
 			break
-			
+	
 func clear_buff_icon(buff_name: String) -> void:
+	# Hide any global icon that matches the buff name
 	for icon in buffIconList:
 		if icon.visible and icon.get_meta("buff_name") == buff_name:
 			icon.visible = false
-			icon.get_node("StatusFill").value = 0
+			var fill = icon.get_node("StatusFill")
+			fill.value = 0
+			fill.min_value = 0
+			fill.max_value = buffDuration
 			icon.set_meta("buff_name", null)
-			appliedBuffs.erase(buff_name)
+			# also remove from this instance's appliedBuffs if present
+			if buff_name in appliedBuffs:
+				appliedBuffs.erase(buff_name)
 			break
+
 			
 func _on_buff_timeout(element: String, amount: float) -> void:
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
