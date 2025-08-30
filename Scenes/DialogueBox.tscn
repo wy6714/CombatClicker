@@ -1,16 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://bi1ealiv7ea6h"]
+[gd_scene load_steps=4 format=3 uid="uid://bi1ealiv7ea6h"]
 
 [ext_resource type="Texture2D" uid="uid://gfbrdgumy1bd" path="res://Art/TestDialogueBox2.png" id="1_2h5cq"]
+[ext_resource type="Script" path="res://Scripts/DialogueBox.gd" id="1_qxh42"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="2_4nvdx"]
 
 [node name="DialogueBox" type="Control"]
-visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 306.0
+offset_top = 219.0
+offset_right = 306.0
+offset_bottom = 219.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_qxh42")
 
 [node name="DialogueBoxRectangle" type="TextureRect" parent="."]
 layout_mode = 0
@@ -28,5 +35,4 @@ offset_right = 1147.0
 offset_bottom = 750.5
 theme_override_fonts/font = ExtResource("2_4nvdx")
 theme_override_font_sizes/font_size = 40
-text = "Player one used their ult! The team raises their ATTACK by 10!"
 autowrap_mode = 2

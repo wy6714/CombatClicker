@@ -4,10 +4,10 @@ extends Node2D
 var weapon_stats = {
 	"Sword1": {
 		"type": "Sword",
-		"strength": 999,
+		"strength": 1,
 		"crit_rate": 1,
 		"crit_damage": 1,
-		"ult_regen": 499,
+		"ult_regen": 1,
 		#"elements": ["Fire", "Water", "Wind", "Earth", "Electric"],
 		"elements": ["Earth", "Water", "Fire"],
 		"status_rate": 5

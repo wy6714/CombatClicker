@@ -129,12 +129,12 @@ var statusFrames = {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	maxHealth = health
 	
 	setInvisible()
 	anim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
 	health = baseHealth * (1 + 0.2 * (player.level - 1))
+	maxHealth = health
 	healthBar.max_value = health
 	healthBar.init_health(health)
 	
@@ -142,8 +142,7 @@ func _ready():
 	# with no other distractions for a while, and THEN we implement enemy gimmicks. 
 	
 	if(player.level >= breakPrereqLevel):
-		#breakable = randi() % 2 == 1  # True or False randomly
-		breakable = true # Debug for when always breakable is desired
+		breakable = randi() % 2 == 1  # True or False randomly
 		#breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up

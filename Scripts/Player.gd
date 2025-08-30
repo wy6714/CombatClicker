@@ -86,9 +86,9 @@ var characterName = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	score = 999999
 	print(";")
-
+	score = 999999
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	claymoreCharging(_delta)
