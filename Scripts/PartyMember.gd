@@ -6,7 +6,7 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 10
+@export var ultRegen: float = 50
 @export var cooldown: float = 7
 @export var statusRate: float = 5
 @export var ultPotency: float = 1
@@ -375,7 +375,10 @@ func useUlt():
 					teammate.bonusStrength += amount
 					if teammate.buffAnim:
 						teammate.buffAnim.play("buff")
+			
 				print("BONUS STRENGTH APPLICATION: ", amount)
+				DialogueBox.type_message(
+				str(characterName) + " has activated their Ultimate! The party's strength has increased by " + str(amount) + ".")
 			"Water":
 				for teammate in get_tree().get_nodes_in_group("Buffable"):
 					teammate.bonusCritDamage += amount
