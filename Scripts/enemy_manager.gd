@@ -7,11 +7,14 @@ var slime = preload("res://Scenes/EnemyScenes/slime.tscn")
 var mushroom = preload("res://Scenes/EnemyScenes/mushroom.tscn")
 
 var enemyList = [chickadee, chicken, ghost, slime, mushroom]
+var enemy_names = ["Chickadee", "Chicken", "Ghost", "Slime", "Mushroom"]
+
+
 var initialInstance = true
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
 
 func _ready():
-	pass
+	spawnChickadeeText()
 
 func spawnEnemy():
 	$EnemySpawnTimer.start()
@@ -28,10 +31,33 @@ func spawnRandomEnemy():
 	var rng = randi_range(0, enemyList.size() - 1)
 	var enemy_instance = enemyList[rng].instantiate()
 	enemy_instance.position = get_viewport().get_size() / 2
+	
+	DialogueBox.type_message(randomEntryText(enemy_names[rng]))
 		
 	add_child(enemy_instance)
 
 func spawnChickadee():
 	var enemy_instance = chickadee.instantiate()  # Create an instance of the chickadee scene
 	enemy_instance.position = get_viewport().get_size() / 2  # Set position to the center
+	DialogueBox.type_message(randomEntryText(enemy_names[0]))
 	add_child(enemy_instance)  # Add the instance to the scene
+	
+func spawnChickadeeText(): # For some reason, the chickadee initially spawned comes from the main scene. 
+	# Spawn chickadee code doesnt even work. so im just gonna make it the dialogue
+	DialogueBox.type_message(randomEntryText(enemy_names[0]))
+	
+func randomEntryText(enemy_name: String) -> String:
+	
+	var templates = [
+	"%s has appeared!",
+	"A wild %s approaches!",
+	"%s jumps into battle!",
+	"You encounter a %s!",
+	"%s stands in your way!",
+	"Suddenly, a %s appears!",
+	"%s challenges you!"
+	]
+
+	# Pick a random phrase
+	var template = templates[randi() % templates.size()]
+	return template % enemy_name

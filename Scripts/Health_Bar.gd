@@ -9,6 +9,7 @@ extends TextureProgressBar
 
 var health = 0 : set = _set_health
 var breakVal = 100: set = _set_break
+var break_max = 100   # explicit authoritative max
 
 func _process(delta):
 	pass
@@ -29,16 +30,17 @@ func _set_health(newHealth):
 		
 func _set_break(newBreak):
 	var prev_break = breakVal
-	breakVal = min(breakBar.max_value, newBreak)
+	# Clamp to our explicit max
+	breakVal = clamp(newBreak, 0, break_max)
+	# Keep the UI consistent with our authoritative max
+	breakBar.max_value = break_max
 	breakBar.value = breakVal
-	
+
 	if breakVal <= 0:
 		breakVal = 0
-	
-	if (breakVal < prev_break):
+
+	if breakVal < prev_break:
 		breakTimer.start()
-	else:
-		pass
 
 func init_health(_health):
 	health = _health
@@ -48,12 +50,14 @@ func init_health(_health):
 	damageBar.value = health
 	
 func init_break(_breakVal):
+	# Set authoritative max and start value
+	break_max = _breakVal
 	breakVal = _breakVal
-	breakBar.max_value = breakVal
+	breakBar.max_value = break_max
 	breakBar.value = breakVal
-	breakDamageBar.max_value = breakVal
+	breakDamageBar.max_value = break_max
 	breakDamageBar.value = breakVal
-
+	
 func _on_timer_timeout():
 	damageBar.value = health # Damage value catches up to health valuepass # Replace with function body.
 
