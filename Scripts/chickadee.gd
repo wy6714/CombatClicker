@@ -234,6 +234,8 @@ func takeBreakDamage(breakDamage):
 		if(!broken):
 			breakAmount -= breakDamage
 			healthBar.breakVal = breakAmount
+			print("Break Bar Amount: ", healthBar.breakVal)
+			print("Break amount: ", breakAmount)
 		if(breakAmount <= 0):
 			if(health >= 0):
 				if(!recovering):

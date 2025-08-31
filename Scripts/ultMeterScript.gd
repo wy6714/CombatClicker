@@ -48,7 +48,7 @@ var initialUltRushBurstUnlock
 func _ready():
 	
 	ultProgressBar.value = 0
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	ultRushTimer.timeout.connect(_on_ult_rush_timer_timeout)
 	
 	ultMeterPos = ultProgressBar.position
