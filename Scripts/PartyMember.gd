@@ -421,8 +421,6 @@ func useUlt():
 			statDisplay.updateMemberTextColors()
 			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
 			
-
-
 func manageBuffIcons(delta):
 	# update icons every frame (no currentEnemy gate) so they don't freeze while enemies are dead
 	for icon in buffIconList:

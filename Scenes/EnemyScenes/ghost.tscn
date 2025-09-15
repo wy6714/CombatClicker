@@ -469,6 +469,14 @@ enemyName = "Ghost"
 
 [node name="Area2D" type="Area2D" parent="."]
 
+[node name="DropShadow" type="AnimatedSprite2D" parent="Area2D"]
+modulate = Color(0, 0, 0, 0.823529)
+position = Vector2(127, 37)
+scale = Vector2(18, 18)
+skew = 0.523599
+sprite_frames = SubResource("SpriteFrames_ri8e5")
+animation = &"Idle"
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
 scale = Vector2(18, 18)
 sprite_frames = SubResource("SpriteFrames_ri8e5")
