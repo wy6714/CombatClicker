@@ -14,6 +14,7 @@ extends Node2D
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
+@onready var dropshadowAnim = $Area2D/DropShadow
 @onready var healthBar = $Health_Bar
 @onready var collision = $Area2D/CollisionShape2D
 
@@ -125,13 +126,14 @@ var statusFrames = {
 	"Petrify": 4
 }
 
+@onready var timeTracker = get_node("/root/Main/scrollingBackground")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	
 	setInvisible()
 	anim.play()
+	dropshadowAnim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
 	health = baseHealth * (1 + 0.2 * (player.level - 1))
 	maxHealth = health
@@ -188,6 +190,7 @@ func _process(_delta):
 			scaling = false  # Stop when finished
 			
 	manageStatusIcons()
+	update_shadow()
 	
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
@@ -693,3 +696,128 @@ func timersResume():
 		if icon.has_meta("status_name") and icon.get_meta("status_name") != null:
 			icon.visible = true
 	
+func update_shadow():
+	# --- DEBUG OVERRIDE: set to true while testing to make the whole cycle very fast ---
+	var DEBUG_FAST := false
+	var DEBUG_DAY_LEN := 4.0  # full loop in seconds when DEBUG_FAST is true
+
+	# Config / safety (fast if debugging)
+	var day_len = timeTracker.day_length
+	if DEBUG_FAST:
+		day_len = DEBUG_DAY_LEN
+
+	if day_len <= 0.0:
+		return
+
+	# normalized time over full cycle [0..1]
+	var local_time := fmod(timeTracker.time, day_len)
+	var tn = local_time / day_len  # 0..1
+
+	# Cosine pattern for base interpolation (0 -> 1 at tn=0.5 -> 0 at tn=1)
+	var p := 0.5 * (1.0 - cos(PI * 2.0 * tn))
+
+	# Key values
+	var morning_pos := Vector2(127, 37)
+	var evening_pos := Vector2(-103, 37)
+	var morning_skew_deg := 30.0
+	var evening_skew_deg := -30.0
+
+	# Morning full scale and the tiny (shrunken) Y-scale you gave
+	var morning_scale := Vector2(16, 16)
+	var small_scale := Vector2(16, 4)             # keep X same, shrink Y to 4
+
+	# The special small-phase position and a "small-phase moved-right" target
+	var small_pos := Vector2(-28, 198)
+	var small_pos_right := small_pos + Vector2(40, 0)  # tweak 40 to change how far it drifts right
+
+	# Default: base interpolation between morning <-> evening (smooth)
+	var base_pos := morning_pos.lerp(evening_pos, p)
+	var base_skew = lerp(morning_skew_deg, evening_skew_deg, p)
+	var base_scale := morning_scale   # keep normal until we enter the special small-phase
+
+	# We'll output final_pos, final_scale, final_skew
+	var final_pos := base_pos
+	var final_scale := base_scale
+	var final_skew = base_skew
+
+	var local_t := -1.0 # for debug printing (only valid if tn >= 0.5)
+
+	# --- Special small-phase after the leftmost peak (midpoint of cycle) ---
+	if tn >= 0.5:
+		local_t = (tn - 0.5) / 0.5  # 0..1 from mid -> end
+
+		# Define fractions of the post-mid half-cycle for the three subphases
+		var shrink_frac := 0.30   # first 30%: evening -> small_pos & shrink
+		var drift_frac  := 0.40   # next 40%: small_pos -> small_pos_right (stay small)
+		var expand_frac := 0.30   # final 30%: small_pos_right -> morning (expand back)
+
+		if local_t <= shrink_frac:
+			# Phase A: evening -> small_pos, shrink Y
+			var s := local_t / shrink_frac   # 0..1
+			final_pos = evening_pos.lerp(small_pos, s)
+			final_scale = morning_scale.lerp(small_scale, s)
+			final_skew = lerp(evening_skew_deg, evening_skew_deg, s)  # keep evening skew initially
+
+		elif local_t <= (shrink_frac + drift_frac):
+			# Phase B: while small, drift slightly right
+			var s := (local_t - shrink_frac) / drift_frac  # 0..1
+			final_pos = small_pos.lerp(small_pos_right, s)
+			final_scale = small_scale
+			final_skew = evening_skew_deg
+
+		else:
+			# Phase C: expand back to morning (small_pos_right -> morning_pos)
+			var s := (local_t - shrink_frac - drift_frac) / expand_frac  # 0..1
+			var ease_s := 0.5 * (1.0 - cos(PI * s))  # cosine ease-in-out on [0..1]
+			final_pos = small_pos_right.lerp(morning_pos, ease_s)
+			final_scale = small_scale.lerp(morning_scale, ease_s)
+			final_skew = lerp(evening_skew_deg, morning_skew_deg, ease_s)
+
+	# Apply results to node
+	dropshadowAnim.position = final_pos
+	dropshadowAnim.scale = final_scale
+	_set_shadow_skew(final_skew)
+
+	# NOTE: when you're done testing, set DEBUG_FAST to false or remove the override.
+
+
+
+func _set_shadow_skew(deg_value: float) -> void:
+	# Safe detection without TYPE_* constants
+	# Try to read the current property if it exists
+	if not dropshadowAnim:
+		return
+
+	# Try to access dropshadowAnim.skew if it exists (use 'has' to avoid errors)
+	var has_skew := false
+	var current = null
+	# Use `get` inside a `match` to avoid runtime errors if property isn't present
+	# (some Node types won't have 'skew')
+	if "skew" in dropshadowAnim:
+		# property access
+		# wrap in `safe` try/catch style using `match` on typeof returned value
+		current = dropshadowAnim.skew
+		has_skew = true
+
+	if has_skew:
+		var t = typeof(current)
+		# compare against typeof(Vector2()) and typeof(0.0) to detect Vector2 vs float
+		if t == typeof(Vector2()):
+			dropshadowAnim.skew = Vector2(deg_to_rad(deg_value), 0.0)
+			return
+		elif t == typeof(0.0):
+			# float (real): assume radians expected
+			dropshadowAnim.skew = deg_to_rad(deg_value)
+			return
+		elif t == typeof(0):
+			# integer -- convert
+			dropshadowAnim.skew = deg_to_rad(float(deg_value))
+			return
+
+	# Fallback: try rotation_degrees if available (Node2D)
+	if "rotation_degrees" in dropshadowAnim:
+		dropshadowAnim.rotation_degrees = deg_value
+		return
+
+	# Final fallback: tweak scale to at least flatten
+	dropshadowAnim.scale.y = 0.6
