@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=22 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://cs3mo6u36kkcl" path="res://Scenes/expBar.tscn" id="7_gst64"]
 [ext_resource type="Script" path="res://Scripts/EquipmentManager.gd" id="7_o1iyn"]
 [ext_resource type="PackedScene" uid="uid://dinvr5xjnps0y" path="res://Scenes/ultMeter.tscn" id="8_fgwng"]
+[ext_resource type="Texture2D" uid="uid://bkswmchfkdo2c" path="res://Art/UI ULT METER OUTLINE.png" id="9_h01e4"]
+[ext_resource type="Texture2D" uid="uid://bnakuo1caxkog" path="res://Art/UI LEVEL METER OUTLINE.png" id="9_hf4es"]
 [ext_resource type="Script" path="res://Scripts/RecruitPartyMember.gd" id="10_xt3va"]
 [ext_resource type="PackedScene" uid="uid://b7nqtkti6xlb0" path="res://Scenes/party_member_stat_holder_ui.tscn" id="11_wl6rb"]
 [ext_resource type="PackedScene" uid="uid://d4eqc4dg6npnh" path="res://Scenes/current_monster_icon_button.tscn" id="13_vp3iu"]
@@ -58,18 +60,34 @@ position = Vector2(570, 337)
 [node name="PartyMemberPlayer" parent="." groups=["Buffable", "Player", "UIMember", "memberData"] instance=ExtResource("6_b5i3i")]
 position = Vector2(42, 0)
 
+[node name="FADE FOR UiLevelMeterOutline" type="Sprite2D" parent="." groups=["BreakUIShut"]]
+modulate = Color(0, 0, 0, 0.784314)
+position = Vector2(1011, 39)
+texture = ExtResource("9_hf4es")
+
+[node name="FADE FOR UiUltMeterOutline" type="Sprite2D" parent="." groups=["BreakUIShut"]]
+modulate = Color(0, 0, 0, 0.784314)
+position = Vector2(1010, 82)
+texture = ExtResource("9_h01e4")
+
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
 layout_mode = 1
 
 [node name="Scoreboard" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("2_s574t")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="ExpBarSystem" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("7_gst64")]
 layout_mode = 1
-offset_left = 903.0
-offset_top = -91.0
-offset_right = 903.0
-offset_bottom = -91.0
+offset_left = 897.0
+offset_top = 16.0
+offset_right = 897.0
+offset_bottom = 16.0
 
 [node name="UltMeter" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("8_fgwng")]
 layout_mode = 1

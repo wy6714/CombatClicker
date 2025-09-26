@@ -13,6 +13,7 @@ extends Node2D
 @export var money: int = 0 
 @export var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
 @export var activeHand: String = "left"
+@onready var scoreNumber = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
 
 # WEAPON BONUS STATS
 var leftWeaponStats = {
@@ -83,10 +84,13 @@ var weaponStats = {}
 
 var ultRushDamageMultiplier = 2.0
 var characterName = ""
+var base_pos : Vector2 = Vector2.ZERO
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print(";")
+	base_pos = scoreNumber.position # store only once
 	score = 999999
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -202,16 +206,24 @@ func levelUp():
 			if node.has_method("gainUpgradePoints"):  # Ensure the node has the function/variable
 				node.gainUpgradePoints()
 		
-		
 func updateScore():
-	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
-	score += damage #Gain points based on how many points you get each click
-	maxScore += damage #Increment the maximum
-	scoreText.text = str(score) #Update text
-	
-	var scoreAnim = get_node("/root/Main/Scoreboard/ScoreBounceAnim")
-	scoreAnim.stop()
-	scoreAnim.play("ScoreBounceAnim")
+	score += damage
+	maxScore += damage
+	scoreNumber.text = str(score)
+
+	# Kill any existing tween before making a new one
+	if scoreNumber.has_meta("tween"):
+		var old_tween = scoreNumber.get_meta("tween")
+		if old_tween and old_tween.is_valid():
+			old_tween.kill()
+
+	var tween := create_tween()
+	scoreNumber.set_meta("tween", tween)
+
+	tween.set_trans(Tween.TRANS_SPRING)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(scoreNumber, "position", base_pos + Vector2(0, -8), 0.08)
+	tween.tween_property(scoreNumber, "position", base_pos, 0.2)
 
 func updateMoney(sum):
 	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
@@ -589,7 +601,7 @@ func stopDrilling(hand: String):
 		activeDrills.erase(hand)
 
 func transactionScoreUpdate(value):
-	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	var scoreText = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
 	score += value
 	scoreText.text = str(score)
 

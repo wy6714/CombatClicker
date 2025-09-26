@@ -1,8 +1,8 @@
 [gd_scene load_steps=24 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
-[ext_resource type="Texture2D" uid="uid://vwtmosia4ooi" path="res://Art/SlantedUltMeterBlack.png" id="2_fvrke"]
-[ext_resource type="Texture2D" uid="uid://cb5cq7wwuvt8a" path="res://Art/SlantedUltMeterFillBlack.png" id="3_cnr66"]
+[ext_resource type="Texture2D" uid="uid://bkswmchfkdo2c" path="res://Art/UI ULT METER OUTLINE.png" id="2_tksla"]
+[ext_resource type="Texture2D" uid="uid://5utut3egrvea" path="res://Art/UI ULT METER FILL.png" id="3_wo3sl"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_oucss"]
 [ext_resource type="Script" path="res://Scripts/SpeedLines.gd" id="5_sdlk3"]
 [ext_resource type="Texture2D" uid="uid://bpvqv6f1s5eo4" path="res://Art/SpeedLine.png" id="6_51v12"]
@@ -148,24 +148,23 @@ script = ExtResource("1_8i3nt")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
-offset_left = 892.0
-offset_top = -71.0
-offset_right = 1180.0
-offset_bottom = 217.0
+offset_left = 895.0
+offset_top = 56.0
+offset_right = 1183.0
+offset_bottom = 344.0
 pivot_offset = Vector2(144, 144)
 mouse_filter = 2
 max_value = 1000.0
-value = 50.0
-texture_under = ExtResource("2_fvrke")
-texture_progress = ExtResource("3_cnr66")
+texture_under = ExtResource("2_tksla")
+texture_progress = ExtResource("3_wo3sl")
 tint_progress = Color(0.488136, 0.430516, 0, 1)
 
 [node name="UltText" type="Label" parent="TextureProgressBar"]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 129.0
-offset_right = 140.0
-offset_bottom = 152.0
+offset_left = 16.0
+offset_top = 7.0
+offset_right = 128.0
+offset_bottom = 30.0
 theme_override_fonts/font = ExtResource("4_oucss")
 text = "23/1000"
 

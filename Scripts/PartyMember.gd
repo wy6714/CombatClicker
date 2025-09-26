@@ -22,6 +22,9 @@ extends Node2D
 @export var bonusStatusRate: float = 0
 @export var bonusUltPotency: float = 0
 
+@export var upgradeCost = 1000 # Points required to buy upgrade points for
+@onready var upgradePointFeedbackLocation = $"+1 Upgrade Point Loc"
+
 
 # map element names directly to your bonus‑field names
 var ULT_BUFFS = {
@@ -140,6 +143,8 @@ func _ready():
 	
 	original_position = position
 	
+	print(position)
+	
 func updateTimer():
 	damageCooldown.wait_time = cooldown - bonusCooldown
 	print(damageCooldown.wait_time)
@@ -215,7 +220,7 @@ func playDamageAnim(position: Vector2):
 		
 		
 func updateScore():
-	var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+	var scoreText = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
 	player.score += damage #Gain points based on how many points you get each click
 	player.maxScore += damage #Increment the maximum
 	scoreText.text = str(player.score) #Update text
