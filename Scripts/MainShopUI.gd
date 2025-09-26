@@ -45,7 +45,7 @@ var darkened_color := Color(0.7, 0.7, 0.7)  # Slightly darker version of white (
 @onready var sword1 = $WeaponStoreMenu/Sword1
 @onready var mainStoreMenu = $MainStoreMenu
 @onready var weaponStoreMenu = $WeaponStoreMenu
-@onready var hireStoreMenu = $HireStoreMenu
+@onready var hireStoreMenu = $MainStoreMenu/HireStoreMenu
 @onready var lotteryStoreMenu = $LotteryStore
 
 @onready var weaponDatabase = get_node("/root/Main/Weapon")
@@ -57,6 +57,10 @@ var equippedWeapons = {
 @onready var initialWeapon = $WeaponStoreMenu/Sword1
 @onready var player = get_node("/root/Main/Player")
 @onready var recruitmentManager = get_node("/root/Main/shop/RecruitPartyMember")
+@onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
+
+@onready var playerCostLabel = $MainStoreMenu/HireStoreMenu/PlayerUpgrade/Cost
+@onready var upgradePointFeedbackPopup = preload("res://Scenes/PlusOneUpgradePoint.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -394,4 +398,30 @@ func updateUnlockedButton():
 				_orig_colors[button] = Color.WHITE
 				hover_colors.erase(button.name)
 				pressed_colors.erase(button.name)
+			
+	
+func playerMemberUpgradeButton():
+	if player.score >= playerStats.upgradePointCost:
+		playerStats.upgradePoints += 1
+		player.score -= playerStats.upgradePointCost
+		player.scoreNumber.text = str(player.score)
+		playerStats.upgradePointCost *= 2
+		playerCostLabel.text = str(playerStats.upgradePointCost)
 
+		var popup := upgradePointFeedbackPopup.instantiate()
+		# Use global for both start and tween
+		popup.global_position = playerStats.upgradePointFeedbackLocation.global_position
+		get_tree().current_scene.add_child(popup)
+
+		var start_pos = popup.global_position
+		var end_pos = start_pos + Vector2(20, -100)
+
+		var tween := create_tween()
+		tween.tween_property(
+			popup,
+			"global_position",       # animate global position
+			end_pos,
+			0.7
+		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	else:
+		print("Player doesnt have enough money..")

@@ -1,0 +1,69 @@
+[gd_scene load_steps=5 format=3 uid="uid://drokwtli6jsbp"]
+
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="1_718kt"]
+
+[sub_resource type="Animation" id="Animation_mtm7g"]
+resource_name = "fadeAway"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.5, 2.5, 2.5001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_h72n1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qhu7o"]
+_data = {
+"RESET": SubResource("Animation_h72n1"),
+"fadeAway": SubResource("Animation_mtm7g")
+}
+
+[node name="+1 Upgrade Point" type="Label"]
+offset_right = 160.0
+offset_bottom = 35.0
+theme_override_fonts/font = ExtResource("1_718kt")
+theme_override_font_sizes/font_size = 16
+text = "+1 Upgrade 
+Point"
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_qhu7o")
+}
+autoplay = "fadeAway"

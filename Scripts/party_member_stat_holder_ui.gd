@@ -234,7 +234,7 @@ func applyUpgrade(button):
 			player.strength = member.strength
 			player.critRate = member.critRate
 			player.critDamage = member.critDamage
-			player.energyRecharge = member.ultRegen
+			player.ultRegen = member.ultRegen
 
 
 func removeUpgrade(button):

@@ -228,6 +228,9 @@ volume_db = -10.0
 stream = ExtResource("8_6vijj")
 volume_db = -10.0
 
+[node name="+1 Upgrade Point Loc" type="Node2D" parent="."]
+position = Vector2(225, 584)
+
 [connection signal="text_changed" from="CharUI/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="timeout" from="CharUI/DamageCooldown" to="." method="_on_damage_cooldown_timeout"]
 [connection signal="button_down" from="CharUI2/StatsButton" to="." method="_on_stats_button_button_down"]

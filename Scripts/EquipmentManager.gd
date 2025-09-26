@@ -1,6 +1,6 @@
 extends Button
 
-@onready var scoreText = get_node("/root/Main/Scoreboard/ScoreNumber")
+@onready var scoreText = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
 @onready var player = get_node("/root/Main/Player")
 
 @export var strengthCost = 50;

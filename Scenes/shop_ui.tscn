@@ -18,7 +18,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HireStoreMenu:position")
+tracks/0/path = NodePath("MainStoreMenu/HireStoreMenu:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -34,7 +34,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("HireStoreMenu:position")
+tracks/0/path = NodePath("MainStoreMenu/HireStoreMenu:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -122,42 +122,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WeaponStoreMenu:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-999, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("HireStoreMenu:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-999, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("LotteryStore:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-999, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_hpv44"]
 resource_name = "WeaponMenuSlideDown"
@@ -226,17 +190,463 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0002
 
+[node name="HireStoreMenu" type="Control" parent="MainStoreMenu"]
+anchors_preset = 0
+offset_left = 9.0
+offset_top = -1.0
+offset_right = 49.0
+offset_bottom = 39.0001
+
+[node name="RecruitButton" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "recruit", "ui_button"]]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 117.0
+offset_top = 82.0
+offset_right = 373.0
+offset_bottom = 178.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/RecruitButton"]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 86.0
+offset_right = 321.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000p"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/RecruitButton"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Recruit"
+
+[node name="PlayerUpgrade" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 140.0
+offset_top = 209.0
+offset_right = 396.0
+offset_bottom = 305.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PlayerUpgrade"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PlayerUpgrade"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "You
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade1" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 130.0
+offset_top = 259.0
+offset_right = 386.0
+offset_bottom = 355.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade1"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade1"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade2" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 121.0
+offset_top = 309.0
+offset_right = 377.0
+offset_bottom = 405.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade2"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade2"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade3" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 109.0
+offset_top = 362.0
+offset_right = 365.0
+offset_bottom = 458.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade3"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade3"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade4" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 102.0
+offset_top = 413.0
+offset_right = 358.0
+offset_bottom = 509.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade4"]
+layout_mode = 0
+offset_left = 54.9999
+offset_top = 90.0
+offset_right = 220.0
+offset_bottom = 123.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade4"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade5" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 93.0
+offset_top = 468.0
+offset_right = 349.0
+offset_bottom = 564.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade5"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade5"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PartyMemberUpgrade6" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
+modulate = Color(0.753984, 0.753984, 0.753984, 1)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 87.0
+offset_top = 518.0
+offset_right = 343.0
+offset_bottom = 614.0
+scale = Vector2(0.4, 0.4)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Cost" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade6"]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 86.0
+offset_right = 291.0
+offset_bottom = 119.0
+theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -6
+theme_override_constants/shadow_offset_y = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/PartyMemberUpgrade6"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 24.0
+offset_right = 153.0
+offset_bottom = 47.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 24
+text = "Locked"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HIRE" type="TextureButton" parent="MainStoreMenu/HireStoreMenu"]
+visible = false
+layout_mode = 0
+offset_left = 79.0
+offset_top = 29.0
+offset_right = 335.0
+offset_bottom = 125.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/HIRE"]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 26.0
+offset_right = 191.0
+offset_bottom = 49.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "HIRE
+"
+
+[node name="Back" type="TextureButton" parent="MainStoreMenu/HireStoreMenu" groups=["back_button", "ui_button"]]
+visible = false
+layout_mode = 0
+offset_left = 25.0
+offset_top = 562.0
+offset_right = 281.0
+offset_bottom = 658.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="MainStoreMenu/HireStoreMenu/Back"]
+layout_mode = 0
+offset_left = 44.0
+offset_top = 26.0
+offset_right = 191.0
+offset_bottom = 49.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 21
+text = "BACK"
+
 [node name="SwordIcon" type="Sprite2D" parent="MainStoreMenu"]
+visible = false
 position = Vector2(79, 234)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_txkhh")
 
 [node name="RecruitmentIcon" type="Sprite2D" parent="MainStoreMenu"]
+visible = false
 position = Vector2(71, 315)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("6_ic8i3")
 
 [node name="LotteryIcon" type="Sprite2D" parent="MainStoreMenu"]
+visible = false
 position = Vector2(63, 393)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("5_fgspc")
@@ -268,7 +678,35 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "STORE"
 
+[node name="UPGRADE" type="TextureButton" parent="MainStoreMenu"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 145.0
+offset_right = 330.0
+offset_bottom = 241.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_sajji")
+
+[node name="Label" type="Label" parent="MainStoreMenu/UPGRADE"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 26.0
+offset_right = 176.0
+offset_bottom = 50.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 7
+theme_override_fonts/font = ExtResource("2_2xnpc")
+theme_override_font_sizes/font_size = 16
+text = "UPGRADES"
+
 [node name="WeaponStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
 layout_mode = 0
 offset_left = 113.0
 offset_top = 209.0
@@ -297,11 +735,12 @@ theme_override_font_sizes/font_size = 21
 text = "WEAPON"
 
 [node name="HireStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
+visible = false
 layout_mode = 0
-offset_left = 105.0
-offset_top = 289.0
-offset_right = 361.0
-offset_bottom = 385.0
+offset_left = 126.0
+offset_top = 87.0
+offset_right = 382.0
+offset_bottom = 183.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
@@ -325,10 +764,10 @@ text = "HIRE"
 
 [node name="LotteryStoreButton" type="TextureButton" parent="MainStoreMenu" groups=["mainUI", "ui_button"]]
 layout_mode = 0
-offset_left = 96.0
-offset_top = 364.0
-offset_right = 352.0
-offset_bottom = 460.0
+offset_left = 24.0
+offset_top = 569.0
+offset_right = 280.0
+offset_bottom = 665.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_sajji")
 
@@ -356,6 +795,7 @@ libraries = {
 }
 
 [node name="WeaponStoreMenu" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_left = -999.0
 offset_right = -959.0
@@ -1080,368 +1520,6 @@ theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 8
 text = "E"
 
-[node name="HireStoreMenu" type="Control" parent="."]
-anchors_preset = 0
-offset_left = -999.0
-offset_right = -959.0
-offset_bottom = 40.0001
-
-[node name="RecruitButton" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "recruit", "ui_button"]]
-layout_mode = 0
-offset_left = 124.0
-offset_top = 97.0
-offset_right = 380.0
-offset_bottom = 193.0
-scale = Vector2(0.5, 0.5)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/RecruitButton"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-text = "1000p"
-
-[node name="Label" type="Label" parent="HireStoreMenu/RecruitButton"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Recruit"
-
-[node name="PartyMember1Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 148.0
-offset_top = 166.0
-offset_right = 404.0
-offset_bottom = 262.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember1Upgrade"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember1Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="PartyMember2Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 133.0
-offset_top = 216.0
-offset_right = 389.0
-offset_bottom = 312.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember2Upgrade"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember2Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="PartyMember3Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 113.0
-offset_top = 270.0
-offset_right = 369.0
-offset_bottom = 366.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember3Upgrade"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember3Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="PartyMember4Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 98.0
-offset_top = 320.0
-offset_right = 354.0
-offset_bottom = 416.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember4Upgrade"]
-layout_mode = 0
-offset_left = 54.9999
-offset_top = 90.0
-offset_right = 220.0
-offset_bottom = 123.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember4Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="PartyMember5Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 80.0
-offset_top = 375.0
-offset_right = 336.0
-offset_bottom = 471.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember5Upgrade"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember5Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="PartyMember6Upgrade" type="TextureButton" parent="HireStoreMenu" groups=["mainUI", "ui_button"]]
-modulate = Color(0.753984, 0.753984, 0.753984, 1)
-layout_mode = 0
-offset_left = 65.0
-offset_top = 425.0
-offset_right = 321.0
-offset_bottom = 521.0
-scale = Vector2(0.4, 0.4)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Cost" type="Label" parent="HireStoreMenu/PartyMember6Upgrade"]
-layout_mode = 0
-offset_left = 126.0
-offset_top = 86.0
-offset_right = 291.0
-offset_bottom = 119.0
-theme_override_colors/font_color = Color(0.942624, 5.87195e-06, 0.598671, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = -6
-theme_override_constants/shadow_offset_y = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 33
-
-[node name="Label" type="Label" parent="HireStoreMenu/PartyMember6Upgrade"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 24.0
-offset_right = 153.0
-offset_bottom = 47.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_constants/line_spacing = 0
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "Locked"
-
-[node name="HIRE" type="TextureButton" parent="HireStoreMenu"]
-layout_mode = 0
-offset_left = 79.0
-offset_top = 29.0
-offset_right = 335.0
-offset_bottom = 125.0
-scale = Vector2(0.5, 0.5)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Label" type="Label" parent="HireStoreMenu/HIRE"]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 26.0
-offset_right = 191.0
-offset_bottom = 49.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "HIRE
-"
-
-[node name="Back" type="TextureButton" parent="HireStoreMenu" groups=["back_button", "ui_button"]]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 562.0
-offset_right = 281.0
-offset_bottom = 658.0
-scale = Vector2(0.5, 0.5)
-texture_normal = ExtResource("2_sajji")
-
-[node name="Label" type="Label" parent="HireStoreMenu/Back"]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 26.0
-offset_right = 191.0
-offset_bottom = 49.0
-scale = Vector2(2, 2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = -4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_outline_size = 7
-theme_override_fonts/font = ExtResource("2_2xnpc")
-theme_override_font_sizes/font_size = 21
-text = "BACK"
-
 [node name="LotteryStore" type="Control" parent="."]
 anchors_preset = 0
 offset_left = -999.0
@@ -1502,3 +1580,5 @@ theme_override_constants/shadow_outline_size = 7
 theme_override_fonts/font = ExtResource("2_2xnpc")
 theme_override_font_sizes/font_size = 21
 text = "BACK"
+
+[connection signal="button_down" from="MainStoreMenu/HireStoreMenu/PlayerUpgrade" to="." method="playerMemberUpgradeButton"]

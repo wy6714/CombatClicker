@@ -54,6 +54,7 @@ var hoverBlocked: bool = false
 
 @onready var charUI1 = $CharUI
 @onready var charUI2 = $CharUI2
+@onready var upgradePointFeedbackLocation = $"+1 Upgrade Point Loc"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
