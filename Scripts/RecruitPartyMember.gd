@@ -43,15 +43,17 @@ func instantiateSelf():
 func newPartyMember():
 	if(partyMemberCount <= partyMemberMax): # (Can only have so many party members, for now at least idk)
 		if(player.score >= partyMemberCost):
-			player.transactionScoreUpdate(partyMemberCost * -1)
-			var partyMember = partyMemberTemplate.instantiate()
+			player.transactionScoreUpdate(partyMemberCost * -1) # Spend money for new member hiring
+			var partyMember = partyMemberTemplate.instantiate() # Instantiate that new member
 			partyMembers.append(partyMember)
 			partyMemberCount += 1
 			partyMember.memberNumber = partyMemberCount
 			print(partyMember.memberNumber)
-			partyMember.position.x = playerMemberIcon.position.x
-			partyMember.position.x += 155 * partyMemberCount
-			get_tree().root.add_child(partyMember)
+			partyMember.position.x = playerMemberIcon.position.x #Align position
+			partyMember.position.x += 155 * partyMemberCount #Align position
+			shopUI.spotlight.position.x += 155 # Align spotlight position
+			get_tree().root.add_child(partyMember) # Instantiate the party member
+			partyMember.arise() # Initial party member arising animation. it is quite goofy.
 			partyMemberCostMult += 1
 			partyMemberCost *= partyMemberCostMult
 			shopUI.updateRecruitmentPrices()
@@ -106,6 +108,7 @@ func partyMemberUpgradeButton(memberNum: int, button):
 					end_pos,
 					0.7
 				).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				shopUI.playMemberUpgradeSE()
 
 				if button.has_node("Cost"):
 					var cost_label := button.get_node("Cost") as Label
@@ -117,6 +120,7 @@ func partyMemberUpgradeButton(memberNum: int, button):
 					push_warning("No 'Cost' node found under partyMember; UI not updated")
 			else:
 				print("Player doesnt have enough money..")
+				shopUI.playNotEnoughMoneySE()
 
 			
 

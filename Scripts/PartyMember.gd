@@ -117,9 +117,12 @@ var tween: Tween
 var hovering := false
 @onready var poly = $CharUI2/Area2D/CollisionPolygon2D
 var hoverBlocked: bool = false
+var rising: bool = false
+var partyMemberIsRising: bool = false
 
 @onready var charUI1 = $CharUI
 @onready var charUI2 = $CharUI2
+@onready var partyMemberData = get_node("/root/Main/shop/RecruitPartyMember")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -145,9 +148,9 @@ func _ready():
 	
 	print(position)
 	
-func updateTimer():
-	damageCooldown.wait_time = cooldown - bonusCooldown
-	print(damageCooldown.wait_time)
+func updateTimer(): #Timer to deal damage
+	if(!rising and !partyMemberIsRising): # Dont do it while in intro cutscene though
+		damageCooldown.wait_time = cooldown - bonusCooldown # Deal damage based on cooldown
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -178,8 +181,9 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	determineDamage()
 	# BASIC  DAMAGE MULTIPLIER (if any, idk yet lol)
 	damage = damage * 1
+				
 	if(currentEnemy != null):
-		if(!currentEnemy.inQTEState): #Dont attack while in QTEs
+		if(!currentEnemy.inQTEState and !rising and !partyMemberIsRising): #Dont attack while in QTEs or rising
 			
 			currentEnemy.takeDamage(damage, 0) # Deal damage (no break damage)
 			
@@ -551,9 +555,26 @@ func _on_buff_timeout(element: String, amount: float) -> void:
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text
 	
-
+func arise():
+	rising = true
+	for member in partyMemberData.partyMembers:
+		member.partyMemberIsRising = true
+		
+	var tween := create_tween()
+	tween.tween_property(
+		self,           # the node this script is on
+		"position:y",   # animate the Y position
+		0,              # final value
+		11.0            # duration (seconds)
+	).from(140)        # start value
+	
+	await tween.finished
+	rising = false
+	for member in partyMemberData.partyMembers:
+		member.partyMemberIsRising = false
+	
 func onHoverEnter():
-	if !hoverBlocked:
+	if not hoverBlocked and not rising:
 		if tween: tween.kill() # cancel old tween if it's still running
 		tween = create_tween()
 		var target_pos = original_position + Vector2(3, -5)
@@ -561,7 +582,7 @@ func onHoverEnter():
 		$MenuHover.play()
 	
 func onHoverExit():
-	if !hoverBlocked:
+	if not hoverBlocked and not rising:
 		if tween: tween.kill()
 		tween = create_tween()
 		tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
