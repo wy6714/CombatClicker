@@ -62,6 +62,9 @@ var equippedWeapons = {
 @onready var playerCostLabel = $MainStoreMenu/HireStoreMenu/PlayerUpgrade/Cost
 @onready var upgradePointFeedbackPopup = preload("res://Scenes/PlusOneUpgradePoint.tscn")
 
+@onready var spotlight = $Spotlight
+@onready var spotlightAnim = $SpotlightAnim
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -147,6 +150,7 @@ func _on_button_mouse_entered(btn: TextureButton):
 	tw.tween_property(btn, "modulate", hover_color, 0.15)
 
 	_active_tweens[btn] = tw
+	playHoverSE()
 
 func _on_button_mouse_exited(btn: TextureButton):
 	var target_color: Color
@@ -355,6 +359,8 @@ func performWeaponAction(mouse_button: String):
 			
 func getNewPartyMember():
 	recruitmentManager.newPartyMember()
+	spotlight.visible = true
+	spotlightAnim.play("SpotlightFade")
 
 #"Sword1": {"type": "Sword", "id": 1, "price": 0, "bought": true}
 func updateWeaponPrices():
@@ -423,5 +429,25 @@ func playerMemberUpgradeButton():
 			end_pos,
 			0.7
 		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		playMemberUpgradeSE()
 	else:
 		print("Player doesnt have enough money..")
+		playNotEnoughMoneySE()
+		
+
+	
+func playMemberUpgradeSE():
+	$ShopUIAudio/MemberUpgrade.play()
+	print("hi (upgrade)")
+	
+func playHoverSE():
+	var rng = randf_range(0.9, 1.1)
+	$ShopUIAudio/Hover.pitch_scale = rng
+	$ShopUIAudio/Hover.play()
+	print("hi (hover)")
+
+func playNotEnoughMoneySE():
+	$ShopUIAudio/NotEnoughMoney.play()
+	print("hi (brokie)")
+	

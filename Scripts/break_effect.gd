@@ -26,11 +26,12 @@ func _on_animation_player_animation_finished(anim_name):
 		breakEffect.visible = false
 		
 func enemySpriteGrowth():
-	player.currentEnemy.start_scaling(player.currentEnemy.original_scale * 2.4, 3)
+	if(player.currentEnemy != null):
+		player.currentEnemy.start_scaling(player.currentEnemy.original_scale * 2.4, 3)
 	
-	# Wait until scaling is done, then trigger shrink
-	await get_tree().create_timer(0.7).timeout
-	enemySpriteShrink()
+		# Wait until scaling is done, then trigger shrink
+		await get_tree().create_timer(0.7).timeout
+		enemySpriteShrink()
 	
 func enemySpriteShrink():
 	player.currentEnemy.start_scaling(player.currentEnemy.original_scale * 2, 788)
