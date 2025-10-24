@@ -54,6 +54,7 @@ func newPartyMember():
 			shopUI.spotlight.position.x += 155 # Align spotlight position
 			get_tree().root.add_child(partyMember) # Instantiate the party member
 			partyMember.arise() # Initial party member arising animation. it is quite goofy.
+			
 			partyMemberCostMult += 1
 			partyMemberCost *= partyMemberCostMult
 			shopUI.updateRecruitmentPrices()

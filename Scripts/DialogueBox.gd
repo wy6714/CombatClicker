@@ -2,6 +2,8 @@ extends Control
 
 @onready var dialogue_label = $DialogueBoxRectangle/DialogueLabel
 @onready var type_timer = Timer.new()
+@onready var player = get_node("/root/Main/Player") # Get a reference to the player
+
 var typing_speed := 0.02 # seconds per character
 var is_typing := false
 var full_text := ""
@@ -16,6 +18,9 @@ func type_message(message: String):
 	if not is_processing:
 		_process_queue()
 
+func hide_dialogue():
+	modulate.a = 0.0
+	
 func _process_queue():
 	is_processing = true
 	should_clear = false

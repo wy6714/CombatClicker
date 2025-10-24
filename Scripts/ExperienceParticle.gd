@@ -16,6 +16,9 @@ var base_y
 func start_float():
 	float_up()
 
+func start_float_long():
+	float_up_long()
+
 func float_up():
 	var rng = randf_range(0.3, 0.7)
 	move_duration_float = rng
@@ -28,7 +31,20 @@ func float_up():
 	await start_floaty_motion(1.0)
 	# Then move to bar
 	move_to_bar()
-
+	
+func float_up_long():
+	var rng = randf_range(0.3, 0.7)
+	move_duration_float = rng
+	# Float up,
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", float_target_position, move_duration_float).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	# Float  for maybe a second, 
+	base_y = position.y
+	await start_floaty_motion(1.4)
+	# Then move to bar
+	move_to_bar()
+	
 func move_to_bar():
 	var tween = create_tween()
 	

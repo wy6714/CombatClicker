@@ -15,7 +15,7 @@ var goodScaleMax = 5.4 # Minimum for getting "Good!"
 var goodScaleMin = 3.5 # Maximum for getting "Good!"
 
 var perfectScaleMax = 3.5 # Minimum for getting "PERFECT!"
-var perfectScaleMin = 2.0 # Maximum for getting "PERFECT!"
+var perfectScaleMin = 2 # Maximum for getting "PERFECT!"
 var final = false
 var loop = false # Loop for debug
 
@@ -29,7 +29,6 @@ var pressed = false # Is the button pressed?
 var goodMultAdd = 7.2
 var perfectMultAdd = 11.5
 var missMultAdd = 0.0
-
 
 @onready var soundPlayer = $AudioStreamPlayer2D
 @onready var okSE = preload("res://Audio/Sound Effect Okay.mp3")
@@ -54,15 +53,18 @@ var expected_key
 var left = false
 var right = false
 
+@onready var currentQTEIndicator = $Visuals/QTEHolder/CurrentCircle
+var is_current = false
+
+signal qte_finished(qte_node, miss, good, perfect)
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# How fast does the event circle shrink
-	scaleTimeLimit = randf_range(0.7, 1.2)
 	
 	# If rush QTE, give the ultSystem access. This is for RUSH. 
 	if(rushQTE):
 		ultSystem.currentQTE = self
-		print("Rush QTE")
 	
 	# Determine if left click or right click, and display the icon. This is for BREAK
 	if(!rushQTE):
@@ -79,9 +81,15 @@ func _process(delta):
 	shrinkEventCircle(delta)
 	
 	if(!ultSystem.inUltRush): # Ult Rush QTEs should spawn qtes "indefinitely"
-		if(qte != null && player != null and is_instance_valid(player.currentEnemy)):
+		
+		for node in get_tree().get_nodes_in_group("activeQTE"): # Get rid of any qtes if not in ult rush
+			if is_instance_valid(node):
+				node.queue_free()
+				
+		if(qte != null && player != null and is_instance_valid(player.currentEnemy)): # Set 4 break qtes
 			if(player.currentEnemy.qtePressedCount >= 4 - 1 && player.currentEnemy.qtePressedCount != null): # There are 4 spawned QTE's. SO, check for when the 3rd one is activated
 				final = true
+				
 
 func shrinkEventCircle(delta):
 	
@@ -97,16 +105,17 @@ func shrinkEventCircle(delta):
 			if loop:
 				scaleTime = 0.0 # Reset timer
 				eventCircle.scale = Vector2(startScale, startScale) # Reset scale
-				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 			else:
 				shrinking = false
-				print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 				$TextureButton.disabled = true
 				anim.play("FadeOut")
 				if(!ultSystem.inUltRush):
 					if(player.currentEnemy != null):
 						player.currentEnemy.qtePressedCount += 1
+				# Emit the signal so the spawner knows this QTE finished
+				miss = true
 				manageRankNum()
+				emit_signal("qte_finished", self, miss, good, perfect)
 				soundPlayer.stream = missSE
 				soundPlayer.play()
 				if(final):
@@ -131,50 +140,49 @@ func manageRankNum():
 	if(perfect):
 		if(player.rankNum < 4 && player.rankNum >= 0):
 			player.rankNum += 1
-		if(player.rankNum <= -1):
+		elif(player.rankNum <= -1):
 			player.rankNum += 2
-	if(miss):
+			
+	elif(miss): # Missed, subtract a point
 		if(player.rankNum > -1):
 			player.rankNum -= 1
-	if(good):
+			
+	if(good): #Player scored good. Help them out if their score is below 0, stay still if its good, reduce to 3 if they were previously perfect.
 		if(player.rankNum <= -1):
 			player.rankNum += 2
-	
+			
+		elif(player.rankNum >= 4):
+			player.rankNum = 3
+
 	determineRank()
 		
 func determineRank():
 	if(player.rankNum <= -1):
-		print("Empty")
 		print(player.rankNum)
 		gradeString.text = missText
 		soundPlayer.stream = missSE
 		
 	elif (miss):
-		print("Miss...")
 		print(player.rankNum)
 		gradeString.text = missText
 		soundPlayer.stream = missSE
 		
 	elif(player.rankNum == 1 || player.rankNum == 0):
-		print("Okay")
 		print(player.rankNum)
 		soundPlayer.stream = okSE  # Set the sound to "Okay"
 		gradeString.text = okString
 
 	elif(player.rankNum == 2):
-		print("Good!")
 		print(player.rankNum)
 		soundPlayer.stream = goodSE  # Set the sound to "Good!"
 		gradeString.text = goodString
 
 	elif(player.rankNum == 3):
-		print("Great!")
 		print(player.rankNum)
 		soundPlayer.stream = greatSE  # Set the sound to "Great!"
 		gradeString.text = greatString
 
 	elif(player.rankNum >= 4):
-		print("Perfect!!!!")
 		print(player.rankNum)
 		soundPlayer.stream = perfectSE  # Set the sound to "Perfect!!!"
 		gradeString.text = perfectString
@@ -196,7 +204,6 @@ func _on_texture_button_button_down():
 				pressed = true
 				player.currentEnemy.qtePressedCount += 1
 				print("Miss...")
-				print(player.rankNum)
 				gradeString.text = missText
 				soundPlayer.stream = missSE
 				soundPlayer.play()  # Play the sound
@@ -214,8 +221,6 @@ func _on_texture_button_button_down():
 				$BounceAnim.play("bounce")
 				pressed = true
 				player.currentEnemy.qtePressedCount += 1
-				print("Miss...")
-				print(player.rankNum)
 				gradeString.text = missText
 				soundPlayer.stream = missSE
 				soundPlayer.play()  # Play the sound
@@ -234,13 +239,13 @@ func _on_texture_button_button_down():
 				print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
 				shrinking = false
 				player.breakQTEdamageMult += goodMultAdd
-				addUltRushTime(1)
+				addUltRushTime(0.1)
 			# Perfect
 			else:
 				print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
 				shrinking = false
 				player.breakQTEdamageMult += perfectMultAdd
-				addUltRushTime(2)
+				addUltRushTime(0.3)
 			
 			if(final):
 				finalQTESetup()
@@ -257,20 +262,17 @@ func _on_texture_button_button_down():
 func rushQTEResult():
 	if(!pressed): # Only press once
 		if(miss):
-			print("MISS! Play 'Miss...' animation, play SE and fade out the circle")
 			shrinking = false
 			player.breakQTEdamageMult += missMultAdd
 			addUltRushTime(0)
 		elif(good):
-			print("GOOD! Play 'Okay' animation, play SE,  and fade out the circle")
 			shrinking = false
 			player.breakQTEdamageMult += goodMultAdd
-			addUltRushTime(1)
+			addUltRushTime(0.2)
 		else:
-			print("PERFECT!!!!!! Play 'Perfect' animation, play SE, and fade out circle")
 			shrinking = false
 			player.breakQTEdamageMult += perfectMultAdd
-			addUltRushTime(2)
+			addUltRushTime(0.4)
 		
 		if(final):
 			finalQTESetup()
@@ -282,15 +284,29 @@ func rushQTEResult():
 		
 		anim.play("FadeOut")
 		$BounceAnim.play("bounce")
-	
+		
+			# Emit the signal so the spawner knows this QTE finished
+		emit_signal("qte_finished", self, miss, good, perfect)
 # Setup QTE
 func setup_qte():
 	# Randomly select one of the 4 directions
 	var keys = [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]
 	expected_key = keys[randi() % keys.size()]
 	show_key_prompt(expected_key) # Show visual prompt to player
-	print("SETUP QTE")
+	# How fast does the event circle shrink
+	scaleTimeLimit = randf_range(0.7, 1.2)
 	pressed = false
+	
+# Setup QTE
+func setup_qte_rush():
+	# Randomly select one of the 4 directions
+	var keys = [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN]
+	expected_key = keys[randi() % keys.size()]
+	show_key_prompt(expected_key)
+	# How fast does the event circle shrink
+	scaleTimeLimit = randf_range(0.7, 1.2)
+	pressed = false
+	# Do NOT start the countdown here — wait for begin_rush()
 
 # Show icon
 func show_key_prompt(key):
@@ -304,32 +320,47 @@ func show_key_prompt(key):
 		KEY_DOWN:
 			determineInputLabelString("↓")
 
+func set_as_current(flag: bool) -> void:
+	is_current = flag
+	# visual feedback: e.g. highlight or pulsing
+	
+	if is_current:
+		currentQTEIndicator.visible = true
+	else:
+		currentQTEIndicator.visible = false
+			
 # Manage input			
 func _unhandled_input(event):
-	if(rushQTE):
-		if pressed:
-			return
+	if not rushQTE:
+		return
 
-		if event is InputEventKey and event.pressed:
-			var key = event.keycode
+	# DO NOT react if this isn't the designated current QTE
+	if not is_current:
+		return
+
+	if pressed:
+		return
 			
-			# Allow arrow keys or WASD
-			var correct = (
-				(key == expected_key) or
-				(key == KEY_A and expected_key == KEY_LEFT) or
-				(key == KEY_D and expected_key == KEY_RIGHT) or
-				(key == KEY_W and expected_key == KEY_UP) or
-				(key == KEY_S and expected_key == KEY_DOWN)
-			)
-			
-			if correct:
-				rushQTEResult() # Grade the input
-			else:
-			  # they hit one of the other QTE keys → that's a miss
-				miss = true
-				good = false
-				perfect = false
-				rushQTEResult()
+	if event is InputEventKey and event.pressed:
+		var key = event.keycode
+		
+		# Allow arrow keys or WASD
+		var correct = (
+			(key == expected_key) or
+			(key == KEY_A and expected_key == KEY_LEFT) or
+			(key == KEY_D and expected_key == KEY_RIGHT) or
+			(key == KEY_W and expected_key == KEY_UP) or
+			(key == KEY_S and expected_key == KEY_DOWN)
+		)
+		
+		if correct:
+			rushQTEResult() # Grade the input
+		else:
+		  # they hit one of the other QTE keys → that's a miss
+			miss = true
+			good = false
+			perfect = false
+			rushQTEResult()
 			
 # -------------------------- END OF RUSH QTE STUFF  ------------------------------
 
@@ -346,7 +377,7 @@ func playSpawnSE():
 func finalQTESetup():
 	break_effect.playExplosion1()
 	
-func addUltRushTime(value: int):
+func addUltRushTime(value: float):
 	if(ultSystem.inUltRush):
 		ultSystem.increaseRushTimerQTE(value)
 		

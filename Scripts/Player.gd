@@ -4,7 +4,9 @@ extends Node2D
 #@export var strength: int = 100 # DEBUG STRENGTH
 @export var critRate: float = 5
 @export var critDamage: float = 2
-@export var ultRegen: float = 1
+#@export var ultRegen: float = 500
+@export var ultRegen: float = 500
+@export var statusRate: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0
 @export var pureDamage: int = 0
@@ -14,6 +16,9 @@ extends Node2D
 @export var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
 @export var activeHand: String = "left"
 @onready var scoreNumber = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
+@onready var autoAttack = false
+@export var autoAttackInterval: float = 0.2
+@onready var autoAttackTimer = $AutoAttackTimer
 
 # WEAPON BONUS STATS
 var leftWeaponStats = {
@@ -93,30 +98,39 @@ func _ready():
 	base_pos = scoreNumber.position # store only once
 	score = 999999
 	
+	
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	claymoreCharging(_delta)
+	#claymoreCharging(_delta)
 		
-	if(drillEquippedLeft || drillEquippedRight):
-		for key in activeDrills:  # Loops through "left" and "right"
-			if activeDrills[key] != null:
-				activeDrills[key].position = (get_global_mouse_position())
-				activeDrills[key]["animation"].position = get_global_mouse_position()
+	#if(drillEquippedLeft || drillEquippedRight):
+	#	for key in activeDrills:  # Loops through "left" and "right"
+	#		if activeDrills[key] != null:
+	#			activeDrills[key].position = (get_global_mouse_position())
+	#			activeDrills[key]["animation"].position = get_global_mouse_position()
 	
-	if drillEquippedLeft:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive:
-			drilling("left")
+	#if drillEquippedLeft:
+	#	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive:
+	#		drilling("left")
 
-	if drillEquippedRight:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive:
-			drilling("right")
+	#if drillEquippedRight:
+	#	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive:
+	#		drilling("right")
 
 	# Check if left mouse button is released
-	if Input.is_action_just_released("left"):
-		stopDrilling("left")
+	#if Input.is_action_just_released("left"):
+	#	stopDrilling("left")
 	# Check if right mouse button is released
-	if Input.is_action_just_released("right"):
-		stopDrilling("right")
+	#if Input.is_action_just_released("right"):
+	#	stopDrilling("right")
+	
+	if autoAttack and not autoAttackTimer.is_stopped():
+		return
+	elif autoAttack and autoAttackTimer.is_stopped():
+		autoAttackTimer.start()
+	elif not autoAttack and not autoAttackTimer.is_stopped():
+		autoAttackTimer.stop()
 		
 func determineDamage(mult):
 	
@@ -131,7 +145,7 @@ func determineDamage(mult):
 	
 	if(ultBarSystem.inUltRush):
 		damage = damage * ultRushDamageMultiplier
-		ultBarSystem.increaseRushTimer(damage)
+		#ultBarSystem.increaseRushTimer(damage) i DONT THInk we should increase time per hit
 		
 	pureDamage = damage # Raw damage before variation
 
@@ -155,10 +169,9 @@ func determineDamage(mult):
 	
 func statusEffect():
 				
-	for element in weaponStats["elements"]:
 		var rng = randi_range(0, 100)
-		if rng <= weaponStats["status_rate"]:
-			match element:
+		if rng <= playerStats.statusRate:
+			match playerStats.currentElement:
 				"Fire":
 					print("Activate the fire stuff")
 					currentEnemy.burn = true
@@ -304,7 +317,7 @@ func determineClaymoreButton(hand: String):
 		startingClaymoreAttackRight = true
 		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
-	determineDamage(5)
+	determineDamage(1)
 	
 	#Multiply break damage if broken
 	breakDamageMultiplier()
@@ -312,8 +325,8 @@ func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
 	if(currentEnemy != null):
 		currentEnemy.takeDamage(damage, swordBreakMult)
 	
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
+	var rngX = randi_range(-30, -10)
+	var rngY = randi_range(-5, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
 	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
 	
@@ -455,8 +468,15 @@ func activateAttackAnim():
 	# Ex: swap from sword animation to greatsword animation depending on weapon etc
 	
 	var attackingAnimation = attackAnim.instantiate()
-	attackingAnimation.position = to_local(get_global_mouse_position())
-	attackingAnimation.determineAnimation(animComboCount)
+	if(!autoAttack):
+		attackingAnimation.position = to_local(get_global_mouse_position())
+	else:
+		attackingAnimation.position = currentEnemy.position
+	if(!crit):
+		attackingAnimation.determineAnimation(animComboCount) #NON CRIT
+	if(crit):
+		attackingAnimation.determineAnimationClaymore(animComboCount) #CRIT
+		
 	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
 	#Simply allows for a satisfying animation combo
 	animComboCount += 1
@@ -510,7 +530,8 @@ func useUlt():
 func ultDamage():
 	determineDamage(100)
 	breakDamageMultiplier()
-	currentEnemy.takeDamage(damage, 1)
+	if(currentEnemy != null):
+		currentEnemy.takeDamage(damage, 1)
 	var rngX = randi_range(-20, 10)
 	var rngY = randi_range(-10, 0)
 	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
@@ -610,7 +631,11 @@ func particleEffect(vMin, vMax, sMin, sMax, lifetime):
 	damageParticles.initial_velocity_max = vMax
 	damageParticles.scale_amount_min = sMin
 	damageParticles.scale_amount_max = sMax
-	damageParticles.position = get_global_mouse_position()
+	if(!autoAttack):
+		damageParticles.position = get_global_mouse_position()
+	else:
+		damageParticles.position = currentEnemy.position
+		
 	damageParticles.lifetime = lifetime
 	damageParticles.restart()
 	damageParticles.emitting = true
@@ -625,22 +650,19 @@ func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effe
 	damageParticles.emitting = true
 	
 func breakDamageMultiplier():
-	if(currentEnemy.breakable):
-		if(currentEnemy.broken):
-			damage = floor(damage * 1.4) # Take a bit more damage when broken
-		else:
-			damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
+	if(currentEnemy != null):
+		if(currentEnemy.breakable):
+			if(currentEnemy.broken):
+				damage = floor(damage * 1.4) # Take a bit more damage when broken
+			else:
+				damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
 
-func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapElements: Array, weapStatusRate: float) -> void:
+func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapStatusRate: float) -> void:
 	leftWeaponStats["strength"] = weapStrength
 	leftWeaponStats["crit_rate"] = weapCritRate
 	leftWeaponStats["crit_damage"] = weapCritDamage
 	leftWeaponStats["ult_regen"] = weapUltRegen
-	leftWeaponStats["elements"] = weapElements
 	leftWeaponStats["status_rate"] = weapStatusRate
-
-	print("LEFT STATS:", leftWeaponStats)
-
 
 func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapElements: Array, weapStatusRate: float) -> void:
 	rightWeaponStats["strength"] = weapStrength
@@ -650,5 +672,6 @@ func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamag
 	rightWeaponStats["elements"] = weapElements
 	rightWeaponStats["status_rate"] = weapStatusRate
 
-	print("RIGHT STATS:", rightWeaponStats)
-
+func autoSwingRush():
+	if(currentEnemy):
+		dealDamage()

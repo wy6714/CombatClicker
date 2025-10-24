@@ -1,12 +1,16 @@
-[gd_scene load_steps=21 format=3 uid="uid://dla7bxyajohr"]
+[gd_scene load_steps=25 format=3 uid="uid://dla7bxyajohr"]
 
 [ext_resource type="Texture2D" uid="uid://c2m4xg2halde0" path="res://Art/QuickTimeEventCircle (1).png" id="1_4bssr"]
 [ext_resource type="Script" path="res://Scripts/qte.gd" id="1_e2lkj"]
-[ext_resource type="Texture2D" uid="uid://bupgxqv8pejvm" path="res://Art/QTESingleCircleIdle.png" id="2_o62j1"]
-[ext_resource type="Texture2D" uid="uid://bue5vxtn34hkf" path="res://Art/QTESingleCirclePressed.png" id="3_cbg74"]
-[ext_resource type="Texture2D" uid="uid://b5vktj2d2x0y7" path="res://Art/QTESingleCircleHover.png" id="4_a4k0i"]
+[ext_resource type="Texture2D" uid="uid://c8v0urfp6xeis" path="res://Art/QTESquare/QTE- Outer Square.png" id="2_h5hl8"]
+[ext_resource type="Texture2D" uid="uid://ddxow3087rytj" path="res://Art/QTESquare/Pixel QTE Button Textures-3.png.png" id="3_a53ly"]
+[ext_resource type="Texture2D" uid="uid://do40qg0bycycm" path="res://Art/QTESquare/Pixel QTE Button Textures-2.png.png" id="4_v7mpf"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="5_6jru0"]
+[ext_resource type="Texture2D" uid="uid://c11orjnx1donm" path="res://Art/QTESquare/QTE- Input Ring.png" id="6_6curc"]
 [ext_resource type="Texture2D" uid="uid://cvcosgd0pmqce" path="res://Art/ComputerMouse.png" id="7_yj4m1"]
+[ext_resource type="Texture2D" uid="uid://ci2lwlouurq1t" path="res://Art/QTESquare/QTE- Inner Square.png" id="8_laroi"]
+[ext_resource type="Texture2D" uid="uid://yberw3pombut" path="res://Art/QTESquare/QTE- Innermost Square.png" id="9_755s4"]
+[ext_resource type="Texture2D" uid="uid://l5ua7qlh03au" path="res://Art/QTESquare/QTE- Black Inner Box.png" id="10_v0qp3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eg44x"]
 atlas = ExtResource("7_yj4m1")
@@ -309,25 +313,26 @@ scale = Vector2(0.7, 0.7)
 script = ExtResource("1_e2lkj")
 
 [node name="TextureButton" type="TextureButton" parent="."]
-modulate = Color(1, 1, 1, 0.231373)
+modulate = Color(1, 1, 1, 0.713726)
+self_modulate = Color(1, 1, 1, 0.156863)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -145.714
-offset_top = -145.714
-offset_right = -105.714
-offset_bottom = -105.714
+offset_left = -161.429
+offset_top = -154.286
+offset_right = -129.429
+offset_bottom = -123.286
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(9, 9)
+scale = Vector2(10, 10)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 button_mask = 7
-texture_normal = ExtResource("4_a4k0i")
-texture_pressed = ExtResource("2_o62j1")
-texture_hover = ExtResource("3_cbg74")
+texture_normal = ExtResource("2_h5hl8")
+texture_pressed = ExtResource("3_a53ly")
+texture_hover = ExtResource("4_v7mpf")
 ignore_texture_size = true
 
 [node name="Visuals" type="Sprite2D" parent="."]
@@ -353,57 +358,36 @@ theme_override_font_sizes/font_size = 48
 text = "Okay"
 
 [node name="EventCircle" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(1, 0, 0, 0.858824)
 z_index = 3
 scale = Vector2(9, 9)
-texture = ExtResource("1_4bssr")
-hframes = 2
-vframes = 3
-frame = 1
+texture = ExtResource("6_6curc")
 
 [node name="Outline" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(0, 0, 0, 1)
+visible = false
 scale = Vector2(7.5, 7.5)
 texture = ExtResource("1_4bssr")
 hframes = 2
 vframes = 3
-frame = 4
 
 [node name="FadedCircle" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(0.482353, 0, 0, 1)
 z_index = 1
 scale = Vector2(7, 7)
-texture = ExtResource("1_4bssr")
-hframes = 2
-vframes = 3
-frame = 4
+texture = ExtResource("2_h5hl8")
 
 [node name="OuterCircle" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(0.27451, 0, 0, 0.678431)
 z_index = 1
-scale = Vector2(5, 5)
-texture = ExtResource("1_4bssr")
-hframes = 2
-vframes = 3
-frame = 4
+scale = Vector2(7, 7)
+texture = ExtResource("8_laroi")
 
 [node name="PerfectZone" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(1, 0.906147, 0.889721, 1)
 z_index = 2
-scale = Vector2(3, 3)
-texture = ExtResource("1_4bssr")
-hframes = 2
-vframes = 3
-frame = 4
+scale = Vector2(7, 7)
+texture = ExtResource("9_755s4")
 
 [node name="InnerCircle" type="Sprite2D" parent="Visuals/QTEHolder"]
-modulate = Color(0, 0, 0, 1)
 z_index = 3
-scale = Vector2(2, 2)
-texture = ExtResource("1_4bssr")
-hframes = 2
-vframes = 3
-frame = 4
+scale = Vector2(7, 7)
+texture = ExtResource("10_v0qp3")
 
 [node name="ButtonToPress" type="Sprite2D" parent="Visuals/QTEHolder"]
 visible = false
@@ -451,7 +435,7 @@ frame_progress = 0.137756
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(101.429, 100)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." groups=["activeQTE"]]
 libraries = {
 "": SubResource("AnimationLibrary_0tads")
 }

@@ -14,4 +14,8 @@ wait_time = 0.1
 
 [node name="DamageParticles" parent="." instance=ExtResource("2_7aul2")]
 
+[node name="AutoAttackTimer" type="Timer" parent="."]
+wait_time = 0.1
+
 [connection signal="timeout" from="DrillTimer" to="." method="_on_drill_timer_timeout"]
+[connection signal="timeout" from="AutoAttackTimer" to="." method="autoSwingRush"]

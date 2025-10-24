@@ -29,10 +29,12 @@ func _on_enemy_spawn_timer_timeout():
 func spawnRandomEnemy():
 
 	var rng = randi_range(0, enemyList.size() - 1)
+	#var rng = 0
 	var enemy_instance = enemyList[rng].instantiate()
 	enemy_instance.position = get_viewport().get_size() / 2
 	
-	DialogueBox.type_message(randomEntryText(enemy_names[rng]))
+	if(!ultBarSystem.inUltRush):
+		DialogueBox.type_message(randomEntryText(enemy_names[rng]))
 		
 	add_child(enemy_instance)
 
@@ -44,7 +46,8 @@ func spawnChickadee():
 	
 func spawnChickadeeText(): # For some reason, the chickadee initially spawned comes from the main scene. 
 	# Spawn chickadee code doesnt even work. so im just gonna make it the dialogue
-	DialogueBox.type_message(randomEntryText(enemy_names[0]))
+	if(!ultBarSystem.inUltRush):
+		DialogueBox.type_message(randomEntryText(enemy_names[0]))
 	
 func randomEntryText(enemy_name: String) -> String:
 	
