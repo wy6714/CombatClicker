@@ -235,7 +235,6 @@ offset_top = -101.0
 offset_right = -120.0
 offset_bottom = -61.0
 scale = Vector2(43.5489, 23.6088)
-mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
 
 [node name="StatBox" type="Sprite2D" parent="."]
@@ -256,9 +255,9 @@ offset_bottom = 365.0
 [node name="Name" type="Label" parent="StatMenuItems"]
 modulate = Color(1, 1, 1, 0.901961)
 layout_mode = 0
-offset_left = -156.0
+offset_left = -150.0
 offset_top = -303.0
-offset_right = -56.0
+offset_right = -50.0
 offset_bottom = -279.0
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_hdsew")
@@ -318,9 +317,9 @@ horizontal_alignment = 1
 
 [node name="CrR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = -155.0
+offset_left = -160.0
 offset_top = -207.0
-offset_right = 45.0
+offset_right = 40.0
 offset_bottom = -191.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
@@ -369,9 +368,9 @@ horizontal_alignment = 1
 
 [node name="CrD" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = -160.0
+offset_left = -170.0
 offset_top = -167.0
-offset_right = 140.0
+offset_right = 130.0
 offset_bottom = -151.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
@@ -420,9 +419,9 @@ horizontal_alignment = 1
 
 [node name="UR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = -170.0
+offset_left = -180.0
 offset_top = -127.0
-offset_right = 130.0
+offset_right = 120.0
 offset_bottom = -111.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
@@ -469,73 +468,22 @@ theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
-[node name="CD" type="Label" parent="StatMenuItems"]
-layout_mode = 0
-offset_left = -180.0
-offset_top = -62.0
-offset_right = 120.0
-offset_bottom = -42.0
-theme_override_fonts/font = ExtResource("3_hdsew")
-theme_override_font_sizes/font_size = 16
-text = "Cooldown:  "
-
-[node name="CooldownPoints" type="Label" parent="StatMenuItems"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = -62.0
-offset_right = 120.0
-offset_bottom = -42.0
-theme_override_fonts/font = ExtResource("3_hdsew")
-text = "1"
-
-[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["add_upgrade", "cooldown"]]
-layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
-theme_override_fonts/font = ExtResource("3_hdsew")
-text = "+"
-
-[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["cooldown", "remove_upgrade"]]
-layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
-theme_override_fonts/font = ExtResource("3_hdsew")
-text = "-
-"
-
-[node name="BonusBuffPointsCD" type="Label" parent="StatMenuItems/CooldownPoints"]
-layout_mode = 0
-offset_left = 70.0
-offset_top = 4.0
-offset_right = 110.0
-offset_bottom = 27.0
-theme_override_fonts/font = ExtResource("3_hdsew")
-theme_override_font_sizes/font_size = 8
-text = "(0)"
-horizontal_alignment = 1
-
 [node name="SR" type="Label" parent="StatMenuItems"]
 layout_mode = 0
 offset_left = -190.0
-offset_top = -22.0
+offset_top = -87.0
 offset_right = 110.0
-offset_bottom = -2.0
+offset_bottom = -67.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
 text = "Status Rate:"
 
 [node name="StatusRatePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = 35.0
-offset_top = -22.0
-offset_right = 111.0
-offset_bottom = -2.0
+offset_left = 40.0
+offset_top = -87.0
+offset_right = 116.0
+offset_bottom = -67.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "1"
 
@@ -571,12 +519,63 @@ theme_override_font_sizes/font_size = 8
 text = "(0)"
 horizontal_alignment = 1
 
+[node name="CD" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = -200.0
+offset_top = -27.0
+offset_right = 100.0
+offset_bottom = -7.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Cooldown:  "
+
+[node name="CooldownPoints" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = -27.0
+offset_right = 115.0
+offset_bottom = -7.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "1"
+
+[node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["add_upgrade", "cooldown"]]
+layout_mode = 0
+offset_left = 125.0
+offset_top = -1.0
+offset_right = 149.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "+"
+
+[node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["cooldown", "remove_upgrade"]]
+layout_mode = 0
+offset_left = 146.0
+offset_top = -1.0
+offset_right = 170.0
+offset_bottom = 30.0
+scale = Vector2(0.8, 0.8)
+theme_override_fonts/font = ExtResource("3_hdsew")
+text = "-
+"
+
+[node name="BonusBuffPointsCD" type="Label" parent="StatMenuItems/CooldownPoints"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 4.0
+offset_right = 110.0
+offset_bottom = 27.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "(0)"
+horizontal_alignment = 1
+
 [node name="UP" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = -201.0
-offset_top = 18.0
-offset_right = 99.0
-offset_bottom = 48.0
+offset_left = -210.0
+offset_top = 17.0
+offset_right = 90.0
+offset_bottom = 47.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
 text = "Ult Potency:"
@@ -643,9 +642,9 @@ text = "1000 points"
 
 [node name="UpgradePoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
-offset_left = -206.0
+offset_left = -220.0
 offset_top = 75.0
-offset_right = 94.0
+offset_right = 80.0
 offset_bottom = 105.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Upgrade Points: 0"

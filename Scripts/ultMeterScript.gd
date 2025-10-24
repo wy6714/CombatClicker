@@ -2,7 +2,7 @@ extends Control
 
 @onready var ultProgressBar = $TextureProgressBar
 @onready var ultText = $TextureProgressBar/UltText
-@export var currentUltValue: float = 0.0
+@export var currentUltValue: float = 999.0
 @export var ultMax: int = 100
 @export var ultRushMax: int = 1000
 @export var canUlt: bool = false
@@ -12,6 +12,7 @@ extends Control
 
 @onready var ultRushTimer = get_node("/root/Main/Scoreboard/UltRushTimer")
 @onready var ultRushTimerLabel = get_node("/root/Main/Scoreboard/UltRushTimerLabel")
+@onready var ultRushBonusTimeText = preload("res://Scenes/UltRushBonusTimeText.tscn")
 
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 
@@ -26,7 +27,7 @@ var currentQTE
 
 # We already have the ult meter progress bar reference
 var ultMeterPos
-var ultMeterRushPos = Vector2(440, 0)
+@onready var ultMeterRushPos = $UltMeterRushPositionNode
 
 @onready var expMeter = get_node("/root/Main/ExpBarSystem")
 var expMeterPos
@@ -59,32 +60,39 @@ func _ready():
 	ultFlash.hide()
 	
 func _process(delta):
-	if(inUltRush):
-		ultRushTimerLabel.text = str(round(ultRushTimer.time_left))
-
+	if inUltRush:
+		var t = ultRushTimer.time_left
+		if t < 0.0:
+			t = 0.0
+		ultRushTimerLabel.text = "%0.1f" % t
+		DialogueBox.hide_dialogue()
+		
+	# No negative ult...
+	if(currentUltValue < 0):
+		currentUltValue = 0
 
 func updateUltProgress(ultRecharge):
 	currentUltValue += ultRecharge
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	updateUltState()
 	
 func subtractUltProgress():
 	currentUltValue -= ultMax
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	updateUltState()
 	
 func resetUltProgress():
 	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	updateUltState()
 	
 func subtractUltRushProgress():
 	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	updateUltState()
 	
 func updateUltState():
@@ -118,17 +126,20 @@ func ultRushSetup():
 	inUltRush = true
 	canUltRush = false
 	ultRushTimerLabel.show()
-	ultRushTimer.wait_time = 15
+	ultRushTimer.wait_time = 10
 	ultRushTimer.start()
 	turnOffUI()
+	player.autoAttack = true
 	
-	$QTETimer.start()
+	# Start the QTE timer with the initial short delay (one-shot)
+	$QTETimer.one_shot = true
+	$QTETimer.start(2.0)   # first spawn after 2 seconds
 	$SpeedLineHolder.show() # Speedlines
 	$SpeedLineHolder2.show() # Speedlines
 	$ColorRect/flash.play("flash") # Flash
 	$UltActivatedSE.play()
 	
-	ultProgressBar.position = ultMeterRushPos
+	ultProgressBar.position = ultMeterRushPos.position
 	expMeter.position = expMeterRushPos
 	moneyLabel.position = moneyRushPos
 	captureIcon.position = captureIconRushPos
@@ -152,7 +163,7 @@ func ultRushBurstSetup():
 	subtractUltRushProgress()
 	despawnQTE()
 	
-func increaseRushTimer(damage: int):
+func increaseRushTimer(damage: int): # PER HIT, LIKELY UNUSED ---------------------------
 	rushAccumulatedDamage += damage
 	
 	if(rushAccumulatedDamage >= damageThreshold):
@@ -162,11 +173,42 @@ func increaseRushTimer(damage: int):
 		ultRushTimer.start(newTime)
 		
 		rushAccumulatedDamage -= damageThreshold
+		
+func increaseRushTimerDefeat(): # PER DEFEAT, LIKELY USED
+	var newTime = ultRushTimer.time_left + timeBonus
+	ultRushTimer.stop()
+	ultRushTimer.start(newTime)
+	
+		# --- Spawn floating bonus time text ---
+	var bonus_text_instance = ultRushBonusTimeText.instantiate()
 
-func increaseRushTimerQTE(value: int):
+	# Add to the same parent as the label (so it appears in the same UI layer)
+	var parent = ultRushTimerLabel.get_parent()
+	parent.add_child(bonus_text_instance)
+
+	# Position it slightly to the left of the timer label
+	var offset = Vector2(-100, 0)  # adjust as needed
+	bonus_text_instance.global_position = ultRushTimerLabel.global_position + offset
+	
+	bonus_text_instance.setTextAnim(timeBonus)
+
+func increaseRushTimerQTE(value: float):
 	var newTime = ultRushTimer.time_left + value	
 	ultRushTimer.stop()
 	ultRushTimer.start(newTime)
+	
+	# --- Spawn floating bonus time text ---
+	var bonus_text_instance = ultRushBonusTimeText.instantiate()
+
+	# Add to the same parent as the label (so it appears in the same UI layer)
+	var parent = ultRushTimerLabel.get_parent()
+	parent.add_child(bonus_text_instance)
+
+	# Position it slightly to the left of the timer label
+	var offset = Vector2(-100, 0)  # adjust as needed
+	bonus_text_instance.global_position = ultRushTimerLabel.global_position + offset
+	
+	bonus_text_instance.setTextAnim(value)
 	
 	
 func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
@@ -175,6 +217,9 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	ultRushTimerLabel.hide()
 	inUltRush = false
 	canUltRushBurst = false
+	player.autoAttack = false
+	
+	$QTETimer.wait_time = 2 # INITIAL SPAWNING RESET 
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
@@ -190,25 +235,40 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	
 	currentUltValue = 0.0
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
+	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	
 	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
 	despawnQTE()
+	
+	# Kill ALL QTE
+	for node in get_tree().get_nodes_in_group("activeQTE"):
+		if is_instance_valid(node):
+			node.queue_free()
 	
 func despawnQTE():
 	if(currentQTE != null):
 		currentQTE.queue_free()
 	
 func endUltRush(): #Aka they used ult
-	turnOnUI()
+	#turnOnUI() DONT RETURN THE UI UNTIL AFTER ATTACK
 	ultRushTimer.stop()
 	ultRushTimerLabel.hide()
+	$"UseUlt!".hide()
 	inUltRush = false
 	canUltRushBurst = false
+	player.autoAttack = false
+	$UltEffectHolder.show()
+	$QTETimer.wait_time = 2 # INITIAL SPAWN TIME RESET
 	$QTETimer.stop()
 	$SpeedLineHolder.hide()
 	$SpeedLineHolder2.hide()
 	$ColorRect/flash.play("flash") # Flash
+	$UltMoveAnim.play("ultEffect")
+	player.currentEnemy.becomeShocked()
+	
+	for node in get_tree().get_nodes_in_group("ultRushBurstHidden"):
+		node.hide()
+	
 	initialUltRushUnlock = false
 	initialUltRushBurstUnlock = false
 	ultFlash.hide()
@@ -223,6 +283,33 @@ func endUltRush(): #Aka they used ult
 	ultProgressBar.value = currentUltValue
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
 	despawnQTE()
+	
+	# Kill ALL QTE
+	for node in get_tree().get_nodes_in_group("activeQTE"):
+		if is_instance_valid(node):
+			node.queue_free()
+	
+func enemyStopAnimating():
+	player.currentEnemy.animationPause()
+	
+func enemyShaking():
+	pass
+	
+func postUltBurstCleanup():
+	turnOnUI()
+	
+	for node in get_tree().get_nodes_in_group("ultRushBurstHidden"):
+		node.show()
+	
+	$PostUltMoveAnim.play("PostUltFadeOut")	
+	player.currentEnemy.healthBar.hide()
+	
+	await get_tree().create_timer(0.1).timeout	
+	$UltEffectHolder.hide()
+	
+	
+func cleanupEnemy():
+	player.currentEnemy.silentlyDie()
 	
 func turnOffUI(): #Shut off all UI to make the break more cinematic
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
@@ -239,7 +326,12 @@ func turnOnUI():
 				
 func spawnQTE():
 	if is_instance_valid(player.currentEnemy):
-		player.currentEnemy.spawnRushQTE()
+		player.currentEnemy.spawnRushQTESet()
 		
 func _on_qte_timer_timeout():
 	spawnQTE()
+	$QTETimer.start(4.5)
+	
+func shakeEnemy():
+	player.currentEnemy.impact_shake(50.0, 2, 65)
+	

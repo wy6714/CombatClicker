@@ -39,6 +39,8 @@ var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREF
 var qteCount = 4
 var inQTEState = false
 var breakState = false
+var canTakeDamage = true
+var currentAnimName
 
 @onready var chargeMeter
 @onready var chargeMeterInstance
@@ -53,7 +55,7 @@ var breakState = false
 @onready var mouseInsideRadius = false
 
 @onready var defeatAnim = $DefeatAnim
-@onready var defeatAnimationList = ["defeatAnim"]
+@onready var defeatAnimationList = ["defeatAnim", "spin", "knock", "anvil", "italian"]
 @onready var damageNumberPosition = $DamageNumberPosition
 @onready var canGrantExp = true
 
@@ -125,8 +127,19 @@ var statusFrames = {
 	"Paralysis": 3,
 	"Petrify": 4
 }
-
 @onready var timeTracker = get_node("/root/Main/scrollingBackground")
+
+@onready var defeatSE = $DefeatSE
+
+var currentQTE
+var activeQTEList
+var currentQTEBurstCount = 0
+
+@onready var qteLocTL = $"QTERushSpawnPositions/Location Top Left"
+@onready var qteLocTR = $"QTERushSpawnPositions/Location Top Right"
+@onready var qteLocBR = $"QTERushSpawnPositions/Location Bottom Right"
+@onready var qteLocBL = $"QTERushSpawnPositions/Location Bottom Left"
+@onready var rushExplosion = preload("res://Scenes/explosion.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -145,13 +158,12 @@ func _ready():
 	
 	if(player.level >= breakPrereqLevel):
 		breakable = randi() % 2 == 1  # True or False randomly
-		#breakable = false # Debug for when never breakable is desired
+		breakable = false # Debug for when never breakable is desired
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
 			breakAmount = baseBreak * (1 + 0.2 * (player.level - 1))
 			healthBar.init_break(breakAmount)
-	
 	
 	player.currentEnemy = self
 	
@@ -195,11 +207,12 @@ func _process(_delta):
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 	if(mouseInsideRadius):
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
-			equipmentManager.performWeaponAction("left")
-		
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
-			equipmentManager.performWeaponAction("right")
+		if(player.autoAttack == false): # DONT ACCEPT PLAYER CLICKS IF THEY ARE IN AUTO ATTACK (unless ult):
+			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
+				equipmentManager.performWeaponAction("left")
+			
+			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
+				equipmentManager.performWeaponAction("right")
 		
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
 			# They can't use the ult big move....but they can enter ultRush
@@ -207,43 +220,45 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 				player.useUltRush()
 			# THEY CAN USE THE ULT BIG MOVE
 			elif(player.ultBarSystem.canUltRushBurst):
-				player.useUltRushBurst()
+				pass
+				#player.useUltRushBurst()
 				player.ultBarSystem.endUltRush()
 			else:
 				# Regular ult
 				player.useUlt()
 					
 func takeDamage(damage, breakMult):
-	health -= damage
-	healthBar.health = health
-	
-	defeatEnemyCheck()
-	if(health > 0):
-		var breakTotal = ceil(damage / 4) * breakMult
+	if(canTakeDamage):
+		health -= damage
+		healthBar.health = health
 		
-		if(breakTotal < 1): # At least, do 5 break damage
-			breakTotal = 5
+		defeatEnemyCheck()
+		if(health > 0):
+			var breakTotal = ceil(damage / 4) * breakMult
 			
-		if(!ultBarSystem.inUltRush):
-			takeBreakDamage(breakTotal)
-		
-		manageDampen(damage)
-		managePetrify(damage)
-		manageParalysis()
+			if(breakTotal < 1): # At least, do 5 break damage
+				breakTotal = 5
+				
+			if(!ultBarSystem.inUltRush):
+				takeBreakDamage(breakTotal)
+			
+			manageDampen(damage)
+			managePetrify(damage)
+			manageParalysis()
 
-	
 func takeBreakDamage(breakDamage):
-	if(breakable):
-		if(!broken):
-			breakAmount -= breakDamage
-			healthBar.breakVal = breakAmount
-			print("Break Bar Amount: ", healthBar.breakVal)
-			print("Break amount: ", breakAmount)
-		if(breakAmount <= 0):
-			if(health >= 0):
-				if(!recovering):
-					broken = true
-					initiateBreak()
+	if(canTakeDamage):
+		if(breakable):
+			if(!broken):
+				breakAmount -= breakDamage
+				healthBar.breakVal = breakAmount
+				print("Break Bar Amount: ", healthBar.breakVal)
+				print("Break amount: ", breakAmount)
+			if(breakAmount <= 0):
+				if(health >= 0):
+					if(!recovering):
+						broken = true
+						initiateBreak()
 			
 func initiateBreak():
 	if(!inQTEState):
@@ -288,6 +303,7 @@ func shrinkAndDealDamage():
 	timersResume()
 	breakState = false
 	collision.disabled = false
+	
 				
 func recoveringFromBreak(delta):
 	if broken:
@@ -315,26 +331,54 @@ func recoveringFromBreak(delta):
 func defeatEnemyCheck():
 	if(health <= 0):
 		broken = false
+		area.input_pickable = false
+		$Area2D/CollisionShape2D.disabled = true
+		
+		if(ultBarSystem.inUltRush):
+			ultBarSystem.increaseRushTimerDefeat()
+		
 		if(canGrantExp):
 			canGrantExp = false
 			player.stopDrilling("left")
 			player.stopDrilling("right")
 			
 			#player.gainExp(expToGive)
-			generateExpParticles()
+			generateExpParticles(false)
 			
 			player.score += defeatPoints
 			player.updateMoney(moneyToGive)
 			monsterCapture()
 			
-			var defeatAnimRng = 0
-			defeatAnim.play(defeatAnimationList[defeatAnimRng])
-			if(ultBarSystem.inUltRush): #Skip the animation and just spawn the new enemy
-				defeatAnimCleanup()
-			area.visible = false
-			healthBar.visible = false
+			#SHRINK ANIM, THAT THEN CALLS DECIDE DEATH ANIM
+			if(!ultBarSystem.inUltRush):
+				defeatAnim.play("shrink")
+			else:
+				
+				var explosion_instance = rushExplosion.instantiate()
+				explosion_instance.global_position = global_position
+				get_tree().current_scene.add_child(explosion_instance)
+				defeatAnimCleanupRush() #Skip the animation and just spawn the new enemy, and EXPLOOODE
+				
+			
+		await get_tree().create_timer(0.05).timeout	
+		player.currentEnemy = null
+		for member in get_tree().get_nodes_in_group("UIMember"):
+			member.currentEnemy = null
+	
+			
+func decideDeathAnim():
+	var defeatAnimRng = randi_range(0, len(defeatAnimationList) - 1)
+	
+	defeatAnim.play(defeatAnimationList[defeatAnimRng])
+	
+	if(ultBarSystem.inUltRush): #Skip the animation and just spawn the new enemy
+		defeatAnimCleanupRush()
 		
-		
+	#area.visible = false (MAKE AREA UNCLICKABLE)
+	area.input_pickable = false
+	$Area2D/CollisionShape2D.disabled = true
+	healthBar.visible = false
+			
 func _on_area_2d_mouse_entered():
 	mouseInsideRadius = true
 	if(!ignoreMouseScale):
@@ -364,11 +408,28 @@ func _on_enemy_scale_animation_finished(anim_name):
 func defeatAnimCleanup():
 	if(!ultBarSystem.inUltRush):
 		enemyManager.spawnEnemy()
+		
+		player.currentEnemy = null
+		for member in get_tree().get_nodes_in_group("UIMember"):
+			member.currentEnemy = null
+		
+		#Wait a bit before queue free so that animations can fully play out
+		await get_tree().create_timer(2.5).timeout	
 		queue_free()
+	
+func defeatAnimCleanupRush():
 	if(ultBarSystem.inUltRush):
 		enemyManager.spawnEnemyUltRush()
+		await get_tree().create_timer(0.1).timeout
+		player.currentEnemy = null
+		for member in get_tree().get_nodes_in_group("UIMember"):
+			member.currentEnemy = null
+		#Wait a bit before queue free so that animations can fully play out	
+		
+		visible = false #explosion animation here
+		
+		await get_tree().create_timer(2.5).timeout
 		queue_free()
-
 	
 func monsterCapture():
 	var captureRng = randi_range(0, 100)
@@ -416,7 +477,167 @@ func spawnRushQTE():
 		
 	spawned_qte_positions.append(random_position)  # Track position
 	
-		
+func spawnRushQTESet():
+	if(ultBarSystem.inUltRush):
+		var burst_count : int = 4
+		var spacing : float = 130.0       # distance between spawned QTEs (no clamping)
+		var per_item_delay : float = 0.35
+		var min_extra : float = 0.25
+		var max_extra : float = 0.50
+		var max_scale_time : float = 3.0
+
+		var mainNode = get_tree().get_root().find_child("Main", true, false)
+		if not mainNode:
+			print("Error: Main node not found!")
+			return
+
+		# pick one of the four anchors (use your @onready nodes)
+		var anchor_index = randi() % 2
+		var anchor_node: Node2D
+		if anchor_index == 0:
+			anchor_node = qteLocBR
+		else:
+			anchor_node = qteLocTR
+
+		var base_pos : Vector2 = anchor_node.global_position
+
+		# ---- ONLY LEFT/RIGHT variant (no up/down) ----
+		var dir := Vector2.ZERO
+		# TL -> RIGHT, TR -> LEFT, BR -> LEFT, BL -> RIGHT
+		if anchor_index == 0:
+			dir = Vector2.UP   
+		elif anchor_index == 1:
+			dir = Vector2.DOWN    
+
+		# If you'd like to restore the original random choice (right OR down / left OR down / left OR up / right OR up),
+		# replace the block above with the commented block below (uncomment it and comment out the left/right assignment).
+		#
+		# ---- COMMENTED: 50/50 direction choice (up/down allowed) ----
+		# var dir := Vector2.ZERO
+		# if anchor_index == 0:
+		#     # TL: right or down
+		#     if randf() < 0.5:
+		#         dir = Vector2.RIGHT
+		#     else:
+		#         dir = Vector2.DOWN
+		# elif anchor_index == 1:
+		#     # TR: left or down
+		#     if randf() < 0.5:
+		#         dir = Vector2.LEFT
+		#     else:
+		#         dir = Vector2.DOWN
+		# elif anchor_index == 2:
+		#     # BR: left or up
+		#     if randf() < 0.5:
+		#         dir = Vector2.LEFT
+		#     else:
+		#         dir = Vector2.UP
+		# else:
+		#     # BL: right or up
+		#     if randf() < 0.5:
+		#         dir = Vector2.RIGHT
+		#     else:
+		#         dir = Vector2.UP
+		# -------------------------------------------------------------
+
+		# ensure lists exist
+		if activeQTEList == null:
+			activeQTEList = []
+		if spawned_qte_positions == null:
+			spawned_qte_positions = []
+
+		# spawn the burst (no bounds/clamping)
+		for i in range(burst_count):
+			var pos = base_pos + dir * (spacing * i)
+
+			var qte_instance = qteRush.instantiate()
+
+			# connect immediately so we don't miss an emit
+			if qte_instance.has_signal("qte_finished"):
+				qte_instance.connect("qte_finished", Callable(self, "_on_qte_finished"))
+			else:
+				print("Warning: spawned QTE has no qte_finished signal declared")
+
+			# set properties then add to scene (stagger appearance for i>0)
+			qte_instance.position = pos
+			qte_instance.rushQTE = true
+
+			if i > 0 and per_item_delay > 0.0:
+				await get_tree().create_timer(per_item_delay).timeout
+
+			mainNode.add_child(qte_instance)
+
+			# run setup on the instance
+			if qte_instance.has_method("setup_qte_rush"):
+				qte_instance.setup_qte_rush()
+			else:
+				print("Warning: QTE instance missing setup_qte_rush()")
+
+			# slight slowdown for subsequent QTEs (non-cumulative)
+			if i > 0:
+				var extra : float = randf_range(min_extra, max_extra)
+				if qte_instance.has_method("set_scale_time_limit"):
+					var new_time = min(qte_instance.scaleTimeLimit + extra, max_scale_time)
+					qte_instance.set_scale_time_limit(new_time)
+				else:
+					qte_instance.scaleTimeLimit = min(qte_instance.scaleTimeLimit + extra, max_scale_time)
+
+			# only the first is current at spawn
+			if qte_instance.has_method("set_as_current"):
+				qte_instance.set_as_current(i == 0)
+
+			# track
+			spawned_qte_positions.append(pos)
+			activeQTEList.append(qte_instance)
+
+		# final housekeeping: prune freed nodes and ensure first is current
+		if activeQTEList.size() > 0:
+			var cleaned := []
+			for q in activeQTEList:
+				if is_instance_valid(q):
+					cleaned.append(q)
+			activeQTEList = cleaned
+
+			for q in activeQTEList:
+				if q.has_method("set_as_current"):
+					q.set_as_current(false)
+
+			if activeQTEList.size() > 0:
+				currentQTE = activeQTEList[0]
+				if is_instance_valid(currentQTE) and currentQTE.has_method("set_as_current"):
+					currentQTE.set_as_current(true)
+			else:
+				currentQTE = null
+
+		# debug:
+		# print("SPAWNED FROM ANCHOR", anchor_index, "DIR", dir, "SPACING", spacing, "POSITIONS:", spawned_qte_positions)
+
+			
+func _on_qte_finished(qte_node: Node, miss: bool, good: bool, perfect: bool) -> void:
+	# Defensive: if the finished node is still valid, clear its flag
+	if is_instance_valid(qte_node) and qte_node.has_method("set_as_current"):
+		qte_node.set_as_current(false)
+
+	# Rebuild activeQTEList without invalid/freed nodes AND without the finished node
+	var new_list := []
+	for q in activeQTEList:
+		# skip freed instances
+		if not is_instance_valid(q):
+			continue
+		# skip the finished one
+		if q == qte_node:
+			continue
+		new_list.append(q)
+	activeQTEList = new_list
+	
+	# Advance the currentQTE to the next valid one (first in the list)
+	if activeQTEList.size() > 0:
+		currentQTE = activeQTEList[0]
+		if is_instance_valid(currentQTE) and currentQTE.has_method("set_as_current"):
+			currentQTE.set_as_current(true)
+	else:
+		currentQTE = null
+
 func spawnQTE(finalQteVal):
 	
 	var max_attempts = 3333  # Avoid infinite loops
@@ -500,40 +721,61 @@ func glassShatterImpact():
 	$DamageFlashAnim.play("flashRed")
 	flashBackgroundRed()
 	
-func generateExpParticles():
-	# Target Spots
+func generateExpParticles(bonus: bool):
+	# collect target spots
 	var float_target_spots: Array[Vector2] = []
-	var particleHolders = get_node("/root/Main/ParticleHolders")
+	var particle_holders = get_node("/root/Main/ParticleHolders")
+	for child in particle_holders.get_children():
+		if child.is_in_group("ExpSpot"):
+			float_target_spots.append(child.global_position)
+
+	# decide how many particles to spawn
+	var num_particles: int
+
+	if bonus:
+		num_particles = 10
+	else:
+		num_particles = 5
+
+	# guard: if there are no target spots, fallback to a sensible default (e.g. enemy pos)
+	var spots_count := float_target_spots.size()
+	if spots_count == 0:
+		push_warning("generateExpParticles: no ExpSpot nodes found — using self.global_position as fallback.")
 	
-	# Get all target spot locations stored in target spot variable
-	for i in particleHolders.get_children():
-		if(i.is_in_group("ExpSpot")):
-			float_target_spots.append(i.global_position)
-		
-	var num_particles = 5
 	for i in range(num_particles):
 		var particle = preload("res://Scenes/ExperienceParticle.tscn").instantiate()
-		get_tree().root.get_node("Main").add_child(particle)
+		get_node("/root/Main").add_child(particle)
 		particle.global_position = self.global_position
-		
+
 		var exp_bar = get_node("/root/Main/ExpBarSystem/TextureProgressBar/LevelText")
-		
-		if(i < 5): #Assign 1 to each target spot (there are 5 currently)
-			var rng = randi_range(-40, 40)
-			var posX = float_target_spots[i].x + rng
-			rng = randi_range(-40, 40)
-			var posY = float_target_spots[i].y + rng
-			particle.float_target_position = Vector2(posX, posY)
-		
+
+		# pick a base spot (use i-th spot if available, otherwise random)
+		var base_pos: Vector2
+		if spots_count == 0:
+			base_pos = self.global_position
+		elif i < spots_count:
+			base_pos = float_target_spots[i]
 		else:
-			var rng = randi_range(0, float_target_spots.size()); #If more than 5, assign it randomly
-			particle.float_target_position = float_target_spots[rng]
-			
-		particle.target_position = exp_bar.global_position  # global position of bar
+			# choose a random index in [0, spots_count-1]
+			var idx = randi() % spots_count
+			base_pos = float_target_spots[idx]
+
+		# add a small random offset so multiple particles don't stack exactly
+		var offset_x = randi_range(-40, 40)
+		var offset_y = randi_range(-40, 40)
+		particle.float_target_position = base_pos + Vector2(offset_x, offset_y)
+
+		# other particle setup
+		particle.target_position = exp_bar.global_position
 		particle.exp_bar_ref = exp_bar
-		particle.exp_value = expToGive / num_particles  # divide the total EXP
-		
-		particle.start_float()
+		# divide exp cleanly (optionally floor/ceil if you need integers)
+		particle.exp_value = expToGive / num_particles
+
+		# start appropriate float
+		if bonus:
+			particle.start_float_long()
+		else:
+			particle.start_float()
 
 #Initiate burn		
 func startBurn():
@@ -778,10 +1020,6 @@ func update_shadow():
 	dropshadowAnim.scale = final_scale
 	_set_shadow_skew(final_skew)
 
-	# NOTE: when you're done testing, set DEBUG_FAST to false or remove the override.
-
-
-
 func _set_shadow_skew(deg_value: float) -> void:
 	# Safe detection without TYPE_* constants
 	# Try to read the current property if it exists
@@ -821,3 +1059,91 @@ func _set_shadow_skew(deg_value: float) -> void:
 
 	# Final fallback: tweak scale to at least flatten
 	dropshadowAnim.scale.y = 0.6
+	
+func animationPause(): #Pause and look stunned for rising
+	var current_frame = anim.frame
+	currentAnimName = anim.animation
+	if anim.animation != "Shock":
+		anim.play("Shock")
+		anim.frame = current_frame
+		
+	dropshadowAnim.pause()
+	anim.pause()
+	canTakeDamage = false
+	
+func animationResume(): #Pause and look stunned for rising
+	var current_frame = anim.frame
+	anim.play(currentAnimName)
+	anim.frame = current_frame
+	anim.play()
+	dropshadowAnim.play()
+	canTakeDamage = true
+	
+func becomeShocked():
+	# Switch to Shock animation but keep same frame
+	var current_frame = anim.frame
+	if anim.animation != "Shock":
+		anim.play("Shock")
+		anim.frame = current_frame		
+	
+func playDefeatSE():
+	var rng = randf_range(0.8, 1.2)
+	defeatSE.pitch_scale = rng
+	defeatSE.play()
+	
+# Put this in your enemy script (or wherever). Call it with `await impact_shake()` if you want to wait.
+func impact_shake(intensity: float = 8.0, duration: float = 0.40, frequency: int = 25) -> void:
+	"""
+	visual_node: Node2D to offset (recommended: a child Node2D called "Visual" with the sprite)
+	intensity: max offset in PIXELS (e.g. 4..12)
+	duration: total shake time in seconds
+	frequency: how many micro-movements per second (higher = more frantic)
+	"""
+
+	var original_pos: Vector2 = area.position
+	var steps = max(1, int(duration * frequency))
+	var step_time: float = duration / float(steps)
+
+	for i in range(steps):
+		# amplitude decays toward 0 so it eases out
+		var decay := 1.0 - float(i) / float(steps)
+		var amp := intensity * decay
+
+		# small random offset: X is stronger, Y is smaller
+		var rx := randf_range(-amp, amp)
+		var ry := randf_range(-amp * 0.35, amp * 0.35)
+
+		var target := original_pos + Vector2(rx, ry)
+
+		# create tween ON the visual node so it won't conflict; short ease out
+		var tw = area.create_tween()
+		tw.tween_property(area, "position", target, step_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		await tw.finished
+
+	# snap back smoothly
+	var snap_t = area.create_tween()
+	snap_t.tween_property(area, "position", original_pos, 0.06).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await snap_t.finished
+	
+func silentlyDie():
+	broken = false
+	area.input_pickable = false
+	$Area2D/CollisionShape2D.disabled = true
+	$Area2D.visible = false
+	$StatusHolder.visible = false
+	if(canGrantExp):
+		canGrantExp = false
+		generateExpParticles(true)
+		player.score += defeatPoints
+		player.updateMoney(moneyToGive)
+		monsterCapture()
+	
+	await get_tree().create_timer(0.05).timeout	
+	player.currentEnemy = null
+	for member in get_tree().get_nodes_in_group("UIMember"):
+		member.currentEnemy = null
+	
+	# Pause before new enemy
+	await get_tree().create_timer(0.5).timeout	
+	enemyManager.spawnEnemy()
+	queue_free()

@@ -127,6 +127,7 @@ var partyMemberIsRising: bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
+	currentEnemy = player.currentEnemy
 	# make sure each StatusFill uses a fine step and sensible defaults
 	for icon in buffIconList:
 		var fill = icon.get_node("StatusFill")
@@ -559,6 +560,8 @@ func arise():
 	rising = true
 	for member in partyMemberData.partyMembers:
 		member.partyMemberIsRising = true
+	
+	currentEnemy.animationPause()
 		
 	var tween := create_tween()
 	tween.tween_property(
@@ -572,6 +575,7 @@ func arise():
 	rising = false
 	for member in partyMemberData.partyMembers:
 		member.partyMemberIsRising = false
+	currentEnemy.animationResume()
 	
 func onHoverEnter():
 	if not hoverBlocked and not rising:

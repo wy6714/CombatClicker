@@ -9,7 +9,7 @@ extends Node2D
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: float = 0
 @export var cooldown: float = 7
-@export var statusRate: float = 0
+@export var statusRate: float = 1
 @export var ultPotency: float = 0
 var currentElement = ""
 
@@ -26,6 +26,8 @@ var currentElement = ""
 @export var baseCritDamage: float = 2
 @export var baseUltRegen: float = 1
 @export var baseCooldown: float = 7
+@export var baseStatusRate: float = 1
+@export var baseUltPotency: float = 0
 
 @export var upgradePoints: int = 0
 @export var upgradeCostMultiplier: float = 1.0
@@ -55,6 +57,12 @@ var hoverBlocked: bool = false
 @onready var charUI1 = $CharUI
 @onready var charUI2 = $CharUI2
 @onready var upgradePointFeedbackLocation = $"+1 Upgrade Point Loc"
+
+@export var fire = false
+@export var water = false
+@export var wind = false
+@export var earth = false
+@export var electric = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

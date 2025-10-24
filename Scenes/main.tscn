@@ -1,7 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://tuab648o7fxb"]
+[gd_scene load_steps=23 format=3 uid="uid://tuab648o7fxb"]
 
 [ext_resource type="PackedScene" uid="uid://djpoqma4i6ff2" path="res://Scenes/EnemyScenes/chickadee.tscn" id="1_246fo"]
 [ext_resource type="Script" path="res://Scripts/game_manager.gd" id="1_b0x31"]
+[ext_resource type="Texture2D" uid="uid://bchydlvsl323m" path="res://Art/DitheredBackdrops-1.png.png" id="1_biaeg"]
 [ext_resource type="PackedScene" uid="uid://dnp4cy3xq0f0p" path="res://Scenes/enemy_manager.tscn" id="2_4tq6c"]
 [ext_resource type="PackedScene" uid="uid://fr2d3ved2h53" path="res://Scenes/tooltip.tscn" id="2_mmnjf"]
 [ext_resource type="PackedScene" uid="uid://dmglenqjhas03" path="res://Scenes/scoreboard.tscn" id="2_s574t"]
@@ -69,6 +70,39 @@ texture = ExtResource("9_hf4es")
 modulate = Color(0, 0, 0, 0.784314)
 position = Vector2(1010, 82)
 texture = ExtResource("9_h01e4")
+
+[node name="AngledShadow" type="Node2D" parent="."]
+visible = false
+position = Vector2(580.717, 55.3271)
+rotation = -0.0349066
+scale = Vector2(37.1092, 5.17886)
+skew = 0.1309
+
+[node name="DitheredBackdrops-1_png" type="Sprite2D" parent="AngledShadow"]
+modulate = Color(1, 1, 1, 0.380392)
+position = Vector2(0, -2.08661)
+scale = Vector2(1, 0.869587)
+texture = ExtResource("1_biaeg")
+
+[node name="DitheredBackdrops-1_png2" type="Sprite2D" parent="AngledShadow"]
+modulate = Color(1, 1, 1, 0.27451)
+texture = ExtResource("1_biaeg")
+
+[node name="StraightShadow" type="Node2D" parent="."]
+position = Vector2(580.717, 55.3271)
+scale = Vector2(37.1092, 5.17886)
+
+[node name="DitheredBackdrops-1_png" type="Sprite2D" parent="StraightShadow"]
+modulate = Color(1, 1, 1, 0.294118)
+position = Vector2(0, -3.4939)
+scale = Vector2(1, 0.781631)
+texture = ExtResource("1_biaeg")
+
+[node name="DitheredBackdrops-1_png2" type="Sprite2D" parent="StraightShadow"]
+modulate = Color(1, 1, 1, 0.156863)
+position = Vector2(0, -1.36989)
+scale = Vector2(1, 0.914382)
+texture = ExtResource("1_biaeg")
 
 [node name="ShopUI" parent="." groups=["BreakUIShut"] instance=ExtResource("14_hksny")]
 layout_mode = 1
@@ -481,7 +515,7 @@ layout_mode = 1
 offset_right = 1070.0
 offset_bottom = 575.0
 
-[node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut", "UltUI"] instance=ExtResource("13_vp3iu")]
+[node name="CurrentMonsterIconButton" parent="." groups=["BreakUIShut", "ultRushBurstHidden"] instance=ExtResource("13_vp3iu")]
 layout_mode = 1
 offset_left = 165.0
 offset_top = 554.0

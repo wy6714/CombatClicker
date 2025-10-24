@@ -124,7 +124,7 @@ _data = {
 "flash": SubResource("Animation_unpg4")
 }
 
-[node name="PartyMemberPlayer" type="Node2D" groups=["BreakUIShut"]]
+[node name="PartyMemberPlayer" type="Node2D" groups=["BreakUIShut", "ultRushBurstHidden"]]
 script = ExtResource("1_fhgmt")
 
 [node name="CharUI" type="Sprite2D" parent="."]

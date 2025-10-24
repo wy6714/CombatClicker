@@ -149,24 +149,19 @@ func updateAllPlayerValues(player):
 	critRateVal.text = str(player.critRate)
 	critDamageVal.text = str(player.critDamage)
 	ultRegenVal.text = str(player.ultRegen)
+	statusRateVal.text = str(player.statusRate)
 	
 	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
 	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
 	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
 	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
+	$StatMenuItems/StatusRatePoints/BonusBuffPointsSR.text = "(" + str(player.bonusStatusRate) + ")"
 	
 	cooldownText.visible = false
 	cooldownVal.visible = false
-	
-	statusRateText.visible = false
-	statusRateVal.visible = false
-	
 	ultPotencyText.visible = false
 	ultPotencyVal.visible = false
 	
-	for btn in get_tree().get_nodes_in_group("ElementalButton"):
-		btn.visible = false
-
 # Updates all player stats, but is invisible (doesnt bring up UI)		
 func playerStatUpdate(player):
 	
@@ -175,11 +170,13 @@ func playerStatUpdate(player):
 	critRateVal.text = str(player.critRate)
 	critDamageVal.text = str(player.critDamage)
 	ultRegenVal.text = str(player.ultRegen)
+	statusRateVal.text = str(player.statusRate)
 	
 	$StatMenuItems/StrengthPoints/BonusBuffPointsSTR.text = "(" + str(player.bonusStrength) + ")"
 	$StatMenuItems/CritRatePoints/BonusBuffPointsCR.text = "(" + str(player.bonusCritRate) + ")"
 	$StatMenuItems/CritDamagePoints/BonusBuffPointsCrD.text = "(" + str(player.bonusCritDamage) + ")"
 	$StatMenuItems/UltRegenPoints/BonusBuffPointsUR.text = "(" + str(player.bonusUltRegen) + ")"
+	$StatMenuItems/StatusRatePoints/BonusBuffPointsSR.text = "(" + str(player.bonusStatusRate) + ")"
 	
 func _on_buy_upgrade_button_down():
 	if(player.score >= member.upgradePointCost):
@@ -219,7 +216,10 @@ func applyUpgrade(button):
 				member.cooldown -= 0.2
 			upgradeTextColorCooldown(cooldownText, member.cooldown, member.baseCooldown)
 		if button.is_in_group("statusRate"):
-			member.statusRate += 1
+			if(member.isPlayer):
+				member.statusRate += 0.2
+			else:
+				member.statusRate += 1
 			upgradeTextColor(statusRateText, member.statusRate, member.baseStatusRate)
 		if button.is_in_group("ultPotency"):
 			member.ultPotency += 1
@@ -235,6 +235,7 @@ func applyUpgrade(button):
 			player.critRate = member.critRate
 			player.critDamage = member.critDamage
 			player.ultRegen = member.ultRegen
+			player.statusRate = member.statusRate
 
 
 func removeUpgrade(button):
@@ -268,7 +269,10 @@ func removeUpgrade(button):
 				upgradeTextColor(critDamageText, member.critDamage, member.baseCritDamage)
 		if button.is_in_group("statusRate"):
 			if member.statusRate > member.baseStatusRate:
-				member.statusRate -= 1
+				if(member.isPlayer):
+					member.statusRate -= 0.2
+				else:
+					member.statusRate -= 1
 				updateUpgradeValues()
 				upgradeTextColor(statusRateText, member.statusRate, member.baseStatusRate)
 		if button.is_in_group("ultPotency"):

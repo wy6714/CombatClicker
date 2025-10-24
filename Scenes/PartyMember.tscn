@@ -129,7 +129,7 @@ _data = {
 "flash": SubResource("Animation_unpg4")
 }
 
-[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "UIMember", "memberData"]]
+[node name="PartyMember" type="Node2D" groups=["BreakUIShut", "Buffable", "PartyMember", "UIMember", "memberData", "ultRushBurstHidden"]]
 script = ExtResource("1_lepxi")
 
 [node name="CharUI" type="Sprite2D" parent="."]

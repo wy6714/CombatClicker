@@ -24,11 +24,14 @@ offset_bottom = -526.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SCORE" type="Label" parent="."]
+[node name="SCORE" type="Label" parent="." groups=["ultRushBurstHidden"]]
 layout_mode = 0
 offset_left = 421.0
 offset_right = 706.0
 offset_bottom = 65.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("1_fl5pe")
 theme_override_font_sizes/font_size = 32
 text = "SCORE"
@@ -41,6 +44,9 @@ offset_left = -245.0
 offset_top = 43.0
 offset_right = 527.0
 offset_bottom = 112.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("1_fl5pe")
 theme_override_font_sizes/font_size = 32
 text = "0"
@@ -172,16 +178,17 @@ libraries = {
 [node name="UltRushTimerLabel" type="Label" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 80.0
-offset_right = 271.0
-offset_bottom = 133.0
+offset_left = 859.0
+offset_top = -33.0
+offset_right = 1051.0
+offset_bottom = 100.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 24
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("1_fl5pe")
-theme_override_font_sizes/font_size = 64
-text = "15"
+theme_override_font_sizes/font_size = 32
+text = "15.5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
