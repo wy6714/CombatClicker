@@ -5,7 +5,7 @@ extends Node2D
 @export var critRate: float = 5
 @export var critDamage: float = 2
 #@export var ultRegen: float = 500
-@export var ultRegen: float = 500
+@export var ultRegen: float = 1
 @export var statusRate: float = 1
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: int = 0

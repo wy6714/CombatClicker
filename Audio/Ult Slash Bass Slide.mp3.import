@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://k8x5xea2dw4d"
+path="res://.godot/imported/Ult Slash Bass Slide.mp3-620827b09c46bc8e5ba5b8e0987b87f5.mp3str"
+
+[deps]
+
+source_file="res://Audio/Ult Slash Bass Slide.mp3"
+dest_files=["res://.godot/imported/Ult Slash Bass Slide.mp3-620827b09c46bc8e5ba5b8e0987b87f5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

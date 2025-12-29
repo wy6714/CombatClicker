@@ -1090,6 +1090,7 @@ script = ExtResource("1_vatxe")
 expToGive = 80
 moneyToGive = 150
 enemyName = "Ghost"
+enemy_type = 2
 
 [node name="ImpactParticles" parent="." instance=ExtResource("2_wxllq")]
 amount = 25

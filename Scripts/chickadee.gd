@@ -141,6 +141,11 @@ var currentQTEBurstCount = 0
 @onready var qteLocBL = $"QTERushSpawnPositions/Location Bottom Left"
 @onready var rushExplosion = preload("res://Scenes/explosion.tscn")
 
+# TYPES OF ENEMIES SO SOUND EFFECTS CAN PLAY
+enum EnemyType { NORMAL, SLIMY, WHISPY, SOLID }
+@export_enum ("Normal", "Slimy", "Whispy", "Solid")
+var enemy_type: int = EnemyType.NORMAL
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
