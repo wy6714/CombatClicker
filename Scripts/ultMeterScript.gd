@@ -2,7 +2,7 @@ extends Control
 
 @onready var ultProgressBar = $TextureProgressBar
 @onready var ultText = $TextureProgressBar/UltText
-@export var currentUltValue: float = 999.0
+@export var currentUltValue: float = 0.0
 @export var ultMax: int = 100
 @export var ultRushMax: int = 1000
 @export var canUlt: bool = false

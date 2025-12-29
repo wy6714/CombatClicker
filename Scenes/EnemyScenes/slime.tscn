@@ -1216,6 +1216,7 @@ script = ExtResource("1_4nkmx")
 expToGive = 80
 moneyToGive = 150
 enemyName = "Slime"
+enemy_type = 1
 
 [node name="ImpactParticles" parent="." instance=ExtResource("2_q3vi3")]
 amount = 25
