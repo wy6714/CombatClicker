@@ -81,13 +81,20 @@ func _process(delta):
 		hovering = false
 		onHoverExit() # Wont trigger if something is blocking the hover
 
-		
-func gainUpgradePoints():
-	upgradePoints += 1
-	
-func _on_stats_button_button_down():
+func _input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var button = $CharUI2/StatsButton
+		if button and button.visible:
+			var button_rect = button.get_global_rect()
+			if button_rect.has_point(event.position):
+				_handle_stats_button_click()
+				get_viewport().set_input_as_handled()
+
+func _handle_stats_button_click():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	var clicked = self  # the member whose button you just hit
+	var clicked = self
+	
+	print("PLAYER STATS BUTTON CLICKED!")
 	
 	# Gray out everyone except the selected one
 	for member in get_tree().get_nodes_in_group("UIMember"):
@@ -98,23 +105,22 @@ func _on_stats_button_button_down():
 	# CASE A: the menu is closed, open it
 	if not statDisplay.open:
 		statDisplay.visible = true
-		statDisplay.statOpen()  # play opening animation
+		statDisplay.statOpen()
 		_applyMemberToDisplay(statDisplay, clicked)
 		statDisplay.open = true
-		$CharUI.modulate = Color.WHITE # Make them show as white
+		$CharUI.modulate = Color.WHITE
 		$CharUI2.modulate = Color.WHITE
 		return
 		
 	# CASE B: the menu is open on the same member → close it
 	if statDisplay.currentlyDisplayingMember == clicked:
-		statDisplay.statClose()  # play closing animation
+		statDisplay.statClose()
 		statDisplay.open = false
 		
 		# Return to white
 		for member in get_tree().get_nodes_in_group("UIMember"):
 			member.charUI1.modulate = Color.WHITE
 			member.charUI2.modulate = Color.WHITE
-			
 		return
 	
 	# CASE C: the menu is open but on a DIFFERENT member → just swap data
@@ -126,14 +132,16 @@ func _on_stats_button_button_down():
 	if previousUI2:
 		previousUI2.modulate = Color.DARK_GRAY
 		
-	# bring the new one forward
-	$CharUI.modulate = Color.WHITE # it SHOULD make the newly selected party member show as white, but it doesnt...
+	$CharUI.modulate = Color.WHITE
 	$CharUI2.modulate = Color.WHITE
-	
-	# no change to statDisplay.open, no anim
 	_applyMemberToDisplay(statDisplay, clicked)
-	statDisplay.randomizePitch($MenuOpen)	
+	statDisplay.randomizePitch($MenuOpen)
+
+func gainUpgradePoints():
+	upgradePoints += 1
 	
+func _on_stats_button_button_down():
+	_handle_stats_button_click()
 
 func _applyMemberToDisplay(statDisplay, member):
 	statDisplay.updateAllPlayerValues(member)  
@@ -161,4 +169,3 @@ func onHoverExit():
 		if tween: tween.kill()
 		tween = create_tween()
 		tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
