@@ -26,31 +26,32 @@ grow_vertical = 2
 
 [node name="SCORE" type="Label" parent="." groups=["ultRushBurstHidden"]]
 layout_mode = 0
-offset_left = 421.0
-offset_right = 706.0
-offset_bottom = 65.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 8
+offset_left = -512.0
+offset_top = 20.0
+offset_right = -227.0
+offset_bottom = 85.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("1_fl5pe")
-theme_override_font_sizes/font_size = 32
-text = "SCORE"
+theme_override_font_sizes/font_size = 24
+text = "Score:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ScoreNumber" type="Label" parent="SCORE"]
-layout_mode = 0
-offset_left = -245.0
-offset_top = 43.0
-offset_right = 527.0
-offset_bottom = 112.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 8
+layout_mode = 1
+offset_left = 589.0
+offset_right = 1741.0
+offset_bottom = 78.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("1_fl5pe")
 theme_override_font_sizes/font_size = 32
 text = "0"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="_SCORE_" type="RichTextLabel" parent="."]
@@ -178,14 +179,12 @@ libraries = {
 [node name="UltRushTimerLabel" type="Label" parent="."]
 visible = false
 layout_mode = 0
-offset_left = 859.0
-offset_top = -33.0
-offset_right = 1051.0
-offset_bottom = 100.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 8
+offset_left = 934.0
+offset_top = -21.0
+offset_right = 1126.0
+offset_bottom = 112.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = -4
 theme_override_fonts/font = ExtResource("1_fl5pe")
 theme_override_font_sizes/font_size = 32
 text = "15.5"

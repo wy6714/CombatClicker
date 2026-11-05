@@ -17,11 +17,11 @@ script = ExtResource("1_4p004")
 [node name="ChargeFill" type="TextureProgressBar" parent="."]
 modulate = Color(1, 1, 1, 0.780392)
 layout_mode = 0
-offset_left = -44.0
-offset_right = 212.0
+offset_right = 256.0
 offset_bottom = 256.0
 rotation = 4.71239
 scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(128, 128)
 mouse_filter = 2
 value = 90.0
 texture_under = ExtResource("2_ivcx2")

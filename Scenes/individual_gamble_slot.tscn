@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://du06kbhjwkm15"]
+
+[ext_resource type="Script" path="res://Scenes/individual_gamble_slot.gd" id="1_3yqa1"]
+[ext_resource type="Texture2D" uid="uid://783sjksa5exk" path="res://Art/Slanted Slot.png" id="2_ymvqv"]
+[ext_resource type="Texture2D" uid="uid://devmqvmlm3pch" path="res://Art/Slanted Slot Glow.png" id="3_vlvgq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qf36"]
+
+[node name="IndividualGambleSlot" type="Control" groups=["IndividualGambleSlot"]]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_3yqa1")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(3, 3)
+texture = ExtResource("2_ymvqv")
+
+[node name="GlowPanel" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(3, 3)
+texture = ExtResource("3_vlvgq")
+
+[node name="GlowPanelOld" type="Panel" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.235294)
+layout_mode = 0
+offset_right = 161.0
+offset_bottom = 161.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0qf36")

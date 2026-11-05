@@ -6,10 +6,10 @@ extends Node2D
 @export var strength: float = 10
 @export var critRate: float = 5
 @export var critDamage: float = 2
+# ULT REGEN DEBUG AT 50 RN
 @export var ultRegen: float = 50
 @export var cooldown: float = 7
 @export var statusRate: float = 5
-@export var ultPotency: float = 1
 
 @export var crit: bool = false # Tracking IF we crit
 @export var damage: float = 0
@@ -20,20 +20,49 @@ extends Node2D
 @export var bonusUltRegen: float = 0
 @export var bonusCooldown: float = 0
 @export var bonusStatusRate: float = 0
-@export var bonusUltPotency: float = 0
 
 @export var upgradeCost = 1000 # Points required to buy upgrade points for
 @onready var upgradePointFeedbackLocation = $"+1 Upgrade Point Loc"
 
 
-# map element names directly to your bonus‑field names
-var ULT_BUFFS = {
-	"Fire":     "bonusStrength",
-	"Water":    "bonusUltPotency",
-	"Wind":     "bonusCritRate",
-	"Earth":    "bonusCritDamage",
-	"Electric": "bonusUltRegen",
-}
+@export_category("Party Ultimate Buff")
+
+@export var ultBuffDuration: float = 15.0
+
+# Buff gained from EACH Ultimate.
+@export var ultBuffStrength: float = 10.0
+@export var ultBuffCritRate: float = 5.0
+@export var ultBuffCritDamage: float = 1.0
+@export var ultBuffUltRegen: float = 5.0
+@export var ultBuffStatusRate: float = 5.0
+
+@export var ultBuffStrengthPercent: float = 5.0
+@export var ultBuffCritRatePercent: float = 3.0
+@export var ultBuffCritDamagePercent: float = 1.0
+@export var ultBuffUltRegenPercent: float = 2.0
+@export var ultBuffStatusRatePercent: float = 3.0
+
+# Track the exact bonuses applied to each character.
+const ULT_APPLIED_STRENGTH_META := "party_ult_applied_strength"
+const ULT_APPLIED_CRIT_RATE_META := "party_ult_applied_crit_rate"
+const ULT_APPLIED_CRIT_DAMAGE_META := "party_ult_applied_crit_damage"
+const ULT_APPLIED_ULT_REGEN_META := "party_ult_applied_ult_regen"
+const ULT_APPLIED_STATUS_RATE_META := "party_ult_applied_status_rate"
+const ULT_APPLIED_COOLDOWN_META := "party_ult_applied_cooldown"
+
+# Party members only.
+# bonusCooldown is subtracted from cooldown elsewhere.
+@export var ultBuffCooldown: float = 0.5
+
+const ULT_BUFF_STACK_META := "party_ult_buff_stacks"
+const ULT_BUFF_ULT_COUNT_META := "party_ult_buff_ult_count"
+const ULT_BUFF_TIMER_NAME := "PartyUltBuffTimer"
+const MAX_ULT_BUFF_STACKS := 5
+const MIN_ULT_BUFF_DURATION := 3.0
+const MAX_ULT_COOLDOWN_REDUCTION: float = 0.5
+
+var partyUltCooldownActive: bool = false
+var bonusCooldownBeforePartyUlt: float = 0.0
 
 @export var fire = false
 @export var water = false
@@ -49,46 +78,19 @@ var ULT_BUFFS = {
 @export var baseUltRegen: float = 1
 @export var baseCooldown: float = 7
 @export var baseStatusRate: float = 5
-@export var baseUltPotency: float = 1
 
 @export var upgradePoints: int = 10
-@export var upgradeCostMultiplier: float = 1.0
+@export var upgradeCostMultiplier: float = 1.25
 @export var totalAccumulatedUpgradePoints: int = 10
-@export var upgradePointCost: int = 1000
+@export var upgradePointCost: float = 1000.0
 @export var buffDuration: float = 15
 const SMOOTH_SPEED := 4.0
 
 # maximum allowed duration for an extended buff (seconds)
 var MAX_BUFF_DURATION: float = 60.0
 
-
-# track active buff‐timers by element
-var _active_buffs := {}    # element (String) → Timer
-
-var buffStatusFrames = {
-	"Fire": 1, # Fire gets strength
-	"Water": 3, # Water gets ??? for now (CRIT DAMAGE ATM)
-	"Wind": 2, # Wind gets crit rate
-	"Earth": 3, # #Elect gets ult regen
-	"Electric": 4, # #Elect gets ult regen
-	"StrengthDown": 11,
-	"CritRateDown": 12,
-	"CritDamageDown": 13,
-	"UltRegenDown": 14,
-}
-
-
-var appliedBuffs = []
-
-#REFERENCES (BUFFS)
-@onready var buffIcon1 = get_node("/root/Main/StatBuffIcons/Buff1")
-@onready var buffIcon2 = get_node("/root/Main/StatBuffIcons/Buff2")
-@onready var buffIcon3 = get_node("/root/Main/StatBuffIcons/Buff3")
-@onready var buffIcon4 = get_node("/root/Main/StatBuffIcons/Buff4")
-@onready var buffIcon5 = get_node("/root/Main/StatBuffIcons/Buff5")
-@onready var buffIcon6 = get_node("/root/Main/StatBuffIcons/Buff6")
-
-@onready var buffIconList = [buffIcon1, buffIcon2, buffIcon3, buffIcon4, buffIcon5, buffIcon6]
+@onready var buffIcon = get_node("/root/Main/StatBuffIcons/Buff1")
+@onready var ultStackLabel = buffIcon.get_node("UltStackLabel")
 
 # REFERENCES
 @onready var player = get_node("/root/Main/Player")
@@ -98,6 +100,7 @@ var appliedBuffs = []
 
 
 @onready var nameLine = $CharUI/LineEdit
+@onready var statsButton = $CharUI2/StatsButton
 var currentEnemy
 
 var open = false
@@ -123,19 +126,27 @@ var partyMemberIsRising: bool = false
 @onready var charUI1 = $CharUI
 @onready var charUI2 = $CharUI2
 @onready var partyMemberData = get_node("/root/Main/shop/RecruitPartyMember")
+@onready var partyManager = get_node("/root/Main/PartyMemberHolder")
+
+# Stored reference to the active rise tween, so skipArise() can jump it to
+# completion early (used by the debug/player "skip cutscene" Enter key).
+var ariseTween: Tween
+
+@export var disabled: bool = false
+@export var muted: bool = false
+@export var animPaused: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	currentEnemy = player.currentEnemy
 	# make sure each StatusFill uses a fine step and sensible defaults
-	for icon in buffIconList:
-		var fill = icon.get_node("StatusFill")
-		if "step" in fill:
-			fill.step = 0.01
-		fill.min_value = 0
-		fill.max_value = buffDuration
-		fill.value = 0
+	var fill = buffIcon.get_node("StatusFill")
+	if "step" in fill:
+		fill.step = 0.01
+	fill.min_value = 0
+	fill.max_value = buffDuration
+	fill.value = 0
 
 
 	upgradePoints += player.totalUpgradePoints # Have party members start off with the total # of upgrade points the player has accumulated
@@ -145,14 +156,24 @@ func _ready():
 	
 	totalAccumulatedUpgradePoints = (totalAccumulatedUpgradePoints + player.level) - 1 # Their starting accumulated points are... this formula.
 	
+	# NOTE: original_position is captured here as a fallback, but it gets
+	# OVERWRITTEN by PartyManager.addMember() right after this node is
+	# parented in and positioned correctly. _ready() fires the instant the
+	# node enters the tree — before PartyManager has had a chance to move
+	# it to its real resting slot — so this initial value is almost always
+	# wrong (the scene's default spawn position) and should not be relied
+	# on for hover-return behavior. PartyManager re-stamps the correct
+	# value immediately after placing the node.
 	original_position = position
 	
 	print(position)
 	
-func updateTimer(): #Timer to deal damage
-	if(!rising and !partyMemberIsRising): # Dont do it while in intro cutscene though
-		damageCooldown.wait_time = cooldown - bonusCooldown # Deal damage based on cooldown
-
+func updateTimer():
+	if not rising and not partyMemberIsRising:
+		if partyUltCooldownActive:
+			damageCooldown.wait_time = cooldown - 0.5
+		else:
+			damageCooldown.wait_time = cooldown - bonusCooldown
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var world_pos = get_global_mouse_position()
@@ -166,61 +187,99 @@ func _process(delta):
 		hovering = false
 		onHoverExit()
 		
-	# always update icons every frame so UI never freezes when enemy dies
-	manageBuffIcons(delta)
+	manageUltBuffIcon(delta)
+	checkUltBuffExpiry()
 
-	
 func determineDamage():
-	currentEnemy = player.currentEnemy
-	damage = strength + bonusStrength # (Bonus from potential buff)
+	if player.currentEnemy != null and is_instance_valid(player.currentEnemy):
+		currentEnemy = player.currentEnemy
+
+	damage = strength + bonusStrength
+
 	var rng = randf_range(1, 100)
-	if(rng <= critRate + bonusCritRate):
+
+	if rng <= critRate + bonusCritRate:
 		crit = true
 		damage = damage * (critDamage + bonusCritDamage)
 		
 func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
+	
+	# If this party member has been set as inactive,
+	# do absolutely nothing.
+	if disabled:
+		return
+
 	determineDamage()
-	# BASIC  DAMAGE MULTIPLIER (if any, idk yet lol)
 	damage = damage * 1
+
+	if currentEnemy != null:
+		if not currentEnemy.inQTEState and not rising and not partyMemberIsRising:
+
+			currentEnemy.takeDamage(damage, 0)
+
+			randomOffsetX = randf_range(-30.0, 30.0)
+			randomOffsetY = randf_range(-30.0, 30.0)
+
+			var randomLoc = Vector2(
+				currentEnemy.position.x + randomOffsetX,
+				currentEnemy.position.y + randomOffsetY
+			)
 				
-	if(currentEnemy != null):
-		if(!currentEnemy.inQTEState and !rising and !partyMemberIsRising): #Dont attack while in QTEs or rising
-			
-			currentEnemy.takeDamage(damage, 0) # Deal damage (no break damage)
-			
-			randomOffsetX = randf_range(-30.0, 30.0) # Offset animation positioning (X)
-			randomOffsetY = randf_range(-30.0, 30.0) # Offset animation positioning (Y)
-			var randomLoc = Vector2(currentEnemy.position.x + randomOffsetX, currentEnemy.position.y + randomOffsetY) # Random loc
-			playDamageAnim(randomLoc) #Now play the animation
-			DamageNumber.display_number(damage,randomLoc, crit) #Display damage number and attack animation upon hit
-			
-			updateScore() #Update score
-			ultBarSystem.updateUltProgress(ultRegen + bonusUltRegen) #Update player's ult
-			if(crit):
-				ultBarSystem.updateUltProgress((ultRegen + bonusUltRegen) * critDamage)
+			# Play the visual attack unless animations are disabled.
+			if not animPaused:
+				playDamageAnim(randomLoc)
+
+			# Play the attack sound unless audio is disabled.
+			if not muted:
+				playRandomPartyMemberAudio()
+
+			DamageNumber.display_number(
+				damage,
+				randomLoc,
+				crit
+			)
+
+			updateScore()
+
+			ultBarSystem.updateUltProgress(
+				ultRegen + bonusUltRegen
+			)
+
+			if crit:
+				ultBarSystem.updateUltProgress(
+					(ultRegen + bonusUltRegen) * critDamage
+				)
+
 			crit = false
-			
-			updatePartyMemberUlt() # Gain party member ult points
-			useUlt() # See if party member can use their upt
-			determineStatusEffect() # See if status was applied, and determine which status
+
+			updatePartyMemberUlt()
+			useUlt()
+			determineStatusEffect()
 
 func playDamageAnim(position: Vector2):
-	var rng = randi() % 2	
-	
+	var rng = randi() % 2
 	var attackInstance = partyMemberAnim.instantiate()
-	add_child(attackInstance)
-	
-	
-	if(currentEnemy != null):
-		attackInstance.global_position = position + Vector2(15,15) #Offset by Vector2
-	
+
+	# Add the animation directly to the main scene.
+	get_tree().current_scene.add_child(attackInstance)
+
+	# Make sure the animation is rendered visibly.
+	attackInstance.z_index = 100
+	attackInstance.modulate = Color.WHITE
+
+	if currentEnemy != null:
+		attackInstance.global_position = position + Vector2(15, 15)
+
 	var memberString = "(" + nameLine.text + ")"
 	attackInstance.setMemberInfo(memberString, currentElement)
-	
-	if(rng == 0):
+
+	# Tell the animation whether this specific party member
+	# has their audio muted.
+	attackInstance.muted = muted
+
+	if rng == 0:
 		attackInstance.playPunch()
-		#attackInstance.playKick()
-	if(rng == 1):
+	else:
 		attackInstance.playKick()
 		
 		
@@ -244,7 +303,7 @@ func determineStatusEffect():
 	
 	print("Current Element According to Member: ", currentElement)
 	
-	if(rng >= statusRate + bonusStatusRate):
+	if(rng <= statusRate + bonusStatusRate):
 		match currentElement:
 			"Fire":
 				print("Activate the fire stuff")
@@ -273,55 +332,30 @@ func determineStatusEffect():
 				currentEnemy.paralysisTimer.start()
 				currentEnemy.applyStatusIcon("Paralysis")
 			
-
 func _on_stats_button_button_down():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	var clicked = self  # the member whose button you just hit
+	var clicked = self
+
+	# Disable all party member selection controls while the stat menu is open.
+	for member in get_tree().get_nodes_in_group("UIMember"):
+		member.nameLine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		member.statsButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Gray out everyone except the selected one
 	for member in get_tree().get_nodes_in_group("UIMember"):
 		if member != clicked:
 			member.charUI1.modulate = Color.DARK_GRAY
 			member.charUI2.modulate = Color.DARK_GRAY
-			
+
 	# CASE A: the menu is closed, open it
 	if not statDisplay.open:
 		statDisplay.visible = true
-		statDisplay.statOpen()  # play opening animation
+		statDisplay.statOpen()
 		_applyMemberToDisplay(statDisplay, clicked)
 		statDisplay.open = true
-		$CharUI.modulate = Color.WHITE # Make them show as white
+		$CharUI.modulate = Color.WHITE
 		$CharUI2.modulate = Color.WHITE
 		return
-		
-	# CASE B: the menu is open on the same member → close it
-	if statDisplay.currentlyDisplayingMember == clicked:
-		statDisplay.statClose()  # play closing animation
-		statDisplay.open = false
-		
-		# Return to white
-		for member in get_tree().get_nodes_in_group("UIMember"):
-			member.charUI1.modulate = Color.WHITE
-			member.charUI2.modulate = Color.WHITE
-			
-		return
-	
-	# CASE C: the menu is open but on a DIFFERENT member → just swap data
-	var previousUI1 = statDisplay.currentlyDisplayingMember.charUI1
-	if previousUI1:
-		previousUI1.modulate = Color.DARK_GRAY
-		
-	var previousUI2 = statDisplay.currentlyDisplayingMember.charUI2
-	if previousUI2:
-		previousUI2.modulate = Color.DARK_GRAY
-		
-	# bring the new one forward
-	$CharUI.modulate = Color.WHITE # it SHOULD make the newly selected party member show as white, but it doesnt...
-	$CharUI2.modulate = Color.WHITE
-	_applyMemberToDisplay(statDisplay, clicked)
-	statDisplay.randomizePitch($MenuOpen)
-	
-	# no change to statDisplay.open, no anim
 	
 func _applyMemberToDisplay(statDisplay, member):
 	statDisplay.updateAllValues(member)  
@@ -337,245 +371,421 @@ func updatePartyMemberUlt():
 	partyMemberProgressBar.value = ultCharge
 	
 func useUlt():
-	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	# If you have ult
-	if ultCharge >= ultLimit:
-		$UltFlash.play("flash")
-		print("usingUlt")
-		# reset ult charge
-		ultCharge = 0
-		partyMemberProgressBar.value = ultCharge
+	if ultCharge < ultLimit:
+		return
 
-		var amount = ultPotency + bonusUltPotency  # how much every ult gives
+	$UltFlash.play("flash")
 
-		# Validate currentElement
-		if currentElement == "None" or currentElement == "":
-			return
+	# Reset this party member's Ult meter.
+	ultCharge = 0
+	partyMemberProgressBar.value = 0
 
-		# Look for a global timer under /root/Main named "<Element>Timer"
-		var main = get_node("/root/Main")
-		var timer_path = "/root/Main/" + currentElement + "Timer"
-		var timer = get_node_or_null(timer_path)
+	applyPartyUltBuff()
+		
 
-		if timer and is_instance_valid(timer):
-			# Extend remaining time by buffDuration (clamped)
-			var new_remaining = clamp(timer.time_left + buffDuration, 0.0, MAX_BUFF_DURATION)
-			timer.stop()
-			timer.wait_time = new_remaining
-			timer.start()
-			print("Extended existing ", currentElement, " timer -> new_remaining: ", new_remaining)
-			print("Total duration for ", currentElement, ": ", new_remaining, " seconds")
-		else:
-			# Create a new timer under /root/Main so it's global/team-wide
-			var t = Timer.new()
-			t.one_shot = true
-			t.wait_time = buffDuration
-			t.name = currentElement + "Timer"
-			main.add_child(t)
-			_active_buffs[currentElement] = t
-			t.timeout.connect(Callable(self, "_on_buff_timeout").bind(currentElement, amount))
-			t.start()
-			print("Created new ", currentElement, " timer with duration ", buffDuration)
-			print("Total duration for ", currentElement, ": ", buffDuration, " seconds")
+func applyPartyUltBuff():
+	var main = get_node("/root/Main")
 
-		# Apply the buff's numeric effect to all teammates (and play buff anims)
-		match currentElement:
-			"Fire":
-				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					teammate.bonusStrength += amount
-					if teammate.buffAnim:
-						teammate.buffAnim.play("buff")
-			
-				print("BONUS STRENGTH APPLICATION: ", amount)
-				DialogueBox.type_message(
-				str(characterName) + " has activated their Ultimate! The party's strength has increased by " + str(amount) + ".")
-			"Water":
-				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					teammate.bonusCritDamage += amount
-					if teammate.buffAnim:
-						teammate.buffAnim.play("buff")
-				print("BONUS STATUS RATE (?) APPLICATION: ", amount)
-			"Wind":
-				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					teammate.bonusCritRate += amount
-					if teammate.buffAnim:
-						teammate.buffAnim.play("buff")
-				print("BONUS CRIT RATE APPLICATION: ", amount)
-			"Earth":
-				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					teammate.bonusCritDamage += amount
-					if teammate.buffAnim:
-						teammate.buffAnim.play("buff")
-				print("BONUS CRIT DAMAGE APPLICATION: ", amount)
-			"Electric":
-				for teammate in get_tree().get_nodes_in_group("Buffable"):
-					teammate.bonusUltRegen += amount
-					if teammate.buffAnim:
-						teammate.buffAnim.play("buff")
-				print("BONUS ULT REGEN APPLICATION: ", amount)
-			_:
-				return
+	var timer = main.get_node_or_null(ULT_BUFF_TIMER_NAME)
 
-		# Show / restart the buff icon (call once — applyBuffIcon handles restarting if needed)
-		applyBuffIcon(currentElement)
+	var current_stacks: int = int(
+		main.get_meta(ULT_BUFF_STACK_META, 0)
+	)
 
-		# Update the stat display UI if it's open & currently showing someone
-		if open:
-			if statDisplay.currentlyDisplayingMember.is_in_group("Player"):
-				statDisplay.updateAllPlayerValues(statDisplay.currentlyDisplayingMember)
-			else:
-				statDisplay.updateAllValues(statDisplay.currentlyDisplayingMember)
+	# Expire the previous buff cycle if its timer has ended.
+	if current_stacks > 0 and timer != null and timer.is_stopped():
+		expirePartyUltBuff()
+		current_stacks = 0
+		
+		# HARD GLOBAL CAP:
+	# Only five Ultimate buff stacks are allowed across the ENTIRE party.
+	# This counter lives on Main, so every party member shares it.
 
-			statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.currentlyDisplayingMember.upgradePoints)
-			statDisplay.upgradePointCostText.text = str(statDisplay.currentlyDisplayingMember.upgradePointCost) + " points"
-			statDisplay.updateMemberTextColors()
-			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
-			
-func manageBuffIcons(delta):
-	# update icons every frame (no currentEnemy gate) so they don't freeze while enemies are dead
-	for icon in buffIconList:
-		if icon.visible:
-			var buff_name = icon.get_meta("buff_name")
-			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
-			var fill_bar = icon.get_node("StatusFill")
+	current_stacks = clampi(
+		int(main.get_meta(ULT_BUFF_STACK_META, 0)),
+		0,
+		MAX_ULT_BUFF_STACKS
+	)
 
-			# fine granularity for smooth movement
-			if "step" in fill_bar:
-				fill_bar.step = 0.01
+	main.set_meta(ULT_BUFF_STACK_META, current_stacks)
 
-			if timer and is_instance_valid(timer):
-				# visual max uses timer meta "display_total" when available (created/extended earlier)
-				var display_total = timer.get_meta("display_total", timer.wait_time)
-				var remaining = timer.time_left
-				var target_value = clamp(display_total - remaining, 0.0, display_total)
+	# If five stacks already exist, stop immediately.
+	# No additional stats and no additional timer duration.
+	if current_stacks >= MAX_ULT_BUFF_STACKS:
+		buffIcon.visible = true
+		ultStackLabel.visible = true
+		ultStackLabel.text = str(MAX_ULT_BUFF_STACKS)
 
-				if fill_bar.max_value != display_total:
-					fill_bar.max_value = display_total
+		refreshCurrentStatDisplay()
+		return
+		
+	# Count every Ultimate used during this buff cycle.
+	var total_ults: int = int(
+		main.get_meta(ULT_BUFF_ULT_COUNT_META, 0)
+	) + 1
 
-				# smooth the displayed value toward the true target
-				var t = clamp(delta * SMOOTH_SPEED, 0.0, 1.0)
-				fill_bar.value = lerp(fill_bar.value, target_value, t)
-			else:
-				# no timer: slowly lerp back to empty
-				if fill_bar.max_value != buffDuration:
-					fill_bar.max_value = buffDuration
-				var tt = clamp(delta * SMOOTH_SPEED, 0.0, 1.0)
-				fill_bar.value = lerp(fill_bar.value, 0.0, tt)
+	main.set_meta(ULT_BUFF_ULT_COUNT_META, total_ults)
 
+	# Create the shared party Ultimate buff timer if needed.
+	if timer == null:
+		timer = Timer.new()
+		timer.name = ULT_BUFF_TIMER_NAME
+		timer.one_shot = true
+		main.add_child(timer)
 
-func applyBuffIcon(buff_name: String) -> void:
-	# FIRST: if a global icon for this buff already exists, update it and return
-	for icon in buffIconList:
-		if icon.visible and icon.get_meta("buff_name") == buff_name:
-			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
-			var fill = icon.get_node("StatusFill")
-			if timer and is_instance_valid(timer):
-				# ensure the fill bar's max matches the timer's total wait_time
-				fill.max_value = timer.wait_time
-				# set fill to elapsed so it visually matches the current timer progress
-				fill.value = timer.wait_time - timer.time_left
-			else:
-				# No timer (shouldn't usually happen) — reset to default duration
-				fill.max_value = buffDuration
-				fill.value = 0
-			return
+	# Only the first five Ultimates add duration.
+	var duration_to_add: float = 0.0
 
-	# OTHERWISE: allocate the first free (invisible) icon for this buff
-	for icon in buffIconList:
-		if not icon.visible:
-			icon.visible = true
-			icon.frame = buffStatusFrames.get(buff_name, 0)
-			icon.set_meta("buff_name", buff_name)
-			# keep per-instance list for completeness, but we no longer rely on it to prevent duplicates
-			if not (buff_name in appliedBuffs):
-				appliedBuffs.append(buff_name)
+	if total_ults <= MAX_ULT_BUFF_STACKS:
+		duration_to_add = ultBuffDuration / float(total_ults)
 
-			var fill = icon.get_node("StatusFill")
-			var timer = get_node_or_null("/root/Main/" + buff_name + "Timer")
-			if timer and is_instance_valid(timer):
-				fill.min_value = 0
-				fill.max_value = timer.wait_time
-				fill.value     = timer.wait_time - timer.time_left
-			else:
-				fill.min_value = 0
-				fill.max_value = buffDuration
-				fill.value     = 0
-			break
-	
-func clear_buff_icon(buff_name: String) -> void:
-	# Hide any global icon that matches the buff name
-	for icon in buffIconList:
-		if icon.visible and icon.get_meta("buff_name") == buff_name:
-			icon.visible = false
-			var fill = icon.get_node("StatusFill")
-			fill.value = 0
-			fill.min_value = 0
-			fill.max_value = buffDuration
-			icon.set_meta("buff_name", null)
-			# also remove from this instance's appliedBuffs if present
-			if buff_name in appliedBuffs:
-				appliedBuffs.erase(buff_name)
-			break
+	# Extend the timer only when this Ultimate grants duration.
+	if duration_to_add > 0.0:
+		var remaining_duration: float = 0.0
 
-			
-func _on_buff_timeout(element: String, amount: float) -> void:
-	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
-	print("buff is off............")
-	# remove the buff we applied earlier
+		if not timer.is_stopped():
+			remaining_duration = timer.time_left
+
+		var new_duration: float = min(
+			remaining_duration + duration_to_add,
+			MAX_BUFF_DURATION
+		)
+
+		timer.wait_time = new_duration
+		timer.start()
+
+	# Read the current number of applied stat stacks.
+	current_stacks = int(
+		main.get_meta(ULT_BUFF_STACK_META, 0)
+	)
+
+	# Apply one new stat-buff stack.
+	current_stacks += 1
+	main.set_meta(ULT_BUFF_STACK_META, current_stacks)
+
 	for teammate in get_tree().get_nodes_in_group("Buffable"):
-		match element:
-			"Fire":
-				teammate.bonusStrength -= amount
-			"Water":
-				teammate.bonusCritDamage -= amount
-			"Wind":
-				teammate.bonusCritRate -= amount
-			"Earth":
-				teammate.bonusCritDamage -= amount
-			"Electric":
-				teammate.bonusUltRegen -= amount
-				
-	# clean up
-	if _active_buffs.has(element):
-		_active_buffs[element].queue_free()
-		_active_buffs.erase(element)
+
+		# Calculate each bonus and round UP to a whole number.
+		# Percentage bonuses use the recipient's regular stat.
+
+		var strength_bonus: int = ceili(
+			ultBuffStrength
+			+ teammate.strength * ultBuffStrengthPercent / 100.0
+		)
+
+		var crit_rate_bonus: int = ceili(
+			ultBuffCritRate
+			+ teammate.critRate * ultBuffCritRatePercent / 100.0
+		)
+
+		var crit_damage_bonus: int = ceili(
+			ultBuffCritDamage
+			+ teammate.critDamage * ultBuffCritDamagePercent / 100.0
+		)
+
+		var ult_regen_bonus: int = ceili(
+			ultBuffUltRegen
+			+ teammate.ultRegen * ultBuffUltRegenPercent / 100.0
+		)
+
+		var status_rate_bonus: int = ceili(
+			ultBuffStatusRate
+			+ teammate.statusRate * ultBuffStatusRatePercent / 100.0
+		)
+
+		# Apply the rounded stat bonuses.
+		teammate.bonusStrength += strength_bonus
+		teammate.bonusCritRate += crit_rate_bonus
+		teammate.bonusCritDamage += crit_damage_bonus
+		teammate.bonusUltRegen += ult_regen_bonus
+		teammate.bonusStatusRate += status_rate_bonus
+
+		# Record the exact amounts applied across all stacks.
+		teammate.set_meta(
+			ULT_APPLIED_STRENGTH_META,
+			float(teammate.get_meta(ULT_APPLIED_STRENGTH_META, 0.0))
+			+ strength_bonus
+		)
+
+		teammate.set_meta(
+			ULT_APPLIED_CRIT_RATE_META,
+			float(teammate.get_meta(ULT_APPLIED_CRIT_RATE_META, 0.0))
+			+ crit_rate_bonus
+		)
+
+		teammate.set_meta(
+			ULT_APPLIED_CRIT_DAMAGE_META,
+			float(teammate.get_meta(ULT_APPLIED_CRIT_DAMAGE_META, 0.0))
+			+ crit_damage_bonus
+		)
+
+		teammate.set_meta(
+			ULT_APPLIED_ULT_REGEN_META,
+			float(teammate.get_meta(ULT_APPLIED_ULT_REGEN_META, 0.0))
+			+ ult_regen_bonus
+		)
+
+		teammate.set_meta(
+			ULT_APPLIED_STATUS_RATE_META,
+			float(teammate.get_meta(ULT_APPLIED_STATUS_RATE_META, 0.0))
+			+ status_rate_bonus
+		)
+		
+			# Fixed Ultimate cooldown bonus. Never stacks.
+		if "cooldown" in teammate and not teammate.isPlayer:
+			if not teammate.partyUltCooldownActive:
+				teammate.bonusCooldownBeforePartyUlt = teammate.bonusCooldown
+
+			teammate.partyUltCooldownActive = true
+			teammate.bonusCooldown = MAX_ULT_COOLDOWN_REDUCTION
+
+			teammate.updateTimer()
+
+	# Update the shared buff icon.
+	buffIcon.visible = true
+	ultStackLabel.visible = true
+	ultStackLabel.text = str(current_stacks)
+
+	refreshCurrentStatDisplay()
 	
-	if(open):
-			if(statDisplay.currentlyDisplayingMember.is_in_group("Player")):
-				statDisplay.updateAllPlayerValues(statDisplay.currentlyDisplayingMember)
-			else:
-				statDisplay.updateAllValues(statDisplay.currentlyDisplayingMember)
-				
-			statDisplay.upgradePointText.text = "Upgrade Points " + str(statDisplay.currentlyDisplayingMember.upgradePoints)
-			statDisplay.upgradePointCostText.text = str(statDisplay.currentlyDisplayingMember.upgradePointCost) + " points"
-			statDisplay.updateMemberTextColors()
-			statDisplay.nameText.text = statDisplay.currentlyDisplayingMember.characterName
+func checkUltBuffExpiry():
+	var main = get_node("/root/Main")
+
+	var current_stacks: int = int(
+		main.get_meta(ULT_BUFF_STACK_META, 0)
+	)
+
+	if current_stacks <= 0:
+		return
+
+	var timer = main.get_node_or_null(ULT_BUFF_TIMER_NAME)
+
+	if timer == null:
+		return
+
+	if not timer.is_stopped():
+		return
+
+	expirePartyUltBuff()
+
+func expirePartyUltBuff():
+	var main = get_node("/root/Main")
+
+	# Capture the number of stacks applied.
+	var current_stacks: int = int(
+		main.get_meta(ULT_BUFF_STACK_META, 0)
+	)
+
+	# Reset the counters first to prevent duplicate expiration.
+	main.set_meta(ULT_BUFF_STACK_META, 0)
+	main.set_meta(ULT_BUFF_ULT_COUNT_META, 0)
+
+	var timer = main.get_node_or_null(ULT_BUFF_TIMER_NAME)
+
+	if timer != null:
+		timer.stop()
+
+	# Remove the exact accumulated bonuses recorded during this cycle.
+	if current_stacks > 0:
+		for teammate in get_tree().get_nodes_in_group("Buffable"):
+
+			var strength_bonus: float = float(
+				teammate.get_meta(ULT_APPLIED_STRENGTH_META, 0.0)
+			)
+
+			var crit_rate_bonus: float = float(
+				teammate.get_meta(ULT_APPLIED_CRIT_RATE_META, 0.0)
+			)
+
+			var crit_damage_bonus: float = float(
+				teammate.get_meta(ULT_APPLIED_CRIT_DAMAGE_META, 0.0)
+			)
+
+			var ult_regen_bonus: float = float(
+				teammate.get_meta(ULT_APPLIED_ULT_REGEN_META, 0.0)
+			)
+
+			var status_rate_bonus: float = float(
+				teammate.get_meta(ULT_APPLIED_STATUS_RATE_META, 0.0)
+			)
+
+			# Remove all recorded stat bonuses.
+			teammate.bonusStrength -= strength_bonus
+			teammate.bonusCritRate -= crit_rate_bonus
+			teammate.bonusCritDamage -= crit_damage_bonus
+			teammate.bonusUltRegen -= ult_regen_bonus
+			teammate.bonusStatusRate -= status_rate_bonus
+
+			# Clear the recorded stat bonuses for the next cycle.
+			teammate.set_meta(ULT_APPLIED_STRENGTH_META, 0.0)
+			teammate.set_meta(ULT_APPLIED_CRIT_RATE_META, 0.0)
+			teammate.set_meta(ULT_APPLIED_CRIT_DAMAGE_META, 0.0)
+			teammate.set_meta(ULT_APPLIED_ULT_REGEN_META, 0.0)
+			teammate.set_meta(ULT_APPLIED_STATUS_RATE_META, 0.0)
 			
-	clear_buff_icon(element)
+			# Restore the previous cooldown bonus when the Ultimate buff expires.
+			if "cooldown" in teammate and not teammate.isPlayer:
+				teammate.bonusCooldown = teammate.bonusCooldownBeforePartyUlt
+				teammate.partyUltCooldownActive = false
+
+				teammate.updateTimer()
+
+	# Hide the shared buff icon.
+	buffIcon.visible = false
+	ultStackLabel.visible = false
+	ultStackLabel.text = ""
+
+	# Reset the fill so the next buff starts from zero.
+	var fill = buffIcon.get_node("StatusFill")
+	fill.value = 0
+
+	refreshCurrentStatDisplay()
+	
+func manageUltBuffIcon(delta):
+	var main = get_node("/root/Main")
+
+	var current_stacks: int = int(
+		main.get_meta(ULT_BUFF_STACK_META, 0)
+	)
+
+	var timer = main.get_node_or_null(ULT_BUFF_TIMER_NAME)
+
+	if current_stacks <= 0 or timer == null:
+		buffIcon.visible = false
+		ultStackLabel.visible = false
+		ultStackLabel.text = ""
+		return
+
+	buffIcon.visible = true
+	ultStackLabel.visible = true
+	ultStackLabel.text = str(current_stacks)
+
+	var fill = buffIcon.get_node("StatusFill")
+
+	fill.min_value = 0
+	fill.max_value = timer.wait_time
+
+	var target_value = timer.wait_time - timer.time_left
+
+	var t = clamp(delta * SMOOTH_SPEED, 0.0, 1.0)
+
+	fill.value = lerp(
+		fill.value,
+		target_value,
+		t
+	)
+
+func refreshCurrentStatDisplay():
+	var statDisplay = get_node_or_null("/root/Main/PartyMemberStatHolderUI")
+
+	if statDisplay == null:
+		return
+
+	if not statDisplay.open:
+		return
+
+	var displayedMember = statDisplay.currentlyDisplayingMember
+
+	if displayedMember == null:
+		return
+
+	if displayedMember.is_in_group("Player"):
+		statDisplay.updateAllPlayerValues(displayedMember)
+	else:
+		statDisplay.updateAllValues(displayedMember)
+
+	statDisplay.upgradePointText.text = (
+		"Upgrade Points " + str(displayedMember.upgradePoints)
+	)
+
+	statDisplay.upgradePointCostText.text = (
+		str(displayedMember.upgradePointCost) + " points"
+	)
+
+	statDisplay.updateMemberTextColors()
+	statDisplay.nameText.text = displayedMember.characterName
 
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text
+
+	var line_edit = $CharUI/LineEdit
+	var font = line_edit.get_theme_font("font")
+	
+	var display_name = characterName
+
+	if display_name.is_empty():
+		display_name = "Member" + str(memberNumber)
+
+	var shop = get_node("/root/Main/ShopUI")
+	shop.updatePartyMemberName(memberNumber, display_name)
+
+	var font_size = 24
+	var minimum_size = 10
+	var available_width = line_edit.size.x - 10
+
+	while font_size > minimum_size:
+		var text_width = font.get_string_size(
+			new_text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1,
+			font_size
+		).x
+
+		if text_width <= available_width:
+			break
+
+		font_size -= 1
+
+	line_edit.add_theme_font_size_override("font_size", font_size)
+
+	# Force the LineEdit to stop scrolling to the caret.
+	var old_caret = line_edit.caret_column
+	line_edit.caret_column = 0
+	line_edit.caret_column = old_caret
+
 	
 func arise():
 	rising = true
-	for member in partyMemberData.partyMembers:
-		member.partyMemberIsRising = true
+	for member in partyManager.roster:
+		if member != null and "partyMemberIsRising" in member:
+			member.partyMemberIsRising = true
 	
-	currentEnemy.animationPause()
-		
-	var tween := create_tween()
-	tween.tween_property(
+	if(currentEnemy):
+		currentEnemy.animationPause()
+	
+	
+	# PartyManager has already set position (including the correct resting
+	# Y, which varies depending on where the player icon actually sits) by
+	# the time arise() is called. Previously this hardcoded a rise from
+	# Y=140 down to Y=0, which only worked by coincidence when members were
+	# parented at scene root with a resting Y near 0 — it would actively
+	# fight PartyManager's positioning once that resting Y became anything
+	# else (e.g. -519 after reparenting under PartyMemberClipPanel).
+	var restingY = position.y
+	ariseTween = create_tween()
+	ariseTween.tween_property(
 		self,           # the node this script is on
 		"position:y",   # animate the Y position
-		0,              # final value
+		restingY,        # final value: wherever PartyManager actually placed it
 		11.0            # duration (seconds)
-	).from(140)        # start value
+	).from(restingY + 140)        # start value: 140px below resting position
 	
-	await tween.finished
+	await ariseTween.finished
+	_finishArise()
+
+func _finishArise():
 	rising = false
-	for member in partyMemberData.partyMembers:
-		member.partyMemberIsRising = false
-	currentEnemy.animationResume()
+	for member in partyManager.roster:
+		if member != null and "partyMemberIsRising" in member:
+			member.partyMemberIsRising = false
+	if(currentEnemy):
+		currentEnemy.animationResume()
+
+func skipArise():
+	if ariseTween and ariseTween.is_valid():
+		ariseTween.kill()
+		position.y = original_position.y
+		_finishArise()
 	
 func onHoverEnter():
 	if not hoverBlocked and not rising:
@@ -590,3 +800,20 @@ func onHoverExit():
 		if tween: tween.kill()
 		tween = create_tween()
 		tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			nameLine.release_focus()
+
+func playRandomPartyMemberAudio():
+	var sounds = [
+		preload("res://Audio/PartyMemberSE1.wav"),
+		preload("res://Audio/PartyMemberSE2.wav"),
+		preload("res://Audio/PartyMemberSE3.wav"),
+		preload("res://Audio/PartyMemberSE4.wav")
+	]
+
+	$AttackSE.pitch_scale = randf_range(0.8, 1.2)
+	$AttackSE.stream = sounds.pick_random()
+	$AttackSE.play()

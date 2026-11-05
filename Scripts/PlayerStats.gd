@@ -2,8 +2,8 @@ extends Node2D
 
 # STATS
 @export var characterName: String = "You"
-@export var strength: float = 1
-@export var critRate: float = 5
+@export var strength: float = 5
+@export var critRate: float = 33
 @export var critDamage: float = 2
 @export var ultRegen: float = 1
 @export var crit: bool = false # Tracking IF we crit
@@ -21,7 +21,7 @@ var currentElement = ""
 @export var bonusStatusRate: float = 0
 @export var bonusUltPotency: float = 0
 
-@export var baseStrength: float = 1
+@export var baseStrength: float = 5
 @export var baseCritRate: float = 5 
 @export var baseCritDamage: float = 2
 @export var baseUltRegen: float = 1
@@ -38,7 +38,10 @@ var currentElement = ""
 @onready var player = get_node("/root/Main/Player")
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
 @onready var damageCooldown = $CharUI/DamageCooldown
+
 @onready var nameLine = $CharUI/LineEdit
+@onready var statsButton = $CharUI2/StatsButton
+
 var currentEnemy
 
 var open = false
@@ -64,10 +67,13 @@ var hoverBlocked: bool = false
 @export var earth = false
 @export var electric = false
 
+@onready var shopUI = get_node("/root/Main/ShopUI")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	add_to_group("Buffable")
 	original_position = position
-
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var world_pos = get_global_mouse_position()
@@ -81,26 +87,20 @@ func _process(delta):
 		hovering = false
 		onHoverExit() # Wont trigger if something is blocking the hover
 
-func _input(event):
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var button = $CharUI2/StatsButton
-		if button and button.visible:
-			var button_rect = button.get_global_rect()
-			if button_rect.has_point(event.position):
-				_handle_stats_button_click()
-				get_viewport().set_input_as_handled()
-
 func _handle_stats_button_click():
 	var statDisplay = get_node("/root/Main/PartyMemberStatHolderUI")
 	var clicked = self
 	
-	print("PLAYER STATS BUTTON CLICKED!")
+	for member in get_tree().get_nodes_in_group("UIMember"):
+		member.nameLine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		member.statsButton.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Gray out everyone except the selected one
 	for member in get_tree().get_nodes_in_group("UIMember"):
 		if member != clicked:
 			member.charUI1.modulate = Color.DARK_GRAY
 			member.charUI2.modulate = Color.DARK_GRAY
+			
 
 	# CASE A: the menu is closed, open it
 	if not statDisplay.open:
@@ -139,6 +139,7 @@ func _handle_stats_button_click():
 
 func gainUpgradePoints():
 	upgradePoints += 1
+
 	
 func _on_stats_button_button_down():
 	_handle_stats_button_click()
@@ -150,11 +151,41 @@ func _applyMemberToDisplay(statDisplay, member):
 	statDisplay.upgradePointText.text = "Upgrade Points " + str(member.upgradePoints)
 	statDisplay.upgradePointCostText.text = str(member.upgradePointCost) + " points"
 	statDisplay.updateMemberTextColors()
-	statDisplay.nameText.text = member.characterName
-
+	statDisplay.nameText.text = member.getDisplayName()
 
 func _on_line_edit_text_changed(new_text):
 	characterName = new_text
+
+	var line_edit = $CharUI/LineEdit
+	var font = line_edit.get_theme_font("font")
+
+	var font_size = 24
+	var minimum_size = 10
+	var available_width = line_edit.size.x - 10
+
+	while font_size > minimum_size:
+		var text_width = font.get_string_size(
+			new_text,
+			HORIZONTAL_ALIGNMENT_LEFT,
+			-1,
+			font_size
+		).x
+
+		if text_width <= available_width:
+			break
+
+		font_size -= 1
+
+	line_edit.add_theme_font_size_override("font_size", font_size)
+
+	# Prevent the LineEdit from scrolling to the cursor
+	# after the font size changes.
+	var old_caret = line_edit.caret_column
+	line_edit.caret_column = 0
+	line_edit.caret_column = old_caret
+
+	if shopUI:
+		shopUI.updatePlayerName(getDisplayName())
 
 func onHoverEnter():
 	if(!hoverBlocked):
@@ -169,3 +200,14 @@ func onHoverExit():
 		if tween: tween.kill()
 		tween = create_tween()
 		tween.tween_property(self, "position", original_position, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			nameLine.release_focus()
+
+func getDisplayName() -> String:
+	if characterName.strip_edges().is_empty():
+		return "You"
+	
+	return characterName

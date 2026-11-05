@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dla7bxyajohr"]
+[gd_scene load_steps=29 format=3 uid="uid://dla7bxyajohr"]
 
 [ext_resource type="Texture2D" uid="uid://c2m4xg2halde0" path="res://Art/QuickTimeEventCircle (1).png" id="1_4bssr"]
 [ext_resource type="Script" path="res://Scripts/qte.gd" id="1_e2lkj"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ci2lwlouurq1t" path="res://Art/QTESquare/QTE- Inner Square.png" id="8_laroi"]
 [ext_resource type="Texture2D" uid="uid://yberw3pombut" path="res://Art/QTESquare/QTE- Innermost Square.png" id="9_755s4"]
 [ext_resource type="Texture2D" uid="uid://l5ua7qlh03au" path="res://Art/QTESquare/QTE- Black Inner Box.png" id="10_v0qp3"]
+[ext_resource type="AudioStream" uid="uid://c86mgw66prth7" path="res://Audio/qteSpawn.wav" id="12_alwbh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eg44x"]
 atlas = ExtResource("7_yj4m1")
@@ -56,6 +57,44 @@ animations = [{
 "speed": 6.0
 }]
 
+[sub_resource type="Animation" id="Animation_lxotv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.947364, 1, 0.557821, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_446hp"]
+resource_name = "flash"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.00102138, 0.0817104, 0.128694, 0.199169),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 0.392157, 0.784314), Color(1, 1, 0.392157, 0.784314), Color(0.960784, 1, 0.745098, 0.784314), Color(1, 1, 0.745098, 0.784314)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_udowa"]
+_data = {
+"RESET": SubResource("Animation_lxotv"),
+"flash": SubResource("Animation_446hp")
+}
+
 [sub_resource type="Animation" id="Animation_pcyke"]
 resource_name = "FadeIn"
 length = 0.9
@@ -78,34 +117,23 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"playSpawnSE"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
+"method": &"playAlteredQTESpawn"
+}, {
 "args": [],
 "method": &"startShrinking"
 }]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("TextureButton:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureButton:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -114,6 +142,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_b2j5g"]
 resource_name = "FadeOut"
+length = 0.9
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -121,7 +150,7 @@ tracks/0/path = NodePath("Visuals/QTEHolder:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
@@ -133,7 +162,7 @@ tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 0.4, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -145,7 +174,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.9),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -171,7 +200,7 @@ tracks/4/path = NodePath("Visuals/QTEHolder/gradeString:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.00204276, 0.2, 0.318023, 0.435748, 0.680239, 0.740855, 0.979987),
+"times": PackedFloat32Array(0.00204276, 0.2, 0.318023, 0.435748, 0.680239, 0.740855, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(9, 180), Vector2(9, 120), Vector2(9, 100), Vector2(9, 120), Vector2(9, 120), Vector2(9, 160), Vector2(9, 180)]
@@ -346,7 +375,7 @@ z_index = 5
 offset_left = 108.571
 offset_top = 220.0
 offset_right = 300.574
-offset_bottom = 268.001
+offset_bottom = 268.002
 rotation = -0.153589
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -432,10 +461,23 @@ sprite_frames = SubResource("SpriteFrames_xm3xu")
 autoplay = "default"
 frame_progress = 0.137756
 
+[node name="CurrentCircle" type="Sprite2D" parent="Visuals/QTEHolder"]
+modulate = Color(0.947364, 1, 0.557821, 1)
+z_index = 3
+scale = Vector2(9, 9)
+texture = ExtResource("6_6curc")
+
+[node name="CurrentCircleFlash" type="AnimationPlayer" parent="Visuals/QTEHolder/CurrentCircle"]
+libraries = {
+"": SubResource("AnimationLibrary_udowa")
+}
+autoplay = "flash"
+
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(101.429, 100)
+bus = &"SFX"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." groups=["activeQTE"]]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_0tads")
 }
@@ -445,5 +487,10 @@ autoplay = "FadeIn"
 libraries = {
 "": SubResource("AnimationLibrary_gtg8w")
 }
+
+[node name="QTESpawn" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_alwbh")
+volume_db = 10.0
+bus = &"SFX"
 
 [connection signal="button_down" from="TextureButton" to="." method="_on_texture_button_button_down"]

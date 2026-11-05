@@ -131,6 +131,7 @@ libraries = {
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_1qnde")
 volume_db = -0.525
+bus = &"SFX"
 
 [node name="DamageParticles" parent="." instance=ExtResource("4_64whi")]
 amount = 50

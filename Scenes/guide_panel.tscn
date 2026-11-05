@@ -1,0 +1,843 @@
+[gd_scene load_steps=23 format=3 uid="uid://c4l6r1g778bys"]
+
+[ext_resource type="Script" path="res://Scripts/GuidePanelScript.gd" id="1_kmle4"]
+[ext_resource type="Texture2D" uid="uid://c3wtipluvkfto" path="res://Art/HorizontalMonsterCaptureListBar-1.png.png" id="2_66vyx"]
+[ext_resource type="Texture2D" uid="uid://cedbap7mfr3yy" path="res://Art/ParallelogramClose-1.png" id="3_j52es"]
+[ext_resource type="Texture2D" uid="uid://cigkt28wmf5es" path="res://Art/ParallelogramClose-3.png" id="4_0mgac"]
+[ext_resource type="Texture2D" uid="uid://cdprr8u25nowl" path="res://Art/ParallelogramClose-2.png" id="5_e2hw7"]
+[ext_resource type="Texture2D" uid="uid://bwmis4iquyx0h" path="res://Art/DiagonalMonsterCapturePanel.png" id="6_43o2n"]
+[ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="6_kil87"]
+[ext_resource type="Texture2D" uid="uid://h6vf6dvi4d6x" path="res://Art/LongestPillButton.png" id="7_fnnjn"]
+[ext_resource type="AudioStream" uid="uid://c20mpstdj805d" path="res://Audio/UiOpen2.wav" id="7_o2qke"]
+[ext_resource type="AudioStream" uid="uid://bqg8efxpl25sd" path="res://Audio/UiClose2.wav" id="8_0jwv3"]
+[ext_resource type="Texture2D" uid="uid://dx08fgjyjlh1a" path="res://Art/LongestPillButtonHover.png" id="8_vrd3l"]
+[ext_resource type="AudioStream" uid="uid://7nnswem086nr" path="res://Audio/MonsterSelectSound.wav" id="9_qckwa"]
+[ext_resource type="Texture2D" uid="uid://daciu23abdrdb" path="res://Art/SparkleIcon.png" id="10_7q14q"]
+[ext_resource type="AudioStream" uid="uid://cururox5qks5a" path="res://Audio/captureEnemyParticle.wav" id="10_ouhd4"]
+[ext_resource type="AudioStream" uid="uid://dnaklk0vvph2k" path="res://Audio/select.wav" id="14_ty0eg"]
+[ext_resource type="Texture2D" uid="uid://8rs85j4252tr" path="res://Art/Status Symbols.png" id="15_sl518"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6acp7"]
+texture = ExtResource("2_66vyx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iwdrw"]
+texture = ExtResource("6_43o2n")
+
+[sub_resource type="Animation" id="Animation_o6f3h"]
+resource_name = "GuideSlideIn"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TutorialPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 709), Vector2(1, 1401)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-453, 40), Vector2(730, 40)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaptureMenuOpen")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../FadeRectangle:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../FadeRectangle:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.172549), Color(1, 1, 1, 0.529412)]
+}
+
+[sub_resource type="Animation" id="Animation_c3pit"]
+resource_name = "GuideSlideOut"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TutorialPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1401), Vector2(1, 2160)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(730, 40), Vector2(1919, 40)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../CaptureMenuClose")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../FadeRectangle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.52549), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../FadeRectangle:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_j5qit"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TutorialPanelItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 709)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-453, 40)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../FadeRectangle:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../FadeRectangle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tv6jt"]
+_data = {
+"GuideSlideIn": SubResource("Animation_o6f3h"),
+"GuideSlideOut": SubResource("Animation_c3pit"),
+"RESET": SubResource("Animation_j5qit")
+}
+
+[node name="GuidePanel" type="Control"]
+z_index = 111
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kmle4")
+
+[node name="FadeRectangle" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -160.0
+offset_top = -101.0
+offset_right = -120.0
+offset_bottom = -61.0
+scale = Vector2(43.5489, 23.6088)
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="ExplanationPanelItems" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -453.0
+offset_top = 40.0
+offset_right = -413.0
+offset_bottom = 80.0
+
+[node name="ExplanationPanel" type="Panel" parent="ExplanationPanelItems"]
+z_index = 20
+layout_mode = 0
+offset_left = -730.0
+offset_top = -4.0
+offset_right = -685.0
+offset_bottom = 35.0
+scale = Vector2(25.6, 15)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_6acp7")
+
+[node name="CloseButton" type="TextureButton" parent="ExplanationPanelItems"]
+z_index = 20
+layout_mode = 0
+offset_left = 294.0
+offset_top = -4.0
+offset_right = 326.0
+offset_bottom = 15.0
+scale = Vector2(4, 4)
+texture_normal = ExtResource("3_j52es")
+texture_pressed = ExtResource("4_0mgac")
+texture_hover = ExtResource("5_e2hw7")
+
+[node name="TutorialPanelItems" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1.0
+offset_top = 709.0
+offset_right = 41.0
+offset_bottom = 749.0
+
+[node name="GUIDE" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 91.0
+offset_top = -1353.0
+offset_right = 517.0
+offset_bottom = -1290.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 24
+text = "GUIDE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attacking" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 125.0
+offset_top = -1293.0
+offset_right = 269.0
+offset_bottom = -1230.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Attacking"
+vertical_alignment = 1
+
+[node name="AttackingButton" type="TextureButton" parent="TutorialPanelItems/Attacking"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/Attacking"]
+visible = false
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 64.0
+offset_right = 676.0
+offset_bottom = 104.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/Attacking/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -198.0
+offset_top = -15.0
+offset_right = 346.0
+offset_bottom = 362.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Click on an enemy to
+deal damage. Reduce the enemy’s 
+HP to 0 to defeat them and
+move on to the next foe.
+
+Press and hold on an enemy
+to charge an attack. Release when
+the bar is mostly full to 
+unleash a powerful Charged Attack. 
+Each successful Charged Attack
+makes the charge meter fill faster, 
+making heavy hits increasingly 
+difficult to land consistently.
+
+Press the middle mouse button or 
+Space key when you have at
+least 100 Ult Charge (the long
+yellow bar at the top) to
+unleash your Ultimate. At
+1000 Ult Charge, press it
+to activate Ult Rush instead. 
+"
+vertical_alignment = 1
+
+[node name="Stats" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 115.0
+offset_top = -1243.0
+offset_right = 259.0
+offset_bottom = -1180.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Stats"
+vertical_alignment = 1
+
+[node name="StatsButton" type="TextureButton" parent="TutorialPanelItems/Stats"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/Stats"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 75.0
+offset_right = 676.0
+offset_bottom = 115.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/Stats/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -197.0
+offset_top = -70.0
+offset_right = 368.0
+offset_bottom = 326.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Attack: Determines how much damage you deal. 
+
+Crit Rate: The chance that you deal bonus damage based on crit damage.
+
+Crit Damage: The damage multiplier applied when landing a critical hit.
+
+Ult Regen: Determines how quickly your Ult Charge increases.
+
+Status Rate: The chance you have at applying a status effect based on elemental affinity.
+
+Cooldown: (Party members only.) Determines how frequently they autoattack.
+"
+autowrap_mode = 2
+
+[node name="Ultimate_UltRush" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 105.0
+offset_top = -1193.0
+offset_right = 377.0
+offset_bottom = -1130.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Ultimate/Ult Rush"
+vertical_alignment = 1
+
+[node name="UltimateUltRushButton" type="TextureButton" parent="TutorialPanelItems/Ultimate_UltRush"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/Ultimate_UltRush"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 64.0
+offset_right = 676.0
+offset_bottom = 104.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/Ultimate_UltRush/ExplanationItems"]
+visible = false
+z_index = 21
+layout_mode = 0
+offset_left = -191.0
+offset_top = -124.0
+offset_right = 374.0
+offset_bottom = 272.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "After pressing the middle mouse button/Space key with at least 1000 Ult Charge, you’ll unleash a flurry of automatic attacks. Join in and attack with clicks, deal heavy damage by using your Ultimate, and rapidly build up your Ult Charge to 1000 again to unleash your Ult Burst on an enemy. 
+
+Maximize your damage, but get your ult charge filled out before time runs out! Ult Bursts instantly defeat any enemy and have a 100% chance to capture them.
+
+Use directional buttons or WASD to perform the Quick Time Events that will briefly extend the Ult Rush Timer.
+"
+autowrap_mode = 2
+
+[node name="BreakEnemies" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 95.0
+offset_top = -1143.0
+offset_right = 367.0
+offset_bottom = -1080.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Break Enemies"
+vertical_alignment = 1
+
+[node name="BreakEnemiesButton" type="TextureButton" parent="TutorialPanelItems/BreakEnemies"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/BreakEnemies"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 75.0
+offset_right = 676.0
+offset_bottom = 115.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/BreakEnemies/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -186.0
+offset_top = -177.0
+offset_right = 379.0
+offset_bottom = 219.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Enemies with a white meter below their HP meter are Break Enemies. 
+
+While their Break Meter is full, they take reduced damage. Empty it completely to trigger a Break. 
+
+Press the corresponding directional buttons, WASD, or click the QTE when the moving indicator reaches the center to unleash a powerful Break Attack. Once broken, attack as rapidly as possible before the Break Meter recovers!
+"
+autowrap_mode = 2
+
+[node name="LevellingUp" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 85.0
+offset_top = -1093.0
+offset_right = 357.0
+offset_bottom = -1030.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Levelling Up"
+vertical_alignment = 1
+
+[node name="LevellingUpButton" type="TextureButton" parent="TutorialPanelItems/LevellingUp"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/LevellingUp"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 661.0
+offset_top = -18.0
+offset_right = 701.0
+offset_bottom = 22.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/LevellingUp/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -191.0
+offset_top = -124.0
+offset_right = 374.0
+offset_bottom = 272.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "When the blue EXP meter in the top-right fills, you level up.
+
+Each level grants every party member an Upgrade Point—including party members you haven't recruited yet, so no points are ever lost.
+
+Upgrade Points can be spent in each Party Member's Stat Menu or purchased individually for a specific character by clicking their name in the shop.
+
+Enemies also become stronger as your level increases, so spend your Upgrade Points wisely.
+"
+autowrap_mode = 2
+
+[node name="PartyMembers" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 75.0
+offset_top = -1043.0
+offset_right = 347.0
+offset_bottom = -980.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Party Members
+"
+vertical_alignment = 1
+
+[node name="PartyMembersButton" type="TextureButton" parent="TutorialPanelItems/PartyMembers"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/PartyMembers"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 75.0
+offset_right = 676.0
+offset_bottom = 115.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/PartyMembers/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -169.0
+offset_top = -274.0
+offset_right = 396.0
+offset_bottom = 122.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Party members assist you by automatically attacking. Their stats and element can be customized as well.
+
+Each party member has their own Ult Meter, and when it is filled, they will automatically unleash a party-wide buff that temporarily increases all stats. The buff can be stacked up to 5 times."
+autowrap_mode = 2
+
+[node name="Elements" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 65.0
+offset_top = -993.0
+offset_right = 337.0
+offset_bottom = -930.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Elements
+"
+vertical_alignment = 1
+
+[node name="ElementsButton" type="TextureButton" parent="TutorialPanelItems/Elements"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/Elements"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 60.0
+offset_right = 676.0
+offset_bottom = 100.0
+
+[node name="StatusSymbols" type="Sprite2D" parent="TutorialPanelItems/Elements/ExplanationItems"]
+position = Vector2(-186, -164)
+texture = ExtResource("15_sl518")
+hframes = 4
+vframes = 4
+
+[node name="StatusSymbols2" type="Sprite2D" parent="TutorialPanelItems/Elements/ExplanationItems"]
+position = Vector2(-186, -125)
+texture = ExtResource("15_sl518")
+hframes = 4
+vframes = 4
+frame = 1
+
+[node name="StatusSymbols3" type="Sprite2D" parent="TutorialPanelItems/Elements/ExplanationItems"]
+position = Vector2(-186, -68)
+texture = ExtResource("15_sl518")
+hframes = 4
+vframes = 4
+frame = 2
+
+[node name="StatusSymbols4" type="Sprite2D" parent="TutorialPanelItems/Elements/ExplanationItems"]
+position = Vector2(-186, -30)
+texture = ExtResource("15_sl518")
+hframes = 4
+vframes = 4
+frame = 3
+
+[node name="StatusSymbols5" type="Sprite2D" parent="TutorialPanelItems/Elements/ExplanationItems"]
+position = Vector2(-186, 8)
+texture = ExtResource("15_sl518")
+hframes = 4
+vframes = 4
+frame = 4
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/Elements/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -158.0
+offset_top = -331.0
+offset_right = 407.0
+offset_bottom = 122.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Determines the status effect that the character has a Status Rate % chance of applying, as well as the buff that a party member’s filled Ult Meter will provide.
+
+Status Effects:
+
+Fire - Burn: Deals moderate damage over time.
+Water - Dampen: A portion of damage dealt is applied back to the enemy.
+Wind - Dizzy: Critical hits are significantly easier to land.
+Electric - Spark: Increases Ult Charge generation on click.
+Earth - Petrify: Stores a portion of all damage dealt while active, then releases it as one massive hit when Petrify expires. 
+
+See “Party Members” for the corresponding Ult Buffs.
+"
+autowrap_mode = 2
+
+[node name="EnemyCapturing" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 55.0
+offset_top = -943.0
+offset_right = 327.0
+offset_bottom = -880.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Enemy Capturing
+"
+vertical_alignment = 1
+
+[node name="EnemyCapturingButton" type="TextureButton" parent="TutorialPanelItems/EnemyCapturing"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/EnemyCapturing"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 653.0
+offset_top = -20.0
+offset_right = 693.0
+offset_bottom = 20.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/EnemyCapturing/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -169.0
+offset_top = -274.0
+offset_right = 396.0
+offset_bottom = 122.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Every defeated monster has a 10% chance to be captured.
+
+Open the Monster Menu to view your collection, pet your monsters, and learn about their ethology.
+
+Capturing duplicate monsters unlocks additional lore entries about their behaviors and history.
+
+Try to collect them all!
+"
+autowrap_mode = 2
+
+[node name="RadiantEnemies" type="Label" parent="TutorialPanelItems"]
+z_index = 21
+layout_mode = 0
+offset_left = 45.0
+offset_top = -893.0
+offset_right = 317.0
+offset_bottom = -830.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Radiant Enemies"
+vertical_alignment = 1
+
+[node name="RadiantEnemiesButton" type="TextureButton" parent="TutorialPanelItems/RadiantEnemies"]
+layout_mode = 0
+offset_left = -15.0
+offset_top = 4.0
+offset_right = 57.0
+offset_bottom = 20.0
+scale = Vector2(4.5, 4.5)
+toggle_mode = true
+texture_pressed = ExtResource("7_fnnjn")
+texture_hover = ExtResource("8_vrd3l")
+
+[node name="ExplanationItems" type="Control" parent="TutorialPanelItems/RadiantEnemies"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 636.0
+offset_top = 75.0
+offset_right = 676.0
+offset_bottom = 115.0
+
+[node name="ExplanationText" type="Label" parent="TutorialPanelItems/RadiantEnemies/ExplanationItems"]
+z_index = 21
+layout_mode = 0
+offset_left = -145.0
+offset_top = -426.0
+offset_right = 420.0
+offset_bottom = -30.0
+theme_override_fonts/font = ExtResource("6_kil87")
+theme_override_font_sizes/font_size = 16
+text = "Radiant Enemies are exceptionally rare mutant variants of normal monsters.
+
+Their unique coloration distinguishes them from their regular counterparts, and they are guaranteed to be captured when defeated.
+
+
+Press:
+
+
+...in the Monster Menu to view a monster's Radiant form.
+"
+autowrap_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TutorialPanelItems/RadiantEnemies/ExplanationItems"]
+layout_mode = 0
+offset_left = -31.0
+offset_top = -230.0
+offset_right = 8.0
+offset_bottom = -191.0
+texture = ExtResource("10_7q14q")
+
+[node name="SelectedMonsterPanel" type="Panel" parent="TutorialPanelItems"]
+z_index = 20
+layout_mode = 0
+offset_left = -5.0
+offset_top = -1428.0
+offset_right = 40.0
+offset_bottom = -1389.0
+scale = Vector2(12, 18)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_iwdrw")
+
+[node name="CaptureMenuOpen" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_o2qke")
+bus = &"SFX"
+
+[node name="CaptureMenuClose" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_0jwv3")
+bus = &"SFX"
+
+[node name="MonsterSelected" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_qckwa")
+bus = &"SFX"
+
+[node name="CaptureParticleSpawnSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_ouhd4")
+bus = &"SFX"
+
+[node name="GuideSlide" type="AnimationPlayer" parent="."]
+root_node = NodePath("../ExplanationPanelItems")
+libraries = {
+"": SubResource("AnimationLibrary_tv6jt")
+}
+
+[node name="Select" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("14_ty0eg")
+bus = &"SFX"
+
+[connection signal="button_down" from="ExplanationPanelItems/CloseButton" to="." method="guideSlideOut"]
+[connection signal="pressed" from="TutorialPanelItems/RadiantEnemies/RadiantEnemiesButton" to="." method="_on_radiant_enemies_button_pressed"]

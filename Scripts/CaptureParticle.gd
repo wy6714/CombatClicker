@@ -14,6 +14,7 @@ var base_y
 
 var enemyName: String
 var enemyPassive: String
+var radiant: bool
 
 func start_float():
 	float_up()
@@ -63,5 +64,5 @@ func start_floaty_motion(duration: float) -> void:
 
 func _on_reach_button():
 	if captureBarRef:
-		playerMonsterList.captureMonster(enemyName, enemyPassive)
+		playerMonsterList.captureMonster(enemyName, enemyPassive, radiant)
 	queue_free()

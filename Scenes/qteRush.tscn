@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://b2hryl6p385tg"]
+[gd_scene load_steps=29 format=3 uid="uid://b2hryl6p385tg"]
 
 [ext_resource type="Script" path="res://Scripts/qte.gd" id="1_y01ux"]
 [ext_resource type="Texture2D" uid="uid://do40qg0bycycm" path="res://Art/QTESquare/Pixel QTE Button Textures-2.png.png" id="3_lw56w"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ci2lwlouurq1t" path="res://Art/QTESquare/QTE- Inner Square.png" id="9_8fkf5"]
 [ext_resource type="Texture2D" uid="uid://yberw3pombut" path="res://Art/QTESquare/QTE- Innermost Square.png" id="10_lfejw"]
 [ext_resource type="Texture2D" uid="uid://l5ua7qlh03au" path="res://Art/QTESquare/QTE- Black Inner Box.png" id="11_emw8h"]
+[ext_resource type="AudioStream" uid="uid://c86mgw66prth7" path="res://Audio/qteSpawn.wav" id="12_rjdym"]
 
 [sub_resource type="Animation" id="Animation_lxotv"]
 length = 0.001
@@ -130,11 +131,14 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.5, 0.5001),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
 "method": &"startShrinking"
+}, {
+"args": [],
+"method": &"playAlteredQTESpawn"
 }]
 }
 tracks/3/type = "value"
@@ -349,7 +353,6 @@ _data = {
 position = Vector2(499, 217)
 scale = Vector2(0.7, 0.7)
 script = ExtResource("1_y01ux")
-rushQTE = true
 
 [node name="TextureButton" type="TextureButton" parent="."]
 modulate = Color(1, 1, 1, 0.113725)
@@ -488,6 +491,7 @@ frame_progress = 0.277007
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(101.429, 100)
+bus = &"SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -499,5 +503,9 @@ autoplay = "FadeIn"
 libraries = {
 "": SubResource("AnimationLibrary_gtg8w")
 }
+
+[node name="QTESpawn" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_rjdym")
+bus = &"SFX"
 
 [connection signal="button_down" from="TextureButton" to="." method="_on_texture_button_button_down"]

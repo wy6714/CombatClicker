@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://lfbge76tm67h"]
+[gd_scene load_steps=36 format=3 uid="uid://lfbge76tm67h"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerMonsterList.gd" id="1_xx8oo"]
 [ext_resource type="Texture2D" uid="uid://cedbap7mfr3yy" path="res://Art/ParallelogramClose-1.png" id="2_ogbsi"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bwmis4iquyx0h" path="res://Art/DiagonalMonsterCapturePanel.png" id="6_r5exp"]
 [ext_resource type="Texture2D" uid="uid://bx1mk3uc1wauw" path="res://Art/CaptureIcon-1.png" id="7_b2gfg"]
 [ext_resource type="Texture2D" uid="uid://dunwhu727g70f" path="res://Art/CaptureIcon-3.png" id="8_nwmss"]
+[ext_resource type="Texture2D" uid="uid://daciu23abdrdb" path="res://Art/SparkleIcon.png" id="9_7j77m"]
 [ext_resource type="Texture2D" uid="uid://6pdl5jhewalo" path="res://Art/CaptureIcon-2.png" id="9_8vyjl"]
 [ext_resource type="Texture2D" uid="uid://c5x084pefeeud" path="res://Art/QuestionMark.png" id="10_f8k1m"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="11_oh0ut"]
@@ -17,6 +18,8 @@
 [ext_resource type="AudioStream" uid="uid://c20mpstdj805d" path="res://Audio/UiOpen2.wav" id="15_ujjcy"]
 [ext_resource type="AudioStream" uid="uid://bqg8efxpl25sd" path="res://Audio/UiClose2.wav" id="16_nrrcx"]
 [ext_resource type="AudioStream" uid="uid://7nnswem086nr" path="res://Audio/MonsterSelectSound.wav" id="17_xefac"]
+[ext_resource type="AudioStream" uid="uid://cururox5qks5a" path="res://Audio/captureEnemyParticle.wav" id="18_8ycp5"]
+[ext_resource type="AudioStream" uid="uid://dnaklk0vvph2k" path="res://Audio/select.wav" id="20_7qtnw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cwpu3"]
 texture = ExtResource("5_2e473")
@@ -298,12 +301,13 @@ _data = {
 }
 
 [node name="PlayerMonsterList" type="Node2D"]
+z_index = 111
 script = ExtResource("1_xx8oo")
 
 [node name="Control" type="Control" parent="."]
 modulate = Color(1, 1, 1, 0.866667)
 top_level = true
-z_index = 2
+z_index = 111
 layout_mode = 3
 anchors_preset = 0
 offset_left = -170.0
@@ -389,6 +393,17 @@ offset_bottom = 40.0
 
 [node name="VScrollBar" type="VScrollBar" parent="Control/CaptureInfoPanelItems/SelectedMonsterPanel/ScrollContainer"]
 layout_mode = 2
+
+[node name="RadiantToggle" type="TextureButton" parent="Control/CaptureInfoPanelItems"]
+visible = false
+z_index = 25
+layout_mode = 0
+offset_left = 1175.0
+offset_top = 111.0
+offset_right = 1207.0
+offset_bottom = 143.0
+toggle_mode = true
+texture_normal = ExtResource("9_7j77m")
 
 [node name="Name" type="Label" parent="Control/CaptureInfoPanelItems"]
 z_index = 20
@@ -604,14 +619,26 @@ libraries = {
 
 [node name="CaptureMenuOpen" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("15_ujjcy")
+bus = &"SFX"
 
 [node name="CaptureMenuClose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_nrrcx")
+bus = &"SFX"
 
 [node name="MonsterSelected" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("17_xefac")
+bus = &"SFX"
+
+[node name="CaptureParticleSpawnSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_8ycp5")
+bus = &"SFX"
+
+[node name="SelectSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("20_7qtnw")
+bus = &"SFX"
 
 [connection signal="button_down" from="Control/MonsterPanelItems/GridContainer/TextureButton" to="Control/MonsterPanelItems/GridContainer" method="_on_texture_button_button_down"]
+[connection signal="button_down" from="Control/CaptureInfoPanelItems/RadiantToggle" to="Control/MonsterPanelItems/GridContainer" method="_on_radiant_toggle_button_down"]
 [connection signal="button_down" from="Control/CaptureInfoPanelItems/CloseButton" to="." method="_on_texture_button_button_down"]
 [connection signal="button_up" from="Control/CaptureInfoPanelItems/CloseButton" to="." method="_on_texture_button_button_up"]
 [connection signal="input_event" from="Control/CaptureInfoPanelItems/Area2D" to="Control/MonsterPanelItems/GridContainer" method="_on_area_2d_input_event"]

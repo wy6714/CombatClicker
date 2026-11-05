@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dmcjcfunlt6m3"]
+[gd_scene load_steps=26 format=3 uid="uid://dmcjcfunlt6m3"]
 
 [ext_resource type="Texture2D" uid="uid://dy30qp85ob0y3" path="res://Art/Cinema_Lines_Simple-1.png.png" id="1_6ku88"]
 [ext_resource type="Script" path="res://Scripts/break_effect.gd" id="1_svqi7"]
@@ -15,6 +15,8 @@
 [ext_resource type="AudioStream" uid="uid://dx475ypigwhmm" path="res://Audio/Bass Impact Glide.mp3" id="12_rrq6n"]
 [ext_resource type="Texture2D" uid="uid://b4t25tkf0ol6u" path="res://Art/ExplosionBuildUpFramesAndOptionalReleaseHooray.png" id="14_o24ex"]
 [ext_resource type="Texture2D" uid="uid://dqrvbx3u6kayn" path="res://Art/ExplosionReleaseOutlineWithoutExtraFramesAndImpactFrames.png" id="15_fwd4c"]
+[ext_resource type="AudioStream" uid="uid://c0eiiwvmwyaoy" path="res://Audio/breakBoom.wav" id="16_ey4jw"]
+[ext_resource type="AudioStream" uid="uid://48ufvfqao1bj" path="res://Audio/breakBoomBuildup.wav" id="17_b1fcw"]
 
 [sub_resource type="Animation" id="Animation_6dmpm"]
 resource_name = "BreakFinale"
@@ -462,6 +464,20 @@ tracks/3/keys = {
 "method": &"playExplosion2"
 }]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ExplosionAnim/BreakBoomBuildup")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_rf3mw"]
 resource_name = "Explosion2"
@@ -550,6 +566,20 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ExplosionAnim/BreakExplosion")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_dr6bb"]
@@ -697,6 +727,7 @@ scale = Vector2(54, 54)
 texture = ExtResource("2_we5hw")
 
 [node name="Flash" type="Sprite2D" parent="."]
+visible = false
 z_index = 3
 position = Vector2(568, 330)
 scale = Vector2(77, 77)
@@ -747,27 +778,33 @@ emission_sphere_radius = 1.0
 [node name="DrumRoll" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_xngip")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="ShatterCrunch" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("11_rimqv")
 volume_db = -13.415
+bus = &"SFX"
 
 [node name="DrumCrash" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_5qa5e")
 volume_db = -80.0
+bus = &"SFX"
 
 [node name="Shatter" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_a0s51")
 volume_db = -80.0
+bus = &"SFX"
 
 [node name="Bass" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("12_rrq6n")
 volume_db = -9.092
 pitch_scale = 1.14
+bus = &"SFX"
 
 [node name="ShatterResolve" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("12_riqpm")
 volume_db = -15.0
+bus = &"SFX"
 
 [node name="Explosions" type="Node2D" parent="."]
 z_index = 6
@@ -808,5 +845,14 @@ texture = ExtResource("5_hymrm")
 libraries = {
 "": SubResource("AnimationLibrary_rr10s")
 }
+
+[node name="BreakExplosion" type="AudioStreamPlayer2D" parent="ExplosionAnim"]
+stream = ExtResource("16_ey4jw")
+bus = &"SFX"
+
+[node name="BreakBoomBuildup" type="AudioStreamPlayer2D" parent="ExplosionAnim"]
+stream = ExtResource("17_b1fcw")
+volume_db = -5.0
+bus = &"SFX"
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

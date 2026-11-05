@@ -6,7 +6,6 @@ extends GridContainer
 var total_monsters = 50
 
 @onready var base_button_scene = preload("res://Scenes/GridMonsterButton.tscn")
-@onready var currentButtonSprite = get_node("/root/Main/CurrentMonsterIconButton/TextureButton/MonsterIcon")
 
 @onready var nametag = $"../../CaptureInfoPanelItems/Name"
 @onready var pats_label = $"../../CaptureInfoPanelItems/PetLabel"
@@ -21,9 +20,23 @@ var total_monsters = 50
 @onready var mouseInsideRadius = false
 var queued_anim: String = ""
 
+var radiantUnlocked
+var regularUnlocked
+
+var currentRadiantUnlocked = false
+var currentRegularUnlocked = false
+
+var radiant
+@onready var radiantToggle = $"../../CaptureInfoPanelItems/RadiantToggle"
+var isShowingRadiant = false   # tracks current display state
+
+var currentGridSprite: Sprite2D
+var currentSingleSprite: Texture2D
+var currentRadiantSingleSprite: Texture2D
+@onready var selectSE = $"../../../SelectSE"
 
 var monster_list = [
-	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/ChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
+	{"name": "Chickadee", "unlocked": false, "sprite": preload("res://Art/EnemyDesigns/ChickadeeSingle.png"), "radiantSprite": preload("res://Art/EnemyDesigns/RadiantChickadeeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chickadee.tscn"), 
 	"lore":
 		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
@@ -36,7 +49,21 @@ var monster_list = [
 	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
 	], "pats": 0},
-	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/ChickenSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn"), 
+	{"name": "Chicken", "unlocked": false, "sprite": preload("res://Art/EnemyDesigns/ChickenSingle.png"), "radiantSprite": preload("res://Art/EnemyDesigns/RadiantChickenSpritesSingle.png"), "scene": preload("res://Scenes/EnemyScenes/chicken.tscn"), 
+	"lore": 
+		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
+	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
+	], "pats": 0
+		},
+	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/EnemyDesigns/SlimeSingle.png"), "radiantSprite": preload("res://Art/EnemyDesigns/RadiantSlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn"),
 	"lore":
 		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
@@ -50,7 +77,7 @@ var monster_list = [
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
 	], "pats": 0
 		},
-	{"name": "Slime", "unlocked": false, "sprite": preload("res://Art/SlimeSingle.png"), "scene": preload("res://Scenes/EnemyScenes/slime.tscn"),
+	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/EnemyDesigns/GhostSingle.png"), "radiantSprite": preload("res://Art/EnemyDesigns/RadiantSpoopyGhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn"),
 	"lore":
 		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
@@ -64,21 +91,7 @@ var monster_list = [
 	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
 	], "pats": 0
 		},
-	{"name": "Ghost", "unlocked": false, "sprite": preload("res://Art/GhostSingle.png"), "scene": preload("res://Scenes/EnemyScenes/ghost.tscn"),
-	"lore":
-		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 3 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 4 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 5 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 6 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 7 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 8 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 9 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
-	 "This is where lore 10 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh."
-	], "pats": 0
-		},
-	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/MushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn"), 
+	{"name": "Mushroom", "unlocked": false, "sprite": preload("res://Art/EnemyDesigns/MushroomSingle.png"), "radiantSprite": preload("res://Art/EnemyDesigns/RadiantWiggleMushroomSingle.png"), "scene": preload("res://Scenes/EnemyScenes/mushroom.tscn"), 
 	"lore":
 		["This is where lore 1 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
 	 "This is where lore 2 for this enemy is stored. Blah blah blah yadda yadda yadda humbly dee humbly doo scooby dooby doo. Yuh.",
@@ -100,13 +113,14 @@ var monster_list = [
 func _ready():
 	base_button.queue_free()
 	populate_monster_list()
-	
+	player_monster_list.monster_captured.connect(_on_monster_captured)
 
 func populate_monster_list() -> void:
-	# 1) Clear out existing buttons
+	# 1) Clear out existing buttons immediately, not at end of frame
 	for button in grid.get_children():
-		button.queue_free()
-
+		grid.remove_child(button)
+		button.free()
+		
 	# 2) Build exactly total_monsters slots
 	for i in range(total_monsters):
 		var btn = base_button_scene.instantiate()
@@ -118,12 +132,19 @@ func populate_monster_list() -> void:
 			var monster = monster_list[i]
 			if monster["name"] in player_monster_list.capturedMonsters \
 					and player_monster_list.capturedMonsters[monster["name"]]["count"] > 0:
-
-				# unlocked
+					
 				cnt = player_monster_list.capturedMonsters[monster["name"]]["count"]
 				sprite.texture = monster["sprite"]
 				
-
+				var is_radiant_unlocked: bool = player_monster_list.capturedMonsters[monster["name"]].get("radiantUnlocked", false)
+				var is_regular_unlocked: bool = player_monster_list.capturedMonsters[monster["name"]].get("regularUnlocked", false)
+				
+				# Show shiny thumbnail only if they own a shiny but NOT the regular version
+				if is_radiant_unlocked and not is_regular_unlocked:
+					sprite.texture = monster["radiantSprite"]
+				else:
+					sprite.texture = monster["sprite"]
+		
 				btn.pressed.connect(
 					Callable(self, "_on_texture_button_button_down")
 						.bind(
@@ -132,83 +153,139 @@ func populate_monster_list() -> void:
 							cnt,
 							monster["scene"],
 							monster["lore"],
-							monster["pats"]
+							monster["pats"],
+							is_radiant_unlocked,
+							is_regular_unlocked,
+							sprite
 						)
 				)
 			else:
-				# defined monster but locked
+				# Defined monster, but not caught yet.
 				sprite.texture = preload("res://Art/QuestionMark.png")
-				btn.pressed.connect(func ():
-					# 1) Show "???" for name
-					nametag.text = "???"
-
-					# 2) ? Animation
-					monsterAnimatedSprite.sprite_frames = question_mark_frames
-					monsterAnimatedSprite.animation = "default"  # or whatever the anim is called
-					monsterAnimatedSprite.play()
-
-					# 3) Show 0 pats
-					pats_label.text = "???"
-					
-					# 4) Blank out all lore entries
-					for trivia in get_tree().get_nodes_in_group("Trivia"):
-						trivia.text = "???"
-						
-					# 5) Disable clicks
-					monsterArea.input_pickable = false
-	)
+				btn.pressed.connect(_show_unknown_monster)
 
 		else:
 			# --- placeholder slot beyond your defined monsters ---
 			sprite.texture = preload("res://Art/QuestionMark.png")
-			btn.pressed.connect(
-				Callable(self, "_on_texture_button_button_down")
-					.bind(
-						null,
-						preload("res://Art/QuestionMark.png"),
-						0,
-						null,
-						[],
-						0
-					)
-			)
+			btn.pressed.connect(_show_unknown_monster)
 
 		grid.add_child(btn)
 
 	print("populated")
 
+
+func _show_unknown_monster() -> void:
+	# Clear the previously selected monster.
+	currentMonster = null
+	currentGridSprite = null
+
+	# Disable radiant display options.
+	currentRadiantUnlocked = false
+	currentRegularUnlocked = false
+	radiantToggle.visible = false
+	radiantToggle.disabled = true
+
+	# Display unknown monster information.
+	nametag.text = "???"
+	pats_label.text = "???"
+
+	# Play the question mark animation.
+	monsterAnimatedSprite.sprite_frames = question_mark_frames
+	monsterAnimatedSprite.animation = "default"
+	monsterAnimatedSprite.play()
+
+	# Lock all lore entries.
+	for trivia in get_tree().get_nodes_in_group("Trivia"):
+		trivia.text = "???"
+
+	# Disable interaction with the monster display.
+	monsterArea.input_pickable = false
 	
-func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene, lore_list: Array, pats: int):
+func _on_monster_captured(monster_name: String):
+	if $"../../..".visible == false:
+		return
+		
+	populate_monster_list()
+		
+	if currentMonster != null and currentMonster.get("name", "") == monster_name:
+		var captured_data = player_monster_list.capturedMonsters[monster_name]
+		var monster_index = monster_list.find(currentMonster)
+		if monster_index != -1:
+			var monster = monster_list[monster_index]
+			
+			# Grab the freshly-rebuilt button/sprite at this index, since the old node was freed
+			var new_grid_sprite: Sprite2D = null
+			if monster_index < grid.get_child_count():
+				var new_btn = grid.get_child(monster_index)
+				new_grid_sprite = new_btn.get_node("Sprite2D")
+			
+			on_monster_selected(
+				monster_name,
+				monster["sprite"],
+				captured_data["count"],
+				monster["scene"],
+				monster["lore"],
+				currentMonster["pats"],
+				captured_data.get("radiantUnlocked", false),
+				captured_data.get("regularUnlocked", false),
+				new_grid_sprite
+			)		
+		
+func on_monster_selected(monster_name: String, sprite_tex: Texture2D, count: int, monster_scene: PackedScene, lore_list: Array, pats: int, radiantUnlocked: bool, regularUnlocked: bool, gridSprite: Sprite2D):
+	print("Monster Selected : ", monster_name)
+	
 	nametag.text = monster_name
 	getTrivia(count, lore_list)
 	pats_label.text = str(currentMonster["pats"])
 	monsterArea.input_pickable = true
 	
-	currentButtonSprite.texture = sprite_tex   # static image, if you still want it
-
+	currentRadiantUnlocked = radiantUnlocked
+	currentRegularUnlocked = regularUnlocked
+	
+	currentGridSprite = gridSprite
+	currentSingleSprite = currentMonster["sprite"]
+	currentRadiantSingleSprite = currentMonster["radiantSprite"]
+	
+	# Toggle visibility: only show it at all if they own a shiny
+	radiantToggle.visible = radiantUnlocked
+	
+	# Decide the default display: shiny-only-owned forces shiny, otherwise default to regular
+	var showRadiantByDefault = radiantUnlocked and not regularUnlocked
+	
+	if radiantUnlocked:
+		if regularUnlocked:
+			# They own both — toggle is free to flip either way
+			radiantToggle.disabled = false
+		else:
+			# Only shiny owned — lock the toggle "on", can't switch to regular
+			radiantToggle.disabled = true
+	
 	# — now for the animated sprite —
-	# 1) Instance the enemy scene so we can read its AnimatedSprite2D and collider
 	var enemy_instance = monster_scene.instantiate()
 	var enemy_area = enemy_instance.get_node("Area2D")
 	var original_anim: AnimatedSprite2D = enemy_area.get_node("AnimatedSprite2D")
 	var original_collider: CollisionShape2D = enemy_area.get_node("CollisionShape2D")
-
-	# 4) Set the animated sprite
+	
 	monsterAnimatedSprite.sprite_frames = original_anim.sprite_frames.duplicate()
-	monsterAnimatedSprite.animation = original_anim.animation
-	monsterAnimatedSprite.play()
+	setDisplayRadiant(showRadiantByDefault)   # <-- replaces the old animation-copy line
 
-	# 5) Set the collider shape and scale to match the enemy
 	monsterCollider.shape = original_collider.shape.duplicate()
 	monsterCollider.scale = original_collider.scale * 4
 	monsterCollider.position = original_collider.position
 
-	# 6) (Optional) If collider looks wrong, use fallback based on sprite size:
 	match_collider_to_sprite()
-
-	# Lastly, tidy up the temporary instance
 	enemy_instance.queue_free()
-
+	
+func setDisplayRadiant(showRadiant: bool) -> void:
+	radiant = showRadiant
+	var currentFrame = monsterAnimatedSprite.frame
+	monsterAnimatedSprite.animation = "RIdle" if showRadiant else "Idle"
+	monsterAnimatedSprite.frame = currentFrame
+	monsterAnimatedSprite.play()
+	
+	if currentGridSprite:
+		currentGridSprite.texture = currentRadiantSingleSprite if showRadiant else currentSingleSprite
+	
 func match_collider_to_sprite():
 	var tex = monsterAnimatedSprite.sprite_frames.get_frame_texture(monsterAnimatedSprite.animation, 0)
 	if tex:
@@ -252,7 +329,10 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 			
 			# 2) Switch anim
 			var currentFrame = monsterAnimatedSprite.frame # Get the frame
-			monsterAnimatedSprite.animation = "Happy" # Happy anim name
+			if(!radiant):
+				monsterAnimatedSprite.animation = "Happy" # Happy anim name
+			else:
+				monsterAnimatedSprite.animation = "RHappy"
 			
 			if(!currentlyPatting): # Only apply the current frame to the new animation ONCE (otherwise there is pausing)
 				monsterAnimatedSprite.frame = currentFrame
@@ -289,7 +369,11 @@ func _on_enemy_scale_animation_finished(anim_name):
 
 func _on_happy_timer_timeout():
 	var currentFrame = monsterAnimatedSprite.frame
-	monsterAnimatedSprite.animation = "Idle"
+	if(!radiant):
+		monsterAnimatedSprite.animation = "Idle"
+	else:
+		monsterAnimatedSprite.animation = "RIdle"
+		
 	monsterAnimatedSprite.frame = currentFrame
 	monsterAnimatedSprite.play()
 	currentlyPatting = false
@@ -301,9 +385,12 @@ func _on_texture_button_button_down(
 	cnt: int,
 	scene: PackedScene,
 	lore: Array,
-	patTotal: int
+	patTotal: int,
+	radiantUnlocked: bool,
+	regularUnlocked: bool,
+	gridSprite: Sprite2D
 ) -> void:
-
+	
 	# 1) Capture the selected monster
 	currentMonster = monster
 	
@@ -321,14 +408,19 @@ func _on_texture_button_button_down(
 		cnt,
 		scene,
 		lore,
-		patTotal
+		patTotal,
+		radiantUnlocked,
+		regularUnlocked,
+		gridSprite
 	)
-	
-	# 4) Equip the monster
-	
-	player_monster_list.equip_monster(monster["name"])
-	
 
+func _on_radiant_toggle_button_down() -> void:
+	if not currentRadiantUnlocked:
+		return
+	if not currentRegularUnlocked:
+		return  # only shiny owned — nothing to toggle to, ignore the press
 	
+	isShowingRadiant = not isShowingRadiant
+	setDisplayRadiant(isShowingRadiant)
+	selectSE.play()
 	
-

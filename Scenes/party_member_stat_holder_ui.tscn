@@ -1,15 +1,20 @@
-[gd_scene load_steps=19 format=3 uid="uid://b7nqtkti6xlb0"]
+[gd_scene load_steps=27 format=3 uid="uid://b7nqtkti6xlb0"]
 
 [ext_resource type="Script" path="res://Scripts/party_member_stat_holder_ui.gd" id="1_g07wn"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_l8v5w"]
 [ext_resource type="Texture2D" uid="uid://ch12swh3oqulm" path="res://Art/Circle Button Unselected.png" id="3_4q1fy"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_hdsew"]
 [ext_resource type="Texture2D" uid="uid://b1lc8f5bene27" path="res://Art/Circle Button Selected.png" id="4_em61s"]
+[ext_resource type="Texture2D" uid="uid://bn7cnagnww145" path="res://Art/HoveredCircle.png" id="6_c5ddx"]
 [ext_resource type="Texture2D" uid="uid://cedbap7mfr3yy" path="res://Art/ParallelogramClose-1.png" id="6_v30gx"]
 [ext_resource type="Texture2D" uid="uid://cdprr8u25nowl" path="res://Art/ParallelogramClose-2.png" id="7_sqcaw"]
 [ext_resource type="Texture2D" uid="uid://cigkt28wmf5es" path="res://Art/ParallelogramClose-3.png" id="8_i7h83"]
 [ext_resource type="AudioStream" uid="uid://c7a1g8ua5imgw" path="res://Audio/StatMenuOpen.wav" id="9_5ix82"]
+[ext_resource type="Texture2D" uid="uid://cqwbkfu351n3t" path="res://Art/SelectIconTriangle.png" id="10_mkdqa"]
 [ext_resource type="AudioStream" uid="uid://dw1ma12bdlg6b" path="res://Audio/StatMenuClose2.wav" id="10_r6c2c"]
+[ext_resource type="Texture2D" uid="uid://dhqmicarlyi3n" path="res://Art/SelectIconTrianglePressed2.png" id="11_eyek7"]
+[ext_resource type="Texture2D" uid="uid://dd0dnllkj8x83" path="res://Art/SelectIconTriangleHover.png" id="12_etavd"]
+[ext_resource type="AudioStream" uid="uid://dnaklk0vvph2k" path="res://Audio/select.wav" id="15_gi0of"]
 
 [sub_resource type="Animation" id="Animation_rshy7"]
 length = 0.001
@@ -215,7 +220,82 @@ _data = {
 "open": SubResource("Animation_laiqh")
 }
 
-[node name="PartyMemberStatHolderUI" type="Control"]
+[sub_resource type="Animation" id="Animation_2mvrs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../StatMenuItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(866, 325)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../StatBox:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(866, 325)]
+}
+
+[sub_resource type="Animation" id="Animation_7ebry"]
+resource_name = "StatHolderJiggle"
+length = 0.13
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../StatMenuItems:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0612504, 0.120563),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(866, 325), Vector2(866, 330), Vector2(866, 325)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../StatBox:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0612504, 0.120563),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(866, 325), Vector2(866, 330), Vector2(866, 325)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../StatHolderJiggleSE")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q04fk"]
+_data = {
+"RESET": SubResource("Animation_2mvrs"),
+"StatHolderJiggle": SubResource("Animation_7ebry")
+}
+
+[node name="PartyMemberStatHolderUI" type="Control" groups=["StatHolder"]]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -237,7 +317,14 @@ offset_bottom = -61.0
 scale = Vector2(43.5489, 23.6088)
 color = Color(0, 0, 0, 0.6)
 
+[node name="ClickOffOverlay" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -27.0
+offset_right = 609.0
+offset_bottom = 653.0
+
 [node name="StatBox" type="Sprite2D" parent="."]
+z_index = 499
 position = Vector2(866, 325)
 scale = Vector2(4.576, 5.07817)
 texture = ExtResource("2_l8v5w")
@@ -246,6 +333,7 @@ vframes = 7
 frame = 5
 
 [node name="StatMenuItems" type="Control" parent="."]
+z_index = 500
 anchors_preset = 0
 offset_left = 866.0
 offset_top = 325.0
@@ -274,6 +362,20 @@ theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 16
 text = "Strength: "
 
+[node name="ULT BONUS" type="Label" parent="StatMenuItems"]
+visible = false
+layout_mode = 0
+offset_left = 123.0
+offset_top = -278.0
+offset_right = 163.0
+offset_bottom = -255.0
+scale = Vector2(1.2, 1.2)
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 8
+text = "Ult
+Bonus"
+horizontal_alignment = 1
+
 [node name="StrengthPoints" type="Label" parent="StatMenuItems"]
 layout_mode = 0
 offset_left = 60.0
@@ -285,34 +387,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/StrengthPoints" groups=["add_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/StrengthPoints" groups=["remove_upgrade", "strength"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsSTR" type="Label" parent="StatMenuItems/StrengthPoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="CrR" type="Label" parent="StatMenuItems"]
@@ -336,34 +437,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CritRatePoints" groups=["add_upgrade", "critRate"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CritRatePoints" groups=["critRate", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsCR" type="Label" parent="StatMenuItems/CritRatePoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="CrD" type="Label" parent="StatMenuItems"]
@@ -387,34 +487,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CritDamagePoints" groups=["add_upgrade", "critDamage"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CritDamagePoints" groups=["critDamage", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsCrD" type="Label" parent="StatMenuItems/CritDamagePoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="UR" type="Label" parent="StatMenuItems"]
@@ -438,34 +537,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/UltRegenPoints" groups=["add_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/UltRegenPoints" groups=["remove_upgrade", "ultRegen"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsUR" type="Label" parent="StatMenuItems/UltRegenPoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="SR" type="Label" parent="StatMenuItems"]
@@ -489,34 +587,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/StatusRatePoints" groups=["add_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/StatusRatePoints" groups=["remove_upgrade", "statusRate"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsSR" type="Label" parent="StatMenuItems/StatusRatePoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="CD" type="Label" parent="StatMenuItems"]
@@ -540,37 +637,37 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["add_upgrade", "cooldown"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/CooldownPoints" groups=["cooldown", "remove_upgrade"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsCD" type="Label" parent="StatMenuItems/CooldownPoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 58.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 98.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="UP" type="Label" parent="StatMenuItems"]
+visible = false
 layout_mode = 0
 offset_left = -210.0
 offset_top = 17.0
@@ -581,6 +678,7 @@ theme_override_font_sizes/font_size = 16
 text = "Ult Potency:"
 
 [node name="UltPotencyPoints" type="Label" parent="StatMenuItems"]
+visible = false
 layout_mode = 0
 offset_left = 30.0
 offset_top = 18.0
@@ -591,34 +689,33 @@ text = "1"
 
 [node name="AddUpgradePoints" type="Button" parent="StatMenuItems/UltPotencyPoints" groups=["add_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 125.0
-offset_top = -1.0
-offset_right = 149.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 118.0
+offset_top = -7.0
+offset_right = 142.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "+"
 
 [node name="RemoveUpgradePoints" type="Button" parent="StatMenuItems/UltPotencyPoints" groups=["remove_upgrade", "ultPotency"]]
 layout_mode = 0
-offset_left = 146.0
-offset_top = -1.0
-offset_right = 170.0
-offset_bottom = 30.0
-scale = Vector2(0.8, 0.8)
+offset_left = 154.0
+offset_top = -7.0
+offset_right = 178.0
+offset_bottom = 24.0
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "-
 "
 
 [node name="BonusBuffPointsUP" type="Label" parent="StatMenuItems/UltPotencyPoints"]
 layout_mode = 0
-offset_left = 70.0
+offset_left = 57.0
 offset_top = 4.0
-offset_right = 110.0
+offset_right = 97.0
 offset_bottom = 27.0
+scale = Vector2(1.2, 1.2)
 theme_override_fonts/font = ExtResource("3_hdsew")
 theme_override_font_sizes/font_size = 8
-text = "(0)"
+text = "+0"
 horizontal_alignment = 1
 
 [node name="BuyUpgrade" type="Button" parent="StatMenuItems"]
@@ -659,6 +756,7 @@ toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
 
 [node name="Element" type="Label" parent="StatMenuItems/FireButton"]
 layout_mode = 0
@@ -680,6 +778,7 @@ toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
 
 [node name="Element" type="Label" parent="StatMenuItems/WaterButton"]
 layout_mode = 0
@@ -701,6 +800,7 @@ toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
 
 [node name="Element" type="Label" parent="StatMenuItems/EarthButton"]
 layout_mode = 0
@@ -722,6 +822,7 @@ toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
 
 [node name="Element" type="Label" parent="StatMenuItems/WindButton"]
 layout_mode = 0
@@ -743,6 +844,7 @@ toggle_mode = true
 action_mode = 0
 texture_normal = ExtResource("3_4q1fy")
 texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
 
 [node name="Element" type="Label" parent="StatMenuItems/ElectricButton"]
 layout_mode = 0
@@ -753,6 +855,97 @@ offset_bottom = 70.0
 scale = Vector2(0.8, 0.8)
 theme_override_fonts/font = ExtResource("3_hdsew")
 text = "Elec"
+
+[node name="DisableAudio" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = -240.0
+offset_top = 217.0
+offset_right = 60.0
+offset_bottom = 237.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Disable Audio: "
+
+[node name="DisableAudioButton" type="TextureButton" parent="StatMenuItems/DisableAudio"]
+layout_mode = 0
+offset_left = 331.0
+offset_top = -3.0
+offset_right = 363.0
+offset_bottom = 29.0
+scale = Vector2(0.75, 0.75)
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
+
+[node name="DisableAnimation" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = -247.0
+offset_top = 246.0
+offset_right = 57.0
+offset_bottom = 266.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Disable Animation: "
+
+[node name="DisableAnimationButton" type="TextureButton" parent="StatMenuItems/DisableAnimation"]
+layout_mode = 0
+offset_left = 331.0
+offset_top = -3.0
+offset_right = 363.0
+offset_bottom = 29.0
+scale = Vector2(0.75, 0.75)
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
+
+[node name="SetAsInactive" type="Label" parent="StatMenuItems"]
+layout_mode = 0
+offset_left = -254.0
+offset_top = 276.0
+offset_right = 50.0
+offset_bottom = 296.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Set As Inactive:"
+
+[node name="SetAsInactiveButton" type="TextureButton" parent="StatMenuItems/SetAsInactive"]
+layout_mode = 0
+offset_left = 332.0
+offset_top = -4.0
+offset_right = 364.0
+offset_bottom = 28.0
+scale = Vector2(0.75, 0.75)
+toggle_mode = true
+action_mode = 0
+texture_normal = ExtResource("3_4q1fy")
+texture_pressed = ExtResource("4_em61s")
+texture_hover = ExtResource("6_c5ddx")
+
+[node name="ExperienceRate" type="Label" parent="StatMenuItems"]
+visible = false
+layout_mode = 0
+offset_left = -240.0
+offset_top = 217.0
+offset_right = 60.0
+offset_bottom = 237.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Experience Rate:  "
+
+[node name="RadiantRate" type="Label" parent="StatMenuItems"]
+visible = false
+layout_mode = 0
+offset_left = -250.0
+offset_top = 260.0
+offset_right = 50.0
+offset_bottom = 280.0
+theme_override_fonts/font = ExtResource("3_hdsew")
+theme_override_font_sizes/font_size = 16
+text = "Radiant Rate:"
 
 [node name="CloseButton" type="TextureButton" parent="StatMenuItems"]
 layout_mode = 0
@@ -765,6 +958,30 @@ texture_normal = ExtResource("6_v30gx")
 texture_pressed = ExtResource("8_i7h83")
 texture_hover = ExtResource("7_sqcaw")
 
+[node name="RightSelectionArrow" type="TextureButton" parent="StatMenuItems" groups=["BreakUIShut"]]
+layout_mode = 0
+offset_left = 185.0
+offset_top = 274.7
+offset_right = 217.0
+offset_bottom = 306.7
+rotation = 1.5708
+scale = Vector2(0.75, 0.75)
+texture_normal = ExtResource("10_mkdqa")
+texture_pressed = ExtResource("11_eyek7")
+texture_hover = ExtResource("12_etavd")
+
+[node name="LeftSelectionArrow" type="TextureButton" parent="StatMenuItems" groups=["BreakUIShut"]]
+layout_mode = 0
+offset_left = 131.0
+offset_top = 298.0
+offset_right = 163.0
+offset_bottom = 330.0
+rotation = 4.71239
+scale = Vector2(0.75, 0.75)
+texture_normal = ExtResource("10_mkdqa")
+texture_pressed = ExtResource("11_eyek7")
+texture_hover = ExtResource("12_etavd")
+
 [node name="PanelFade" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_nm3xb")
@@ -775,13 +992,32 @@ libraries = {
 "": SubResource("AnimationLibrary_nrqvp")
 }
 
+[node name="StatHolderJiggle" type="AnimationPlayer" parent="."]
+root_node = NodePath("../FadeRectangle")
+libraries = {
+"": SubResource("AnimationLibrary_q04fk")
+}
+
 [node name="MenuOpen" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_5ix82")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="MenuClose" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_r6c2c")
 volume_db = -10.0
+bus = &"SFX"
 
+[node name="StatHolderJiggleSE" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_gi0of")
+volume_db = -10.0
+bus = &"SFX"
+
+[connection signal="gui_input" from="ClickOffOverlay" to="." method="_on_click_off_overlay_gui_input"]
 [connection signal="button_down" from="StatMenuItems/BuyUpgrade" to="." method="_on_buy_upgrade_button_down"]
+[connection signal="toggled" from="StatMenuItems/DisableAudio/DisableAudioButton" to="." method="_on_disable_audio_button_toggled"]
+[connection signal="toggled" from="StatMenuItems/DisableAnimation/DisableAnimationButton" to="." method="_on_disable_animation_button_toggled"]
+[connection signal="toggled" from="StatMenuItems/SetAsInactive/SetAsInactiveButton" to="." method="_on_set_as_inactive_button_toggled"]
 [connection signal="button_down" from="StatMenuItems/CloseButton" to="." method="_on_close_button_button_down"]
+[connection signal="button_down" from="StatMenuItems/RightSelectionArrow" to="." method="_on_right_selection_arrow_button_down"]
+[connection signal="button_down" from="StatMenuItems/LeftSelectionArrow" to="." method="_on_left_selection_arrow_button_down"]

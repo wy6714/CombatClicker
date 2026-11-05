@@ -9,7 +9,6 @@ func _on_texture_button_button_down():
 	playerMonsterListScript.uiSlideIn()
 	player_monster_list.populate_monster_list()
 	
-
 func newCaptureBounce():
 	$NewCaptureAnim.play("newCaptureLabelBounce")
 	$ButtonBounce.play("buttonBounce")

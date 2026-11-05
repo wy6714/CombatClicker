@@ -8,6 +8,7 @@
 [node name="GridMonsterButton" type="TextureButton"]
 offset_right = 40.0
 offset_bottom = 40.0
+action_mode = 0
 texture_normal = ExtResource("1_1dlpr")
 texture_pressed = ExtResource("2_55cve")
 texture_hover = ExtResource("3_0a0q7")

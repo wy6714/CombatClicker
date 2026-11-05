@@ -1,13 +1,14 @@
-[gd_scene load_steps=66 format=3 uid="uid://bpykp0eem4hm8"]
+[gd_scene load_steps=85 format=3 uid="uid://bpykp0eem4hm8"]
 
 [ext_resource type="Script" path="res://Scripts/chickadee.gd" id="1_vatxe"]
-[ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/SpoopyGhost.png" id="2_p7vgq"]
-[ext_resource type="Texture2D" uid="uid://ddiaqha75gcho" path="res://Art/SpoopyGhostSprites.png" id="2_wwmkh"]
+[ext_resource type="Texture2D" uid="uid://dqe6okjydu0ay" path="res://Art/EnemyDesigns/SpoopyGhost.png" id="2_p7vgq"]
+[ext_resource type="Texture2D" uid="uid://ddiaqha75gcho" path="res://Art/EnemyDesigns/SpoopyGhostSprites.png" id="2_wwmkh"]
 [ext_resource type="PackedScene" uid="uid://dpov4rnb55tso" path="res://Scenes/damage_particles.tscn" id="2_wxllq"]
 [ext_resource type="Texture2D" uid="uid://d0jp36aac5yii" path="res://Art/HealthBar-2.png (1).png" id="3_kyu5m"]
-[ext_resource type="Texture2D" uid="uid://1ebjm2341ur3" path="res://Art/SpoopyGhostShocked.png" id="3_mhb8q"]
+[ext_resource type="Texture2D" uid="uid://1ebjm2341ur3" path="res://Art/EnemyDesigns/SpoopyGhostShocked.png" id="3_mhb8q"]
 [ext_resource type="Texture2D" uid="uid://f1apjpv8u2qr" path="res://Art/Fireworks.png" id="4_f7gj3"]
 [ext_resource type="Script" path="res://Scripts/Health_Bar.gd" id="4_lx2ef"]
+[ext_resource type="Texture2D" uid="uid://d10557vn61vgc" path="res://Art/EnemyDesigns/RadiantSpoopyGhostSprites.png" id="5_35hug"]
 [ext_resource type="Texture2D" uid="uid://clcj45rsviixo" path="res://Art/HealthBar-1.png (1).png" id="5_hil3y"]
 [ext_resource type="Texture2D" uid="uid://4515sjup7i5a" path="res://Art/BreakMeterFill.png" id="6_qy0b5"]
 [ext_resource type="Texture2D" uid="uid://dyxqp37l1hj3m" path="res://Art/BreakMeter.png" id="7_e316m"]
@@ -21,8 +22,14 @@
 [ext_resource type="AudioStream" uid="uid://c588n4rhjf3qy" path="res://Audio/Spinning Defeat SE.mp3" id="19_070v2"]
 [ext_resource type="AudioStream" uid="uid://cg6qv6bpt2u3a" path="res://Audio/DefeatImpactSE2.wav" id="20_1yatq"]
 [ext_resource type="Texture2D" uid="uid://ci2yx2vuqo3q7" path="res://Art/Anvil.png" id="21_cllnb"]
+[ext_resource type="Texture2D" uid="uid://bvlphc0b453ng" path="res://Art/RadiantSparkleParticle.png" id="23_yfbac"]
+[ext_resource type="AudioStream" uid="uid://c1ai5pi65vpfi" path="res://Audio/RadiantEncounter.wav" id="24_ptgb3"]
 
 [sub_resource type="Gradient" id="Gradient_k8j4k"]
+offsets = PackedFloat32Array(0, 0.649573, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.878431, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_snuc8"]
 offsets = PackedFloat32Array(0, 0.649573, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.878431, 1, 1, 1, 0)
 
@@ -57,6 +64,54 @@ region = Rect2(0, 32, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_3bfsl"]
 atlas = ExtResource("2_p7vgq")
 region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6n3b"]
+atlas = ExtResource("5_35hug")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hrmhk"]
+atlas = ExtResource("5_35hug")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kmryh"]
+atlas = ExtResource("5_35hug")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d7w63"]
+atlas = ExtResource("5_35hug")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a7yoy"]
+atlas = ExtResource("5_35hug")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1hgf"]
+atlas = ExtResource("5_35hug")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7yds"]
+atlas = ExtResource("5_35hug")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0r6x"]
+atlas = ExtResource("5_35hug")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rcw2"]
+atlas = ExtResource("5_35hug")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uqqpw"]
+atlas = ExtResource("5_35hug")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p0bsb"]
+atlas = ExtResource("5_35hug")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfma1"]
+atlas = ExtResource("5_35hug")
+region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f58ha"]
 atlas = ExtResource("3_mhb8q")
@@ -108,6 +163,57 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6n3b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hrmhk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kmryh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d7w63")
+}],
+"loop": true,
+"name": &"RHappy",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a7yoy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k1hgf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7yds")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x0r6x")
+}],
+"loop": true,
+"name": &"RIdle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rcw2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uqqpw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p0bsb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfma1")
+}],
+"loop": true,
+"name": &"RShock",
 "speed": 5.0
 }, {
 "frames": [{
@@ -1083,11 +1189,50 @@ size = Vector2(32.2222, 33.3333)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w716c"]
 size = Vector2(32.2222, 33.3333)
 
+[sub_resource type="Animation" id="Animation_2avxo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_bprk5"]
+resource_name = "flashRed"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0398338, 0.230737, 0.2993),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.901961, 0.392157, 0.392157, 1), Color(0.901961, 0.392157, 0.392157, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l4p0y"]
+_data = {
+"RESET": SubResource("Animation_2avxo"),
+"flashRed": SubResource("Animation_bprk5")
+}
+
 [node name="Enemy" type="Node2D"]
 position = Vector2(215, 0)
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_vatxe")
-expToGive = 80
+health = 200
+baseHealth = 200
+expToGive = 45
 moneyToGive = 150
 enemyName = "Ghost"
 enemy_type = 2
@@ -1100,6 +1245,17 @@ initial_velocity_max = 600.0
 scale_amount_min = 2.0
 scale_amount_max = 3.0
 color_ramp = SubResource("Gradient_k8j4k")
+
+[node name="RadiantParticles" parent="." instance=ExtResource("2_wxllq")]
+amount = 33
+lifetime = 1.0
+explosiveness = 0.7
+texture = ExtResource("23_yfbac")
+initial_velocity_min = 500.0
+initial_velocity_max = 600.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_snuc8")
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -1391,37 +1547,50 @@ shape = SubResource("RectangleShape2D_w716c")
 
 [node name="DefeatSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("13_ijk36")
-volume_db = -10.0
+volume_db = -15.0
+bus = &"SFX"
 
 [node name="ItalianDefeatSE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("14_nmp4x")
-volume_db = -10.0
+volume_db = -15.0
+bus = &"SFX"
 
 [node name="Knock Defeat SE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("15_6k5c2")
 volume_db = -15.0
+bus = &"SFX"
 
 [node name="Anvil Defeat SE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("16_4ngmn")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="Fireworks Defeat SE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("18_isy3i")
-volume_db = -20.0
+volume_db = -15.0
+bus = &"SFX"
 
 [node name="Spin Defeat SE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("19_070v2")
-volume_db = -10.0
+volume_db = -15.0
+bus = &"SFX"
 
 [node name="Defeat Impact SE" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(43.3333, 0)
 stream = ExtResource("20_1yatq")
+volume_db = -15.0
+bus = &"SFX"
+
+[node name="Capture Particle Spawn SE" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(43.3333, 0)
+stream = ExtResource("20_1yatq")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="Anvil" type="Sprite2D" parent="."]
 visible = false
@@ -1445,6 +1614,17 @@ position = Vector2(265, 216.162)
 
 [node name="Location Bottom Left" type="Node2D" parent="QTERushSpawnPositions"]
 position = Vector2(-201.01, 217.172)
+
+[node name="RadiantEncounterSE" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(43.3333, 0)
+stream = ExtResource("24_ptgb3")
+volume_db = -10.0
+bus = &"SFX"
+
+[node name="CritFlashAnim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l4p0y")
+}
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

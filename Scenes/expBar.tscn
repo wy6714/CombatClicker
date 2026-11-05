@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://cs3mo6u36kkcl"]
+[gd_scene load_steps=15 format=3 uid="uid://cs3mo6u36kkcl"]
 
 [ext_resource type="Script" path="res://Scripts/expBar.gd" id="1_7oioh"]
 [ext_resource type="Texture2D" uid="uid://bnakuo1caxkog" path="res://Art/UI LEVEL METER OUTLINE.png" id="2_ulebu"]
 [ext_resource type="Texture2D" uid="uid://deou3dc7nsqw0" path="res://Art/UI LEVEL METER FILL.png" id="3_0uhlf"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="4_5qtbd"]
 [ext_resource type="AudioStream" uid="uid://38bckhfsgcqp" path="res://Audio/ExpFill.mp3" id="5_3ec1f"]
+[ext_resource type="AudioStream" uid="uid://dodcobo1nd8j5" path="res://Audio/LevelUp.wav" id="6_gc2ef"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbjfs"]
 bg_color = Color(0.303233, 0.303233, 0.303233, 1)
@@ -49,6 +50,43 @@ _data = {
 "RESET": SubResource("Animation_nh5mg")
 }
 
+[sub_resource type="Animation" id="Animation_jwf2k"]
+resource_name = "LevelUpTextSlide"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 2.6, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(8, -12), Vector2(-160, -12), Vector2(-155, -12), Vector2(-155, -12), Vector2(-160, -12), Vector2(8, -12)]
+}
+
+[sub_resource type="Animation" id="Animation_pepgf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(8, -12)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2sji4"]
+_data = {
+"LevelUpTextSlide": SubResource("Animation_jwf2k"),
+"RESET": SubResource("Animation_pepgf")
+}
+
 [node name="ExpBarSystem" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -59,6 +97,18 @@ offset_right = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7oioh")
+
+[node name="LevelUpText" type="Label" parent="." groups=["BreakUIShut"]]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -12.0
+offset_right = 216.0
+offset_bottom = 48.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("4_5qtbd")
+text = "+1 Upgrade
+Point to all"
+vertical_alignment = 1
 
 [node name="ExpBar" type="ColorRect" parent="."]
 visible = false
@@ -107,6 +157,19 @@ offset_bottom = 39.0
 theme_override_fonts/font = ExtResource("4_5qtbd")
 text = "Lv: 1"
 
+[node name="ExpLabel" type="Label" parent="TextureProgressBar"]
+visible = false
+layout_mode = 0
+offset_left = 198.0
+offset_top = 29.0
+offset_right = 254.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 0.470588)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_5qtbd")
+text = "EXP"
+
 [node name="ExpBarJiggle" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_r8fh3")
@@ -114,4 +177,20 @@ libraries = {
 
 [node name="ExpFillSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_3ec1f")
+volume_db = -10.0
 pitch_scale = 3.52
+bus = &"SFX"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+bus = &"SFX"
+
+[node name="LevelUp" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_gc2ef")
+volume_db = -10.0
+bus = &"SFX"
+
+[node name="LevelUpTextAnim" type="AnimationPlayer" parent="."]
+root_node = NodePath("../LevelUpText")
+libraries = {
+"": SubResource("AnimationLibrary_2sji4")
+}
