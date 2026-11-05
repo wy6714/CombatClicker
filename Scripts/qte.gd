@@ -58,6 +58,7 @@ var is_current = false
 
 signal qte_finished(qte_node, miss, good, perfect)
 
+@onready var qteSpawnSE = $QTESpawn
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -65,16 +66,11 @@ func _ready():
 	# If rush QTE, give the ultSystem access. This is for RUSH. 
 	if(rushQTE):
 		ultSystem.currentQTE = self
-	
-	# Determine if left click or right click, and display the icon. This is for BREAK
-	if(!rushQTE):
-		var rng = randi() % 2
-		if(rng == 0):
-			left = true
-		else:
-			right = true
-		determineInputLabelIcon()
-		print("Not a Rush QTE")
+		
+	# Break QTEs now use the exact same directional prompts as Rush QTEs
+	if !rushQTE:
+		setup_qte()
+		print("Break QTE using directional keys.")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -92,6 +88,9 @@ func _process(delta):
 				
 
 func shrinkEventCircle(delta):
+	
+	if pressed: # Already graded elsewhere — don't let the shrink loop grade it a second time
+		return
 	
 	if shrinking:
 		scaleTime += delta
@@ -294,7 +293,7 @@ func setup_qte():
 	expected_key = keys[randi() % keys.size()]
 	show_key_prompt(expected_key) # Show visual prompt to player
 	# How fast does the event circle shrink
-	scaleTimeLimit = randf_range(0.7, 1.2)
+	scaleTimeLimit = randf_range(0.6, 1.1)
 	pressed = false
 	
 # Setup QTE
@@ -331,20 +330,19 @@ func set_as_current(flag: bool) -> void:
 			
 # Manage input			
 func _unhandled_input(event):
-	if not rushQTE:
-		return
-
-	# DO NOT react if this isn't the designated current QTE
-	if not is_current:
-		return
 
 	if pressed:
 		return
-			
+
+	# Both rush AND break QTEs now require being the active/current one.
+	# Only the currently-highlighted QTE should respond to a keypress.
+	if !is_current:
+		return
+
 	if event is InputEventKey and event.pressed:
+
 		var key = event.keycode
-		
-		# Allow arrow keys or WASD
+
 		var correct = (
 			(key == expected_key) or
 			(key == KEY_A and expected_key == KEY_LEFT) or
@@ -352,26 +350,81 @@ func _unhandled_input(event):
 			(key == KEY_W and expected_key == KEY_UP) or
 			(key == KEY_S and expected_key == KEY_DOWN)
 		)
-		
-		if correct:
-			rushQTEResult() # Grade the input
+
+		if rushQTE:
+
+			if correct:
+				rushQTEResult()
+			else:
+				miss = true
+				good = false
+				perfect = false
+				rushQTEResult()
+
 		else:
-		  # they hit one of the other QTE keys → that's a miss
-			miss = true
-			good = false
-			perfect = false
-			rushQTEResult()
-			
+
+			if correct:
+
+				shrinking = false
+
+				if(miss):
+					player.breakQTEdamageMult += missMultAdd
+					addUltRushTime(0)
+				elif(good):
+					player.breakQTEdamageMult += goodMultAdd
+					addUltRushTime(0.1)
+				else:
+					player.breakQTEdamageMult += perfectMultAdd
+					addUltRushTime(0.3)
+
+				if(final):
+					finalQTESetup()
+
+				pressed = true
+				player.currentEnemy.qtePressedCount += 1
+				manageRankNum()
+
+				anim.play("FadeOut")
+				$BounceAnim.play("bounce")
+
+				# Break QTEs also need to notify their spawner (enemy.gd) so the
+				# next QTE in the sequence becomes current.
+				emit_signal("qte_finished", self, miss, good, perfect)
+
+			else:
+
+				shrinking = false
+
+				miss = true
+				good = false
+				perfect = false
+
+				player.breakQTEdamageMult += missMultAdd
+				addUltRushTime(0)
+
+				if(final):
+					finalQTESetup()
+
+				pressed = true
+				player.currentEnemy.qtePressedCount += 1
+
+				gradeString.text = missText
+				soundPlayer.stream = missSE
+				soundPlayer.play()
+
+				anim.play("FadeOut")
+				$BounceAnim.play("bounce")
+
+				# Break QTEs also need to notify their spawner (enemy.gd) so the
+				# next QTE in the sequence becomes current.
+				emit_signal("qte_finished", self, miss, good, perfect)
+					
 # -------------------------- END OF RUSH QTE STUFF  ------------------------------
 
 
 # Called on animation "Fade In" which plays on autoload. Allows QTE circle to start shrinking.
 func startShrinking():
 	shrinking = true
-
-# Called on animation "Fade In" which plays on autoload. Plays a Sound Effect (SE)
-func playSpawnSE():
-	pass
 
 # Play the initial explosion, which then calls finalQTEEffects once it is done...exploding.
 func finalQTESetup():
@@ -390,6 +443,8 @@ func determineInputLabelIcon():
 		$Visuals/QTEHolder/InputLabelIconLeft.show()
 	else:
 		$Visuals/QTEHolder/InputLabelIconRight.show()
-	
 
-		
+func playAlteredQTESpawn():
+	var rng = randf_range(0.8, 1.2)
+	qteSpawnSE.pitch_scale = rng
+	qteSpawnSE.play()

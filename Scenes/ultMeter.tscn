@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://dinvr5xjnps0y"]
+[gd_scene load_steps=51 format=3 uid="uid://dinvr5xjnps0y"]
 
 [ext_resource type="Script" path="res://Scripts/ultMeterScript.gd" id="1_8i3nt"]
 [ext_resource type="Texture2D" uid="uid://bkswmchfkdo2c" path="res://Art/UI ULT METER OUTLINE.png" id="2_tksla"]
@@ -85,6 +85,132 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ykar2"]
 _data = {
 "UseUltFlash": SubResource("Animation_7h44g")
+}
+
+[sub_resource type="Animation" id="Animation_w4ny3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../UltRushGuide:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../UltRushGuide:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4a464"]
+resource_name = "UltGuideFlash"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.470588), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_h012l"]
+resource_name = "UltRushGuideFlash"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../UltRushGuide:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../UltRushGuide:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.470588), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5n8sp"]
+_data = {
+"RESET": SubResource("Animation_w4ny3"),
+"UltGuideFlash": SubResource("Animation_4a464"),
+"UltRushGuideFlash": SubResource("Animation_h012l")
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w4hn4"]
@@ -1377,7 +1503,21 @@ offset_top = 7.0
 offset_right = 128.0
 offset_bottom = 30.0
 theme_override_fonts/font = ExtResource("4_oucss")
-text = "23/1000"
+text = "Ult: 0/1000"
+
+[node name="UltLabel" type="Label" parent="TextureProgressBar"]
+visible = false
+layout_mode = 0
+offset_left = 199.0
+offset_top = 3.0
+offset_right = 249.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0, 0, 0, 0.470588)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "ULT"
+vertical_alignment = 1
 
 [node name="QTETimer" type="Timer" parent="."]
 wait_time = 2.0
@@ -1725,8 +1865,100 @@ libraries = {
 }
 autoplay = "UseUltFlash"
 
+[node name="UltTutorials" type="AnimationPlayer" parent="."]
+root_node = NodePath("../UltGuide")
+libraries = {
+"": SubResource("AnimationLibrary_5n8sp")
+}
+
+[node name="UltGuide" type="Node2D" parent="."]
+visible = false
+position = Vector2(898, 134)
+
+[node name="Ult Ready!" type="Label" parent="UltGuide"]
+offset_left = 43.0
+offset_top = -37.0
+offset_right = 203.0
+offset_bottom = -14.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "ULT READY!"
+
+[node name="ULT COUNT2" type="Label" parent="UltGuide"]
+offset_left = 26.0
+offset_top = -11.0
+offset_right = 266.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "100/1000 ULT"
+
+[node name="Mouse2" type="AnimatedSprite2D" parent="UltGuide"]
+position = Vector2(36, 30)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_3dbw1")
+autoplay = "default"
+frame_progress = 0.349467
+
+[node name="or" type="Label" parent="UltGuide"]
+offset_left = 64.0
+offset_top = 23.0
+offset_right = 97.0
+offset_bottom = 46.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "or"
+
+[node name="[SPACE]" type="Label" parent="UltGuide"]
+offset_left = 104.0
+offset_top = 23.0
+offset_right = 216.0
+offset_bottom = 46.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "[SPACE]"
+
+[node name="UltRushGuide" type="Node2D" parent="."]
+visible = false
+position = Vector2(898, 134)
+
+[node name="Ult Rush Ready!" type="Label" parent="UltRushGuide"]
+offset_left = 4.0
+offset_top = -37.0
+offset_right = 244.0
+offset_bottom = -14.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "ULT RUSH READY!"
+
+[node name="ULT COUNT" type="Label" parent="UltRushGuide"]
+offset_left = 19.0
+offset_top = -8.0
+offset_right = 259.0
+offset_bottom = 15.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "1000/1000 ULT"
+
+[node name="Mouse2" type="AnimatedSprite2D" parent="UltRushGuide"]
+position = Vector2(36, 36)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_3dbw1")
+autoplay = "default"
+frame_progress = 0.349467
+
+[node name="or" type="Label" parent="UltRushGuide"]
+offset_left = 64.0
+offset_top = 29.0
+offset_right = 97.0
+offset_bottom = 52.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "or"
+
+[node name="[SPACE]" type="Label" parent="UltRushGuide"]
+offset_left = 104.0
+offset_top = 29.0
+offset_right = 216.0
+offset_bottom = 52.0
+theme_override_fonts/font = ExtResource("4_oucss")
+text = "[SPACE]"
+
 [node name="UseUlt!" type="Sprite2D" parent="."]
-position = Vector2(222, 89)
+position = Vector2(222, 148)
 rotation = -0.139626
 scale = Vector2(3.6, 3.6)
 texture = ExtResource("7_ksp4f")
@@ -1764,13 +1996,16 @@ libraries = {
 
 [node name="UltRushSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("9_6llt1")
+bus = &"SFX"
 
 [node name="UltSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_lxtbv")
 volume_db = -7.0
+bus = &"SFX"
 
 [node name="UltActivatedSE" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("11_ghvb8")
+bus = &"SFX"
 
 [node name="UltMoveAnim" type="AnimationPlayer" parent="."]
 root_node = NodePath("../UltEffectHolder")
@@ -1800,9 +2035,9 @@ color = Color(0, 0, 0, 1)
 [node name="BottomRect" type="ColorRect" parent="UltEffectHolder"]
 visible = false
 offset_left = -521.0
-offset_top = 462.0
+offset_top = 465.0
 offset_right = 667.0
-offset_bottom = 570.0
+offset_bottom = 573.0
 color = Color(0, 0, 0, 1)
 
 [node name="KatakanaShadow" type="Label" parent="UltEffectHolder"]
@@ -1977,45 +2212,54 @@ color_ramp = SubResource("Gradient_ipr8s")
 [node name="Japanese Clapper" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("19_8q7xt")
+bus = &"SFX"
 
 [node name="Slash" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("20_rsdnp")
+bus = &"SFX"
 
 [node name="SlashCrunch" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("22_10sks")
+bus = &"SFX"
 
 [node name="Explosion Bass Slide" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("23_h1hhl")
+bus = &"SFX"
 
 [node name="Explosion Impact" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("21_ng7et")
+bus = &"SFX"
 
 [node name="Glass Shatter Crunch" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("24_pjane")
 volume_db = -10.0
 pitch_scale = 0.9
+bus = &"SFX"
 
 [node name="Glass Shatter Crunch2" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("24_pjane")
 volume_db = -10.0
 pitch_scale = 1.2
+bus = &"SFX"
 
 [node name="Static Charges" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("25_c1kb2")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="Beam Explosion" type="AudioStreamPlayer2D" parent="UltEffectHolder"]
 position = Vector2(-521, -76)
 stream = ExtResource("26_6y3oe")
 volume_db = -10.0
 pitch_scale = 0.8
+bus = &"SFX"
 
 [node name="PostUltMoveAnim" type="AnimationPlayer" parent="."]
 root_node = NodePath("../PostUltEffectHolder")
@@ -2024,6 +2268,7 @@ libraries = {
 }
 
 [node name="PostUltEffectHolder" type="Node2D" parent="."]
+z_index = 99
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="PostUltEffectHolder"]
 position = Vector2(1312, 419)
@@ -2048,5 +2293,6 @@ color = Color(0.901961, 0.901961, 0.901961, 1)
 [node name="Sparkle" type="AudioStreamPlayer2D" parent="PostUltEffectHolder"]
 stream = ExtResource("24_0cvx0")
 volume_db = -20.0
+bus = &"SFX"
 
 [connection signal="timeout" from="QTETimer" to="." method="_on_qte_timer_timeout"]

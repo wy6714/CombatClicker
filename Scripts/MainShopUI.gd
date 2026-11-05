@@ -7,24 +7,44 @@ var _orig_scales := {}
 var _orig_colors := {}
 
 # Stores the currently active tween for each button
-var _active_tweens: = {}
-@onready var shopAnim = $AnimationPlayer
+var _active_tweens := {}
+#@onready var shopAnim = $AnimationPlayer
 
-@export var recruitButtonColorHover: Color = Color(1,1,1,1)
-@export var recruitButtonColorPressed: Color = Color(1,1,1,1)
+@export var recruitButtonColorHover: Color = Color(1.0, 0.88, 0.2, 1.0) # yellow
+@export var recruitButtonColorPressed: Color = Color(0.85, 0.7, 0.1, 1.0)
+
+@export var monstersButtonColorHover: Color = Color(0.3, 1.0, 0.7, 1.0)   # mint/teal
+@export var monstersButtonColorPressed: Color = Color(0.15, 0.7, 0.5, 1.0)
+
+@export var guideButtonColorHover: Color = Color(0.45, 0.65, 1.0, 1.0)     # blue
+@export var guideButtonColorPressed: Color = Color(0.25, 0.45, 0.75, 1.0)
+
+@export var settingsButtonColorHover: Color = Color(1.0, 0.6, 0.25, 1.0)   # orange
+@export var settingsButtonColorPressed: Color = Color(0.75, 0.4, 0.1, 1.0)
+
+@export var gambleButtonColorHover: Color
+@export var gambleButtonColorPressed: Color
 
 var hover_colors = {
 	"WeaponStoreButton": Color(0.8, 0, 0),
 	"HireStoreButton": Color(0.8, 0.8, 0.0),
 	"LotteryStoreButton": Color(0, 0.8, 0),
-	"RecruitButton": recruitButtonColorHover
+	"RecruitButton": recruitButtonColorHover,
+	"MONSTERS": monstersButtonColorHover,
+	"GUIDE": guideButtonColorHover,
+	"SETTINGS": settingsButtonColorHover,
+	"GambleButton": gambleButtonColorHover	
 }
 
 var pressed_colors = {
 	"WeaponStoreButton": Color(0.5, 0, 0),
 	"HireStoreButton": Color(0.5, 0.5, 0.0),
 	"LotteryStoreButton": Color(0, 0.5, 0),
-	"RecruitButton": recruitButtonColorPressed
+	"RecruitButton": recruitButtonColorPressed,
+	"MONSTERS": monstersButtonColorPressed,
+	"GUIDE": guideButtonColorPressed,
+	"SETTINGS": settingsButtonColorPressed,
+	"GambleButton": gambleButtonColorPressed
 }
 
 var weapon_data = {
@@ -39,8 +59,8 @@ var weapon_data = {
 	"Drill3": {"type": "Drill", "id": 3, "price": 700, "bought": false},
 }
 
-var normal_color := Color(1, 1, 1)  # Default white
-var darkened_color := Color(0.7, 0.7, 0.7)  # Slightly darker version of white (you can adjust this)
+var normal_color := Color(1, 1, 1)
+var darkened_color := Color(0.7, 0.7, 0.7)
 
 @onready var sword1 = $WeaponStoreMenu/Sword1
 @onready var mainStoreMenu = $MainStoreMenu
@@ -57,104 +77,143 @@ var equippedWeapons = {
 @onready var initialWeapon = $WeaponStoreMenu/Sword1
 @onready var player = get_node("/root/Main/Player")
 @onready var recruitmentManager = get_node("/root/Main/shop/RecruitPartyMember")
-@onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
+@onready var partyManager = get_node("/root/Main/PartyMemberHolder")
+@onready var playerStats = get_node("/root/Main/PartyMemberHolder/PartyMemberClipPanel/PartyMemberPlayer")
+@onready var settings = get_node("/root/Main/Settings")
+@onready var guide = get_node("/root/Main/Guide")
 
-@onready var playerCostLabel = $MainStoreMenu/HireStoreMenu/PlayerUpgrade/Cost
+@onready var playerCostLabel = $MainStoreMenu/HireStoreMenu/CharacterListContents/PlayerUpgrade/Cost
 @onready var upgradePointFeedbackPopup = preload("res://Scenes/PlusOneUpgradePoint.tscn")
+@export var memberUpgradePointScalar = 1.25
+@export var memberUpgradePointCostCap = 99999.0
 
 @onready var spotlight = $Spotlight
 @onready var spotlightAnim = $SpotlightAnim
 
-# Called when the node enters the scene tree for the first time.
+@onready var player_monster_list = get_node("/root/Main/Player/PlayerMonsterList/Control/MonsterPanelItems/GridContainer")
+@onready var playerMonsterListScript = get_node("/root/Main/Player/PlayerMonsterList")
+
+@onready var characterList = $MainStoreMenu/HireStoreMenu/CharacterListContents
+var scrollPosition := 0
+const scrollSpeed := 30.0
+
+@onready var navUpButton = $"MainStoreMenu/HireStoreMenu/CharacterListPanelX/NavTriangleIcon(Up)"
+@onready var navDownButton = $"MainStoreMenu/HireStoreMenu/CharacterListPanelX/NavTriangleIcon(Down)"
+
+@onready var settingsButton = $MainStoreMenu/HireStoreMenu/SETTINGS
+
+# Stored reference to the recruit button itself, found via the "recruit" group
+# during connect_button_tree. Used to disable/re-enable it while the
+# recruit animation is in flight, preventing the rapid-click double-trigger bug.
+var recruitButton: BaseButton = null
+var gambleButton: BaseButton = null
+
+# True only while a recruit cutscene (spotlight fade + member rise) is in
+# flight AND hasn't been skipped yet. Guarantees skipRecruitCutscene()'s
+# actual skip logic runs exactly once per recruit, no matter how many times
+# Enter gets pressed — previously, repeated presses could each re-enter the
+# skip logic (since it only checked recruitButton.disabled, which doesn't
+# reliably reflect "already skipped"), corrupting tween/animation state.
+var cutsceneSkippable: bool = false
+@onready var gamblePanel = $GamblePanel
+
 func _ready():
-	
 	# Start off with a sword equipped
 	equip_weapon(initialWeapon, "left", "Sword1")
-	
+
 	getButtonColors()
 	updateWeaponPrices()
 	updateRecruitmentPrices()
-	
-	for button in mainStoreMenu.get_children():
-		if button.is_in_group("ui_button"):
-			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
-			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
-			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
-			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
-			_orig_scales[button] = button.scale
-			_orig_colors[button] = button.modulate
-			
-		if button.is_in_group("mainUI"):
-			button.connect("button_down", Callable(self, "mainShopButtonAnim"))
-			button.connect("button_down", Callable(self, "getButtonName").bind(button))
-	
-	for button in weaponStoreMenu.get_children():
-		if button.is_in_group("ui_button"):
-			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
-			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
-			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
-			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
-			_orig_scales[button] = button.scale
-			_orig_colors[button] = button.modulate
-		if button.is_in_group("back_button"):
-			button.connect("button_down", Callable(self, "returnToMain").bind("Weapon"))
-			
-	for button in hireStoreMenu.get_children():
-		if button.is_in_group("ui_button"):
-			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
-			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
-			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
-			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
-			_orig_scales[button] = button.scale
-			_orig_colors[button] = button.modulate
-		if button.is_in_group("back_button"):
-			button.connect("button_down", Callable(self, "returnToMain").bind("Hire"))
-		if button.is_in_group("recruit"):
-			button.connect("button_down", Callable(self, "getNewPartyMember"))
-	
-	for button in lotteryStoreMenu.get_children():
-		if button.is_in_group("ui_button"):
-			button.connect("mouse_entered", Callable(self, "_on_button_mouse_entered").bind(button))
-			button.connect("mouse_exited", Callable(self, "_on_button_mouse_exited").bind(button))
-			button.connect("button_down", Callable(self, "_on_button_down").bind(button))
-			button.connect("button_up", Callable(self, "_on_button_up").bind(button))
-			_orig_scales[button] = button.scale
-			_orig_colors[button] = button.modulate
-		if button.is_in_group("back_button"):
-			button.connect("button_down", Callable(self, "returnToMain").bind("Lottery"))
-			
-	# Get all weapon buttons
-	for button in weaponStoreMenu.get_children():
-		if button.is_in_group("Weapons"):
-			button.connect("button_down", Callable(self, "select_weapon").bind(button.name))
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	# One hookup path only: recursive.
+	# This catches nested buttons like Recruit / MONSTERS / GUIDE / SETTINGS
+	# and avoids duplicate signal connections.
+	connect_button_tree(mainStoreMenu)
+	connect_button_tree(weaponStoreMenu)
+	connect_button_tree(hireStoreMenu)
+	connect_button_tree(lotteryStoreMenu)
+	
+	# Initialize scroll button states
+	#update_scroll_button_states()
+	
+	# Manage party member cost label visibility (skip player)
+	manage_cost_label_visibility()
+	
+	# Re-enable the recruit button exactly when the spotlight animation
+	# actually finishes, instead of guessing a cooldown duration.
+	spotlightAnim.animation_finished.connect(_on_spotlight_anim_finished)
+	
+	gamblePanel.modulate.a = 0.0
+	gamblePanel.visible = false
+	
+	if gambleButton:
+		if not gambleButton.mouse_entered.is_connected(_on_gamble_hover_entered):
+			gambleButton.mouse_entered.connect(_on_gamble_hover_entered)
+		if not gambleButton.mouse_exited.is_connected(_on_gamble_hover_exited):
+			gambleButton.mouse_exited.connect(_on_gamble_hover_exited)
+
+func connect_button_tree(node: Node) -> void:
+	for child in node.get_children():
+		if child is BaseButton and child.is_in_group("ui_button"):
+			var enter_cb := Callable(self, "_on_button_mouse_entered").bind(child)
+			var exit_cb := Callable(self, "_on_button_mouse_exited").bind(child)
+			var down_cb := Callable(self, "_on_button_down").bind(child)
+			var up_cb := Callable(self, "_on_button_up").bind(child)
+
+			if not child.mouse_entered.is_connected(enter_cb):
+				child.mouse_entered.connect(enter_cb)
+			if not child.mouse_exited.is_connected(exit_cb):
+				child.mouse_exited.connect(exit_cb)
+			if not child.button_down.is_connected(down_cb):
+				child.button_down.connect(down_cb)
+			if not child.button_up.is_connected(up_cb):
+				child.button_up.connect(up_cb)
+
+			_orig_scales[child] = child.scale
+			_orig_colors[child] = child.modulate
+
+		# Recruit button action hookup.
+		if child.is_in_group("recruit"):
+			recruitButton = child
+			var recruit_cb := Callable(self, "getNewPartyMember")
+			if not child.button_down.is_connected(recruit_cb):
+				child.button_down.connect(recruit_cb)
+		
+		if child.is_in_group("gamble"):
+			gambleButton = child
+			
+		# Weapon button hookup.
+		if child.is_in_group("Weapons"):
+			var weapon_cb := Callable(self, "select_weapon").bind(child.name)
+			if not child.button_down.is_connected(weapon_cb):
+				child.button_down.connect(weapon_cb)
+
+		# Recurse through all descendants.
+		connect_button_tree(child)
+
 func _process(delta):
 	pass
 
-func _on_button_mouse_entered(btn: TextureButton):
-	# determine the color we should hover to
+func _on_button_mouse_entered(btn: BaseButton):
 	var hover_color: Color
 	if btn.is_in_group("unlocked"):
 		hover_color = Color(1, 1, 1)
 	else:
 		hover_color = hover_colors.get(btn.name, _orig_colors[btn])
 
-	# determine the scale we should hover to
 	var normal = _orig_scales[btn]
-	var hover  = normal * 1.1
+	var hover = normal * 1.1
 
-	# tween both scale and color
 	var tw = btn.create_tween()
-	tw.tween_property(btn, "scale",   hover,       0.15)
+	tw.tween_property(btn, "scale", hover, 0.15)
 	tw.tween_property(btn, "modulate", hover_color, 0.15)
 
 	_active_tweens[btn] = tw
 	playHoverSE()
 
-func _on_button_mouse_exited(btn: TextureButton):
+func _on_button_mouse_exited(btn: BaseButton):
 	var target_color: Color
-	
+
 	if btn.is_in_group("unlocked"):
 		target_color = Color(1, 1, 1)
 	else:
@@ -164,81 +223,30 @@ func _on_button_mouse_exited(btn: TextureButton):
 	var tw = btn.create_tween()
 	tw.tween_property(btn, "scale", normal_scale, 0.15)
 	tw.tween_property(btn, "modulate", target_color, 0.15)
-	
-# Called when the button is pressed (darken effect)
-func _on_button_down(button: TextureButton):
+
+func _on_button_down(button: BaseButton):
 	var target_color = pressed_colors.get(button.name, normal_color)
 	button.modulate = target_color
 
-# Button released (brighten)
-func _on_button_up(button: TextureButton):
- # If this button is “unlocked,” always go back to white
+func _on_button_up(button: BaseButton):
 	if button.is_in_group("unlocked"):
 		button.modulate = Color(1, 1, 1)
 	else:
-		# Otherwise restore whatever original color we saved
 		var orig_color = _orig_colors.get(button, normal_color)
 		button.modulate = orig_color
-	
+
 func mainShopButtonAnim():
-	if !shopAnim.is_playing():
-		shopAnim.play("MainMenuSlideDown")
-	else:
-		shopAnim.queue("MainMenuSlideDown")  # Waits for the current animation to finish before playing
+	pass
 
-func returnToMain(uiType: String):
-	if(uiType == "Weapon"):
-		if(shopAnim.is_playing()):
-			shopAnim.queue("WeaponMenuSlideDown")
-		else:
-			shopAnim.play("WeaponMenuSlideDown")
-			
-	if(uiType == "Hire"):
-		if(shopAnim.is_playing()):
-			shopAnim.queue("HireMenuSlideDown")
-		else:
-			shopAnim.play("HireMenuSlideDown")
-	
-	if(uiType == "Lottery"):
-		if(shopAnim.is_playing()):
-			shopAnim.queue("LotteryMenuSlideDown")
-		else:
-			shopAnim.play("LotteryMenuSlideDown")
-	
-	if shopAnim.is_playing():	
-		shopAnim.queue("MainMenuSlideIn")
-	else:
-		shopAnim.play("MainMenuSlideIn")
-
-func getButtonName(button: TextureButton):
-	if !button:  # Safety check
+func getButtonName(button: BaseButton):
+	if !button:
 		print("um")
 		return
-	
-	match button.name:
-		"WeaponStoreButton":
-			if shopAnim.is_playing():
-				shopAnim.queue("WeaponMenuSlideIn")
-			else:
-				shopAnim.play("WeaponMenuSlideIn")
-			print("WEAPON")
-		"HireStoreButton":
-			if shopAnim.is_playing():
-				shopAnim.queue("HireMenuSlideUp")
-			else:
-				shopAnim.play("HireMenuSlideUp")
-		"LotteryStoreButton":
-			if shopAnim.is_playing():
-				shopAnim.queue("LotteryMenuSlideUp")
-			else:
-				shopAnim.play("LotteryMenuSlideUp")
-		_:
-			print("Unknown button clicked:", button.name)  # Debugging fallback
 
 # Choosing a weapon
 func select_weapon(weapon_name: String):
 	var weapon_info = weapon_data.get(weapon_name)
-	
+
 	if weapon_info:
 		if weapon_info["bought"]:
 			print("Selected:", weapon_info["type"], "ID:", weapon_info["id"])
@@ -250,36 +258,31 @@ func select_weapon(weapon_name: String):
 				print(weapon_name, "purchased! Remaining Gold:", player.score)
 			else:
 				print("Not enough gold to buy", weapon_name)
-				return  # Stop here if we can't afford the weapon
+				return
 	else:
 		print("Unknown weapon selected:", weapon_name)
-		return  # Stop if the weapon doesn't exist
-	
-	#UPDATE COST FOR A WEAPON THAT YOU JUST BOUGHT
+		return
+
 	updateWeaponPrices()
-	
+
 	var weapons = get_tree().get_nodes_in_group("Weapons")
 	var currentWeapon = null
 	for node in weapons:
 		if node.name == weapon_name:
 			currentWeapon = node
 			break
-			
-	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		equip_weapon(currentWeapon, "left", weapon_name)
 		print("LEFT")
-	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		equip_weapon(currentWeapon, "right", weapon_name)
 		print("RIGHT")
 
-			
-	# Function to handle equipping
 func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_name: String):
-	# Get the Left and Right equip symbols
 	var left_symbol = weapon_button.get_node("Left Equip")
 	var right_symbol = weapon_button.get_node("Right Equip")
 
-	# Unequip the previously equipped weapon for this mouse button
 	if equippedWeapons[mouse_button]:
 		var previous_button = equippedWeapons[mouse_button]
 		var previous_symbol = previous_button.get_node(
@@ -287,29 +290,28 @@ func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_nam
 		)
 		previous_symbol.hide()
 
-	# Equip the new weapon
 	equippedWeapons[mouse_button] = weapon_button
 	if mouse_button == "left":
 		left_symbol.show()
 		right_symbol.hide()
-		if(equippedWeapons["right"] == equippedWeapons["left"]):
+		if equippedWeapons["right"] == equippedWeapons["left"]:
 			equippedWeapons["right"] = null
-			
+
 		var stats = weaponDatabase.weapon_stats[weapon_name]
 		var strBon = stats["strength"]
 		var critRateBon = stats["crit_rate"]
 		var critDamageBon = stats["crit_damage"]
 		var ultRegenBon = stats["ult_regen"]
 		var statusRate = stats["status_rate"]
-		
+
 		player.setLeftWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon, statusRate)
-		
+
 	elif mouse_button == "right":
 		right_symbol.show()
 		left_symbol.hide()
-		if(equippedWeapons["left"] == equippedWeapons["right"]):
+		if equippedWeapons["left"] == equippedWeapons["right"]:
 			equippedWeapons["left"] = null
-			
+
 		var stats = weaponDatabase.weapon_stats[weapon_name]
 		var strBon = stats["strength"]
 		var critRateBon = stats["crit_rate"]
@@ -317,12 +319,10 @@ func equip_weapon(weapon_button: TextureButton, mouse_button: String, weapon_nam
 		var ultRegenBon = stats["ult_regen"]
 		var elements = stats["elements"]
 		var statusRate = stats["status_rate"]
-		
+
 		player.setRightWeaponBonus(strBon, critRateBon, critDamageBon, ultRegenBon, elements, statusRate)
-	
-			
+
 func getWeaponType(weapon_button: TextureButton) -> String:
-	# Example: Use the button's name to determine the weapon type
 	if weapon_button.name.begins_with("Sword"):
 		return "Sword"
 	elif weapon_button.name.begins_with("Claymore"):
@@ -333,20 +333,17 @@ func getWeaponType(weapon_button: TextureButton) -> String:
 		return "Unknown"
 
 func performWeaponAction(mouse_button: String):
-	# Get the equipped weapon for the specified mouse button
 	var weapon = equippedWeapons[mouse_button]
 	if weapon == null:
 		print("No weapon equipped for", mouse_button, "click.")
 		return
 
-	# Determine the weapon type
 	var weaponType = getWeaponType(weapon)
-	
-	# Perform the action based on the weapon type
+
 	match weaponType:
 		"Sword":
 			player.activeHand = mouse_button
-			player.dealDamage()  # Sword's action for any button
+			player.dealDamage()
 		"Claymore":
 			player.activeHand = mouse_button
 			player.determineClaymoreButton(mouse_button)
@@ -355,13 +352,25 @@ func performWeaponAction(mouse_button: String):
 			player.drilling(mouse_button)
 		_:
 			print("No action configured for weapon type:", weaponType)
-			
-func getNewPartyMember():
-	recruitmentManager.newPartyMember()
-	spotlight.visible = true
-	spotlightAnim.play("SpotlightFade")
 
-#"Sword1": {"type": "Sword", "id": 1, "price": 0, "bought": true}
+func getNewPartyMember():
+	# Ignore clicks while a recruit animation is still in flight.
+	# Without this, rapid clicks can restart SpotlightFade mid-fade,
+	# leaving the spotlight stuck visible and blocking input permanently.
+	if recruitButton.disabled:
+		return
+
+	if recruitmentManager.newPartyMember():
+		recruitButton.disabled = true
+		cutsceneSkippable = true
+		spotlight.visible = true
+		spotlightAnim.play("SpotlightFade")
+
+func _on_spotlight_anim_finished(anim_name: StringName):
+	print("Spotlight anim finished signal fired: ", anim_name)
+	if anim_name == "SpotlightFade":
+		finishRecruitCutscene()
+
 func updateWeaponPrices():
 	for button in weaponStoreMenu.get_children():
 		if button.is_in_group("Weapons"):
@@ -369,15 +378,14 @@ func updateWeaponPrices():
 			if weapon_info:
 				var label = button.get_node("Cost")
 				label.text = str(weapon_info["price"])
-			# IF WE HAVE THE WEAPON, HIDE THE COST
 				if weapon_info["bought"] == true:
 					label.visible = false
-			
+
 func updateRecruitmentPrices():
 	for button in hireStoreMenu.get_children():
 		if button.is_in_group("recruit"):
 			var hireButton = button
-			if(hireButton):
+			if hireButton:
 				var label = hireButton.get_node("Cost")
 				label.text = str(recruitmentManager.partyMemberCost)
 
@@ -386,15 +394,38 @@ func getButtonColors():
 		"WeaponStoreButton": Color(0.8, 0, 0),
 		"HireStoreButton": Color(0.8, 0.8, 0),
 		"LotteryStoreButton": Color(0, 0.8, 0),
-		"RecruitButton": recruitButtonColorHover
+		"RecruitButton": recruitButtonColorHover,
+		"MONSTERS": monstersButtonColorHover,
+		"GUIDE": guideButtonColorHover,
+		"SETTINGS": settingsButtonColorHover,
+		"GambleButton": gambleButtonColorHover
 	}
 
 	pressed_colors = {
 		"WeaponStoreButton": Color(0.5, 0, 0),
 		"HireStoreButton": Color(0.5, 0.5, 0),
 		"LotteryStoreButton": Color(0, 0.5, 0),
-		"RecruitButton": recruitButtonColorPressed
+		"RecruitButton": recruitButtonColorPressed,
+		"MONSTERS": monstersButtonColorPressed,
+		"GUIDE": guideButtonColorPressed,
+		"SETTINGS": settingsButtonColorPressed,
+		"GambleButton": gambleButtonColorPressed
 	}
+
+func manage_cost_label_visibility():
+	for button in characterList.get_children():
+		# Skip the PlayerUpgrade button
+		if button.name == "PlayerUpgrade":
+			continue
+		
+		if button is BaseButton:
+			var cost_label = button.get_node_or_null("Cost")
+			if cost_label:
+				# Show if unlocked, hide if locked
+				if button.is_in_group("unlocked"):
+					cost_label.visible = true
+				else:
+					cost_label.visible = false
 
 func updateUnlockedButton():
 	for button in mainStoreMenu.get_children():
@@ -403,18 +434,24 @@ func updateUnlockedButton():
 				_orig_colors[button] = Color.WHITE
 				hover_colors.erase(button.name)
 				pressed_colors.erase(button.name)
-			
 	
+	# Update cost label visibility for party member buttons only
+	manage_cost_label_visibility()
+
 func playerMemberUpgradeButton():
 	if player.score >= playerStats.upgradePointCost:
 		playerStats.upgradePoints += 1
 		player.score -= playerStats.upgradePointCost
 		player.scoreNumber.text = str(player.score)
-		playerStats.upgradePointCost *= 2
+		
+		playerStats.upgradePointCost = min(
+			round(playerStats.upgradePointCost * memberUpgradePointScalar / 50.0) * 50,
+			 memberUpgradePointCostCap
+		)
+		
 		playerCostLabel.text = str(playerStats.upgradePointCost)
 
 		var popup := upgradePointFeedbackPopup.instantiate()
-		# Use global for both start and tween
 		popup.global_position = playerStats.upgradePointFeedbackLocation.global_position
 		get_tree().current_scene.add_child(popup)
 
@@ -424,22 +461,20 @@ func playerMemberUpgradeButton():
 		var tween := create_tween()
 		tween.tween_property(
 			popup,
-			"global_position",       # animate global position
+			"global_position",
 			end_pos,
 			0.7
 		).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		
+
 		playMemberUpgradeSE()
 	else:
 		print("Player doesnt have enough money..")
 		playNotEnoughMoneySE()
-		
 
-	
 func playMemberUpgradeSE():
 	$ShopUIAudio/MemberUpgrade.play()
 	print("hi (upgrade)")
-	
+
 func playHoverSE():
 	var rng = randf_range(0.9, 1.1)
 	$ShopUIAudio/Hover.pitch_scale = rng
@@ -449,4 +484,115 @@ func playHoverSE():
 func playNotEnoughMoneySE():
 	$ShopUIAudio/NotEnoughMoney.play()
 	print("hi (brokie)")
+
+func _on_monsters_button_down():
+	playerMonsterListScript.uiSlideIn()
+	player_monster_list.populate_monster_list()
 	
+func newCaptureBounce():
+	$MainStoreMenu/HireStoreMenu/MONSTERS/NewCaptureAnim.play("newCaptureLabelBounce")
+
+#func _on_nav_triangle_icon_up_button_down():
+	#scrollPosition += scrollSpeed
+	#scrollPosition = clamp(scrollPosition, -max_scroll(), 0)
+	#characterList.position.y = scrollPosition
+	#update_scroll_button_states()
+
+#func _on_nav_triangle_icon_down_button_down():
+	#scrollPosition -= scrollSpeed
+	#scrollPosition = clamp(scrollPosition, -max_scroll(), 0)
+	#characterList.position.y = scrollPosition
+	#update_scroll_button_states()
+
+#func update_scroll_button_states():
+	#if navUpButton:
+	#	navUpButton.disabled = scrollPosition >= 0
+	#if navDownButton:
+	#	navDownButton.disabled = scrollPosition <= -max_scroll()
+
+func _unhandled_input(event):
+	#if event is InputEventMouseButton and event.pressed:
+		#if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			#_on_nav_triangle_icon_up_button_down()
+		#elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			#_on_nav_triangle_icon_down_button_down()
+			
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ENTER:
+		skipRecruitCutscene()
+
+func finishRecruitCutscene():
+	spotlightAnim.stop()
+	$ShopUIAudio/Recruit.stop()
+
+	spotlight.visible = false
+	cutsceneSkippable = false
+
+	if recruitButton:
+		recruitButton.disabled = false
+		
+func skipRecruitCutscene():
+	if not cutsceneSkippable:
+		return
+
+	print("Skip triggered")
+
+	finishRecruitCutscene()
+
+	if partyManager and partyManager.roster.size() > 0:
+		var newest = partyManager.roster.back()
+
+		if newest and newest.has_method("skipArise"):
+			newest.skipArise()
+
+#func max_scroll() -> float:
+	#var bottom := 0.0
+
+	#for child in characterList.get_children():
+		#bottom = max(bottom, child.position.y + child.size.y)
+
+	#var panel_height = $MainStoreMenu/HireStoreMenu/CharacterListPanel.size.y
+
+	#return max(0.0, bottom - panel_height)
+
+func _on_settings_button_down():
+	settings.openMenu()
+
+func _on_guide_button_down():
+	guide.guideSlideIn()
+
+func _on_gamble_hover_entered():
+	gamblePanel.visible = true
+	var tw = gamblePanel.create_tween()
+	tw.tween_property(gamblePanel, "modulate:a", 1.0, 0.2)
+
+func _on_gamble_hover_exited():
+	if not gamblePanel.isGambling:
+		var tw = gamblePanel.create_tween()
+		tw.tween_property(gamblePanel, "modulate:a", 0.0, 0.2)
+		tw.tween_callback(func(): gamblePanel.visible = false)
+
+func _on_gamble_button_button_down():
+	gamblePanel.attemptGamble()
+
+func updatePartyMemberName(member_number: int, display_name: String):
+	var button = get_node_or_null(
+		"MainStoreMenu/HireStoreMenu/CharacterListContents/PartyMemberUpgrade"
+		+ str(member_number)
+	)
+
+	if button:
+		var label = button.get_node("Label")
+		label.text = display_name
+
+func updatePlayerName(display_name: String):
+	var button = get_node_or_null(
+		"MainStoreMenu/HireStoreMenu/CharacterListContents/PlayerUpgrade"
+	)
+	
+	if button:
+		var label = button.get_node("Label")
+		
+		if display_name.strip_edges().is_empty():
+			label.text = "You"
+		else:
+			label.text = display_name

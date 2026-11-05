@@ -178,6 +178,7 @@ autoplay = "dropIn"
 stream = ExtResource("2_1aa42")
 volume_db = -15.0
 pitch_scale = 0.8
+bus = &"SFX"
 
 [node name="DamageParticles" parent="." instance=ExtResource("3_7oe7i")]
 position = Vector2(152, 76)
@@ -186,3 +187,4 @@ speed_scale = 2.0
 
 [node name="CritBigHit" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_65yqx")
+bus = &"SFX"

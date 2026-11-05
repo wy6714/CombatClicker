@@ -156,7 +156,7 @@ tracks/4/path = NodePath(".")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.6),
+"times": PackedFloat32Array(0.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -170,7 +170,7 @@ tracks/5/path = NodePath("Impact:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.6),
+"times": PackedFloat32Array(0, 0.1, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [false, true, false]
@@ -182,7 +182,7 @@ tracks/6/path = NodePath("Impact:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.1, 0.2, 0.6),
+"times": PackedFloat32Array(0.1, 0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0.627451), Color(1, 1, 1, 0.627451), Color(1, 1, 1, 0)]
@@ -248,7 +248,7 @@ tracks/4/path = NodePath(".")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.6),
+"times": PackedFloat32Array(0.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -262,7 +262,7 @@ tracks/5/path = NodePath("Impact:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.6),
+"times": PackedFloat32Array(0, 0.1, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [false, true, false]
@@ -274,7 +274,7 @@ tracks/6/path = NodePath("Impact:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0.1, 0.2, 0.6),
+"times": PackedFloat32Array(0.1, 0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0.627451), Color(1, 1, 1, 0.627451), Color(1, 1, 1, 0)]
@@ -290,17 +290,18 @@ _data = {
 [node name="PartyMemberAnims" type="Node2D"]
 scale = Vector2(1.5, 1.5)
 script = ExtResource("1_og8hv")
-fireColor = Color(0.856231, 0.204753, 9.62615e-08, 1)
-waterColor = Color(0.253319, 0.473894, 1, 1)
-windColor = Color(0.325915, 1, 0.298232, 1)
-earthColor = Color(0.615493, 0.341357, 0.00861954, 1)
-electricColor = Color(0.956977, 0.956977, 4.62055e-06, 1)
+fireColor = Color(0.854902, 0.203922, 0, 0.901961)
+waterColor = Color(0.254902, 0.47451, 1, 0.901961)
+windColor = Color(0.32549, 1, 0.298039, 0.901961)
+earthColor = Color(0.615686, 0.341176, 0.00784314, 0.901961)
+electricColor = Color(0.956863, 0.956863, 0, 0.901961)
 metadata/_edit_horizontal_guides_ = [-163.0]
 
 [node name="Impact" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0.356863)
 position = Vector2(0, -2)
+scale = Vector2(0.7, 0.7)
 texture = ExtResource("5_smhm8")
 hframes = 2
 vframes = 3
@@ -324,13 +325,17 @@ color_ramp = SubResource("Gradient_d0duj")
 
 [node name="Punch" type="Sprite2D" parent="."]
 visible = false
+modulate = Color(1, 1, 1, 0.862745)
 position = Vector2(0, -2)
+scale = Vector2(0.7, 0.7)
 texture = ExtResource("1_x3sj5")
 hframes = 2
 vframes = 2
 
 [node name="Kick" type="Sprite2D" parent="."]
 visible = false
+modulate = Color(1, 1, 1, 0.862745)
+scale = Vector2(0.7, 0.7)
 texture = ExtResource("2_qdwws")
 hframes = 2
 vframes = 2
@@ -367,4 +372,10 @@ libraries = {
 "": SubResource("AnimationLibrary_c7uok")
 }
 
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_c7uok")
+}
+
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+bus = &"SFX"

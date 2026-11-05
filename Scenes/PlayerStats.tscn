@@ -1,11 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://n4kcq3rlkqw0"]
+[gd_scene load_steps=16 format=3 uid="uid://n4kcq3rlkqw0"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerStats.gd" id="1_fhgmt"]
 [ext_resource type="Texture2D" uid="uid://dqqe3xn4fw3nj" path="res://Art/SkewedRectangles.png" id="2_ayqdn"]
 [ext_resource type="FontFile" uid="uid://0n58x5h2eb8o" path="res://Fonts/Press_Start_2P/PressStart2P-Regular.ttf" id="3_m27gj"]
-[ext_resource type="Texture2D" uid="uid://nlp6nkwvgldq" path="res://Art/UISlant-1.png (1).png" id="4_p8car"]
+[ext_resource type="Texture2D" uid="uid://dky53cmtbuap7" path="res://Art/UI Capsule (1).png" id="5_hevuo"]
 [ext_resource type="Texture2D" uid="uid://ctulebq7ybhap" path="res://Art/SkewedRectangleFlash.png" id="5_ir787"]
+[ext_resource type="Texture2D" uid="uid://hyw0gf1sm6uk" path="res://Art/UI Capsule-3.png.png" id="5_v74y4"]
 [ext_resource type="Texture2D" uid="uid://c3dh0i2oxpvut" path="res://Art/SkewedSquareLines.png" id="6_hcmuj"]
+[ext_resource type="Texture2D" uid="uid://cr0u1s3k82jco" path="res://Art/UI Capsule-2.png.png" id="6_jl5mt"]
 [ext_resource type="AudioStream" uid="uid://dtujjuqhqm13l" path="res://Audio/MenuHover.wav" id="7_ga28u"]
 [ext_resource type="AudioStream" uid="uid://c7a1g8ua5imgw" path="res://Audio/StatMenuOpen.wav" id="8_6vijj"]
 
@@ -137,14 +139,15 @@ vframes = 7
 
 [node name="LineEdit" type="LineEdit" parent="CharUI"]
 z_index = 1
-offset_left = -33.3333
-offset_top = -43.3333
-offset_right = 77.6667
-offset_bottom = -12.3333
+offset_left = -32.6667
+offset_top = -44.0
+offset_right = 122.333
+offset_bottom = -12.0
 scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_m27gj")
-theme_override_font_sizes/font_size = 16
-placeholder_text = "You"
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Name"
+max_length = 8
 flat = true
 
 [node name="DamageCooldown" type="Timer" parent="CharUI"]
@@ -156,38 +159,42 @@ position = Vector2(0, 22)
 
 [node name="NameEditorBackdrop" type="TextureButton" parent="CharUI2" groups=["ui"]]
 offset_left = 246.0
-offset_top = 535.0
+offset_top = 530.0
 offset_right = 333.0
-offset_bottom = 575.0
-scale = Vector2(1.2, 0.578)
+offset_bottom = 570.0
+scale = Vector2(1.45, 0.75)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 disabled = true
-texture_normal = ExtResource("4_p8car")
+texture_normal = ExtResource("5_hevuo")
+texture_pressed = ExtResource("5_v74y4")
+texture_hover = ExtResource("6_jl5mt")
 texture_click_mask = SubResource("BitMap_r5o7a")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="StatsButton" type="TextureButton" parent="CharUI2" groups=["ui"]]
+[node name="StatsButton" type="TextureButton" parent="CharUI2"]
 offset_left = 239.0
-offset_top = 565.0
+offset_top = 564.0
 offset_right = 326.0
-offset_bottom = 605.0
-scale = Vector2(1.2, 0.578)
+offset_bottom = 604.0
+scale = Vector2(1.1, 0.75)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("4_p8car")
+texture_normal = ExtResource("5_hevuo")
+texture_pressed = ExtResource("5_v74y4")
+texture_hover = ExtResource("6_jl5mt")
 ignore_texture_size = true
 stretch_mode = 0
 
 [node name="StatsText" type="Label" parent="CharUI2" groups=["ui"]]
 offset_left = 248.0
-offset_top = 571.0
-offset_right = 368.0
-offset_bottom = 595.0
+offset_top = 572.0
+offset_right = 408.0
+offset_bottom = 604.0
 scale = Vector2(0.5, 0.5)
 theme_override_fonts/font = ExtResource("3_m27gj")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Stats"
 
 [node name="CharUIFlash" type="Sprite2D" parent="CharUI2"]
@@ -223,10 +230,12 @@ libraries = {
 [node name="MenuHover" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_ga28u")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="MenuOpen" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_6vijj")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="+1 Upgrade Point Loc" type="Node2D" parent="."]
 position = Vector2(225, 584)

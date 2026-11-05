@@ -4,7 +4,7 @@ extends Control
 @onready var type_timer = Timer.new()
 @onready var player = get_node("/root/Main/Player") # Get a reference to the player
 
-var typing_speed := 0.02 # seconds per character
+var typing_speed := 0.04 # seconds per character
 var is_typing := false
 var full_text := ""
 var current_index := 0
@@ -35,7 +35,7 @@ func _process_queue():
 
 		modulate.a = 0.0
 		current_tween = create_tween()
-		current_tween.tween_property(self, "modulate:a", 1.0, 0.25)
+		current_tween.tween_property(self, "modulate:a", 1.0, 0.5)
 		await current_tween.finished
 		current_tween = null
 		# if someone cleared while fading in, bail

@@ -1,230 +1,619 @@
 extends Node2D
 
-@export var strength: int = 1
-#@export var strength: int = 100 # DEBUG STRENGTH
+#@export var strength: int = 50
+@export var strength: int = 5
 @export var critRate: float = 5
 @export var critDamage: float = 2
-#@export var ultRegen: float = 500
-@export var ultRegen: float = 1
+@export var ultRegen: float = 50
 @export var statusRate: float = 1
-@export var crit: bool = false # Tracking IF we crit
-@export var damage: int = 0
-@export var pureDamage: int = 0
-@export var score: int = 0 #Our current score (also currency)
-@export var maxScore: int = 0 # Our TOTAL score accumulated throughout the entirety of playtime. (NOT currency)
-@export var money: int = 0 
-@export var totalClicks: int = 0 # Our total clicks we have done ever. Seems good to track this
 @export var activeHand: String = "left"
-@onready var scoreNumber = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
-@onready var autoAttack = false
+
+@export var crit: bool = false
+@export var damage: float = 0
+@export var pureDamage: float = 0
+@export var score: int = 99999999999
+#@export var score: int = 0
+@export var maxScore: int = 0
+@export var money: int = 0
+@export var totalClicks: int = 0
+
+@export var enemiesDefeated = 0
+
+@export var chargeAttackTutorialLimit = 4
+@export var hasChargeAttacked = false
+
+@onready var chargeAttackTutorialAnim = $"../ChargeAttackTutorial"
+@onready var chargeAttackGuide = $"../ChargeAttackGuide"
+
 @export var autoAttackInterval: float = 0.2
-@onready var autoAttackTimer = $AutoAttackTimer
-
-# WEAPON BONUS STATS
-var leftWeaponStats = {
-	"strength": 0,
-	"crit_rate": 0.0,
-	"crit_damage": 0.0,
-	"ult_regen": 0.0
-}
-
-var rightWeaponStats = {
-	"strength": 0,
-	"crit_rate": 0.0,
-	"crit_damage": 0.0,
-	"ult_regen": 0.0
-}
-
 @export var level: int = 1
+@export var maxLevel: int = 9999
 @export var currentExp: int = 0
 @export var expToNextLevel: int = 100
-@onready var expBarSystem = get_node("/root/Main/ExpBarSystem") # Get a reference to the levelSystem
+@export var totalUpgradePoints: int = 0
+
+@export var autoAttack: bool = false
+@export var ultRushDamageMultiplier: float = 2.0
+
+@export var maxCharge: float = 100.0
+@export var chargeDuration: float = 0.9
+@export var chargeRequired: float = 88.0
+@export var chargeHoldDelay: float = 0.3
+@export var claymoreDelay: float = 0.1
+
+@export var chargeSpeedUpPerHit: float = 0.1
+@export var maxChargeSpeedMult: float = 2.5
+
+@onready var scoreNumber = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
+@onready var autoAttackTimer = $AutoAttackTimer
+@onready var chargeMeterPos = $ChargeMeterPosition
+@onready var expBarSystem = get_node("/root/Main/ExpBarSystem")
 @onready var ultBarSystem = get_node("/root/Main/UltMeter")
-
-@onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
-@onready var anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
-
-var leftCharging = false
-var rightCharging = false
-var leftChargeLevel = 0
-var rightChargeLevel = 0
-@onready var chargeMeterLeft
-@onready var chargeMeterRight
-var chargeMeterInstanceLeft = null
-var chargeMeterInstanceRight = null
-var startingClaymoreAttackLeft: bool = false
-var startingClaymoreAttackRight: bool = false
-
-@export var animComboCount: int = 0
-@export var maxCharge = 100
-@export var chargeDuration = 1.5
-@export var claymoreDelay = 0.1
-@export var drillActive: bool = false
-@export var drillEquippedLeft: bool = false
-@export var drillEquippedRight: bool = false
-@onready var activeDrills = {}
-
-var swordBreakMult = 6
-var drillBreakMult = 3
-var claymoreBreakMult = 8
-var ultBreakMult = 9
-
-var currentEnemy;
-@onready var playerStats = get_node("/root/Main/PartyMemberPlayer")
-
-@export var totalUpgradePoints: int = 0 
+@onready var playerStats = get_node("/root/Main/PartyMemberHolder/PartyMemberClipPanel/PartyMemberPlayer")
 @onready var damageParticles = $DamageParticles
 
-@onready var breakQTEdamageMult = 1.0
+var rankNum: int = 0
 
-#Number tracking successful QTE hits
-@onready var rankNum = 0
+const attackAnim = preload("res://Scenes/attack_anim.tscn")
+const flurryAttackAnim = preload("res://Scenes/flurry_attack_anim.tscn")
+const anim_claymore_meter = preload("res://Scenes/anim_claymore_meter.tscn")
 
-# Damage Tracking Variables
-var heavy_hit_threshold := 1.3 # if actual > 130% of expected
+var currentEnemy = null
+var base_pos: Vector2 = Vector2.ZERO
+
+var heavy_hit_threshold := 1.3
 var low_threshold := 0.8
 var high_threshold := 1.2
 var bigHit = false
-var weaponStats = {}
 
-var ultRushDamageMultiplier = 2.0
-var characterName = ""
-var base_pos : Vector2 = Vector2.ZERO
+var animComboCount: int = 0
+var flurryAnimComboCount: int = 0
+var currentChargeLevel: float = 0.0
 
+var chargePending := false
+var chargePendingTime := 0.0
+var isCharging := false
+var enteredChargeMode := false
 
-# Called when the node enters the scene tree for the first time.
+var chargeDirection: float = 1.0
+var chargeSpeedMult: float = 1.0
+
+# Combo system for charge attacks:
+# Every successful charge release increases the next charged attack by +1x damage,
+# until the combo is broken by a miss. This is what makes repeated successful
+# charge attacks feel like they are ramping up over time.	
+var chargeComboCount: int = 0
+@export var chargeComboBonusPerStack: float = 0.5
+@export var chargeComboMaxStacks: int = 10
+
+var chargeMeterInstance = null
+var chargeMeter = null
+var chargeMeterBaseTint: Color = Color.WHITE
+var chargeMeterBaseScale: Vector2 = Vector2.ONE
+var chargeSuccessTween: Tween = null
+var breakQTEdamageMult: float = 1.0
+var breakQTEQualityScore: float = 0.0
+@onready var expMultiplier = 1.0
+
+@export var unbrokenDamageMult = 0.4
+@export var brokenDamageMult = 1.3
+
+@export_category("Break QTE System")
+
+# ------------------------------------------------------------
+# BREAK QTE QUALITY
+#
+# Each QTE contributes a certain amount to the final
+# break-quality score.
+#
+# Four Perfects = 4.0 total score.
+# ------------------------------------------------------------
+
+@export var breakPerfectScore: float = 1.0
+@export var breakGoodScore: float = 0.50
+@export var breakMissScore: float = 0.0
+
+# ------------------------------------------------------------
+# BREAK DAMAGE MILESTONES
+#
+# These are percentages of the enemy's REMAINING HP.
+#
+# 0 perfect-equivalent score = handled separately as flat damage.
+# 1.0 score = 10%
+# 2.0 score = 25%
+# 3.0 score = 33.3%
+# 4.0 score = 50%
+#
+# Only a perfect 4/4 can reach the 4.0 score.
+# ------------------------------------------------------------
+
+@export var breakDamageAt1Score: float = 0.10
+@export var breakDamageAt2Score: float = 0.25
+@export var breakDamageAt3Score: float = 0.333
+@export var breakDamageAt4Score: float = 0.50
+
+# Damage when every QTE is missed.
+@export var breakZeroScoreDamage: float = 1.0
+
+# The maximum possible score.
+# Four perfect QTEs = 4.0.
+@export var breakMaxQualityScore: float = 4.0
+
 func _ready():
-	print(";")
-	base_pos = scoreNumber.position # store only once
-	score = 999999
-	
-	
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	#claymoreCharging(_delta)
-		
-	#if(drillEquippedLeft || drillEquippedRight):
-	#	for key in activeDrills:  # Loops through "left" and "right"
-	#		if activeDrills[key] != null:
-	#			activeDrills[key].position = (get_global_mouse_position())
-	#			activeDrills[key]["animation"].position = get_global_mouse_position()
-	
-	#if drillEquippedLeft:
-	#	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) && !drillActive:
-	#		drilling("left")
+	if scoreNumber:
+		base_pos = scoreNumber.position
+		scoreNumber.text = str(score)
 
-	#if drillEquippedRight:
-	#	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) && !drillActive:
-	#		drilling("right")
 
-	# Check if left mouse button is released
-	#if Input.is_action_just_released("left"):
-	#	stopDrilling("left")
-	# Check if right mouse button is released
-	#if Input.is_action_just_released("right"):
-	#	stopDrilling("right")
-	
-	if autoAttack and not autoAttackTimer.is_stopped():
-		return
-	elif autoAttack and autoAttackTimer.is_stopped():
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			# Only allow charging if mouse is over the enemy
+			if has_valid_enemy() and currentEnemy.mouseInsideRadius:
+				chargePending = true
+				chargePendingTime = 0.0
+		else:
+			# Released after charge started
+			if isCharging:
+				release_charge_attack()
+				get_viewport().set_input_as_handled()
+			
+			# Reset charge state
+			chargePending = false
+			isCharging = false
+
+
+func _process(delta):
+	if autoAttack and autoAttackTimer.is_stopped():
 		autoAttackTimer.start()
 	elif not autoAttack and not autoAttackTimer.is_stopped():
 		autoAttackTimer.stop()
+
+	if chargePending:
+		chargePendingTime += delta
+		if chargePendingTime >= chargeHoldDelay:
+			chargePending = false
+			start_charge_attack()
+
+	if isCharging:
+		update_charge_attack(delta)
 		
+	
+
+func should_show_charge_attack_tutorial() -> bool:
+	return (
+		not hasChargeAttacked
+		and enemiesDefeated >= chargeAttackTutorialLimit
+	)	
+			
+func setupChargeAttackTutorial():
+	if not should_show_charge_attack_tutorial():
+		chargeAttackTutorialAnim.stop()
+		chargeAttackGuide.visible = false
+		return
+
+	chargeAttackGuide.visible = true
+	chargeAttackTutorialAnim.play("ChargeAttackTutorial")
+	
+func has_valid_enemy() -> bool:
+	return currentEnemy != null and is_instance_valid(currentEnemy)
+
+# -------------------------------------------------------------------------
+# DAMAGE CALCULATION
+# -------------------------------------------------------------------------
+
 func determineDamage(mult):
-	
-	if activeHand == "left":
-		weaponStats = leftWeaponStats
-	else:
-		weaponStats = rightWeaponStats
-	
-	damage = strength
+	# Reset crit before calculating new damage.
+	crit = false
+
+	damage = get_effective_strength()
 	damage *= mult
-	damage += weaponStats["strength"]
-	
-	if(ultBarSystem.inUltRush):
-		damage = damage * ultRushDamageMultiplier
-		#ultBarSystem.increaseRushTimer(damage) i DONT THInk we should increase time per hit
-		
-	pureDamage = damage # Raw damage before variation
+
+	if ultBarSystem.inUltRush:
+		damage *= ultRushDamageMultiplier
+
+	pureDamage = damage
 
 	var variation = randf_range(low_threshold, high_threshold)
 	damage *= variation
 
 	var rng = randf_range(1, 100)
-	if(currentEnemy != null && currentEnemy.dizzy == false):
-		if rng <= critRate + weaponStats["crit_rate"]:
+
+	var effective_crit_rate = get_effective_crit_rate()
+	var effective_crit_damage = get_effective_crit_damage()
+
+	if has_valid_enemy() and currentEnemy.dizzy == false:
+		if rng <= effective_crit_rate:
 			crit = true
-			damage *= (critDamage + weaponStats["crit_damage"])
-			
-	elif(currentEnemy != null && currentEnemy.dizzy == true):
-		if rng <= critRate + weaponStats["crit_rate"] + currentEnemy.dizzyCritRateBoost: # dizzy crit rate boost
+			damage *= effective_crit_damage
+
+	elif has_valid_enemy() and currentEnemy.dizzy == true:
+		if rng <= effective_crit_rate + currentEnemy.dizzyCritRateBoost:
 			crit = true
-			damage *= (critDamage + weaponStats["crit_damage"] + currentEnemy.dizzyCritDamageBoost) # dizzy crit damage boost
-			
+			damage *= (
+				effective_crit_damage
+				+ currentEnemy.dizzyCritDamageBoost
+			)
 
 	trackDamage(pureDamage, damage)
 	statusEffect()
-	
+
 func statusEffect():
-				
-		var rng = randi_range(0, 100)
-		if rng <= playerStats.statusRate:
-			match playerStats.currentElement:
-				"Fire":
-					print("Activate the fire stuff")
-					currentEnemy.burn = true
-					currentEnemy.startBurn()
-					currentEnemy.burnTimer.start()
-					currentEnemy.applyStatusIcon("Burn")
-				"Water":
-					print("Activate the water stuff")
-					currentEnemy.dampen = true
-					currentEnemy.dampenTimer.start()
-					currentEnemy.applyStatusIcon("Dampen")
-				"Earth":
-					print("Activate the earth stuff")
-					currentEnemy.petrify = true
-					currentEnemy.petrifyTimer.start()
-					currentEnemy.applyStatusIcon("Petrify")
-				"Wind":
-					print("Activate the wind stuff")
-					currentEnemy.dizzy = true
-					currentEnemy.dizzyTimer.start()
-					currentEnemy.applyStatusIcon("Dizzy")
-				"Electric":
-					print("Activate the electric stuff")
-					currentEnemy.paralysis = true
-					currentEnemy.paralysisTimer.start()
-					currentEnemy.applyStatusIcon("Paralysis")
-				
+	if not has_valid_enemy():
+		return
+
+	var rng = randi_range(0, 100)
+	if rng <= get_effective_status_rate():
+		match playerStats.currentElement:
+			"Fire":
+				currentEnemy.burn = true
+				currentEnemy.startBurn()
+				currentEnemy.burnTimer.start()
+				currentEnemy.applyStatusIcon("Burn")
+			"Water":
+				currentEnemy.dampen = true
+				currentEnemy.dampenTimer.start()
+				currentEnemy.applyStatusIcon("Dampen")
+			"Earth":
+				currentEnemy.petrify = true
+				currentEnemy.petrifyTimer.start()
+				currentEnemy.applyStatusIcon("Petrify")
+			"Wind":
+				currentEnemy.dizzy = true
+				currentEnemy.dizzyTimer.start()
+				currentEnemy.applyStatusIcon("Dizzy")
+			"Electric":
+				currentEnemy.paralysis = true
+				currentEnemy.paralysisTimer.start()
+				currentEnemy.applyStatusIcon("Paralysis")
+
+
+func trackDamage(expected: float, actual: float):
+	if expected == 0:
+		return
+
+	var ratio = actual / expected
+	if ratio >= heavy_hit_threshold:
+		bigHit = true
+
+func breakDamageMultiplier():
+	if has_valid_enemy():
+		if currentEnemy.breakable:
+			if currentEnemy.broken:
+				damage = floor(damage * brokenDamageMult)
+			else:
+				damage = max(1, floor(damage * unbrokenDamageMult))
+
+# -------------------------------------------------------------------------
+# NORMAL ATTACK
+# -------------------------------------------------------------------------
+
+func dealDamage():
+	if not has_valid_enemy():
+		return
+
+	determineDamage(1)
+	breakDamageMultiplier()
+
+	currentEnemy.takeDamage(damage, 6)
+	if crit:
+		currentEnemy.playCritReaction()
+
+	var rngX = randi_range(-30, -10)
+	var rngY = randi_range(-5, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_number(ceili(damage), damageNumPos, crit)
+
+	particleEffect(200, 300, 3, 5, 0.3)
+	activateAttackAnim()
+	updateScore()
+
+	ultBarSystem.updateUltProgress(ultRegen)
+	if crit:
+		ultBarSystem.updateUltProgress(ultRegen * critDamage)
+
+	crit = false
+	bigHit = false
+
+func dealFlurryDamage():
+	if not has_valid_enemy():
+		return
+
+	determineDamage(1)
+	breakDamageMultiplier()
+
+	currentEnemy.takeDamage(damage, 6)
+	if crit:
+		currentEnemy.playCritReaction()
+
+	var rngX = randi_range(-30, -10)
+	var rngY = randi_range(-5, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_number(ceili(damage), damageNumPos, crit)
+
+	particleEffect(200, 300, 3, 5, 0.3)
+	activateFlurryAttackAnim()
+	updateScore()
+
+	ultBarSystem.updateUltProgress(ultRegen)
+	if crit:
+		ultBarSystem.updateUltProgress(ultRegen * critDamage)
+
+	crit = false
+	bigHit = false
+
+# -------------------------------------------------------------------------
+# CHARGE ATTACK SYSTEM
+# -------------------------------------------------------------------------
+
+func start_charge_attack():
+	if isCharging:
+		return
+
+	isCharging = true
+	enteredChargeMode = true
+	hasChargeAttacked = true
+
+	chargeAttackTutorialAnim.stop()
+	chargeAttackGuide.visible = false
+
+	currentChargeLevel = 0.0
+	chargeDirection = 1.0
+	activateChargeMeter()
+
+func update_charge_attack(delta):
+	var step = (maxCharge / chargeDuration) * chargeSpeedMult * delta
+	currentChargeLevel += step * chargeDirection
+
+	if currentChargeLevel >= maxCharge:
+		currentChargeLevel = maxCharge
+		chargeDirection = -1.0
+	elif currentChargeLevel <= 0:
+		currentChargeLevel = 0
+		chargeDirection = 1.0
+
+	if chargeMeter != null:
+		chargeMeter.value = currentChargeLevel
+
+	if chargeMeterInstance != null and chargeMeterPos != null:
+		chargeMeterInstance.global_position = chargeMeterPos.global_position
+
+	update_charge_meter_visuals()
+
+func update_charge_meter_visuals() -> void:
+	if chargeMeter == null:
+		return
+
+	if currentChargeLevel >= chargeRequired:
+		chargeMeter.tint_progress = Color.WHITE
+	else:
+		chargeMeter.tint_progress = chargeMeterBaseTint
+
+func play_charge_success_feedback() -> void:
+	if chargeMeter == null:
+		return
+
+	chargeMeter.tint_progress = Color.WHITE
+
+	if chargeSuccessTween != null and chargeSuccessTween.is_valid():
+		chargeSuccessTween.kill()
+
+	chargeSuccessTween = create_tween()
+	chargeSuccessTween.tween_property(
+		chargeMeter,
+		"scale",
+		chargeMeterBaseScale * 1.08,
+		0.05
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+	chargeSuccessTween.tween_property(
+		chargeMeter,
+		"scale",
+		chargeMeterBaseScale,
+		0.06
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
+
+func cleanup_charge_meter() -> void:
+	if chargeSuccessTween != null and chargeSuccessTween.is_valid():
+		chargeSuccessTween.kill()
+	chargeSuccessTween = null
+
+	if chargeMeterInstance != null:
+		chargeMeterInstance.queue_free()
+		chargeMeterInstance = null
+		chargeMeter = null
+
+
+func release_charge_attack():
+	if not isCharging:
+		return
+
+	isCharging = false
+	chargeDirection = 1.0
+
+	if not has_valid_enemy():
+		currentChargeLevel = 0.0
+		enteredChargeMode = false
+		cleanup_charge_meter()
+		return
+
+	var is_success_hit := currentChargeLevel >= chargeRequired
+
+	if is_success_hit:
+		# Visual feedback for a successful charge:
+		# 1) turn the meter white
+		# 2) pulse it briefly
+		# 3) keep it on screen for a tiny moment before removing it
+		play_charge_success_feedback()
+		
+		await get_tree().create_timer(0.07).timeout
+
+		# Combo bonus:
+		# Each successful charge increases the next charged attack by +1x damage
+		# (capped so it does not ramp forever). This rewards chaining good releases.
+		var combo_bonus: float = chargeComboCount * chargeComboBonusPerStack
+		var combo_cap: int = chargeComboMaxStacks * chargeComboBonusPerStack
+		if combo_bonus > combo_cap:
+			combo_bonus = combo_cap
+
+		var charge_multiplier: float = 10 + combo_bonus
+		await dealChargedDamage_with_multiplier(charge_multiplier)
+
+		# Success builds combo and slightly speeds up the next charge cycle.
+		chargeComboCount = min(chargeComboCount + 1, chargeComboMaxStacks)
+		chargeSpeedMult = min(chargeSpeedMult + chargeSpeedUpPerHit, maxChargeSpeedMult)
+
+		await get_tree().create_timer(0.05).timeout
+		cleanup_charge_meter()
+
+	elif enteredChargeMode:
+		# Miss breaks the combo and resets charge speed.
+		chargeComboCount = 0
+		chargeSpeedMult = 1.0
+		await dealWeakChargeDamage()
+		cleanup_charge_meter()
+
+	currentChargeLevel = 0.0
+	enteredChargeMode = false
+
+
+func activateChargeMeter():
+	if chargeMeterInstance != null:
+		return
+
+	chargeMeterInstance = anim_claymore_meter.instantiate()
+	add_child(chargeMeterInstance)
+
+	chargeMeter = chargeMeterInstance.get_node("ChargeFill")
+	if chargeMeter != null:
+		chargeMeter.value = 0
+		chargeMeter.max_value = maxCharge
+		chargeMeterBaseTint = chargeMeter.tint_progress
+		chargeMeterBaseScale = chargeMeter.scale
+		chargeMeter.tint_progress = chargeMeterBaseTint
+		chargeMeter.scale = chargeMeterBaseScale
+
+	if chargeMeterPos != null:
+		chargeMeterInstance.global_position = chargeMeterPos.global_position
+	else:
+		chargeMeterInstance.global_position = get_global_mouse_position() + Vector2(-70, -50)
+
+
+func dealChargedDamage_with_multiplier(charge_multiplier: int):
+	if not has_valid_enemy():
+		return
+
+	#await get_tree().create_timer(claymoreDelay).timeout
+
+	if not has_valid_enemy():
+		return
+
+	determineDamage(charge_multiplier)  # Calculate damage and crit FIRST
+	breakDamageMultiplier()
+	
+	activateAttackAnimClaymore()  # NOW create animation with correct crit status
+
+	currentEnemy.takeDamage(damage, 8)
+
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_number(ceili(damage), damageNumPos, crit)
+
+	particleEffect(500, 700, 4, 6, 0.25)
+
+	ultBarSystem.updateUltProgress(ultRegen * 5)
+	if crit:
+		ultBarSystem.updateUltProgress((ultRegen * 5) * critDamage)
+		currentEnemy.playChargeCritReaction()
+	else:
+		currentEnemy.playChargeReaction()
+
+	updateScore()
+
+	crit = false
+	bigHit = false
+
+func dealChargedDamage():
+	await dealChargedDamage_with_multiplier(10)
+
+
+func dealWeakChargeDamage():
+	if not has_valid_enemy():
+		return
+
+	activateAttackAnimClaymoreFlimsy()
+	await get_tree().create_timer(claymoreDelay).timeout
+
+	if not has_valid_enemy():
+		return
+
+	determineDamage(1)
+	breakDamageMultiplier()
+
+	currentEnemy.takeDamage(damage / 10, 1)
+
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+	DamageNumber.display_number(ceili(damage / 10), damageNumPos, crit)
+
+	particleEffect(100, 200, 2, 3, 0.3)
+
+	ultBarSystem.updateUltProgress(ultRegen * 5)
+	if crit:
+		ultBarSystem.updateUltProgress((ultRegen * 5) * critDamage)
+
+	updateScore()
+
+	crit = false
+	bigHit = false
+
+
+# -------------------------------------------------------------------------
+# EXP / LEVEL
+# -------------------------------------------------------------------------
+
 func gainExp(exp):
-	currentExp += exp;
+	currentExp += exp
 	levelUp()
+	
+	if(level >= maxLevel):
+		level = maxLevel
+		
 	expBarSystem.expBar.value = currentExp
 	expBarSystem.playExpSE()
 
 func levelUp():
-	while currentExp >= expToNextLevel:  # Keep leveling up as long as there's enough EXP
-		print("levelled up!")
-		level += 1
-		expBarSystem.levelText.text = "Lv: " + str(level)
-		var expOverflow = currentExp - expToNextLevel
-		currentExp = expOverflow  # Retain the leftover EXP
-		print("POST LEVEL EXP: ", currentExp)
-		playerStats.gainUpgradePoints()
-		totalUpgradePoints += 1
-		for node in get_tree().get_nodes_in_group("PartyMember"):
-			if node.has_method("gainUpgradePoints"):  # Ensure the node has the function/variable
-				node.gainUpgradePoints()
-		
+	if(level < maxLevel):
+		while currentExp >= expToNextLevel and level < maxLevel:
+			level += 1
+			expBarSystem.levelText.text = "Lv: " + str(level)
+			var expOverflow = currentExp - expToNextLevel
+			currentExp = expOverflow
+			
+			expToNextLevel = int(100 * (1 + 0.35 * (level - 1)))  # scale requirement with level
+			expBarSystem.expBar.max_value = expToNextLevel        # keep the bar's max in sync
+			
+			playerStats.gainUpgradePoints()
+			totalUpgradePoints += 1
+			expBarSystem.levelUpSE.play()
+			expBarSystem.playLevelUpTextSlide()
+
+			for node in get_tree().get_nodes_in_group("PartyMember"):
+				if node.has_method("gainUpgradePoints"):
+					node.gainUpgradePoints()
+
+# -------------------------------------------------------------------------
+# SCORE / MONEY
+# -------------------------------------------------------------------------
+
 func updateScore():
-	score += damage
-	maxScore += damage
+	score += ceili(damage)
+	maxScore += ceili(damage)
 	scoreNumber.text = str(score)
 
-	# Kill any existing tween before making a new one
 	if scoreNumber.has_meta("tween"):
 		var old_tween = scoreNumber.get_meta("tween")
 		if old_tween and old_tween.is_valid():
@@ -238,409 +627,346 @@ func updateScore():
 	tween.tween_property(scoreNumber, "position", base_pos + Vector2(0, -8), 0.08)
 	tween.tween_property(scoreNumber, "position", base_pos, 0.2)
 
+
 func updateMoney(sum):
 	var moneyText = get_node("/root/Main/Scoreboard/MoneyNumber")
 	money += sum
 	moneyText.text = "$" + str(money)
-	
-	 # Record the label’s current Y so “down” is orig_y:
+
 	var orig_y = moneyText.position.y
 	var bounce_offset = 10.0
-	
-	# Reset position in case a previous tween left it mid‐bounce:
+
 	moneyText.position.y = orig_y
-	
-	# Create a tween and chain two property‐tweens:
+
 	var t = moneyText.create_tween()
 	t.tween_property(moneyText, "position:y", orig_y - bounce_offset, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	t.tween_property(moneyText, "position:y", orig_y, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	
-func claymoreCharging(_delta):
-	if (startingClaymoreAttackLeft):
-		claymoreChargeLeft()
-				
-	if(startingClaymoreAttackRight):
-		claymoreChargeRight()
-				
-	if (leftCharging):
-		leftChargeLevel += (maxCharge / chargeDuration) * _delta
-		chargeMeterLeft.value = leftChargeLevel
-		if (leftChargeLevel >= 100):
-			print("RESET")
-			leftChargeLevel = 0
-			
-	if (rightCharging):
-		rightChargeLevel += (maxCharge / chargeDuration) * _delta
-		chargeMeterRight.value = rightChargeLevel
-		if (rightChargeLevel >= 100):
-			print("RESET")
-			rightChargeLevel = 0
-			
-func claymoreChargeRight():
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-			# A mouse button is pressed
-			if chargeMeterInstanceRight == null:  # Check if it's already instantiated
-				print("Right mouse button is pressed")
-				rightCharging = true
-				activateChargeMeterRight()  # Only instantiate the charge meter once
-	else:
-		# The right mouse button is released
-		rightCharging = false
-		determineClaymoreDamageRight()
-		rightChargeLevel = 0
-		if (chargeMeterInstanceRight != null):
-			chargeMeterInstanceRight.queue_free()  # Free the charge meter when released
-			chargeMeterInstanceRight = null  # Reset the instance tracker
-			startingClaymoreAttackRight = false
-			
-func claymoreChargeLeft():
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		# A left button is pressed
-		if chargeMeterInstanceLeft == null:  # Check if it's already instantiated
-			print("Left mouse button is pressed")
-			leftCharging = true
-			activateChargeMeterLeft()  # Only instantiate the charge meter once
-	else:
-		# The left mouse button is released
-		leftCharging = false
-		determineClaymoreDamageLeft()
-		leftChargeLevel = 0
-		if (chargeMeterInstanceLeft != null):
-			chargeMeterInstanceLeft.queue_free()  # Free the charge meter when released
-			chargeMeterInstanceLeft = null  # Reset the instance tracker
-			startingClaymoreAttackLeft = false
-	
-func determineClaymoreButton(hand: String):
-	if(hand == "left"):
-		startingClaymoreAttackLeft = true
-	if(hand == "right"):
-		startingClaymoreAttackRight = true
-		
-func dealDamage(): # DEFAULT DAMAGE DEALING. Also what swords use to deal damage
-	determineDamage(1)
-	
-	#Multiply break damage if broken
-	breakDamageMultiplier()
 
-	if(currentEnemy != null):
-		currentEnemy.takeDamage(damage, swordBreakMult)
-	
-	var rngX = randi_range(-30, -10)
-	var rngY = randi_range(-5, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-	
-	particleEffect(200, 300, 3, 5, 0.3)
-	activateAttackAnim()
-	updateScore()
-	ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"])
-	if(crit):
-		ultBarSystem.updateUltProgress(ultRegen * critDamage + weaponStats["ult_regen"])
-	crit = false
-	bigHit = false
-			
-func dealClaymoreDamage(): #Max charge on claymore!! Yay!!
-	
-	activateAttackAnimClaymore()
-	await get_tree().create_timer(claymoreDelay).timeout
-	determineDamage(10)
-	
-	breakDamageMultiplier()
-	
-	currentEnemy.takeDamage(damage, claymoreBreakMult)
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
-	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-	particleEffect(500, 700, 4, 6, 0.25)
-	
-	ultBarSystem.updateUltProgress(ultRegen * 5 + weaponStats["ult_regen"])
-	if(crit):
-		ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
-	crit = false
-	bigHit = false
-	
-func dealFlimsyClaymoreDamage(): #Messed up the claymore charge....
-	determineDamage(1)
-	
-	breakDamageMultiplier()
-	
-	currentEnemy.takeDamage(damage / 10, 1)
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
-	
-	DamageNumber.display_number(ceili(damage / 40), damageNumPos, crit) #Display damage number and attack animation upon hit
-	particleEffect(100, 200, 2, 3, 0.3)
-	activateAttackAnimClaymoreFlimsy() 
-	ultBarSystem.updateUltProgress(ultRegen * 5 + weaponStats["ult_regen"])
-	if(crit):
-		ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
-	crit = false
-	bigHit = false
-	print("flimsy ;;")
-
-func drillDamage(hand: String):
-	determineDamage(1)
-	
-	breakDamageMultiplier()
-	
-	if currentEnemy != null:
-		currentEnemy.takeDamage(damage, drillBreakMult)
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
-	DamageNumber.display_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-	particleEffectDrill(400, 800, 4, 5, 0.13)
-	updateScore()
-	ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"])
-	if crit:
-		ultBarSystem.updateUltProgress(ultRegen + weaponStats["ult_regen"] * critDamage)
-	crit = false
-	bigHit = false
-	
-func activateChargeMeterLeft():
-	chargeMeterInstanceLeft = anim_claymore_meter.instantiate()
-	add_child(chargeMeterInstanceLeft)
-
-	chargeMeterLeft = chargeMeterInstanceLeft.get_node("ChargeFill")
-	if chargeMeterLeft:
-		chargeMeterLeft.value = 0
-
-	# Get the current global mouse position
-	var mouse_pos = get_global_mouse_position()
-	# Set the position slightly to the left of the mouse position
-	chargeMeterInstanceLeft.position = mouse_pos - Vector2(70, -50)
-	
-func activateChargeMeterRight():
-	chargeMeterInstanceRight = anim_claymore_meter.instantiate()
-	add_child(chargeMeterInstanceRight)
-
-	chargeMeterRight = chargeMeterInstanceRight.get_node("ChargeFill")
-	if chargeMeterRight:
-		chargeMeterRight.value = 0
-
-	# Get the current global mouse position
-	var mouse_pos = get_global_mouse_position()
-	# Set the position slightly to the left of the mouse position
-	chargeMeterInstanceRight.position = mouse_pos - Vector2(-70, -50)
-
-func determineClaymoreDamageLeft():
-	totalClicks += 1 #Track totalClicks
-	if(leftChargeLevel >= 90):
-		determineDamage(10)
-		dealClaymoreDamage()
-		score += damage #Gain points based on how much damage you get do per click
-		maxScore += damage #Increment the maximum
-		updateScore()
-	else:
-		determineDamage(1)
-		dealFlimsyClaymoreDamage()
-		updateScore()
-		
-func determineClaymoreDamageRight():
-	totalClicks += 1 #Track totalClicks
-	if(rightChargeLevel >= 90):
-		determineDamage(10)
-		dealClaymoreDamage()
-		score += damage #Gain points based on how much damage you get do per click
-		maxScore += damage #Increment the maximum
-		updateScore()
-	else:
-		determineDamage(1)
-		dealFlimsyClaymoreDamage()
-		updateScore()
-	
-func trackDamage(expected: float, actual: float):
-	
-	var ratio = actual / expected # Calc damage ratio
-	print("Ratio: ", ratio)
-	if(ratio >= heavy_hit_threshold): # If damage exceeds high damage ratio (crit, damage up or something, ult)
-		print("BIG HITT!!")
-		bigHit = true
-		
-
-func activateAttackAnim():
-	#Later, we would put the code that determines which attack animation we use here
-	# Ex: swap from sword animation to greatsword animation depending on weapon etc
-	
-	var attackingAnimation = attackAnim.instantiate()
-	if(!autoAttack):
-		attackingAnimation.position = to_local(get_global_mouse_position())
-	else:
-		attackingAnimation.position = currentEnemy.position
-	if(!crit):
-		attackingAnimation.determineAnimation(animComboCount) #NON CRIT
-	if(crit):
-		attackingAnimation.determineAnimationClaymore(animComboCount) #CRIT
-		
-	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
-	#Simply allows for a satisfying animation combo
-	animComboCount += 1
-	if(animComboCount >= 3):
-		animComboCount = 0
-	add_child(attackingAnimation)
-	
-func activateAttackAnimClaymore():
-	#Later, we would put the code that determines which attack animation we use here
-	# Ex: swap from sword animation to greatsword animation depending on weapon etc
-	
-	var attackingAnimation = attackAnim.instantiate()
-	attackingAnimation.position = to_local(get_global_mouse_position())
-	attackingAnimation.determineAnimationClaymore(animComboCount)
-	# This combo index allows for a series of animations, a right slash, a left slash, and then a downward slash. 
-	#Simply allows for a satisfying animation combo
-	animComboCount += 1
-	if(animComboCount >= 3):
-		animComboCount = 0
-	add_child(attackingAnimation)
-	
-func activateAttackAnimClaymoreFlimsy():
-	#Later, we would put the code that determines which attack animation we use here
-	# Ex: swap from sword animation to greatsword animation depending on weapon etc
-	
-	var attackingAnimation = attackAnim.instantiate()
-	attackingAnimation.position = to_local(get_global_mouse_position())
-	attackingAnimation.flimsyClaymoreAnimation()
-	add_child(attackingAnimation)
-	
-func ultAttackAnim():
-	
-	var attackingAnimation = attackAnim.instantiate()
-	attackingAnimation.position = to_local(get_global_mouse_position())
-	attackingAnimation.ultAnimation()
-	add_child(attackingAnimation)
-	
-func useUlt():
-	if(ultBarSystem.canUlt && !ultBarSystem.canUltRush):
-		# Ult. (Damage of ult is called by animation)
-		
-		ultAttackAnim()
-		ultBarSystem.updateUltProgress(0)
-		if(crit):
-			ultBarSystem.updateUltProgress((ultRegen * 5 + weaponStats["ult_regen"]) * critDamage)
-		crit = false
-		bigHit = false
-		ultBarSystem.subtractUltProgress()
-
-# Called in ult animation in attack_anim
-func ultDamage():
-	determineDamage(100)
-	breakDamageMultiplier()
-	if(currentEnemy != null):
-		currentEnemy.takeDamage(damage, 1)
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-	DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit	
-			
-func useUltRushBurst():
-	if(ultBarSystem.inUltRush):
-		# Ult.
-		print("Ult Rush Bursted!")
-		determineDamage(500)
-		breakDamageMultiplier()
-		#currentEnemy.takeDamage(damage, 7)
-		var rngX = randi_range(-20, 10)
-		var rngY = randi_range(-10, 0)
-		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-
-		currentEnemy.takeDamage(damage, 1)
-		DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-		activateAttackAnim()
-		ultBarSystem.updateUltProgress(0)
-		crit = false
-		bigHit = false
-		ultBarSystem.resetUltProgress()
-
-func useUltRush():
-	if(ultBarSystem.canUltRush && !ultBarSystem.canUltRushBurst):
-		print("Rushin")
-		ultBarSystem.ultRushSetup()
-		ultBarSystem.subtractUltRushProgress()
-	if(ultBarSystem.canUltRushBurst):
-		print("ULT RUSH BURST")
-		ultBarSystem.ultRushBurstSetup()
-		
-func breakSlash():
-	determineDamage(breakQTEdamageMult)
-	
-	var rngX = randi_range(-20, 10)
-	var rngY = randi_range(-10, 0)
-	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
-	
-	currentEnemy.takeDamage(damage, 1)
-	DamageNumber.display_big_number(damage, damageNumPos, crit) #Display damage number and attack animation upon hit
-	crit = false
-	bigHit = false
-	updateScore()
-	breakQTEdamageMult = 1.0
-	rankNum = 0
-		
-func drilling(hand: String):
-
-	if hand == "left" and drillEquippedLeft:
-		return  # Left drill already equipped
-	if hand == "right" and drillEquippedRight:
-		return  # Right drill already equipped
-	
-	if hand in activeDrills and activeDrills[hand] != null:
-		return  # Prevent duplicate drills for the same hand
-
-	var drillAnimation = attackAnim.instantiate()
-	drillAnimation.position = to_local(get_global_mouse_position())
-	drillAnimation.drillAnimation()
-	add_child(drillAnimation)
-
-	var drillTimer = Timer.new()
-	drillTimer.wait_time = $DrillTimer.wait_time
-	drillTimer.one_shot = false
-	drillTimer.timeout.connect(func(): drillDamage(hand))
-	add_child(drillTimer)
-	drillTimer.start()
-
-	activeDrills[hand] = {"animation": drillAnimation, "timer": drillTimer}
-	# Mark the corresponding hand as equipped
-	if hand == "left":
-		drillEquippedLeft = true
-	elif hand == "right":
-		drillEquippedRight = true
-	
-func stopDrilling(hand: String):
-	if hand == "left":
-		drillEquippedLeft = false  # Reset the left drill equipped state
-	elif hand == "right":
-		drillEquippedRight = false  # Reset the right drill equipped state
-
-	# Stop the corresponding drill's animation and timer
-	if activeDrills.has(hand):
-		activeDrills[hand]["timer"].stop()
-		activeDrills[hand]["animation"].queue_free()
-		activeDrills.erase(hand)
 
 func transactionScoreUpdate(value):
 	var scoreText = get_node("/root/Main/Scoreboard/SCORE/ScoreNumber")
 	score += value
 	scoreText.text = str(score)
 
+	if scoreText.has_meta("tween"):
+		var old_tween = scoreText.get_meta("tween")
+		if old_tween and old_tween.is_valid():
+			old_tween.kill()
+
+	var tween := create_tween()
+	scoreText.set_meta("tween", tween)
+
+	tween.set_trans(Tween.TRANS_SPRING)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(scoreText, "position", base_pos + Vector2(0, -8), 0.08)
+	tween.tween_property(scoreText, "position", base_pos, 0.2)
+
+
+# -------------------------------------------------------------------------
+# ULT / SPECIALS
+# -------------------------------------------------------------------------
+
+func ultAttackAnim():
+	var attackingAnimation = attackAnim.instantiate()
+	attackingAnimation.position = to_local(get_global_mouse_position())
+	attackingAnimation.ultAnimation()
+	add_child(attackingAnimation)
+
+func useUlt():
+	if ultBarSystem.canUlt and not ultBarSystem.canUltRush:
+		ultAttackAnim()
+		ultBarSystem.updateUltProgress(0)
+		if crit:
+			ultBarSystem.updateUltProgress((ultRegen * 5) * critDamage)
+		crit = false
+		bigHit = false
+		ultBarSystem.subtractUltProgress()
+
+
+func ultDamage():
+	if not has_valid_enemy():
+		return
+
+	determineDamage(25)
+	breakDamageMultiplier()
+
+	var target = currentEnemy
+
+	target.takeDamage(damage, 1)
+
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+
+	var damageNumPos = target.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	DamageNumber.display_big_number(
+		ceili(damage),
+		damageNumPos,
+		crit
+	)
+
+	# Choose the appropriate ultimate reaction.
+	if crit:
+		target.playUltCritReaction()
+	else:
+		target.playUltReaction()
+
+	updateScore()
+
+	crit = false
+	bigHit = false
+
+func useUltRushBurst():
+	if ultBarSystem.inUltRush and has_valid_enemy():
+		determineDamage(500)
+		breakDamageMultiplier()
+
+		var rngX = randi_range(-20, 10)
+		var rngY = randi_range(-10, 0)
+		var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+		currentEnemy.takeDamage(damage, 1)
+		DamageNumber.display_big_number(ceili(damage), damageNumPos, crit)
+		activateAttackAnim()
+		ultBarSystem.updateUltProgress(0)
+		crit = false
+		bigHit = false
+		ultBarSystem.resetUltProgress()
+		
+func useUltRush():
+	if ultBarSystem.canUltRush and not ultBarSystem.canUltRushBurst:
+		ultBarSystem.ultRushSetup()
+		ultBarSystem.subtractUltRushProgress()
+	if ultBarSystem.canUltRushBurst:
+		ultBarSystem.ultRushBurstSetup()
+
+func breakSlash():
+	if not has_valid_enemy():
+		return
+
+	# ------------------------------------------------------------
+	# GET BREAK QUALITY
+	# ------------------------------------------------------------
+
+	var qualityScore: float = breakQTEQualityScore
+
+	# Make absolutely sure the score stays within valid bounds.
+	qualityScore = clamp(qualityScore, 0.0, breakMaxQualityScore)
+
+	var remainingHealth: float = currentEnemy.health
+	var breakDamage: float = breakZeroScoreDamage
+	var damageFraction: float = 0.0
+
+	# ------------------------------------------------------------
+	# CALCULATE DAMAGE FROM BREAK QUALITY
+	#
+	# Instead of simply counting QTEs, the actual quality of each
+	# QTE contributes to a continuous score.
+	#
+	# The milestone values are:
+	#
+	# 1.0 score -> 10%
+	# 2.0 score -> 25%
+	# 3.0 score -> 33.3%
+	# 4.0 score -> 50%
+	#
+	# We interpolate between those milestones so Good hits still
+	# meaningfully contribute.
+	# ------------------------------------------------------------
+
+	if qualityScore <= 0.0:
+		# Complete failure.
+		breakDamage = breakZeroScoreDamage
+
+	elif qualityScore < 1.0:
+		# Between 0 and 1 equivalent Perfect hit.
+		#
+		# This means one Good is weaker than one Perfect,
+		# but it still contributes damage.
+		damageFraction = lerp(
+			0.0,
+			breakDamageAt1Score,
+			qualityScore
+		)
+
+		breakDamage = remainingHealth * damageFraction
+
+	elif qualityScore < 2.0:
+		# Between the 1-score and 2-score milestones.
+		var t = qualityScore - 1.0
+
+		damageFraction = lerp(
+			breakDamageAt1Score,
+			breakDamageAt2Score,
+			t
+		)
+
+		breakDamage = remainingHealth * damageFraction
+
+	elif qualityScore < 3.0:
+		# Between the 2-score and 3-score milestones.
+		var t = qualityScore - 2.0
+
+		damageFraction = lerp(
+			breakDamageAt2Score,
+			breakDamageAt3Score,
+			t
+		)
+
+		breakDamage = remainingHealth * damageFraction
+
+	else:
+		# Between the 3-score and 4-score milestones.
+		var t = clamp(qualityScore - 3.0, 0.0, 1.0)
+
+		damageFraction = lerp(
+			breakDamageAt3Score,
+			breakDamageAt4Score,
+			t
+		)
+
+		breakDamage = remainingHealth * damageFraction
+
+	# Never deal less than 1 damage.
+	breakDamage = max(1.0, breakDamage)
+
+	# Store the result in the normal damage variable so the rest
+	# of your player systems know how much damage was actually dealt.
+	damage = breakDamage
+	pureDamage = breakDamage
+	currentEnemy.updateBreakRecoveryFromQuality()
+	# ------------------------------------------------------------
+	# APPLY DAMAGE
+	# ------------------------------------------------------------
+
+	var rngX = randi_range(-20, 10)
+	var rngY = randi_range(-10, 0)
+	var damageNumPos = currentEnemy.damageNumberPosition.global_position + Vector2(rngX, rngY)
+
+	currentEnemy.takeDamage(breakDamage, 1)
+
+	DamageNumber.display_big_number(
+		ceili(breakDamage),
+		damageNumPos,
+		false
+	)
+
+	updateScore()
+
+	# ------------------------------------------------------------
+	# RESET ATTACK STATE
+	# ------------------------------------------------------------
+
+	crit = false
+	bigHit = false
+	currentChargeLevel = 0.0
+
+	# Reset the break quality so it cannot accidentally carry into
+	# another break sequence.
+	breakQTEQualityScore = 0.0
+
+# -------------------------------------------------------------------------
+# ATTACK ANIMATIONS
+# -------------------------------------------------------------------------
+
+func activateAttackAnim():
+	var attackingAnimation = attackAnim.instantiate()
+
+	if not autoAttack or not has_valid_enemy():
+		attackingAnimation.position = to_local(get_global_mouse_position())
+	else:
+		attackingAnimation.position = currentEnemy.position
+
+	# Set attack type, then always play normal animations
+	if crit:
+		attackingAnimation.attack_type = "crit"
+	else:
+		attackingAnimation.attack_type = "normal"
+
+	attackingAnimation.determineAnimation(animComboCount)
+
+	animComboCount += 1
+	if animComboCount >= 3:
+		animComboCount = 0
+
+	add_child(attackingAnimation)
+	
+func activateFlurryAttackAnim():
+	var attackingAnimation = flurryAttackAnim.instantiate()
+
+	if not autoAttack or not has_valid_enemy():
+		attackingAnimation.position = to_local(get_global_mouse_position())
+	else:
+		attackingAnimation.position = currentEnemy.position
+
+	if crit:
+		attackingAnimation.attack_type = "crit"
+	else:
+		attackingAnimation.attack_type = "normal"
+
+	attackingAnimation.determineAnimation(flurryAnimComboCount)
+
+	flurryAnimComboCount += 1
+	if flurryAnimComboCount >= 3:
+		flurryAnimComboCount = 0
+
+	add_child(attackingAnimation)
+
+func activateAttackAnimClaymore():
+	var attackingAnimation = attackAnim.instantiate()
+	
+	if has_valid_enemy() and currentEnemy.mouseInsideRadius:
+		attackingAnimation.position = to_local(get_global_mouse_position())
+	elif has_valid_enemy():
+		attackingAnimation.position = to_local(currentEnemy.global_position)
+	
+	# Set attack type based on crit status
+	if crit:
+		attackingAnimation.attack_type = "charged_crit"
+	else:
+		attackingAnimation.attack_type = "charged"
+	
+	attackingAnimation.determineAnimationClaymore(animComboCount)
+
+	animComboCount += 1
+	if animComboCount >= 3:
+		animComboCount = 0
+
+	add_child(attackingAnimation)
+
+func activateAttackAnimClaymoreFlimsy():
+	var attackingAnimation = attackAnim.instantiate()
+	
+	# If mouse is still over enemy, use mouse position; otherwise use enemy center
+	if has_valid_enemy() and currentEnemy.mouseInsideRadius:
+		attackingAnimation.position = to_local(get_global_mouse_position())
+	elif has_valid_enemy():
+		attackingAnimation.position = to_local(currentEnemy.global_position)
+	
+	attackingAnimation.flimsyClaymoreAnimation()
+	add_child(attackingAnimation)
+
+# -------------------------------------------------------------------------
+# PARTICLES
+# -------------------------------------------------------------------------
+
 func particleEffect(vMin, vMax, sMin, sMax, lifetime):
 	damageParticles.initial_velocity_min = vMin
 	damageParticles.initial_velocity_max = vMax
 	damageParticles.scale_amount_min = sMin
 	damageParticles.scale_amount_max = sMax
-	if(!autoAttack):
+
+	if not autoAttack or not has_valid_enemy():
 		damageParticles.position = get_global_mouse_position()
 	else:
 		damageParticles.position = currentEnemy.position
-		
+
 	damageParticles.lifetime = lifetime
 	damageParticles.restart()
 	damageParticles.emitting = true
-	
-func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effect simply just doesn't reset, drills do constant damage.
+
+
+func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime):
 	damageParticles.initial_velocity_min = vMin
 	damageParticles.initial_velocity_max = vMax
 	damageParticles.scale_amount_min = sMin
@@ -648,30 +974,82 @@ func particleEffectDrill(vMin, vMax, sMin, sMax, lifetime): # This particle effe
 	damageParticles.position = get_global_mouse_position()
 	damageParticles.lifetime = lifetime
 	damageParticles.emitting = true
-	
-func breakDamageMultiplier():
-	if(currentEnemy != null):
-		if(currentEnemy.breakable):
-			if(currentEnemy.broken):
-				damage = floor(damage * 1.4) # Take a bit more damage when broken
-			else:
-				damage = max(1,floor(damage * 0.8)) #Ensures its not 0. And take a bit less damage when not broken
 
-func setLeftWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapStatusRate: float) -> void:
-	leftWeaponStats["strength"] = weapStrength
-	leftWeaponStats["crit_rate"] = weapCritRate
-	leftWeaponStats["crit_damage"] = weapCritDamage
-	leftWeaponStats["ult_regen"] = weapUltRegen
-	leftWeaponStats["status_rate"] = weapStatusRate
 
-func setRightWeaponBonus(weapStrength: float, weapCritRate: float, weapCritDamage: float, weapUltRegen: float, weapElements: Array, weapStatusRate: float) -> void:
-	rightWeaponStats["strength"] = weapStrength
-	rightWeaponStats["crit_rate"] = weapCritRate
-	rightWeaponStats["crit_damage"] = weapCritDamage
-	rightWeaponStats["ult_regen"] = weapUltRegen
-	rightWeaponStats["elements"] = weapElements
-	rightWeaponStats["status_rate"] = weapStatusRate
+# -------------------------------------------------------------------------
+# AUTO ATTACK
+# -------------------------------------------------------------------------
 
 func autoSwingRush():
-	if(currentEnemy):
-		dealDamage()
+	if currentEnemy:
+		dealFlurryDamage()
+
+# -------------------------------------------------------------------------
+# LEGACY STUBS
+# -------------------------------------------------------------------------
+
+func determineClaymoreButton(_hand: String):
+	start_charge_attack()
+
+func claymoreCharging(delta):
+	if isCharging:
+		update_charge_attack(delta)
+
+func claymoreChargeLeft():
+	start_charge_attack()
+
+func claymoreChargeRight():
+	start_charge_attack()
+
+func determineClaymoreDamageLeft():
+	release_charge_attack()
+
+func determineClaymoreDamageRight():
+	release_charge_attack()
+
+func dealClaymoreDamage():
+	await dealChargedDamage()
+
+func dealFlimsyClaymoreDamage():
+	await dealWeakChargeDamage()
+
+func drilling(_hand: String):
+	pass
+
+func stopDrilling(_hand: String):
+	pass
+
+func performWeaponAction(_mouse_button: TextureButton):
+	pass
+
+func getWeaponType(_weapon_button: TextureButton) -> String:
+	return "Unknown"
+
+func setLeftWeaponBonus(_weapStrength: float, _weapCritRate: float, _weapCritDamage: float, _weapUltRegen: float, _weapStatusRate: float) -> void:
+	pass
+
+func setRightWeaponBonus(_weapStrength: float, _weapCritRate: float, _weapCritDamage: float, _weapUltRegen: float, _weapElements: Array, _weapStatusRate: float) -> void:
+	pass
+	
+# EFFECTIVE STATS
+# Use the stats stored on PartyMemberPlayer,
+# including any active party Ultimate bonuses.
+
+func get_effective_strength() -> float:
+	return playerStats.strength + playerStats.bonusStrength
+
+
+func get_effective_crit_rate() -> float:
+	return playerStats.critRate + playerStats.bonusCritRate
+
+
+func get_effective_crit_damage() -> float:
+	return playerStats.critDamage + playerStats.bonusCritDamage
+
+
+func get_effective_ult_regen() -> float:
+	return playerStats.ultRegen + playerStats.bonusUltRegen
+
+
+func get_effective_status_rate() -> float:
+	return playerStats.statusRate + playerStats.bonusStatusRate

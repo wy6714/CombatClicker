@@ -75,6 +75,7 @@ func start_floaty_motion(duration: float) -> void:
 
 func _on_reach_bar():
 	if exp_bar_ref:
-		player.gainExp(exp_value)
-		expBarSystem.playJiggle()
+		if(player.level <= player.maxLevel):
+			player.gainExp(exp_value)
+			expBarSystem.playJiggle()
 	queue_free()

@@ -3,8 +3,8 @@ extends Control
 @onready var ultProgressBar = $TextureProgressBar
 @onready var ultText = $TextureProgressBar/UltText
 @export var currentUltValue: float = 0.0
-@export var ultMax: int = 100
-@export var ultRushMax: int = 1000
+@export var ultMax: float = 100.0
+@export var ultRushMax: float = 1000.0
 @export var canUlt: bool = false
 @export var canUltRush: bool = false
 @export var inUltRush: bool = false
@@ -45,11 +45,18 @@ var captureIconRushPos = Vector2(100, 570)
 var initialUltRushUnlock
 var initialUltRushBurstUnlock
 
+@onready var ultGuide = $UltGuide
+@onready var ultRushGuide = $UltRushGuide
+@onready var ultTutorialAnims = $UltTutorials
+@export var hasUsedUlt = false
+@export var ultTutorialSkipped = false
+@export var hasUsedUltRush = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	ultProgressBar.value = 0
-	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
+	ultText.text = "Ult: " + str(currentUltValue)
 	ultRushTimer.timeout.connect(_on_ult_rush_timer_timeout)
 	
 	ultMeterPos = ultProgressBar.position
@@ -58,6 +65,10 @@ func _ready():
 	captureIconPos = captureIcon.position
 	
 	ultFlash.hide()
+	
+	# First time hide tutorials
+	ultGuide.hide()
+	ultRushGuide.hide()
 	
 func _process(delta):
 	if inUltRush:
@@ -70,59 +81,129 @@ func _process(delta):
 	# No negative ult...
 	if(currentUltValue < 0):
 		currentUltValue = 0
+		
+func showUltTutorial():
+	# Don't show the normal Ult tutorial if the player
+	# has already used an Ult or reached the Ult Rush tutorial.
+	if hasUsedUlt or ultTutorialSkipped:
+		return
+	
+	ultGuide.show()
+	
+	if ultTutorialAnims.current_animation != "UltGuideFlash":
+		ultTutorialAnims.play("UltGuideFlash")
 
+
+func showUltRushTutorial():
+	# Don't show the Ult Rush tutorial more than once.
+	if hasUsedUltRush:
+		return
+	
+	# The player skipped the normal Ult tutorial by reaching
+	# Ult Rush without using an Ult first.
+	ultTutorialSkipped = true
+	
+	# Make absolutely sure the normal Ult guide is gone.
+	ultGuide.hide()
+	
+	ultRushGuide.show()
+	
+	if ultTutorialAnims.current_animation != "UltRushGuideFlash":
+		ultTutorialAnims.play("UltRushGuideFlash")
+	
+func finishUltTutorial():
+	hasUsedUlt = true
+	
+	# Stop the looping tutorial animation.
+	if ultTutorialAnims.current_animation == "UltGuideFlash":
+		ultTutorialAnims.stop()
+		
+	ultGuide.hide()
+
+func finishUltRushTutorial():
+	hasUsedUltRush = true
+	
+	# Stop the looping tutorial animation.
+	if ultTutorialAnims.current_animation == "UltRushGuideFlash":
+		ultTutorialAnims.stop()
+	
+	ultRushGuide.hide()
+		
 func updateUltProgress(ultRecharge):
-	currentUltValue += ultRecharge
+	currentUltValue = (currentUltValue + ultRecharge)
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
+	ultText.text = "Ult: " + str(currentUltValue)
 	updateUltState()
 	
 func subtractUltProgress():
+	# The player actually used their normal Ult.
+	finishUltTutorial()
+	
 	currentUltValue -= ultMax
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
+	ultText.text = "Ult: " + str(currentUltValue)
 	updateUltState()
 	
 func resetUltProgress():
 	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
+	ultText.text = "Ult: " + str(currentUltValue)
 	updateUltState()
 	
 func subtractUltRushProgress():
 	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
-	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
+	ultText.text = "Ult: " + str(currentUltValue)
 	updateUltState()
 	
 func updateUltState():
 	# Can they ult?
 	canUlt = currentUltValue >= ultMax
-	
+
 	# If they are in ultRush
-	if(!inUltRush):
+	if !inUltRush:
 		canUltRush = currentUltValue >= ultRushMax
-		if(canUltRush):
-			if(!initialUltRushUnlock): #Flash and play SE, ONLY ONCE
+		
+		# -----------------------------------------
+		# FIRST ULT RUSH TUTORIAL
+		# Takes priority over the normal Ult tutorial.
+		# -----------------------------------------
+		if canUltRush and !hasUsedUltRush:
+			showUltRushTutorial()
+		
+		# -----------------------------------------
+		# FIRST NORMAL ULT TUTORIAL
+		# Only shown if they have not reached Ult Rush.
+		# -----------------------------------------
+		elif canUlt and !hasUsedUlt and !ultTutorialSkipped:
+			showUltTutorial()
+		
+		if canUltRush:
+			if !initialUltRushUnlock:
 				$UltSE.play()
 				$UltBarAnimation.play("UltBarGrow")
+			
 			initialUltRushUnlock = true
-	
-	if(inUltRush):
+
+	if inUltRush:
 		canUltRushBurst = currentUltValue >= ultRushMax
 		
-		if(canUltRushBurst):
+		if canUltRushBurst:
 			ultFlash.show()
-			if(!initialUltRushBurstUnlock): #Flash and play SE, ONLY ONCE
-				$ColorRect/flash.play("flash") # Flash
+			
+			if !initialUltRushBurstUnlock:
+				$ColorRect/flash.play("flash")
 				$UltRushSE.play()
 				$UltBarAnimation.play("UltBarGrow")
-			initialUltRushBurstUnlock = true
 			
+			initialUltRushBurstUnlock = true
 		else:
 			ultFlash.hide()
 		
 func ultRushSetup():
+	
+	finishUltRushTutorial()
+	
 	inUltRush = true
 	canUltRush = false
 	ultRushTimerLabel.show()
@@ -233,7 +314,7 @@ func _on_ult_rush_timer_timeout(): # Natural ending to ult rush timer. No ult
 	moneyLabel.position = moneyPos
 	captureIcon.position = captureIconPos
 	
-	currentUltValue = 0.0
+	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
 	ultText.text = str(currentUltValue) + "/ " + str(ultRushMax)
 	
@@ -264,7 +345,9 @@ func endUltRush(): #Aka they used ult
 	$SpeedLineHolder2.hide()
 	$ColorRect/flash.play("flash") # Flash
 	$UltMoveAnim.play("ultEffect")
-	player.currentEnemy.becomeShocked()
+	
+	if is_instance_valid(player.currentEnemy):
+		player.currentEnemy.becomeShocked()
 	
 	for node in get_tree().get_nodes_in_group("ultRushBurstHidden"):
 		node.hide()
@@ -279,7 +362,7 @@ func endUltRush(): #Aka they used ult
 	captureIcon.position = captureIconPos
 	
 	shaderMaterial.material.set_shader_parameter("rushFlag", 0.0)
-	currentUltValue = 0.0
+	currentUltValue = 0
 	ultProgressBar.value = currentUltValue
 	ultText.text = str(currentUltValue) + "/ " + str(ultMax)
 	despawnQTE()

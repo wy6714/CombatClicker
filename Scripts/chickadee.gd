@@ -14,19 +14,31 @@ extends Node2D
 @onready var enemyManager = get_node("/root/Main/EnemyManager")
 @onready var area = $Area2D
 @onready var anim = $Area2D/AnimatedSprite2D
+
 @onready var dropshadowAnim = $Area2D/DropShadow
 @onready var healthBar = $Health_Bar
 @onready var collision = $Area2D/CollisionShape2D
 
 var breakAmount = 100
 var baseBreak = 100
+var maxBreak = 100
+@export var breakRate = 10
 @onready var breakBar = $Health_Bar/BreakBar
 var breakable = false
 var broken = false
 var recovering = false
-var break_recovery_time = 4.0  # Default recovery time in seconds
-var break_recovery_speed = 100.0 / break_recovery_time  # Adjusts speed dynamically
-var breakPrereqLevel = 1 # Level required to encounter break meter enemies. PREFERABLY set to 4, but, for debug, it is set to 1.
+@export_category("Break Recovery")
+# Base recovery time for an average-quality break.
+@export var breakRecoveryBaseTime: float = 4.0
+# Worst possible recovery time.
+# A poor QTE performance lets the enemy recover slightly faster.
+@export var breakRecoveryMinimumTime: float = 3.7
+# Best possible recovery time.
+# A perfect 4/4 makes the enemy stay broken slightly longer.
+@export var breakRecoveryMaximumTime: float = 4.3
+var break_recovery_time: float = 4.0
+var break_recovery_speed: float = 25.0
+var breakPrereqLevel = 5 # Level required to encounter break meter enemies. PREFERABLY set to 4, but, for debug, it is set to 1.
 
 
 @onready var attackAnim = preload("res://Scenes/attack_anim.tscn")
@@ -49,7 +61,7 @@ var currentAnimName
 @export var maxCharge = 100
 @export var chargeDuration = 1.5
 @export var charging: bool = false
-@export var captureRate: int = 99
+@export var captureRate: int = 10
 
 @onready var equipmentManager = get_node("/root/Main/ShopUI")
 @onready var mouseInsideRadius = false
@@ -85,6 +97,7 @@ var scale_timer = 0.0
 var scale_duration = 0.5  # Time in seconds for the scale transition
 var target_scale = Vector2(0.7, 0.7)  # Adjust to how large you want it to grow
 var qtePressedCount = 0
+var breakQTESuccessCount: int = 0
 
 @onready var glassShatter = get_node("/root/Main/GlassShatter")
 @onready var background = get_node("/root/Main/scrollingBackground")
@@ -135,25 +148,74 @@ var currentQTE
 var activeQTEList
 var currentQTEBurstCount = 0
 
+# Break QTE "current" tracking — mirrors the rush QTE system so only one
+# break QTE responds to input at a time.
+var breakActiveQTEList = []
+var currentBreakQTE
+
 @onready var qteLocTL = $"QTERushSpawnPositions/Location Top Left"
 @onready var qteLocTR = $"QTERushSpawnPositions/Location Top Right"
 @onready var qteLocBR = $"QTERushSpawnPositions/Location Bottom Right"
 @onready var qteLocBL = $"QTERushSpawnPositions/Location Bottom Left"
 @onready var rushExplosion = preload("res://Scenes/explosion.tscn")
 
+@onready var captureParticleSpawnSE = $"Capture Particle Spawn SE"
+
 # TYPES OF ENEMIES SO SOUND EFFECTS CAN PLAY
 enum EnemyType { NORMAL, SLIMY, WHISPY, SOLID }
 @export_enum ("Normal", "Slimy", "Whispy", "Solid")
 var enemy_type: int = EnemyType.NORMAL
 
+var radiant: bool = false
+var radiantRate = 1
+
+@onready var radiantEncounterSE = $"RadiantEncounterSE"
+@onready var radiantParticles = $RadiantParticles
+
+# Gamble rewards
+var forceNextRadiant: int = 0  # Count of guaranteed radiant enemies
+var forceNextCapture: int = 0  # Count of guaranteed capture enemies
+var tempRadiantBoost: int = 0  # Temporary +5% radiant rate
+var tempRadiantBoostCounter: int = 0  # How many enemies left with boost
+var permanentRadiantRate: float = 0.0  # Permanent boost
+var expMultiplier: float = 1.0  # Exp multiplier
+
+@export var breakEndurance = 5
+@export var hpToLevelScalar = 0.25
+
+@export_category("Critical Hit Reactions")
+@export var critReactionCooldown: float = 1.25
+@export var critShockDuration: float = 0.20
+@export var critShakeIntensity: float = 16.0
+@export var chargeCritShakeIntensity: float = 24.0
+@export var ultCritShakeIntensity: float = 32.0
+@export var critShakeDuration: float = 0.12
+
+var critReactionCooldownTimer: float = 0.0
+var shockReactionActive: bool = false
+
+# Used to restore the enemy's original animation.
+var critReturnAnimation: String = "Idle"
+var critReturnFrame: int = 0
+var critReturnFrameProgress: float = 0.0
+var critReactionStartMsec: int = 0
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	setInvisible()
-	anim.play()
+	manageRadiant()
+	manageCapture()
+	
+	if(!radiant):
+		anim.play("Idle")
+	else:
+		anim.play("RIdle")
+		
 	dropshadowAnim.play()
 	position = get_viewport().get_size() / 2  # Set position to the center
-	health = baseHealth * (1 + 0.2 * (player.level - 1))
+	health = baseHealth * (1 + hpToLevelScalar * (player.level - 1))
 	maxHealth = health
 	healthBar.max_value = health
 	healthBar.init_health(health)
@@ -161,17 +223,22 @@ func _ready():
 	# Determine if a monster has a break meter or not. Early game monsters shouldn't, as the player should just get used to clicking
 	# with no other distractions for a while, and THEN we implement enemy gimmicks. 
 	
+	#breakPrereqLevel = 0
+	# DEBUG: SHOULD BE BREAK REQUIRED LEVEL
 	if(player.level >= breakPrereqLevel):
-		breakable = randi() % 2 == 1  # True or False randomly
-		breakable = false # Debug for when never breakable is desired
+		breakable = randi_range(0, 100 ) >= breakRate # True or False according to break rate
+		#breakable = true # Debug for when breakable or non breakable is desired
+		#breakable = false
 		if(breakable):
 			breakable = true #This enemy WILL have a break meter. Set it up
 			breakBar.visible = true
-			breakAmount = baseBreak * (1 + 0.2 * (player.level - 1))
+			maxBreak = baseBreak * (1 + hpToLevelScalar * (player.level - 1))
+			breakAmount = maxBreak
 			healthBar.init_break(breakAmount)
 	
-	player.currentEnemy = self
 	
+	
+	player.currentEnemy = self
 	# Scalar
 	scalarLevel = (1 + 0.2 * (player.level - 1))
 	expToGive *= scalarLevel
@@ -192,7 +259,7 @@ func _ready():
 		
 		icon.visible = false
 		icon.set_meta("status_name", null)
-			
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if broken:
@@ -209,44 +276,59 @@ func _process(_delta):
 	manageStatusIcons()
 	update_shadow()
 	
+	if critReactionCooldownTimer > 0.0:
+		critReactionCooldownTimer = maxf(
+			0.0,
+			critReactionCooldownTimer - _delta
+		)
+	
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	
 	if(mouseInsideRadius):
-		if(player.autoAttack == false): # DONT ACCEPT PLAYER CLICKS IF THEY ARE IN AUTO ATTACK (unless ult):
-			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
-				equipmentManager.performWeaponAction("left")
-			
-			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
-				equipmentManager.performWeaponAction("right")
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed: #On left mouse click...
+			equipmentManager.performWeaponAction("left")
+		
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed: #On right mouse click...
+			equipmentManager.performWeaponAction("right")
 		
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed: #On middle mouse click...
-			# They can't use the ult big move....but they can enter ultRush
-			if(!player.ultBarSystem.canUltRushBurst && player.ultBarSystem.canUltRush):
-				player.useUltRush()
-			# THEY CAN USE THE ULT BIG MOVE
-			elif(player.ultBarSystem.canUltRushBurst):
-				pass
-				#player.useUltRushBurst()
-				player.ultBarSystem.endUltRush()
-			else:
-				# Regular ult
-				player.useUlt()
+			performUltInput()
+
+# Handles the spacebar-while-hovering alternative to middle-click, for trackpad users.
+# Uses _unhandled_input so UI elements (menus, buttons) get first priority on the event.
+func _unhandled_input(event):
+	if(mouseInsideRadius):
+		if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
+			performUltInput()
+
+func performUltInput():
+	if not is_instance_valid(player.currentEnemy) or player.currentEnemy != self or health <= 0:
+		return
+	if(!player.ultBarSystem.canUltRushBurst && player.ultBarSystem.canUltRush):
+		player.useUltRush()
+	elif(player.ultBarSystem.canUltRushBurst):
+		player.ultBarSystem.endUltRush()
+	else:
+		player.useUlt()
 					
-func takeDamage(damage, breakMult):
+func takeDamage(damage, breakMult, wasCrit: bool = false):
 	if(canTakeDamage):
 		health -= damage
 		healthBar.health = health
 		
 		defeatEnemyCheck()
 		if(health > 0):
-			var breakTotal = ceil(damage / 4) * breakMult
+			var breakTotal = (damage / breakEndurance) * breakMult
 			
-			if(breakTotal < 1): # At least, do 5 break damage
-				breakTotal = 5
+			if(breakTotal < 1): # At least, do 1 break damage
+				breakTotal = 1
 				
 			if(!ultBarSystem.inUltRush):
 				takeBreakDamage(breakTotal)
 			
+			if wasCrit:
+				playCritReaction()
+				
 			manageDampen(damage)
 			managePetrify(damage)
 			manageParalysis()
@@ -267,8 +349,10 @@ func takeBreakDamage(breakDamage):
 			
 func initiateBreak():
 	if(!inQTEState):
-		qteCurrentCounter = 0  # Reset counter
+		qteCurrentCounter = 0
 		qtePressedCount = 0
+		player.breakQTEQualityScore = 0.0
+		breakQTESuccessCount = 0
 		breakState = true
 		ignoreMouseScale = true
 		turnOffUI()
@@ -276,6 +360,8 @@ func initiateBreak():
 		collision.disabled = true
 		inQTEState = true
 		spawned_qte_positions.clear()  # Reset list before spawning new QTEs
+		breakActiveQTEList.clear()  # Reset break-QTE current-tracking list
+		currentBreakQTE = null
 		qteSpawnTimer.wait_time = 0.1
 		player.rankNum = 0
 		breakScreen.visible = true
@@ -283,7 +369,8 @@ func initiateBreak():
 		start_scaling(original_scale * 0.9, 0.8)  # Slowly shrink a little
 	
 func _on_qte_spawn_timer_timeout():
-	qteSpawnTimer.wait_time = 1
+	var rng = randf_range(0.6, 0.8)
+	qteSpawnTimer.wait_time = rng
 	print(qteCurrentCounter)
 	if qteCurrentCounter < qteCount - 1:
 		spawnQTE(false)
@@ -314,30 +401,40 @@ func recoveringFromBreak(delta):
 	if broken:
 		if not inQTEState:
 			ignoreMouseScale = false
-			breakAmount = move_toward(breakAmount, 100, break_recovery_speed * delta)
+			breakAmount = move_toward(breakAmount, maxBreak, break_recovery_speed * delta)
 			healthBar.breakVal = breakAmount
 			recovering = true
 			$BreakRecoveryFlash.play("recoveryFlash")
 			# Switch to Shock animation but keep same frame
 			var current_frame = anim.frame
-			if anim.animation != "Shock":
-				anim.play("Shock")
+			if anim.animation != "Shock" && anim.animation != "RadiantShock":
+				if(radiant):
+					anim.play("RShock")
+				else:
+					anim.play("Shock")
 				anim.frame = current_frame
 
-	if breakAmount >= 100:
+	if breakAmount >= maxBreak:
 		broken = false
 		recovering = false
 		$BreakRecoveryFlash.stop()
 		var current_frame = anim.frame
-		if anim.animation != "Idle":
-			anim.play("Idle")
-			anim.frame = current_frame
+		if(!radiant):
+			if anim.animation != "Idle":
+				anim.play("Idle")
+				anim.frame = current_frame
+		else:
+			if anim.animation != "RIdle":
+				anim.play("RIdle")
+				anim.frame = current_frame
 	
 func defeatEnemyCheck():
 	if(health <= 0):
 		broken = false
 		area.input_pickable = false
 		$Area2D/CollisionShape2D.disabled = true
+		
+		player.enemiesDefeated += 1
 		
 		if(ultBarSystem.inUltRush):
 			ultBarSystem.increaseRushTimerDefeat()
@@ -412,13 +509,16 @@ func _on_enemy_scale_animation_finished(anim_name):
 
 func defeatAnimCleanup():
 	if(!ultBarSystem.inUltRush):
-		enemyManager.spawnEnemy()
-		
+		# Clear references to THIS enemy first.
 		player.currentEnemy = null
+		
 		for member in get_tree().get_nodes_in_group("UIMember"):
 			member.currentEnemy = null
 		
-		#Wait a bit before queue free so that animations can fully play out
+		# Now spawn the new enemy.
+		# Its _ready() will set player.currentEnemy to itself.
+		enemyManager.spawnEnemy()
+		
 		await get_tree().create_timer(2.5).timeout	
 		queue_free()
 	
@@ -439,9 +539,8 @@ func defeatAnimCleanupRush():
 func monsterCapture():
 	var captureRng = randi_range(0, 100)
 	if(captureRate >= captureRng):
-		#playerCapture.captureMonster(enemyName, enemyPassive)
-		playerCapture.generateCaptureParticle(enemyName, enemyPassive)
-
+		playerCapture.generateCaptureParticle(enemyName, enemyPassive, radiant)
+		
 func setInvisible(): #Set the monster and their healthbar invisible at the start
 	$Health_Bar.modulate.a = 0
 	$Area2D.modulate.a = 0
@@ -643,6 +742,58 @@ func _on_qte_finished(qte_node: Node, miss: bool, good: bool, perfect: bool) -> 
 	else:
 		currentQTE = null
 
+# Handles a break QTE finishing (hit or miss). Mirrors _on_qte_finished above,
+# but operates on breakActiveQTEList so break QTEs advance their own "current"
+# pointer independently from rush QTEs.
+func _on_break_qte_finished(qte_node: Node, miss: bool, good: bool, perfect: bool) -> void:
+
+	# ------------------------------------------------------------
+	# RECORD BREAK QTE QUALITY
+	# ------------------------------------------------------------
+
+	if perfect:
+		player.breakQTEQualityScore += player.breakPerfectScore
+
+	elif good:
+		player.breakQTEQualityScore += player.breakGoodScore
+
+	else:
+		player.breakQTEQualityScore += player.breakMissScore
+
+	print(
+		"Break QTE result | Score: ",
+		player.breakQTEQualityScore
+	)
+
+	# ------------------------------------------------------------
+	# EXISTING QTE ADVANCEMENT LOGIC
+	# ------------------------------------------------------------
+
+	if is_instance_valid(qte_node) and qte_node.has_method("set_as_current"):
+		qte_node.set_as_current(false)
+
+	var new_list := []
+
+	for q in breakActiveQTEList:
+		if not is_instance_valid(q):
+			continue
+
+		if q == qte_node:
+			continue
+
+		new_list.append(q)
+
+	breakActiveQTEList = new_list
+
+	if breakActiveQTEList.size() > 0:
+		currentBreakQTE = breakActiveQTEList[0]
+
+		if is_instance_valid(currentBreakQTE) and currentBreakQTE.has_method("set_as_current"):
+			currentBreakQTE.set_as_current(true)
+
+	else:
+		currentBreakQTE = null
+
 func spawnQTE(finalQteVal):
 	
 	var max_attempts = 3333  # Avoid infinite loops
@@ -664,32 +815,37 @@ func spawnQTE(finalQteVal):
 				break
 		
 		attempts += 1
+	
+	# Spawn the QTE at whatever random_position was last generated, regardless of
+	# whether a fully non-overlapping spot was found (matches original behavior).
+	var qte_instance = qte.instantiate()
+	qte_instance.position = random_position
+	
+	# Connect the finished signal so this enemy can advance which break QTE is "current"
+	if qte_instance.has_signal("qte_finished"):
+		qte_instance.connect("qte_finished", Callable(self, "_on_break_qte_finished"))
+	else:
+		print("Warning: spawned break QTE has no qte_finished signal declared")
+	
+	# Find the Main node and add the QTE instance as its child
+	var mainNode = get_tree().get_root().find_child("Main", true, false)
+	if mainNode:
+		mainNode.add_child(qte_instance)
+	else:
+		print("Error: Main node not found!")
 		
-	if(attempts >= max_attempts):
-		var qte_instance = qte.instantiate()
-		qte_instance.position = random_position
-		
-		# Find the Main node and add the QTE instance as its child
-		var mainNode = get_tree().get_root().find_child("Main", true, false)
-		if mainNode:
-			mainNode.add_child(qte_instance)
-		else:
-			print("Error: Main node not found!")
-			
-		spawned_qte_positions.append(random_position)  # Track position
-
-	if valid_position:
-		var qte_instance = qte.instantiate()
-		qte_instance.position = random_position
-		
-		# Find the Main node and add the QTE instance as its child
-		var mainNode = get_tree().get_root().find_child("Main", true, false)
-		if mainNode:
-			mainNode.add_child(qte_instance)
-		else:
-			print("Error: Main node not found!")
-			
-		spawned_qte_positions.append(random_position)  # Track position
+	spawned_qte_positions.append(random_position)  # Track position
+	breakActiveQTEList.append(qte_instance)
+	
+	# Only the very first break QTE spawned in this sequence starts as "current";
+	# the rest wait their turn, same as the rush QTE system.
+	if breakActiveQTEList.size() == 1:
+		currentBreakQTE = qte_instance
+		if qte_instance.has_method("set_as_current"):
+			qte_instance.set_as_current(true)
+	else:
+		if qte_instance.has_method("set_as_current"):
+			qte_instance.set_as_current(false)
 
 func turnOffUI(): #Shut off all UI to make the break more cinematic
 	for ui in get_tree().get_nodes_in_group("BreakUIShut"):
@@ -774,7 +930,7 @@ func generateExpParticles(bonus: bool):
 		particle.target_position = exp_bar.global_position
 		particle.exp_bar_ref = exp_bar
 		# divide exp cleanly (optionally floor/ceil if you need integers)
-		particle.exp_value = expToGive / num_particles
+		particle.exp_value = (expToGive * player.expMultiplier) / num_particles
 
 		# start appropriate float
 		if bonus:
@@ -1068,9 +1224,15 @@ func _set_shadow_skew(deg_value: float) -> void:
 func animationPause(): #Pause and look stunned for rising
 	var current_frame = anim.frame
 	currentAnimName = anim.animation
-	if anim.animation != "Shock":
-		anim.play("Shock")
-		anim.frame = current_frame
+	
+	if(!radiant):
+		if anim.animation != "Shock":
+			anim.play("Shock")
+			anim.frame = current_frame
+	else:
+		if anim.animation != "RShock":
+			anim.play("RShock")
+			anim.frame = current_frame
 		
 	dropshadowAnim.pause()
 	anim.pause()
@@ -1078,18 +1240,25 @@ func animationPause(): #Pause and look stunned for rising
 	
 func animationResume(): #Pause and look stunned for rising
 	var current_frame = anim.frame
-	anim.play(currentAnimName)
-	anim.frame = current_frame
-	anim.play()
-	dropshadowAnim.play()
-	canTakeDamage = true
+	if(currentAnimName):
+		anim.play(currentAnimName)
+		anim.frame = current_frame
+		anim.play()
+		dropshadowAnim.play()
+		canTakeDamage = true
 	
 func becomeShocked():
 	# Switch to Shock animation but keep same frame
 	var current_frame = anim.frame
-	if anim.animation != "Shock":
-		anim.play("Shock")
-		anim.frame = current_frame		
+	
+	if(!radiant):
+		if anim.animation != "Shock":
+			anim.play("Shock")
+			anim.frame = current_frame
+	if(radiant):
+		if anim.animation != "RShock":
+			anim.play("RShock")
+			anim.frame = current_frame		
 	
 func playDefeatSE():
 	var rng = randf_range(0.8, 1.2)
@@ -1152,3 +1321,192 @@ func silentlyDie():
 	await get_tree().create_timer(0.5).timeout	
 	enemyManager.spawnEnemy()
 	queue_free()
+	
+func manageRadiant():
+	var enemyManager = get_node("/root/Main/EnemyManager")
+	
+	# Check if radiant is forced
+	if enemyManager.forceNextRadiant > 0:
+		print("RADIANT!!!!")
+		radiant = true
+		captureRate = 100
+		enemyManager.forceNextRadiant -= 1
+		if radiantParticles:
+			await get_tree().create_timer(0.5).timeout
+			radiantParticles.emitting = true
+			radiantEncounterSE.play()
+		return
+	
+	# Calculate radiant rate with all boosts
+	var baseRadiantRate = 1  # CHANGE THIS TO 50 FOR DEBUG, back to 1 when done
+	var tempBoost = 0
+	if enemyManager.tempRadiantBoostCounter > 0:
+		tempBoost = enemyManager.tempRadiantBoost
+		enemyManager.tempRadiantBoostCounter -= 1
+	
+	var totalRadiantRate = baseRadiantRate + tempBoost + enemyManager.permanentRadiantRate
+	
+	var rng = randi_range(1, 100)
+	if rng <= totalRadiantRate:
+		print("RADIANT!!!!")
+		radiant = true
+		captureRate = 100
+		# Emit sparkles after 1 second
+		if radiantParticles:
+			await get_tree().create_timer(0.5).timeout
+			radiantParticles.emitting = true
+			radiantEncounterSE.play()
+	else:
+		print("regular...")
+		radiant = false
+
+		
+func manageCapture():
+	var enemyManager = get_node("/root/Main/EnemyManager")
+	
+	# Check if capture is forced
+	if enemyManager.forceNextCapture > 0:
+		captureRate = 100
+		enemyManager.forceNextCapture -= 1
+	# Otherwise captureRate stays at its default
+	
+func updateBreakRecoveryFromQuality() -> void:
+	# ------------------------------------------------------------
+	# Convert the player's break quality score into a 0.0 - 1.0
+	# ratio.
+	# ------------------------------------------------------------
+
+	var qualityRatio: float = 0.0
+
+	if player.breakMaxQualityScore > 0.0:
+		qualityRatio = player.breakQTEQualityScore / player.breakMaxQualityScore
+
+	qualityRatio = clamp(qualityRatio, 0.0, 1.0)
+
+	# ------------------------------------------------------------
+	# Better QTE performance = slightly longer break.
+	#
+	# 0 quality  -> 3.7 seconds
+	# 100%       -> 4.3 seconds
+	# ------------------------------------------------------------
+
+	break_recovery_time = lerp(
+		breakRecoveryMinimumTime,
+		breakRecoveryMaximumTime,
+		qualityRatio
+	)
+
+	# The recovery system moves the break bar toward maxBreak
+	# using this speed, so we MUST recalculate it whenever the
+	# recovery time changes.
+	if break_recovery_time > 0.0:
+		break_recovery_speed = 100.0 / break_recovery_time
+	else:
+		break_recovery_speed = 100.0
+
+	print(
+		"Break Quality: ",
+		player.breakQTEQualityScore,
+		" / ",
+		player.breakMaxQualityScore,
+		" | Recovery Time: ",
+		break_recovery_time
+	)
+
+func playCritReaction():
+	if critReactionCooldownTimer > 0.0:
+		return
+
+	if not canPlayHitReaction():
+		return
+
+	critReactionCooldownTimer = critReactionCooldown
+	playShockHitReaction(critShakeIntensity)
+	
+func playChargeReaction():
+	if not canPlayHitReaction():
+		return
+
+	$CritFlashAnim.play("flashRed")
+
+func playChargeCritReaction():
+	playShockHitReaction(chargeCritShakeIntensity)
+	
+func playUltReaction():
+	if not canPlayHitReaction():
+		return
+
+	$CritFlashAnim.play("flashRed")
+	
+func playUltCritReaction():
+	playShockHitReaction(ultCritShakeIntensity)
+	
+func canPlayHitReaction() -> bool:
+	if health <= 0 or broken or recovering or inQTEState or breakState:
+		return false
+
+	return true
+
+
+func playShockHitReaction(shakeIntensity: float):
+	if not canPlayHitReaction():
+		return
+
+	# Don't interrupt an existing shock reaction.
+	if shockReactionActive:
+		return
+
+	shockReactionActive = true
+
+	# Remember where the current animation is.
+	critReturnAnimation = anim.animation
+	critReturnFrame = anim.frame
+	critReturnFrameProgress = anim.frame_progress
+	critReactionStartMsec = Time.get_ticks_msec()
+
+	# Flash, shock, and shake.
+	$CritFlashAnim.play("flashRed")
+	becomeShocked()
+	impact_shake(shakeIntensity, critShakeDuration, 20)
+
+	# Return to the original animation.
+	get_tree().create_timer(critShockDuration).timeout.connect(_finishCritReaction)
+
+func _finishCritReaction():
+	shockReactionActive = false
+
+	if not is_inside_tree():
+		return
+
+	if not canPlayHitReaction():
+		return
+
+	# Don't overwrite another animation that started during the reaction.
+	if anim.animation != "Shock" and anim.animation != "RShock":
+		return
+
+	# Calculate how much time passed during the reaction.
+	var elapsed = float(Time.get_ticks_msec() - critReactionStartMsec) / 1000.0
+
+	# Calculate how far the original animation would have advanced.
+	var animationSpeed = anim.sprite_frames.get_animation_speed(critReturnAnimation)
+	animationSpeed *= anim.speed_scale
+
+	var frameCount = anim.sprite_frames.get_frame_count(critReturnAnimation)
+
+	var totalProgress = critReturnFrameProgress + (elapsed * animationSpeed)
+
+	var framesAdvanced = floori(totalProgress)
+	var restoredProgress = totalProgress - framesAdvanced
+	var restoredFrame = critReturnFrame + framesAdvanced
+
+	# Handle looping animations.
+	if anim.sprite_frames.get_animation_loop(critReturnAnimation):
+		restoredFrame = posmod(restoredFrame, frameCount)
+	else:
+		restoredFrame = mini(restoredFrame, frameCount - 1)
+		restoredProgress = 0.0
+
+	# Resume the original animation at its expected position.
+	anim.play(critReturnAnimation)
+	anim.set_frame_and_progress(restoredFrame, restoredProgress)
